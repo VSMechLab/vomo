@@ -25,7 +25,7 @@ struct ContentView: View {
     @State private var playLast = false
     @State private var timerCount = 0
     
-    let default_audio = ""
+    let default_audio = "default_audio"
     let button_img = "VM_Gradient-Btn"
     let next_img = "VM_next-nav-btn"
     let stop_img = "VM_stop-nav-icon"
@@ -106,24 +106,16 @@ struct ContentView: View {
                                 .frame(height: 125)
                                 .padding(.top, 75)
                             
-                            Button(action: {
+                            Button("") {
                                 if audioPlayer.isPlaying == false {
                                     self.audioPlayerPrerecordings.play()
                                 } else {
                                     self.audioPlayerPrerecordings.pause()
                                 }
-                            }) {
-                                ZStack {
-                                    Image(button_img)
-                                        .resizable()
-                                        .frame(width: 185, height: 45)
-                                    
-                                    Text("Play Example")
-                                        .font(Font.vomoHeader)
-                                        .foregroundColor(Color.white)
-                                }
-                            }.onAppear {
-                                let sound = Bundle.main.path(forResource: "default_audio", ofType: "mp3")
+                            }
+                            .buttonStyle(SubmissionButton(label: "Play Example"))
+                            .onAppear {
+                                let sound = Bundle.main.path(forResource: default_audio, ofType: "mp3")
                                 self.audioPlayerPrerecordings = try! AVAudioPlayer(contentsOf: URL(fileURLWithPath: sound!))
                             }
                             

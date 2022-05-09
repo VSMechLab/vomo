@@ -14,7 +14,6 @@
 		AD09A65627D9037F00684ECA /* RecordingsTile.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD09A65527D9037F00684ECA /* RecordingsTile.swift */; };
 		AD158E6C279919A500C3119A /* VoMoApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD158E6B279919A500C3119A /* VoMoApp.swift */; };
 		AD158E6E279919A500C3119A /* RecordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD158E6D279919A500C3119A /* RecordView.swift */; };
-		AD158E70279919A600C3119A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AD158E6F279919A600C3119A /* Assets.xcassets */; };
 		AD158E73279919A600C3119A /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AD158E72279919A600C3119A /* Preview Assets.xcassets */; };
 		AD2B8166282831C1007DE128 /* TabIcons.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD2B8165282831C1007DE128 /* TabIcons.swift */; };
 		AD3F0EBE282034E800443591 /* TotalGoalsRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD3F0EBD282034E800443591 /* TotalGoalsRow.swift */; };
@@ -65,13 +64,19 @@
 		ADA0E0E42825C28B00CF05D1 /* PitchGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADA0E0E32825C28B00CF05D1 /* PitchGraph.swift */; };
 		ADA0E0E82827198500CF05D1 /* ActivityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADA0E0E72827198500CF05D1 /* ActivityView.swift */; };
 		ADA0E0EC28282D9E00CF05D1 /* SubmissionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADA0E0EB28282D9E00CF05D1 /* SubmissionButton.swift */; };
+		ADBAE7F9282996A500A7BD1B /* Roboto-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = ADBAE7F8282996A500A7BD1B /* Roboto-Bold.ttf */; };
+		ADBAE7FC282996DF00A7BD1B /* Roboto-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = ADBAE7FB282996DF00A7BD1B /* Roboto-Medium.ttf */; };
+		ADBAE7FE282996E500A7BD1B /* Roboto-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = ADBAE7FD282996E500A7BD1B /* Roboto-Regular.ttf */; };
+		ADBAE800282996EE00A7BD1B /* Roboto-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = ADBAE7FF282996EE00A7BD1B /* Roboto-Light.ttf */; };
+		ADBAE802282996FA00A7BD1B /* Roboto-LightItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = ADBAE801282996FA00A7BD1B /* Roboto-LightItalic.ttf */; };
+		ADBAE8062829984F00A7BD1B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = ADBAE8052829984F00A7BD1B /* Assets.xcassets */; };
+		ADBAE808282998B000A7BD1B /* default_audio.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = ADBAE807282998B000A7BD1B /* default_audio.mp3 */; };
 		ADD4CE6827EF430D00037058 /* AudioPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADD4CE6727EF430D00037058 /* AudioPlayer.swift */; };
 		ADD4CE6A27EF434400037058 /* AudioRecorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADD4CE6927EF434400037058 /* AudioRecorder.swift */; };
 		ADD6846627D82DA300FF23D2 /* JournalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADD6846527D82DA300FF23D2 /* JournalView.swift */; };
 		ADD6846827D82DB100FF23D2 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADD6846727D82DB100FF23D2 /* ProfileView.swift */; };
 		ADD6846C27D8326B00FF23D2 /* Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADD6846B27D8326B00FF23D2 /* Extension.swift */; };
 		ADF14CAA2829623800869322 /* WavPlayground.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADF14CA92829623800869322 /* WavPlayground.swift */; };
-		ADF14CAC28297B0C00869322 /* default_audio.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = ADF14CAB28297B0C00869322 /* default_audio.mp3 */; };
 		ADFA9278279A1AAE00F8758B /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADFA9277279A1AAE00F8758B /* ViewController.swift */; };
 		ADFA927A279A1AC700F8758B /* ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADFA9279279A1AC600F8758B /* ViewModel.swift */; };
 		ADFA927D279A1B1E00F8758B /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADFA927C279A1B1E00F8758B /* HomeView.swift */; };
@@ -93,7 +98,6 @@
 		AD158E68279919A500C3119A /* VoMo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VoMo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AD158E6B279919A500C3119A /* VoMoApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoMoApp.swift; sourceTree = "<group>"; };
 		AD158E6D279919A500C3119A /* RecordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordView.swift; sourceTree = "<group>"; };
-		AD158E6F279919A600C3119A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		AD158E72279919A600C3119A /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		AD2B8165282831C1007DE128 /* TabIcons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = TabIcons.swift; path = vomo/Components/Buttons/TabIcons.swift; sourceTree = SOURCE_ROOT; };
 		AD3F0EBD282034E800443591 /* TotalGoalsRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = TotalGoalsRow.swift; path = VoMo/Components/HomePageComponents/TotalGoalsRow.swift; sourceTree = SOURCE_ROOT; };
@@ -144,19 +148,19 @@
 		ADA0E0E52826E42600CF05D1 /* VoMo.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = VoMo.entitlements; sourceTree = "<group>"; };
 		ADA0E0E72827198500CF05D1 /* ActivityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ActivityView.swift; path = vomo/Views/ActivityView/ActivityView.swift; sourceTree = SOURCE_ROOT; };
 		ADA0E0EB28282D9E00CF05D1 /* SubmissionButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SubmissionButton.swift; path = vomo/Components/Buttons/SubmissionButton.swift; sourceTree = SOURCE_ROOT; };
+		ADBAE7F8282996A500A7BD1B /* Roboto-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Roboto-Bold.ttf"; path = "../../Roboto/Roboto-Bold.ttf"; sourceTree = "<group>"; };
+		ADBAE7FB282996DF00A7BD1B /* Roboto-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Roboto-Medium.ttf"; path = "../../Roboto/Roboto-Medium.ttf"; sourceTree = "<group>"; };
+		ADBAE7FD282996E500A7BD1B /* Roboto-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Roboto-Regular.ttf"; path = "../../Roboto/Roboto-Regular.ttf"; sourceTree = "<group>"; };
+		ADBAE7FF282996EE00A7BD1B /* Roboto-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Roboto-Light.ttf"; path = "../../Roboto/Roboto-Light.ttf"; sourceTree = "<group>"; };
+		ADBAE801282996FA00A7BD1B /* Roboto-LightItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Roboto-LightItalic.ttf"; path = "../../Roboto/Roboto-LightItalic.ttf"; sourceTree = "<group>"; };
+		ADBAE8052829984F00A7BD1B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = vomo/Assets.xcassets; sourceTree = SOURCE_ROOT; };
+		ADBAE807282998B000A7BD1B /* default_audio.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = default_audio.mp3; sourceTree = SOURCE_ROOT; };
 		ADD4CE6727EF430D00037058 /* AudioPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioPlayer.swift; sourceTree = "<group>"; };
 		ADD4CE6927EF434400037058 /* AudioRecorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioRecorder.swift; sourceTree = "<group>"; };
 		ADD6846527D82DA300FF23D2 /* JournalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JournalView.swift; sourceTree = "<group>"; };
 		ADD6846727D82DB100FF23D2 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		ADD6846B27D8326B00FF23D2 /* Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extension.swift; sourceTree = "<group>"; };
 		ADF14CA92829623800869322 /* WavPlayground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = WavPlayground.swift; path = vomo/WavPlayground.swift; sourceTree = SOURCE_ROOT; };
-		ADF14CAB28297B0C00869322 /* default_audio.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = default_audio.mp3; path = ../../../../../Desktop/default_audio.mp3; sourceTree = "<group>"; };
-		ADF14CAD28297B0F00869322 /* default_audio.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = default_audio.mp3; path = ../../../../Desktop/default_audio.mp3; sourceTree = "<group>"; };
-		ADF14CAE28297B1C00869322 /* Roboto-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Roboto-Bold.ttf"; path = "../../../../Downloads/Roboto/Roboto-Bold.ttf"; sourceTree = "<group>"; };
-		ADF14CAF28297B2600869322 /* Roboto-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Roboto-Medium.ttf"; path = "../../../../Downloads/Roboto/Roboto-Medium.ttf"; sourceTree = "<group>"; };
-		ADF14CB028297B3700869322 /* Roboto-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Roboto-Regular.ttf"; path = "../../../../Downloads/Roboto/Roboto-Regular.ttf"; sourceTree = "<group>"; };
-		ADF14CB128297B3F00869322 /* Roboto-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Roboto-Light.ttf"; path = "../../../../Downloads/Roboto/Roboto-Light.ttf"; sourceTree = "<group>"; };
-		ADF14CB228297B4A00869322 /* Roboto-LightItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Roboto-LightItalic.ttf"; path = "../../../../Downloads/Roboto/Roboto-LightItalic.ttf"; sourceTree = "<group>"; };
 		ADFA9277279A1AAE00F8758B /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		ADFA9279279A1AC600F8758B /* ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModel.swift; sourceTree = "<group>"; };
 		ADFA927C279A1B1E00F8758B /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
@@ -244,13 +248,13 @@
 				AD09A65927D9282A00684ECA /* Views */,
 				ADFA927B279A1ACD00F8758B /* Navigation */,
 				AD6B031D27FE1C3D0066B77D /* OnboardingViews */,
-				ADF14CAD28297B0F00869322 /* default_audio.mp3 */,
-				ADF14CAE28297B1C00869322 /* Roboto-Bold.ttf */,
-				ADF14CAF28297B2600869322 /* Roboto-Medium.ttf */,
-				ADF14CB028297B3700869322 /* Roboto-Regular.ttf */,
-				ADF14CB128297B3F00869322 /* Roboto-Light.ttf */,
-				ADF14CB228297B4A00869322 /* Roboto-LightItalic.ttf */,
-				AD158E6F279919A600C3119A /* Assets.xcassets */,
+				ADBAE7F8282996A500A7BD1B /* Roboto-Bold.ttf */,
+				ADBAE7FB282996DF00A7BD1B /* Roboto-Medium.ttf */,
+				ADBAE7FD282996E500A7BD1B /* Roboto-Regular.ttf */,
+				ADBAE7FF282996EE00A7BD1B /* Roboto-Light.ttf */,
+				ADBAE801282996FA00A7BD1B /* Roboto-LightItalic.ttf */,
+				ADBAE807282998B000A7BD1B /* default_audio.mp3 */,
+				ADBAE8052829984F00A7BD1B /* Assets.xcassets */,
 				AD158E71279919A600C3119A /* Preview Content */,
 			);
 			path = VoMo;
@@ -352,7 +356,6 @@
 		AD6B031D27FE1C3D0066B77D /* OnboardingViews */ = {
 			isa = PBXGroup;
 			children = (
-				ADF14CAB28297B0C00869322 /* default_audio.mp3 */,
 				AD6B031E27FE1C5F0066B77D /* OnboardingView.swift */,
 				AD6B032027FE2A260066B77D /* PersonalQuestionView.swift */,
 				AD6B032227FE2BE60066B77D /* VoiceQuestionView.swift */,
@@ -557,9 +560,14 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				ADBAE7FC282996DF00A7BD1B /* Roboto-Medium.ttf in Resources */,
 				AD158E73279919A600C3119A /* Preview Assets.xcassets in Resources */,
-				ADF14CAC28297B0C00869322 /* default_audio.mp3 in Resources */,
-				AD158E70279919A600C3119A /* Assets.xcassets in Resources */,
+				ADBAE808282998B000A7BD1B /* default_audio.mp3 in Resources */,
+				ADBAE802282996FA00A7BD1B /* Roboto-LightItalic.ttf in Resources */,
+				ADBAE800282996EE00A7BD1B /* Roboto-Light.ttf in Resources */,
+				ADBAE8062829984F00A7BD1B /* Assets.xcassets in Resources */,
+				ADBAE7FE282996E500A7BD1B /* Roboto-Regular.ttf in Resources */,
+				ADBAE7F9282996A500A7BD1B /* Roboto-Bold.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
