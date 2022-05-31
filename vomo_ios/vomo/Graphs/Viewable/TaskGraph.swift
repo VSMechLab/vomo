@@ -1,21 +1,21 @@
 //
-//  PitchGraph.swift
+//  TaskGraph.swift
 //  VoMo
 //
-//  Created by Neil McGrogan on 5/6/22.
+//  Created by Neil McGrogan on 5/9/22.
 //
 
 import SwiftUI
 
-struct PitchGraph: View {
+struct TaskGraph: View {
     @State private var demoData: [Double] = [55, 48, 54, 52, 50, 50, 56, 57, 59, 56, 57, 58, 57, 58]
     @State private var index = 0
     
-    let content_height: CGFloat = 225
+    let content_height: CGFloat = 300
     
     var body: some View {
         ZStack {
-            Color.BLUE.frame(height: content_height).cornerRadius(12)
+            Color.BLUE.opacity(0.3).frame(height: content_height).cornerRadius(12)
             
             HStack(spacing: 0) {
                 Text("ENTRIES")
@@ -25,13 +25,13 @@ struct PitchGraph: View {
                 VStack {
                     ForEach(0...10, id: \.self) { item in
                         Text("\(10 - item)")
-                            .font(._buttonFieldCopy)
+                            .font(._coverBodyCopy)
                     }
                 }.frame(height: content_height * 0.5)
                 Text("10\n9\n8\n7\n6\n5\n4\n3\n2\n1\n")
-                    .font(._buttonFieldCopy)
+                    .font(._coverBodyCopy)
                     .foregroundColor(Color.INPUT_FIELDS)
-                    .frame(width: 1, height: content_height * 0.25)
+                    .frame(width: 1, height: content_height * 0.495)
                 Color.white.frame(width: 1, height: content_height * 0.495)
                 
                 ScrollView(.horizontal, showsIndicators: false) {
@@ -49,10 +49,10 @@ struct PitchGraph: View {
                             ForEach(0...demoData.count, id: \.self) { item in
                                 VStack(spacing: 0) {
                                     Text("WEEK")
-                                        .font(._buttonFieldCopy)
+                                        .font(._coverBodyCopy)
                                         .foregroundColor(Color.INPUT_FIELDS)
                                     Text("\(item + 1)")
-                                        .font(._buttonFieldCopy)
+                                        .font(._coverBodyCopy)
                                 }.padding(.top, 5)
                                 if item != demoData.count {
                                     Spacer()
@@ -62,8 +62,16 @@ struct PitchGraph: View {
                     }
                 }
             }.frame(height: content_height)
-        }
-        .foregroundColor(Color.white)
-        .frame(height: 225, alignment: .center)
+            
+            VStack(alignment: .leading) {
+                HStack {
+                    Text("Measure")
+                        .font(._coverBodyCopy)
+                        .padding()
+                    Spacer()
+                }
+                Spacer()
+            }.frame(height: content_height)
+        }.foregroundColor(Color.white)
     }
 }

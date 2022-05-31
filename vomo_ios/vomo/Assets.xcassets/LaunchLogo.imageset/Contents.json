@@ -1,0 +1,23 @@
+{
+  "images" : [
+    {
+      "filename" : "VM_VoMo-Logo-WhBG.png",
+      "idiom" : "universal",
+      "scale" : "1x"
+    },
+    {
+      "filename" : "VM_VoMo-Logo-WhBG-1.png",
+      "idiom" : "universal",
+      "scale" : "2x"
+    },
+    {
+      "filename" : "VM_VoMo-Logo-WhBG-2.png",
+      "idiom" : "universal",
+      "scale" : "3x"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

@@ -21,7 +21,7 @@ struct AmplitudeGraph: View {
                 } else {
                     Text("\(demoData[0], specifier: "%.0f")")
                 }
-            }.padding(.horizontal, 5).font(.vomoCardnHeader).foregroundColor(.white)
+            }.padding(.horizontal, 5).font(._coverBodyCopy).foregroundColor(.white)
             
             Spacer()
             
