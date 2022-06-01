@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="bright_purple">#A59BFF</color>
+    <color name="dark_purple">#8782E1</color>
+    <color name="darkest_purple">#32288C</color>
+    <color name="teal">#00DDD4</color>
+    <color name="deep_blue">#285FC8</color>
+    <color name="gradient_blue">#5A82E1</color>
+    <color name="black">#FF000000</color>
+    <color name="headline_copy_gray">#232323</color>
+    <color name="body_copy_gray">#7D7D7D</color>
+    <color name="input_fields_gray">#EBEBEB</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="gradient_bp">@drawable/gradient1</color>
+    <color name="gradient_tp">@drawable/gradient2</color>
+</resources>
