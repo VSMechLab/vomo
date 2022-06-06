@@ -1,70 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Header 1 Style -->
-    <style name="H1" >
+    <!-- Text Base Style -->
+    <style name="Text" >
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:fontFamily">@font/roboto_bold</item>
-        <item name="android:textAlignment">viewStart</item>
-        <item name="android:textSize">30sp</item>
-        <item name="android:textColor">@color/headline_copy_gray</item>
-    </style>
-
-    <!-- Header 1 Style: v1 -->
-    <style name="H1.v1" parent="@style/H1">
-        <item name="android:textColor">@color/dark_purple</item>
-    </style>
-
-    <!-- Header 1 Style: v2 -->
-    <style name="H1.v2" parent="@style/H1">
-        <item name="android:textColor">@color/teal</item>
-    </style>
-
-    <!-- Header 2 Style -->
-    <style name="H2" >
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:fontFamily">@font/roboto_bold</item>
-        <item name="android:textAlignment">viewStart</item>
-        <item name="android:textSize">20sp</item>
-        <item name="android:textColor">@color/headline_copy_gray</item>
-    </style>
-
-    <!-- Body 2 Style -->
-    <style name="B2" >
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:fontFamily">@font/roboto</item>
-        <item name="android:textAlignment">viewStart</item>
-        <item name="android:textSize">12sp</item>
         <item name="android:textColor">@color/body_copy_gray</item>
     </style>
 
-    <!-- Body 2 Style: v1 -->
-    <style name="B2.v1" parent="@style/B2" >
-        <item name="android:fontFamily">@font/roboto_medium</item>
-        <item name="android:textColor">@color/dark_purple</item>
+    <!-- Header 1 Style -->
+    <style name="H1" parent="@style/Text">
+        <item name="android:fontFamily">@font/roboto_bold</item>
+        <item name="android:textColor">@color/headline_copy_gray</item>
+        <item name="android:textAlignment">viewStart</item>
+        <item name="android:textSize">30sp</item>
+    </style>
+
+    <!-- Header 2 Style -->
+    <style name="H2" parent="@style/H1">
+        <item name="android:textSize">20sp</item>
+    </style>
+
+    <!-- Body 2 Style -->
+    <style name="B2" parent="Text">
+        <item name="android:fontFamily">@font/roboto</item>
+        <item name="android:textAlignment">viewStart</item>
+        <item name="android:textSize">12sp</item>
     </style>
 
     <!-- Body 3 Style -->
-    <style name="B3" >
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
+    <style name="B3" parent="Text">
         <item name="android:fontFamily">@font/roboto_medium</item>
         <item name="android:textSize">10sp</item>
         <item name="android:textColor">@color/dark_purple</item>
     </style>
 
-    <!-- Quote Style -->
-    <style name="Q1" >
-        <item name="android:layout_gravity">center</item>
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_marginStart">15dp</item>
-        <item name="android:layout_marginEnd">15dp</item>
+    <!-- Body 3 Style: v1 -->
+    <style name="B3.v1" parent="B3">
         <item name="android:fontFamily">@font/roboto_bold</item>
         <item name="android:textAlignment">center</item>
-        <item name="android:textSize">18sp</item>
+        <item name="android:layout_marginTop">5dp</item>
+    </style>
+
+    <!-- Body 4 Style -->
+    <style name="B4" parent="Text">
+        <item name="android:textSize">7sp</item>
+        <item name="android:fontFamily">@font/roboto_medium</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:layout_marginTop">-2dp</item>
+    </style>
+
+    <!-- Quote Style -->
+    <style name="Quotes" parent="Text">
+        <item name="android:fontFamily">@font/roboto_bold</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:textSize">16sp</item>
         <item name="android:textColor">@color/white</item>
     </style>
 
@@ -75,7 +64,7 @@
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:adjustViewBounds">true</item>
-        <item name="android:maxHeight">60dp</item>
+        <item name="android:maxHeight">@dimen/homepage_icon_size</item>
         <item name="android:scaleType">centerInside</item>
         <item name="android:clickable">true</item>
     </style>

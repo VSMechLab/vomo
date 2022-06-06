@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">VoMo</string>
     <string name="button_edit"><u>Edit</u></string>
+    <string name="random_quote">$(rand_quote)</string>
 </resources>
