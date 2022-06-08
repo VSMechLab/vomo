@@ -7,14 +7,25 @@
 
 import SwiftUI
 
-struct NoButton: View {
-    var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
-    }
-}
-
-struct NoButton_Previews: PreviewProvider {
-    static var previews: some View {
-        NoButton()
+struct NoButton: ButtonStyle {
+    let selected: Bool
+    let select_img = "VM_Select-Btn-Prpl-Field"
+    let unselect_img = "VM_Unselect-Btn-Gry-Field"
+    
+    func makeBody(configuration: Configuration) -> some View {
+        ZStack {
+            Image(selected ? unselect_img : select_img)
+                .resizable()
+                .frame(height:  35)
+            
+            HStack {
+                Text("No")
+                    .font(._buttonFieldCopy)
+                    .foregroundColor(selected ? Color.BODY_COPY : Color.white)
+                    .padding(.leading, 26)
+                
+                Spacer()
+            }
+        }
     }
 }

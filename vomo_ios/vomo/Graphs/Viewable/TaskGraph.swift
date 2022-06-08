@@ -18,7 +18,7 @@ struct TaskGraph: View {
             Color.BLUE.opacity(0.3).frame(height: content_height).cornerRadius(12)
             
             HStack(spacing: 0) {
-                Text("ENTRIES")
+                Text("TASKS")
                     .font(._coverBodyCopy)
                     .rotationEffect(Angle(degrees: -90))
                     .padding(.horizontal, -10)
@@ -28,7 +28,7 @@ struct TaskGraph: View {
                             .font(._coverBodyCopy)
                     }
                 }.frame(height: content_height * 0.5)
-                Text("10\n9\n8\n7\n6\n5\n4\n3\n2\n1\n")
+                Text("7\n6\n5\n4\n3\n2\n1\n")
                     .font(._coverBodyCopy)
                     .foregroundColor(Color.INPUT_FIELDS)
                     .frame(width: 1, height: content_height * 0.495)
@@ -65,7 +65,7 @@ struct TaskGraph: View {
             
             VStack(alignment: .leading) {
                 HStack {
-                    Text("Measure")
+                    Text("Task")
                         .font(._coverBodyCopy)
                         .padding()
                     Spacer()

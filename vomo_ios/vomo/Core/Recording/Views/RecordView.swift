@@ -11,34 +11,18 @@ import Combine
 import AVFoundation
 
 struct ContentView: View {
-    @EnvironmentObject var viewRouter: ViewRouter
-    @EnvironmentObject var recordingState: RecordingState
+    @EnvironmentObject var recordingState: RecordState
+    @State private var audioPlayerPrerecordings: AVAudioPlayer?
     
-    @ObservedObject var audioRecorder: AudioRecorder
-    @ObservedObject var audioPlayer = AudioPlayer()
-    
-    @State var audioPlayerPrerecordings: AVAudioPlayer!
-    @State private var promptSelect = 0
-    @State private var playing = false
-    @State private var audioRecorded = false
-    @State private var showMenu = false
+    @State private var vm = RecordingViewModel()
+    @State private var exercise = 0
     @State private var playLast = false
-    @State private var timerCount = 0
-    
-    let default_audio = "default_audio"
-    let button_img = "VM_Gradient-Btn"
-    let next_img = "VM_next-nav-btn"
-    let stop_img = "VM_stop-nav-icon"
-    let navArrowWidth = CGFloat(20)
-    let navArrowHeight = CGFloat(25)
-    let prompts: [String] = ["Say 'ahh' for\n5 seconds", "say 'ahhh' for\nas long as you can", "Say 'A raindbow is a\ndivision of white light\ninto many beautiful colors'"]
-    
-    let content_width: CGFloat = 317.5
+    @State private var timer = 0
     
     var body: some View {
         ZStack {
-            if promptSelect < 3 {
-                RecordBackground(timerCount: self.$timerCount, playing: self.playing)
+            if exercise < 3 {
+                RecordBackground(timerCount: self.$timer)
             }
             
             HStack {
@@ -46,149 +30,208 @@ struct ContentView: View {
                 
                 Spacer()
                 
-                centerSection
+                VStack(spacing: 0) {
+                    switch exercise {
+                    case 0..<3:
+                        vocalSection
+                    case 3:
+                        QuestionnaireView()
+                    case 4:
+                        VocalEffort()
+                    case 5:
+                        JournalView()
+                        Spacer()
+                    default:
+                        Text("ERROR")
+                    }
+                }
+                .frame(width: vm.content_width)
                 
                 Spacer()
                 
                 nextSection
-            }.padding()
+            }
+            .padding()
+            .onAppear() {
+                initTasks()
+            }
             
-            VStack {
-                if audioRecorded && showMenu {
-                    CompleteMenu(audioRecorder: self.audioRecorder, playLast: self.$playLast, showMenu: self.$showMenu, audioRecorded: self.$audioRecorded, promptSelect: self.$promptSelect)
-                }
+            if self.recordingState.state == 2 {
+                CompleteMenu(playLast: self.$playLast, promptSelect: self.$exercise, timer: self.$timer)
             }
         }
-    }
-}
-
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        ContentView(audioRecorder: AudioRecorder())
     }
 }
 
 extension ContentView {
-    private var centerSection: some View {
-        VStack(spacing: 0) {
-            switch promptSelect {
-            case 0..<3:
-                VStack {
-                    Group {
-                        if self.recordingState.recordingState == 0 && self.promptSelect != 3 {
-                            Text("Tap the mic to record")
-                        } else if self.recordingState.recordingState == 1 {
-                            Text("Recording...")
-                                .onAppear {
-                                    if self.recordingState.recordingState == 2 {
-                                        self.playing.toggle()
-                                        self.audioRecorder.stopRecording()
-                                        self.audioRecorded.toggle()
-                                        self.showMenu.toggle()
-                                        self.timerCount = 0
-                                    } else if self.recordingState.recordingState == 1 {
-                                        self.playing.toggle()
-                                        self.audioRecorder.startRecording(taskNum: self.promptSelect + 1)
-                                    }
-                                }
-                        } else if self.recordingState.recordingState == 2 {
-                            Text("Stopped...")
-                                .onAppear {
-                                    if self.recordingState.recordingState == 2 {
-                                        self.playing.toggle()
-                                        self.audioRecorder.stopRecording()
-                                        self.audioRecorded.toggle()
-                                        self.showMenu.toggle()
-                                        self.timerCount = 0
-                                    } else if self.recordingState.recordingState == 1 {
-                                        self.playing.toggle()
-                                        self.audioRecorder.startRecording(taskNum: self.promptSelect + 1)
-                                    }
-                                }
-                        }
-                    }
+    private var vocalSection: some View {
+        VStack {
+            VStack {
+                Spacer()
+                Text("\(recordingState.status())")
                     .font(._recordStateStatus)
                     .foregroundColor(Color.BODY_COPY)
-                    
-                    Text(promptSelect != 3 ? prompts[promptSelect] : "")
-                        .multilineTextAlignment(.center)
-                        .font(._headline)
-                        .frame(height: 125)
-                        .padding(.top, 75)
-                    
-                    Button("") {
-                        if audioPlayer.isPlaying == false {
-                            self.audioPlayerPrerecordings.play()
-                        } else {
-                            self.audioPlayerPrerecordings.pause()
-                        }
-                    }
-                    .buttonStyle(SubmissionButton(label: "Play Example"))
-                    .onAppear {
-                        let sound = Bundle.main.path(forResource: default_audio, ofType: "mp3")
-                        self.audioPlayerPrerecordings = try! AVAudioPlayer(contentsOf: URL(fileURLWithPath: sound!))
-                    }
-                    
-                    Spacer()
-                }
-            case 3:
-                Questionnaire()
-            case 4:
-                VocalEffort()
-            case 5:
-                JournalView()
+                    .padding()
+                Text(exercise != 3 ? vm.prompt[exercise] : "")
+                    .multilineTextAlignment(.center)
+                    .font(._headline)
                 Spacer()
-            default:
-                Text("ERROR")
+                promptPlaybackButton
             }
+            .frame(height: UIScreen.main.bounds.height / 3)
+            
+            Spacer()
         }
-        .frame(width: content_width)
     }
     
     private var backSection: some View {
         Group {
-            if self.promptSelect > 0 {
+            if self.exercise > 0 && moveBackHold() {
                 VStack {
                     Spacer()
                     Button(action: {
-                        if self.promptSelect == 3 {
-                            self.recordingState.recordingState = 0
+                        if self.exercise == 3 {
+                            self.recordingState.state = 0
                         }
-                        self.promptSelect -= 1
+                        decreaseExercise()
+                        self.recordingState.task = self.exercise + 1
                     }) {
-                        Image(next_img)
+                        Image(vm.next_img)
                             .resizable()
                             .rotationEffect(Angle(degrees: 180))
-                            .frame(width: navArrowWidth, height: navArrowHeight)
+                            .frame(width: vm.navArrowWidth, height: vm.navArrowHeight)
                     }
                     Spacer()
                 }
             } else {
-                Spacer().frame(width: navArrowWidth)
+                Spacer().frame(width: vm.navArrowWidth)
             }
         }
     }
     
     private var nextSection: some View {
         Group {
-            if self.promptSelect < 5 {
+            if self.exercise < 5 {
                 VStack {
                     Spacer()
                     Button(action: {
-                        if self.promptSelect == 2 {
-                            self.recordingState.recordingState = 2
+                        if self.exercise == 2 {
+                            self.recordingState.state = 0
                         }
-                        self.promptSelect += 1
+                        increaseExercise()
                     }) {
-                        Image(next_img)
+                        Image(vm.next_img)
                             .resizable()
-                            .frame(width: navArrowWidth, height: navArrowHeight)
+                            .frame(width: vm.navArrowWidth, height: vm.navArrowHeight)
                     }
                     Spacer()
                 }
             } else {
-                Spacer().frame(width: navArrowWidth)
+                Spacer().frame(width: vm.navArrowWidth)
             }
         }
+    }
+    
+    private var promptPlaybackButton: some View {
+        Button(action: {
+            if self.audioPlayerPrerecordings?.isPlaying == true {
+                self.audioPlayerPrerecordings?.stop()
+            } else {
+                let sound = Bundle.main.path(forResource: vm.audio[exercise], ofType: "wav")
+                audioPlayerPrerecordings = try! AVAudioPlayer(contentsOf: URL(fileURLWithPath: sound!))
+                
+                self.audioPlayerPrerecordings?.play()
+            }
+        }) {
+            SubmissionButton(label: "PLAY EXAMPLE")
+        }
+    }
+    
+    func initTasks() {
+        if vm.taskList.contains("vowel") {
+            self.exercise = 0
+        } else if vm.taskList.contains("max_pt") {
+            self.exercise = 1
+        } else if vm.taskList.contains("rainbow_s") {
+            self.exercise = 2
+        }
+    }
+    
+    func increaseExercise() {
+        if exercise == 0 {
+            if vm.taskList.contains("max_pt") {
+                self.exercise += 1
+            } else if vm.taskList.contains("rainbow_s") {
+                self.exercise += 2
+            } else {
+                self.exercise += 3
+            }
+        } else if exercise == 1 {
+            if vm.taskList.contains("rainbow_s") {
+                self.exercise += 1
+            } else {
+                self.exercise += 2
+            }
+        } else {
+            self.exercise += 1
+        }
+        
+        self.recordingState.task = self.exercise + 1
+    }
+    
+    func decreaseExercise() {
+        if self.exercise == 3 {
+            if vm.taskList.contains("rainbow_s") {
+                self.exercise -= 1
+            } else if vm.taskList.contains("max_pt") {
+                self.exercise -= 2
+            } else if vm.taskList.contains("vowel") {
+                self.exercise -= 3
+            }
+        } else if self.exercise == 2 {
+            if vm.taskList.contains("max_pt") {
+                self.exercise -= 1
+            } else if vm.taskList.contains("vowel") {
+                self.exercise -= 2
+            }
+        } else if self.exercise == 1 {
+            if vm.taskList.contains("vowel") {
+                self.exercise -= 1
+            }
+        } else {
+            self.exercise -= 1
+        }
+        
+        self.recordingState.task = self.exercise + 1
+    }
+    
+    func moveBackHold() -> Bool {
+        if exercise == 3 {
+            if vm.taskList.contains("vowel") || vm.taskList.contains("max_pt") || vm.taskList.contains("rainbow_s") {
+                return true
+            } else {
+                return false
+            }
+        } else if exercise == 2 {
+            if vm.taskList.contains("vowel") || vm.taskList.contains("max_pt") {
+                return true
+            } else {
+                return false
+            }
+        } else if exercise == 1 {
+            if vm.taskList.contains("vowel") {
+                return true
+            } else {
+                return false
+            }
+        } else {
+            return true
+        }
+    }
+}
+
+struct ContentView_Previews: PreviewProvider {
+    static var previews: some View {
+        ContentView()
     }
 }

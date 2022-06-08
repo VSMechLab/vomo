@@ -72,13 +72,6 @@ struct Activityiew: View {
                             .cornerRadius(7)
                         
                         HStack {
-                            Button(action: {
-                                self.goalOneSelect.toggle()
-                            }) {
-                                Image(goalOneSelect ? select_img : unselect_img)
-                                    .resizable()
-                                    .frame(width: 20, height: 20)
-                            }
                             Text("2x week")
                                 .font(._bodyCopy)
                             Spacer()
@@ -102,13 +95,6 @@ struct Activityiew: View {
                             .cornerRadius(7)
                         
                         HStack {
-                            Button(action: {
-                                self.goalTwoSelect.toggle()
-                            }) {
-                                Image(goalTwoSelect ? select_img : unselect_img)
-                                    .resizable()
-                                    .frame(width: 20, height: 20)
-                            }
                             Text("8 weeks")
                                 .font(._bodyCopy)
                             Spacer()

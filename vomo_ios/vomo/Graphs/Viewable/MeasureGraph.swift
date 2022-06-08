@@ -28,7 +28,7 @@ struct MeasureGraph: View {
                             .font(._coverBodyCopy)
                     }
                 }.frame(height: content_height * 0.5)
-                Text("10\n9\n8\n7\n6\n5\n4\n3\n2\n1\n")
+                Text("7\n6\n5\n4\n3\n2\n1\n")
                     .font(._day)
                     .foregroundColor(Color.INPUT_FIELDS)
                     .frame(width: 1, height: content_height * 0.495)

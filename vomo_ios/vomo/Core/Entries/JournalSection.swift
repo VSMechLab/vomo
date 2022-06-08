@@ -21,31 +21,28 @@ struct JournalSection: View {
     
     var body: some View {
         HStack(alignment: .top) {
-            VStack {
-                Image(logo)
-                    .resizable()
-                    .frame(width: 42, height: 42, alignment: .center)
-                    .shadow(radius: 2)
-                
-                Spacer()
-                
-                Text("")
-            }.frame(height: 100)
+            Image(logo)
+                .resizable()
+                .frame(width: 55, height: 55, alignment: .center)
+                .padding(.leading, 4)
             
             VStack(alignment: .leading) {
                 HStack {
                     Text(type)
-                        .font(._coverBodyCopy)
+                        .font(._fieldLabel)
                     
                     Spacer()
                     
                     Button(action: {
-                        self.active = 0
+                        withAnimation {
+                            self.active = 0
+                        }
                     }) {
                         Image(dropdown)
                             .resizable()
                             .rotationEffect(.degrees(-180))
-                            .frame(width: 25, height: 10, alignment: .center)
+                            .frame(width: 20, height: 8.5, alignment: .center)
+                            .padding(.trailing, 5)
                     }
                 }
                 
@@ -64,7 +61,7 @@ struct JournalSection: View {
                 }
             }
         }
-        .padding()
+        .padding(.vertical)
         .background(Color.BLUE.opacity(0.45))
     }
 }

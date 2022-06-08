@@ -5,21 +5,21 @@
 //  Created by Neil McGrogan on 4/12/22.
 //
 
+import Foundation
 import SwiftUI
+import Combine
+import AVFoundation
 
 struct CompleteMenu: View {
     @EnvironmentObject var entries: Entries
-    @EnvironmentObject var recordingState: RecordingState
-    
+    @EnvironmentObject var recordingState: RecordState
+    @EnvironmentObject var audioRecorder: AudioRecorder
     @ObservedObject var audioPlayer = AudioPlayer()
-    @ObservedObject var audioRecorder: AudioRecorder
     
     @Binding var playLast: Bool
-    @Binding var showMenu: Bool
-    @Binding var audioRecorded: Bool
     @Binding var promptSelect: Int
+    @Binding var timer: Int
     
-    let exit_button = "VoMo-App-Assets_2_popup-close-btn"
     let stop_play_img = "VM_stop_play-btn"
     let approved_img = "VM_appr-btn"
     let play_img = "VM_play-btn"
@@ -36,22 +36,6 @@ struct CompleteMenu: View {
                     Color.white.frame(width: 275, height: 150).opacity(0.95).shadow(color: Color.black.opacity(0.2), radius: 5)
                     
                     VStack {
-                        HStack {
-                            Spacer()
-                            
-                            Button(action: {
-                                self.showMenu.toggle()
-                                self.audioRecorded.toggle()
-                                self.recordingState.recordingState = 0
-                            }) {
-                                Image(exit_button)
-                                    .resizable()
-                                    .frame(width: 17, height: 17)
-                                    .padding(.top, -10)
-                                    .padding(.horizontal)
-                            }
-                        }
-                        
                         Text("Recording Complete!")
                             .font(._coverBodyCopy)
                         
@@ -81,6 +65,7 @@ struct CompleteMenu: View {
                                     } else {
                                         self.audioPlayer.stopPlayback()
                                     }
+                                    self.timer = 0
                                 }) {
                                     Image(audioPlayer.isPlaying ? stop_play_img : play_img)
                                         .resizable()
@@ -95,11 +80,10 @@ struct CompleteMenu: View {
                             
                             VStack {
                                 Button(action: {
-                                    self.showMenu.toggle()
-                                    self.audioRecorded.toggle()
-                                    self.recordingState.recordingState = 0
-                                    self.entries.recordings.append(RecordingModel(createdAt: audioRecorder.recordings.last?.createdAt as! Date, taskNum: promptSelect + 1))
+                                    self.recordingState.state = 0
+                                    self.entries.recordings.append(RecordingModel(createdAt: audioRecorder.recordings.last!.createdAt, taskNum: promptSelect + 1))
                                     self.entries.saveItems()
+                                    self.timer = 0
                                 }) {
                                     Image(approved_img)
                                         .resizable()
@@ -115,9 +99,8 @@ struct CompleteMenu: View {
                             VStack {
                                 Button(action: {
                                     deleteLastRecording()
-                                    self.recordingState.recordingState = 0
-                                    self.showMenu.toggle()
-                                    self.audioRecorded.toggle()
+                                    self.recordingState.state = 0
+                                    self.timer = 0
                                 }) {
                                     Image(retry_img)
                                         .resizable()
@@ -141,7 +124,7 @@ struct CompleteMenu: View {
     }
     
     func retreiveLastRecording() -> URL {
-        let lastRecording = audioRecorder.recordings.last?.fileURL as! URL
+        let lastRecording: URL = audioRecorder.recordings.last!.fileURL
         return lastRecording
     }
     

@@ -1,5 +1,5 @@
 //
-//  VisitLis.swift
+//  VisitTypeRow.swift
 //  VoMo
 //
 //  Created by Neil McGrogan on 5/31/22.
@@ -7,14 +7,28 @@
 
 import SwiftUI
 
-struct VisitLis: View {
-    var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
-    }
-}
 
-struct VisitLis_Previews: PreviewProvider {
-    static var previews: some View {
-        VisitLis()
+struct VisitTypeRow: View {
+    let visit: VisitModel
+    let img: String
+    
+    var body: some View {
+        HStack(spacing: 0) {
+            Text("\(visit.date.toStringDay())")
+            
+            Spacer()
+            
+            Text("\(visit.visitType)")
+            
+            Button(action: {}) {
+                Image(systemName: img)
+                    .background(Color.white)
+                    .cornerRadius(3)
+            }
+        }
+        .padding(.horizontal, 3)
+        .foregroundColor(Color.gray)
+        .cornerRadius(5)
+        
     }
 }

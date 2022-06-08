@@ -8,13 +8,17 @@
 import SwiftUI
 
 struct SubmissionButton: View {
+    let button_img = "VM_Gradient-Btn"
+    let label: String
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
-    }
-}
-
-struct SubmissionButton_Previews: PreviewProvider {
-    static var previews: some View {
-        SubmissionButton()
+        ZStack {
+            Image(button_img)
+                .resizable()
+                .frame(width: 225, height: 40)
+            
+            Text(label)
+                .font(._BTNCopy)
+                .foregroundColor(Color.white)
+        }
     }
 }

@@ -1,5 +1,5 @@
 //
-//  QuestionnaireSection.swift
+//  ResultsSection.swift
 //  VoMo
 //
 //  Created by Neil McGrogan on 4/18/22.
@@ -7,48 +7,41 @@
 
 import SwiftUI
 
-struct QuestionnaireSection: View {
+struct ResultsSection: View {
     @EnvironmentObject var entries: Entries
-    @ObservedObject var audioRecorder: AudioRecorder
+    @EnvironmentObject var audioRecorder: AudioRecorder
     @ObservedObject var audioPlayer = AudioPlayer()
+    @EnvironmentObject var retrieve: Retrieve
     @Binding var active: Int
     
     let focus: Date
     let type: String
     
-    let logo = "VM_record-nav-icon"
+    let logo = "VoMo-App-Assets_2_scores-gfx"
     let dropdown = "VM_Dropdown-Btn"
     let info_img = "VM_info-icon"
-    
     @State private var infoPopup = false
     
     var body: some View {
         HStack(alignment: .top) {
-            VStack {
-                Image(logo)
-                    .resizable()
-                    .frame(width: 60, height: 60, alignment: .center)
-                    .shadow(radius: 2)
-                
-                Spacer()
-                
-                Text("")
-            }.frame(height: 100)
+            headerSection
             
             VStack(alignment: .leading, spacing: 3) {
                 HStack {
                     Text(type)
-                        .font(._coverBodyCopy)
+                        .font(._fieldLabel)
                     
                     Spacer()
                     
                     Button(action: {
-                        self.active = 0
+                        withAnimation {
+                            self.active = 0
+                        }
                     }) {
                         Image(dropdown)
                             .resizable()
                             .rotationEffect(.degrees(-180))
-                            .frame(width: 25, height: 10, alignment: .center)
+                            .frame(width: 20, height: 8.5, alignment: .center)
                     }
                 }
                 
@@ -102,9 +95,25 @@ struct QuestionnaireSection: View {
                 }
                 
                 Color.white.frame(height: 1)
+                /*
+                ForEach(audioRecorder.recordings, id: \.createdAt) { record in
+                    if record.createdAt.toStringDay() == retrieve.focusDay.toStringDay() {
+                        Text("Record \(record.createdAt.toStringHour())")
+                            .font(._bodyCopy)
+                            .onAppear() {
+                                print("\(audioRecorder.signalProcess(file: record.fileURL))")
+                            }
+                        
+                        
+                        
+                        //Text("Function \()")
+                    }
+                }
+                */
             }
+            .padding(.trailing, 5)
         }
-        .padding()
+        .padding(.vertical)
         .foregroundColor(Color.black)
         .background(Color.TEAL)
     }
@@ -122,6 +131,18 @@ struct QuestionnaireSection: View {
     }
 }
 
+extension ResultsSection {
+    private var headerSection: some View {
+        VStack {
+            Image(logo)
+                .resizable()
+                .frame(width: 55, height: 55)
+                .padding(.leading, 5)
+            
+            Spacer()
+        }
+    }
+}
 /*
 List {
     if !entries.questioinnairesPresent {

@@ -22,7 +22,7 @@ struct EffortScale: View {
         ZStack {
             Image(scale_img)
                 .resizable()
-                .frame(width: scale_width, height: scale_height)
+                .frame(width: scale_width + 10, height: scale_height)
             
             
             ZStack {

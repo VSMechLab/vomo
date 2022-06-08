@@ -11,8 +11,8 @@ struct PersonalQuestionView: View {
     @EnvironmentObject var viewRouter: ViewRouter
     
     @State private var acceptedTerms = UserDefaults.standard.bool(forKey: "accepts_terms")
-    @State private var name = UserDefaults.standard.string(forKey: "name") ?? ""
-    @State private var gender = UserDefaults.standard.string(forKey: "gender") ?? ""
+    @State private var firstName = UserDefaults.standard.string(forKey: "first_name") ?? ""
+    @State private var lastName = UserDefaults.standard.string(forKey: "last_name") ?? ""
     @State private var dob = UserDefaults.standard.string(forKey: "dob") ?? ""
     
     let logo = "VM_0-Loading-Screen-logo"
@@ -25,9 +25,20 @@ struct PersonalQuestionView: View {
     let img_selected = "VM_Prpl-Square-Btn copy"
     let img_unselected = "VM_Prpl-Check-Square-Btn"
     
+    let content_width = 317.5
+    
+    let arrow_img = "VM_Dropdown-Btn"
+    
+    @State private var showCalendar = false
+    
+    @State var goalDate = ""
+    @State var showDatePicker = false
+    @State var textfieldText: String = ""
+    
+    @State var date: Date = .now
+    
     var body: some View {
         VStack {
-            
             Spacer()
             
             HStack(spacing: 0) {
@@ -45,98 +56,94 @@ struct PersonalQuestionView: View {
             .padding()
             
             VStack(alignment: .leading) {
-                Text("Name")
-                    .font(._coverBodyCopy)
+                Text("First Name")
+                    .font(._fieldLabel)
                 
                 ZStack {
                     Image(entry_img)
                         .resizable()
-                        .frame(width: fieldWidth, height: toggleHeight)
+                        .frame(width: content_width, height: toggleHeight)
                         .cornerRadius(7)
                     
                     HStack {
-                        TextField(self.name.isEmpty ? "First and Last Name" : self.name, text: self.$name)
-                            .font(self.name.isEmpty ? ._fieldCopyItalic : ._fieldCopyRegular)
+                        TextField(self.firstName.isEmpty ? "First Name" : self.firstName, text: self.$firstName)
+                            .font(self.firstName.isEmpty ? ._fieldCopyItalic : ._fieldCopyRegular)
                     }.padding(.horizontal, 5)
-                }.frame(width: fieldWidth, height: toggleHeight)
+                }.frame(width: content_width, height: toggleHeight)
                 
-                Text("Gender")
-                    .font(._coverBodyCopy)
+                Text("Last Name")
+                    .font(._fieldLabel)
                 
                 ZStack {
                     Image(entry_img)
                         .resizable()
-                        .frame(width: fieldWidth, height: toggleHeight)
+                        .frame(width: content_width, height: toggleHeight)
                         .cornerRadius(7)
                     
                     HStack {
-                        TextField(self.gender.isEmpty ? "Gender" : self.gender, text: self.$gender)
-                            .font(self.gender.isEmpty ? ._fieldCopyItalic : ._fieldCopyRegular)
+                        TextField(self.lastName.isEmpty ? "Last Name" : self.lastName, text: self.$lastName)
+                            .font(self.lastName.isEmpty ? ._fieldCopyItalic : ._fieldCopyRegular)
                     }.padding(.horizontal, 5)
-                }//.frame(width: fieldWidth, height: toggleHeight)
+                }.frame(width: content_width, height: toggleHeight)
                 
                 Text("Date of Birth")
-                        .font(._coverBodyCopy)
+                    .font(._fieldLabel)
                 
                 ZStack {
                     Image(entry_img)
                         .resizable()
-                        .frame(width: fieldWidth, height: toggleHeight)
+                        .frame(width: content_width, height: toggleHeight)
                         .cornerRadius(5)
                     
-                    HStack {
-                        TextField(self.dob.isEmpty ? "00/00/0000" : self.dob, text: self.$dob)
-                            .font(self.dob.isEmpty ? ._fieldCopyItalic : ._fieldCopyRegular)
-                    }.padding(.horizontal, 7)
-                }.frame(width: fieldWidth, height: toggleHeight)
-            }
-            
-            HStack {
-                Spacer()
+                    Button(action: {
+                        withAnimation() {
+                            self.showCalendar.toggle()
+                        }
+                        dob = date.toDOB()
+                    }) {
+                        HStack {
+                            Text(date.toDOB())
+                                .font(._bodyCopy)
+                            /*
+                            TextField(self.dob.isEmpty ? "00/00/0000" : self.dob, text: self.$dob)
+                                .font(self.dob.isEmpty ? ._fieldCopyItalic : ._fieldCopyRegular)
+                            */
+                            Spacer()
+                            Image(arrow_img)
+                                .resizable()
+                                .frame(width: 20, height: 10)
+                                .rotationEffect(Angle(degrees:  showCalendar ? 180 : 0))
+                        }.padding(.horizontal, 7)
+                    }
+                }.frame(width: content_width, height: toggleHeight)
                 
-                HStack(spacing: 0) {
-                    Spacer()
-                    
-                    Button(action: {
-                        self.acceptedTerms.toggle()
-                    }) {
-                        Image(acceptedTerms ? img_selected : img_unselected)
-                            .resizable()
-                            .frame(width: 20, height: 20)
+                ZStack {
+                    if showCalendar {
+                        DatePicker("", selection: $date, in: ...Date.now, displayedComponents: .date)
+                            .datePickerStyle(WheelDatePickerStyle())
+                            .frame(maxHeight: 400)
                     }
-                    
-                    Text("By signing up you accept the ")
-                        .foregroundColor(Color.BODY_COPY)
-                        .font(._disclaimerCopy)
-                    
-                    Button(action: {
-                        
-                    }) {
-                        Text("Terms of Service")
-                            .foregroundColor(Color.DARK_PURPLE)
-                            .font(._disclaimerLink)
-                    }
-                    
-                    Text("and ")
-                        .foregroundColor(Color.BODY_COPY)
-                        .font(._disclaimerCopy)
-                    
-                    Button(action: {
-                        
-                    }) {
-                        Text("Privacy Policy")
-                            .foregroundColor(Color.DARK_PURPLE)
-                            .font(._disclaimerLink)
-                    }
-                    
-                    Spacer()
                 }
-                .multilineTextAlignment(.center)
-                .padding()
-                        
-                Spacer()
+                .transition(.slide)
             }
             
+            //termsSection
+            
+            Spacer()
+            
+            navSection
+            
+        }
+        .frame(width: content_width)
+        .onAppear() {
+            date = self.dob.toDateFromDOB() ?? .now
+        }
+    }
+}
+
+extension PersonalQuestionView {
+    private var navSection: some View {
+        Group {
             HStack {
                 Circle()
                     .foregroundColor(Color.DARK_PURPLE)
@@ -155,11 +162,12 @@ struct PersonalQuestionView: View {
                 Spacer()
                 
                 Button(action: {
-                    if self.name != "" && self.dob != "" && self.gender != "" {
+                    dob = date.toDOB()
+                    if self.firstName != "" && self.lastName != "" && self.dob != "" /* && self.acceptedTerms != false */ {
                         UserDefaults.standard.set(self.acceptedTerms, forKey:  "accepts_terms")
-                        UserDefaults.standard.set(self.name, forKey:  "name")
+                        UserDefaults.standard.set(self.firstName, forKey:  "first_name")
+                        UserDefaults.standard.set(self.lastName, forKey:  "last_name")
                         UserDefaults.standard.set(self.dob, forKey:  "dob")
-                        UserDefaults.standard.set(self.gender, forKey:  "gender")
                         viewRouter.currentPage = .voiceQuestionView
                     }
                 }) {
@@ -176,8 +184,45 @@ struct PersonalQuestionView: View {
                     }
                 }
             }
-            .frame(width: UIScreen.main.bounds.width - 50, height: 55, alignment: .center)
-            .padding()
+            .frame(width: content_width, height: 55, alignment: .center)
         }
+    }
+    
+    private var termsSection: some View {
+        HStack(spacing: 0) {
+            Button(action: {
+                self.acceptedTerms.toggle()
+            }) {
+                Image(acceptedTerms ? img_unselected : img_selected)
+                    .resizable()
+                    .frame(width: 20, height: 20)
+            }
+            
+            Text("By signing up you accept the ")
+                .foregroundColor(Color.BODY_COPY)
+                .font(._disclaimerCopy)
+            
+            Button(action: {
+                
+            }) {
+                Text("Terms of Service")
+                    .foregroundColor(Color.DARK_PURPLE)
+                    .font(._disclaimerLink)
+            }
+            
+            Text("and ")
+                .foregroundColor(Color.BODY_COPY)
+                .font(._disclaimerCopy)
+            
+            Button(action: {
+                
+            }) {
+                Text("Privacy Policy")
+                    .foregroundColor(Color.DARK_PURPLE)
+                    .font(._disclaimerLink)
+            }
+        }
+        .padding(.vertical)
+        .multilineTextAlignment(.center)
     }
 }

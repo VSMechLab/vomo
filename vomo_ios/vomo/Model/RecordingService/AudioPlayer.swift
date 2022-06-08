@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftUI
 import Combine
 import AVFoundation
 
@@ -22,6 +23,7 @@ class AudioPlayer: NSObject, ObservableObject, AVAudioPlayerDelegate {
     var audioPlayer: AVAudioPlayer!
     
     func startPlayback (audio: URL) {
+        
         let playbackSession = AVAudioSession.sharedInstance()
         
         do {
@@ -50,4 +52,5 @@ class AudioPlayer: NSObject, ObservableObject, AVAudioPlayerDelegate {
             isPlaying = false
         }
     }
+    
 }

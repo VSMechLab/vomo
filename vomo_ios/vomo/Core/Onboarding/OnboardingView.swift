@@ -7,12 +7,19 @@
 
 import SwiftUI
 
+/*
+ make sure audio recording works
+ finalize UI
+ */
+
 struct OnboardingView: View {
     @EnvironmentObject var viewRouter: ViewRouter
     
     let recording_background_img = "VM_Waves-Gfx"
     let logo = "VM_VoMo-Logo-WhBG"
     let button_img = "VM_Gradient-Btn"
+    
+    let content_width = 317.5
     
     var body: some View {
         VStack {
@@ -24,18 +31,24 @@ struct OnboardingView: View {
                 Text("Welcome to ")
                     .font(._headline)
                 
-                Text("VoMo.")
+                Text("VoMo")
                     .font(._headline)
                     .foregroundColor(Color.DARK_PURPLE)
                 
+                Text(".")
+                    .font(._headline)
+                    .foregroundColor(Color.TEAL)
+                
                 Spacer()
             }
+            .padding(.bottom, 10)
             
-            Text("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Excepteur sint occaecat cupidatat non proident, sunt in est laborum.")
+            Text("Track your voice over time and share vocal health information with your clinical provider all in one place")
                 .font(._bodyCopy)
                 .foregroundColor(Color.BODY_COPY)
                 .multilineTextAlignment(.center)
-                .padding()
+                .padding(.horizontal, 30)
+                .frame(width: content_width)
             
             Spacer()
             
@@ -49,18 +62,9 @@ struct OnboardingView: View {
             Button(action: {
                 viewRouter.currentPage = .personalQuestionView
             }) {
-                ZStack {
-                    Image(button_img)
-                        .resizable()
-                        .frame(width: UIScreen.main.bounds.width - 75, height: 55, alignment: .center)
-                        .cornerRadius(20)
-                    
-                    Text("Get Started")
-                        .font(._BTNCopy)
-                        .foregroundColor(Color.white)
-                }
+                SubmissionButton(label: "GET STARTED")
             }
-            .frame(width: UIScreen.main.bounds.width - 75, height: 55, alignment: .center)
+            .frame(width: content_width, height: 55, alignment: .center)
             .padding(.top, 30)
             .padding(.bottom)
         }.onAppear {

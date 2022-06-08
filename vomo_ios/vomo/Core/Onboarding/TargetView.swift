@@ -21,29 +21,13 @@ struct TargetView: View {
     let buttonWidth: CGFloat = 160
     let buttonHeight: CGFloat = 35
     
+    let content_width = 317.5
+    
     var body: some View {
         VStack {
             Spacer()
             
-            HStack(spacing: 0) {
-                Spacer()
-                
-                Text("Voice Treatment ")
-                    .font(._headline)
-                
-                Text("Target")
-                    .font(._headline)
-                    .foregroundColor(Color.DARK_PURPLE)
-                
-                Spacer()
-            }
-            .padding(.bottom, 20)
-            
-            Text("Lorem ipsomes description copy goes\nhere if needed.")
-                .font(._bodyCopy)
-                .foregroundColor(Color.BODY_COPY)
-                .multilineTextAlignment(.center)
-                .padding(.bottom, 20)
+            header
             
             HStack {
                 Button(action: {
@@ -138,7 +122,7 @@ struct TargetView: View {
                             .resizable()
                             .frame(width: buttonWidth, height: buttonHeight)
                         
-                        Text("None of the Above")
+                        Text("None of the Above (Default)")
                             .font(._buttonFieldCopy)
                             .foregroundColor(focusSelection == 6 ? Color.white : Color.BODY_COPY)
                             .multilineTextAlignment(.leading)
@@ -147,8 +131,58 @@ struct TargetView: View {
                 }.frame(width: buttonWidth, height: buttonHeight)
             }
             
+            infoSection
+            
             Spacer()
             
+            navSection
+        }.frame(width: content_width)
+    }
+}
+
+extension TargetView {
+    private var header: some View {
+        VStack(spacing: 0) {
+            HStack(spacing: 0) {
+                Spacer()
+                
+                Text("Voice Treatment ")
+                    .font(._headline)
+                
+                Text("Target")
+                    .font(._headline)
+                    .foregroundColor(Color.DARK_PURPLE)
+                
+                Text(".")
+                    .font(._headline)
+                    .foregroundColor(Color.TEAL)
+                
+                Spacer()
+            }
+            .padding(.bottom, 20)
+            
+            Text("VoMo will customize your app based on your selection.")
+                .font(._bodyCopy)
+                .foregroundColor(Color.BODY_COPY)
+                .multilineTextAlignment(.center)
+                .padding(.bottom, 20)
+        }.frame(width: content_width + 100)
+    }
+    
+    private var infoSection: some View {
+        HStack(spacing: 0) {
+            Text("Need more info? ")
+                .font(._disclaimerCopy)
+            Button("Click Here.") {
+                
+            }.foregroundColor(Color.DARK_PURPLE)
+                .font(._disclaimerLink)
+        }.padding(.vertical)
+            .hidden()
+    }
+    
+    private var navSection: some View {
+        Group {
             HStack {
                 if !edited_before {
                     Circle()
@@ -201,8 +235,7 @@ struct TargetView: View {
                     }
                 }
             }
-            .frame(width: UIScreen.main.bounds.width - 50, height: 55, alignment: .center)
-            .padding()
+            .frame(width: content_width, height: 55)
         }
     }
 }

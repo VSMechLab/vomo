@@ -126,6 +126,52 @@ class Entries: ObservableObject {
 }
 
 extension Entries {
+    func eraseRecording(index: Int) {
+        if index <= recordings.count - 1 {
+            recordings.remove(at: index)
+        }
+    }
+    
+    func firstRecordingFromSpecifiedDay(day: Date, filterTask: Int) -> Date {
+        var target: Date = .now
+        
+        if filterTask == 0 {
+            for record in recordings {
+                if day.toStringDay() == record.createdAt.toStringDay() {
+                    target = record.createdAt
+                    return target
+                }
+                //if day
+            }
+        } else {
+            for record in recordings {
+                if day.toStringDay() == record.createdAt.toStringDay() && record.taskNum == filterTask {
+                    target = record.createdAt
+                    return target
+                }
+            }
+        }
+        return target
+    }
+    
+    func tasksPresent(day: Date) -> [String] {
+        var target: [String] = []
+        
+        for record in recordings {
+            if day.toStringDay() == record.createdAt.toStringDay() {
+                if record.taskNum == 1 {
+                    target.append("One")
+                } else if record.taskNum == 2 {
+                    target.append("Two")
+                } else if record.taskNum == 3 {
+                    target.append("Three")
+                }
+            }
+        }
+        
+        return target
+    }
+    
     var recordingsPresent: Bool {
         return self.recordings.isEmpty
     }
@@ -142,24 +188,8 @@ extension Entries {
     // only show files from specific day and task
     func focused(createdAt: Date, task: Int) -> [RecordingModel] {
         let focused = self.recordings
-        
         return focused
-        /*
-        for index in self.recordings {
-            if self.recordings[Int(index)].createdAt != createdAt  || self.recordings[Int(index)].taskNum != task {
-                focused(removeAt: index)
-                return focused
-            }
-        }
-        */
     }
-    
-    
-    
-    
-    
-    
-    
     
     // Signal Processing Goes Here
     /*
@@ -181,18 +211,53 @@ class Keyboard: ObservableObject {
     @Published var present: Bool = false
 }
 
-class RecordingState: ObservableObject {
+class RecordState: ObservableObject {
     /*
      
      state:
-     
      0 not recording
      1 recording
      2 recorded
      
      */
-    @Published var recordingState = 0
+    @Published var state = 0
+    @Published var task = 0
     @Published var selectedEntry: Date = .now
+    func status() -> String {
+        switch state {
+        case 0:
+            return "Tap the mic to record"
+        case 1:
+            return "Recording..."
+        case 2:
+            return "Stopped..."
+        default:
+            return "Error"
+        }
+    }
+}
+
+class Retrieve: ObservableObject {
+    @Published var selectedEntry: Date = .now
+    @Published var focusDay: Date = .now
+    @Published var focusDayExercise: Int = 0
+    @Published var preciseRecord: Date = .now
+    
+    func totalDays(recordings: [Recording], journals: [JournalModel], questionnaires: [QuestionnaireModel]) -> [Date] {
+        
+        var returnable: [Date] = []
+        for record in recordings {
+            returnable.append(record.createdAt)
+        }
+        for journal in journals {
+            returnable.append(journal.createdAt)
+        }
+        for questionnaire in questionnaires {
+            returnable.append(questionnaire.createdAt)
+        }
+        
+        return returnable
+    }
 }
 
 

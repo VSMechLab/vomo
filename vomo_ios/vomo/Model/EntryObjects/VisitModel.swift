@@ -6,15 +6,14 @@
 //
 
 import SwiftUI
+import Foundation
 
-struct VisitModel: View {
-    var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
-    }
-}
-
-struct VisitModel_Previews: PreviewProvider {
-    static var previews: some View {
-        VisitModel()
+class VisitModel: Identifiable, Codable {
+    var date: Date
+    var visitType: String
+    
+    init(date: Date, visitType: String) {
+        self.date = date
+        self.visitType = visitType
     }
 }

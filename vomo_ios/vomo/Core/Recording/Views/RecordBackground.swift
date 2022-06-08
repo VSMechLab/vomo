@@ -8,11 +8,12 @@
 import SwiftUI
 
 struct RecordBackground: View {
+    @EnvironmentObject var recordingState: RecordState
+    
     @Binding var timerCount: Int
     
     let recording_background_img = "VM_Waves-Gfx"
     let demi_circle_img = "VM_record-bg-combined-gfx"
-    let playing: Bool
     let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
     
     var body: some View {
@@ -36,7 +37,7 @@ struct RecordBackground: View {
                     .font(._recordStateStatus)
                     .foregroundColor(Color.BODY_COPY)
                     .onReceive(timer) { _ in
-                        if playing {
+                        if recordingState.state == 1 {//playing {
                             timerCount += 1
                         }
                     }

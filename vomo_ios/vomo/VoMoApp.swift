@@ -12,20 +12,65 @@ import UIKit
 struct VoMoApp: App {
     var body: some Scene {
         WindowGroup {
+            SplashScreen()
+        }
+    }
+}
+
+struct SplashScreen: View {
+    @State var animate = false
+    @State var endSplash = false
+    @State var hideAnimation = false
+    
+    let bg = "LaunchBackground"
+    let lg = "LaunchLogo"
+    
+    var body: some View {
+        if !hideAnimation {
+            ZStack(alignment: .center) {
+                Color.BLUE
+                    .edgesIgnoringSafeArea(.all)
+                
+                Image(lg)
+                    .resizable()
+                    .renderingMode(.original)
+                    .edgesIgnoringSafeArea(.all)
+                    .aspectRatio(contentMode: animate ? .fill : .fit)
+                    .frame(width: animate ? nil : 1, height: animate ? nil : 1)
+                    .scaleEffect(animate ? 3 : 1)
+                    .frame(width: UIScreen.main.bounds.width)
+            }
+            .ignoresSafeArea(.all, edges: .all)
+            .onAppear(perform: animateSplash)
+            .opacity(endSplash ? 0 : 1)
+        } else {
             ViewController()
+                .environmentObject(AudioRecorder())
                 .environmentObject(ViewRouter())
                 .environmentObject(Keyboard())
-                .environmentObject(RecordingState())
+                .environmentObject(RecordState())
                 .environmentObject(Entries())
+                .environmentObject(Retrieve())
+                .environmentObject(Visits())
                 .foregroundColor(Color.black)
                 .background(Color.white)
                 .preferredColorScheme(.light)
-                .onAppear() {
-                    for family in UIFont.familyNames.sorted() {
-                        let names = UIFont.fontNames(forFamilyName: family)
-                        print("Family: \(family) Font names: \(names)")
-                    }
-                }
+        }
+    }
+    
+    func animateSplash() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
+            withAnimation(Animation.easeOut(duration: 0.45)) {
+                animate.toggle()
+            }
+            withAnimation(Animation.linear(duration: 0.35)) {
+                endSplash.toggle()
+            }
+            
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                self.hideAnimation.toggle()
+            }
         }
     }
 }
@@ -49,6 +94,4 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // If any sessions were discarded while the application was not running, this will be called shortly after application:didFinishLaunchingWithOptions.
         // Use this method to release any resources that were specific to the discarded scenes, as they will not return.
     }
-
-
 }

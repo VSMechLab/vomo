@@ -1,13 +1,13 @@
 //
-//  ScoresPitchGraph.swift
+//  HomePitchGraph.swift
 //  VoMo
 //
-//  Created by Neil McGrogan on 5/31/22.
+//  Created by Neil McGrogan on 6/2/22.
 //
 
 import SwiftUI
 
-struct ScoresPitchGraph: View {
+struct HomePitchGraph: View {
     @EnvironmentObject var viewRouter: ViewRouter
     @State private var demoData: [Double] = [8, 9, 12, 16, 18, 17, 20, 28, 29, 30, 43, 38, 46, 50]
     @State private var index = 0
@@ -15,21 +15,12 @@ struct ScoresPitchGraph: View {
     var body: some View {
         VStack(spacing: 0) {
             HStack(spacing: 0) {
-                Button(action: {
-                    viewRouter.currentPage = .scoresView
-                }) {
-                    Text("Pitch")
-                        .font(._coverBodyCopy)
-                }
-                .padding(.top, -5)
+                Text("Pitch")
+                    .font(._coverBodyCopy)
+                    .padding(8)
                 Spacer()
-                if index < demoData.count && index > 0 {
-                    Text("\(demoData[index], specifier: "%.0f")")
-                } else {
-                    Text("\(demoData[0], specifier: "%.0f")")
-                }
             }
-            .padding(.horizontal, 5).font(._coverBodyCopy).foregroundColor(.white)
+            .font(._coverBodyCopy).foregroundColor(.white)
             .font(._fieldLabel)
             
             Spacer()
@@ -52,15 +43,14 @@ struct ScoresPitchGraph: View {
             }
             
         }
-        .padding(.top)
         .frame(height: 225, alignment: .center)
         .background(Color.BRIGHT_PURPLE)
         .cornerRadius(17)
     }
 }
 
-struct ScoresPitchGraph_Previews: PreviewProvider {
+struct HomePitchGraph_Previews: PreviewProvider {
     static var previews: some View {
-        ScoresPitchGraph()
+        HomePitchGraph()
     }
 }

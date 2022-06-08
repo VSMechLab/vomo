@@ -20,6 +20,8 @@ struct ProfileButton: View {
                 Image(profile_img)
                     .resizable().frame(width: 60, height: 60, alignment: .center)
             }
-        }.frame(width: 317.5)
+        }
+        .frame(width: 317.5)
+        .padding(.top, 4)
     }
 }

@@ -18,13 +18,19 @@ struct HomeWidget: View {
                 .resizable()
             
             VStack(spacing: 0) {
-                Spacer()
-                Text(quotes.findQuote())
-                    .font(._coverBodyCopy)
-                    .foregroundColor(Color.white)
-                    .multilineTextAlignment(.center)
-                    .padding(.bottom, 10)
-                    .padding(.horizontal)
+                VStack(spacing: 0) {
+                    Spacer()
+                }.frame(width: 317.5, height: 155 / 2)
+                
+                VStack(spacing: 0) {
+                    Text(quotes.findQuote())
+                        .font(._coverBodyCopy)
+                        .foregroundColor(Color.white)
+                        .multilineTextAlignment(.center)
+                        .padding(.bottom, 10)
+                        .padding(.horizontal)
+                    Spacer()
+                }.frame(width: 317.5, height: 155 / 2)
             }
         }.frame(width: 317.5, height: 155)
     }

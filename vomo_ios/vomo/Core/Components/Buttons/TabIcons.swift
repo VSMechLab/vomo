@@ -7,14 +7,16 @@
 
 import SwiftUI
 
-struct TabIcons: View {
-    var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
-    }
-}
-
-struct TabIcons_Previews: PreviewProvider {
-    static var previews: some View {
-        TabIcons()
+struct TabIcons: ButtonStyle {
+    let image: String
+    func makeBody(configuration: Configuration) -> some View {
+        HStack(spacing: 0) {
+            Spacer()
+            Image(image)
+                .resizable()
+                .frame(width: 30, height: 30, alignment: .center)
+                .padding(.top, -10)
+            Spacer()
+        }
     }
 }

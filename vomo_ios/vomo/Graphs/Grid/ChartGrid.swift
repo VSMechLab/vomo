@@ -23,7 +23,7 @@ public struct ChartGrid<Content: View>: View, ChartBase {
         HStack {
             ZStack {
                 VStack {
-                    ForEach(0..<numberOfHorizontalLines) { _ in
+                    ForEach(0..<numberOfHorizontalLines, id: \.self) { _ in
                         GridElement()
                         Spacer()
                     }

@@ -16,6 +16,8 @@ struct VoiceQuestionView: View {
     
     let nav_img = "VM_Dropdown-Btn"
     
+    let content_width = 317.5
+    
     @State private var voice_plan = UserDefaults.standard.integer(forKey: "voice_plan")
     @State private var edited_before = UserDefaults.standard.bool(forKey: "edited_before")
     
@@ -23,6 +25,30 @@ struct VoiceQuestionView: View {
         VStack {
             Spacer()
             
+            header
+            
+            Spacer()
+            
+            customizeSection
+            
+            haveVoMoChooseSection
+            
+            Spacer()
+            
+            navSection
+        }.frame(width: content_width)
+    }
+}
+
+struct VoiceQuestionView_Previews: PreviewProvider {
+    static var previews: some View {
+        VoiceQuestionView()
+    }
+}
+
+extension VoiceQuestionView {
+    private var header: some View {
+        VStack(spacing: 0) {
             HStack(spacing: 0) {
                 Spacer()
                 
@@ -35,51 +61,69 @@ struct VoiceQuestionView: View {
                 
                 Spacer()
             }
-            .padding(.bottom, 20)
+            .padding(.bottom, 10)
             
-            Button(action: {
-                self.voice_plan = 1
-            }) {
-                ZStack {
-                    Image(voice_plan == 1 ? select_img : unselect_img)
-                        .resizable()
-                        .frame(width: UIScreen.main.bounds.width - 40, height: 90, alignment: .center)
-                    
+            Text("Choose your voice plan")
+                .font(._bodyCopy)
+                .foregroundColor(Color.BODY_COPY)
+                .multilineTextAlignment(.center)
+        }
+    }
+    
+    private var customizeSection: some View {
+        Button(action: {
+            self.voice_plan = 1
+        }) {
+            ZStack {
+                Image(voice_plan == 1 ? select_img : unselect_img)
+                    .resizable()
+                    .frame(height: 85)
+                
+                HStack {
                     VStack(alignment: .leading) {
                         Text("Have VoMo Choose for Me")
                             .foregroundColor(voice_plan == 1 ? Color.white : Color.gray)
-                            .font(._buttonFieldCopy)
+                            .font(._buttonFieldCopyLarger)
                         
-                        Text("More description can go here")
+                        Text("Optimize my plan based on my voice diagnosis")
                             .foregroundColor(voice_plan == 1 ? Color.white : Color.DARK_PURPLE)
                             .font(._subCopy)
-                    }.padding(.leading, 35)
-                }.frame(width: UIScreen.main.bounds.width - 40, height: 90, alignment: .center)
-            }.padding(.top, -20)
-           
-            Button(action: {
-                self.voice_plan = 2
-            }) {
-                ZStack {
-                    Image(voice_plan == 1 ? unselect_img : select_img)
-                        .resizable()
-                        .frame(width: UIScreen.main.bounds.width - 40, height: 90, alignment: .center)
-                    
+                    }
+                    .padding(.leading, 60)
+                    Spacer()
+                }
+            }.frame(height: 85)
+        }.padding(.top, -20)
+    }
+    
+    private var haveVoMoChooseSection: some View {
+        Button(action: {
+            self.voice_plan = 2
+        }) {
+            ZStack {
+                Image(voice_plan == 1 ? unselect_img : select_img)
+                    .resizable()
+                    .frame(height: 85)
+                
+                HStack {
                     VStack(alignment: .leading) {
                         Text("Customize My Own Plan")
                             .foregroundColor(voice_plan == 1 ? Color.gray : Color.white)
-                            .font(._buttonFieldCopy)
+                            .font(._buttonFieldCopyLarger)
                         
-                        Text("More description can go here")
+                        Text("Let me decide which takss and measurements I want")
                             .foregroundColor(voice_plan == 1 ? Color.DARK_PURPLE : Color.white)
                             .font(._subCopy)
-                    }.padding(.leading, 35)
-                }.frame(width: UIScreen.main.bounds.width - 40, height: 90, alignment: .center)
-            }.padding(.top, -20)
-            
-            Spacer()
-            
-            
+                    }
+                    .padding(.leading, 60)
+                    Spacer()
+                }
+            }.frame(height: 85)
+        }.padding(.top, -20)
+    }
+    
+    private var navSection: some View {
+        Group {
             HStack {
                 if !edited_before {
                     Circle()
@@ -138,14 +182,7 @@ struct VoiceQuestionView: View {
                     }
                 }
             }
-            .frame(width: UIScreen.main.bounds.width - 50, height: 55, alignment: .center)
-            .padding()
+            .frame(width: content_width, height: 55, alignment: .center)
         }
-    }
-}
-
-struct VoiceQuestionView_Previews: PreviewProvider {
-    static var previews: some View {
-        VoiceQuestionView()
     }
 }

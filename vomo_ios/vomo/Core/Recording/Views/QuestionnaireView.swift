@@ -1,5 +1,5 @@
 //
-//  VRQOLView.swift
+//  QuestionnaireView.swift
 //  VoMo
 //
 //  Created by Neil McGrogan on 5/30/22.
@@ -8,11 +8,10 @@
 import SwiftUI
 import UIKit
 
-struct VRQOLView: View {
+struct QuestionnaireView: View {
     @EnvironmentObject var viewRouter: ViewRouter
     @EnvironmentObject var entries: Entries
-    
-    let button_img = "VM_Gradient-Btn"
+    @State private var vm = RecordingViewModel()
     
     @State private var q1 = -1
     @State private var q2 = -1
@@ -27,25 +26,29 @@ struct VRQOLView: View {
     @State private var q11 = -1
     
     let content_width: CGFloat = 317.5
+    let button_img = "VM_Gradient-Btn"
     
     var body: some View {
         ScrollView(showsIndicators: false) {
             ProfileButton()
             
             VStack(alignment: .leading, spacing: 0) {
-                Text("Voice-Related Quality of Life")
+                Text(vm.questionniare == "VRQOL" ? "Voice-Related Quality of Life" : "Vocal Handicap Index" )
                     .font(._bodyCopy)
                     .foregroundColor(Color.BODY_COPY)
                     .multilineTextAlignment(.leading)
+                    .padding(.leading, 6)
                 
                 Text("Questionnaire")
                     .foregroundColor(.black)
                     .font(._headline)
+                    .padding(.leading, 6)
                 
                 Text("These are statements that many people have used to describe their voices and effects of their voices on their lives. Circle the response that indicates how frequently you have the same experience.")
                     .font(._bodyCopy)
                     .foregroundColor(Color.BODY_COPY)
                     .multilineTextAlignment(.leading)
+                    .padding(.leading, 6)
                 
                 Group {
                     Group {

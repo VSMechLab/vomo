@@ -11,12 +11,13 @@ struct JournalView: View {
     @EnvironmentObject var viewRouter: ViewRouter
     @EnvironmentObject var entries: Entries
     
-    let banner_img = "VM_FPO-12-free-write-banner-img"
+    let banner_img = "VoMo-App-Assets_2_13-freewrite-banner-FPO"
     
     let tag_img = "VM_12-tags-entry-field"
     let field_img = "VM_12-entry-field"
     
     let button_img = "VM_Gradient-Btn"
+
     
     let content_width: CGFloat = 317.5
     
@@ -38,9 +39,29 @@ struct JournalView: View {
                 Spacer()
             }
             
-            Image(banner_img)
-                .resizable()
-                .frame(height: 170)
+            ZStack {
+                Image(banner_img)
+                    .resizable()
+                    .frame(height: 190)
+                
+                VStack(alignment: .leading) {
+                    Spacer()
+                    Text("How does")
+                        .foregroundColor(.white)
+                    Text("your voice")
+                        .foregroundColor(.BRIGHT_PURPLE.opacity(0.8))
+                    HStack(spacing: 0) {
+                        Text("feel today")
+                            .foregroundColor(.white)
+                        Text("?")
+                            .foregroundColor(.TEAL)
+                        Spacer()
+                    }
+                }
+                .padding()
+                .font(._subHeadline)
+                .frame(width: content_width, height: 190)
+            }
             
             VStack(spacing: 0) {
                 ZStack {
@@ -82,12 +103,36 @@ struct JournalView: View {
                 .padding(.top, 5)
             }
             
-            Button("") {
-                self.entries.journals.append(JournalModel(createdAt: .now, noteName:  self.name, note: self.note))
-            }
-            .buttonStyle(SubmissionButton(label: "ADD NOTE"))
-            .padding(.top, 10)
+            addNoteButton
         }.frame(width: content_width)
+    }
+}
+
+extension JournalView {
+    private var addNoteButton: some View {
+        Group {
+            if self.name.isEmpty || self.note.isEmpty {
+                ZStack {
+                    Image(button_img)
+                        .resizable()
+                        .frame(width: 225, height: 40)
+                    
+                    Text("ADD NOTE")
+                        .font(._BTNCopyUnbold)
+                        .foregroundColor(Color.INPUT_FIELDS)
+                }
+                .padding(.top, 10)
+            } else {
+                Button(action: {
+                    self.entries.journals.append(JournalModel(createdAt: .now, noteName:  self.name, note: self.note))
+                    self.name = ""
+                    self.note = ""
+                }) {
+                    SubmissionButton(label: "ADD NOTE")
+                        .padding(.top, 10)
+                }
+            }
+        }
     }
 }
 

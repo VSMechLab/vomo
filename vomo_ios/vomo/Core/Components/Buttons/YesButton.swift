@@ -7,14 +7,25 @@
 
 import SwiftUI
 
-struct YesButton: View {
-    var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
-    }
-}
-
-struct YesButton_Previews: PreviewProvider {
-    static var previews: some View {
-        YesButton()
+struct YesButton: ButtonStyle {
+    let selected: Bool
+    let select_img = "VM_Select-Btn-Prpl-Field"
+    let unselect_img = "VM_Unselect-Btn-Gry-Field"
+    
+    func makeBody(configuration: Configuration) -> some View {
+        ZStack {
+            Image(selected ? select_img : unselect_img)
+                .resizable()
+                .frame(height:  35)
+            
+            HStack {
+                Text("Yes")
+                    .font(._buttonFieldCopy)
+                    .foregroundColor(selected ? Color.white : Color.BODY_COPY)
+                    .padding(.leading, 26)
+                
+                Spacer()
+            }
+        }
     }
 }

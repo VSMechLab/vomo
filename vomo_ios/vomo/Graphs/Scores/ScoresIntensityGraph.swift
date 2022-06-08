@@ -1,15 +1,15 @@
 //
-//  ScoresPitchGraph.swift
+//  ScoresIntensityGraph.swift
 //  VoMo
 //
-//  Created by Neil McGrogan on 5/31/22.
+//  Created by Neil McGrogan on 6/2/22.
 //
 
 import SwiftUI
 
-struct ScoresPitchGraph: View {
+struct ScoresIntensityGraph: View {
     @EnvironmentObject var viewRouter: ViewRouter
-    @State private var demoData: [Double] = [8, 9, 12, 16, 18, 17, 20, 28, 29, 30, 43, 38, 46, 50]
+    @State private var demoData: [Double] = [8, 9, 12, 16, 18, 17, 20, 28]
     @State private var index = 0
     
     var body: some View {
@@ -18,7 +18,7 @@ struct ScoresPitchGraph: View {
                 Button(action: {
                     viewRouter.currentPage = .scoresView
                 }) {
-                    Text("Pitch")
+                    Text("Intensity")
                         .font(._coverBodyCopy)
                 }
                 .padding(.top, -5)
@@ -59,8 +59,8 @@ struct ScoresPitchGraph: View {
     }
 }
 
-struct ScoresPitchGraph_Previews: PreviewProvider {
+struct ScoresIntensityGraph_Previews: PreviewProvider {
     static var previews: some View {
-        ScoresPitchGraph()
+        ScoresIntensityGraph()
     }
 }

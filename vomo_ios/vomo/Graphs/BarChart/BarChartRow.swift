@@ -37,7 +37,7 @@ public struct BarChartRow: View {
                                      gradientColor: self.style.foregroundColor.rotate(for: index),
                                      touchLocation: self.touchLocation)
                             .scaleEffect(self.getScaleSize(touchLocation: self.touchLocation, index: index), anchor: .bottom)
-                            .animation(Animation.easeIn(duration: 0.2))
+                            .animation(Animation.easeInOut(duration: 0.2), value: 0.1)
                     }
 //                    .drawingGroup()
             }
@@ -67,7 +67,7 @@ public struct BarChartRow: View {
     func getScaleSize(touchLocation: CGFloat, index: Int) -> CGSize {
         if touchLocation > CGFloat(index)/CGFloat(chartData.data.count) &&
            touchLocation < CGFloat(index+1)/CGFloat(chartData.data.count) {
-            return CGSize(width: 1.4, height: 1.1)
+            return CGSize(width: 1.1, height: 1.01)
         }
         return CGSize(width: 1, height: 1)
     }

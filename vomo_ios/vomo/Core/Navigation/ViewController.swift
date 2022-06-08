@@ -11,7 +11,8 @@ import UIKit
 struct ViewController: View {
     @EnvironmentObject var viewRouter: ViewRouter
     @EnvironmentObject var keyboard: Keyboard
-    @EnvironmentObject var recordingState: RecordingState
+    @EnvironmentObject var recordingState: RecordState
+    @EnvironmentObject var audioRecorder: AudioRecorder
     
     @State private var onboarded = true
     
@@ -36,7 +37,7 @@ struct ViewController: View {
                 case .homeView:
                     HomeView()
                 case .recordView:
-                    ContentView(audioRecorder: AudioRecorder())
+                    ContentView()
                 case .journalView:
                     JournalView()
                 case .profileView:
@@ -48,7 +49,7 @@ struct ViewController: View {
                 case .customTargetView:
                     CustomTargetView()
                 case .entryView:
-                    EntryView(audioRecorder: AudioRecorder(), focus: self.recordingState.selectedEntry)
+                    EntryView(focus: self.recordingState.selectedEntry)
                 case .activityView:
                     Activityiew()
                 case .scoresView:
@@ -57,52 +58,64 @@ struct ViewController: View {
                 Spacer()
             }
             
-            VStack(spacing: 0) {
-                Color.white.edgesIgnoringSafeArea(.top).frame(height: 0)
-                Spacer()
-                
-                if (viewRouter.currentPage != .onboardView) && (viewRouter.currentPage != .personalQuestionView) && (viewRouter.currentPage != .voiceQuestionView) && (viewRouter.currentPage != .targetView) && (viewRouter.currentPage != .customTargetView) {
-                    Group {
-                        Divider()
-                        HStack(spacing: 0) {
-                            Button("") {
-                                viewRouter.currentPage = .homeView
-                                self.recordingState.recordingState = 0
-                            }.buttonStyle(TabIcons(image: home_img))
-                            
-                            Button(action: {
-                                if viewRouter.currentPage == .recordView {
-                                    if recordingState.recordingState == 0 {
-                                        self.recordingState.recordingState = 1
-                                    } else if recordingState.recordingState == 1 {
-                                        self.recordingState.recordingState = 2
-                                    }
-                                } else {
-                                    viewRouter.currentPage = .recordView
-                                }
-                            }) {
-                                ZStack {
-                                    Image(recordingState.recordingState == 1 ? stop_img : start_img)
-                                        .resizable()
-                                        .frame(width: 125, height: 125)
-                                        .padding(.top, -50)
-                                        .shadow(radius: 1)
-                                    
-                                    Text("\(self.recordingState.recordingState)").hidden()
-                                }
-                            }
-                            
-                            Button("") {
-                                viewRouter.currentPage = .journalView
-                                self.recordingState.recordingState = 0
-                            }.buttonStyle(TabIcons(image: journal_img))
-                        }
-                    }
-                    .background(Color.white)
-                    .padding(.bottom, -25)
-                    .shadow(radius: 1)
-                }
-            }.frame(width: UIScreen.main.bounds.width)
+            tabBar
         }
+    }
+}
+
+extension ViewController {
+    private var tabBar: some View {
+        VStack(spacing: 0) {
+            Color.white.edgesIgnoringSafeArea(.top).frame(height: 0)
+            
+            Spacer()
+            
+            if (viewRouter.currentPage != .onboardView) && (viewRouter.currentPage != .personalQuestionView) && (viewRouter.currentPage != .voiceQuestionView) && (viewRouter.currentPage != .targetView) && (viewRouter.currentPage != .customTargetView) {
+                Group {
+                    Divider()
+                    HStack(spacing: 0) {
+                        Button("") {
+                            viewRouter.currentPage = .homeView
+                            self.recordingState.state = 0
+                        }.buttonStyle(TabIcons(image: home_img))
+                        
+                        Button(action: {
+                            if viewRouter.currentPage == .recordView {
+                                if recordingState.state == 0 {
+                                    self.recordingState.state = 1
+                                    self.audioRecorder.startRecording(taskNum: self.recordingState.task)
+                                } else if recordingState.state == 1 {
+                                    self.recordingState.state = 2
+                                    self.audioRecorder.stopRecording()
+                                }
+                            } else {
+                                viewRouter.currentPage = .recordView
+                                self.recordingState.task = 1
+                            }
+                        }) {
+                            ZStack {
+                                Image(recordingState.state == 1 ? stop_img : start_img)
+                                    .resizable()
+                                    .frame(width: 125, height: 125)
+                                    .padding(.top, -50)
+                                    .shadow(radius: 1)
+                                
+                                Text("\(self.recordingState.state)").hidden()
+                            }
+                        }
+                        
+                        Button("") {
+                            viewRouter.currentPage = .journalView
+                            self.recordingState.state = 0
+                        }.buttonStyle(TabIcons(image: journal_img))
+                    }
+                }
+                .background(Color.white)
+                .padding(.bottom, -25)
+                .shadow(radius: 1)
+            }
+        }
+        .frame(width: UIScreen.main.bounds.width)
+        .shadow(color: Color.gray.opacity(0.2), radius: 2, x: 0, y: 0)
     }
 }

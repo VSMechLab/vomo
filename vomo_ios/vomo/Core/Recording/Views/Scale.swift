@@ -16,32 +16,20 @@ struct Scale: View {
     
     @Binding var position: Int
     
+    @State private var vm = RecordingViewModel()
     let prompt: Int
-    let promptSelection = [
-        "1. I have trouble speaking loudly or being heard in noisy situations.",
-        "2. I run out of air and need to take frequent breaths when talking.",
-        "3. I sometimes do not know what will come out when I begin speaking.",
-        "4. I am sometimes anxious or frustrated (because of my voice).",
-        "5. I sometimes get depressed (because of my voice).",
-        "6. I have trouble using the telephone (because of my voice).",
-        "7. I have trouble doing my job or practicing my profession (because of my voice).",
-        "8. I avoid going out socially (because of my voice).",
-        "9. I have to repeat myself to be understood",
-        "10. I have become less outgoing (because of my voice).",
-        "The overall quality of my voice during the last two weeks has been:"
-    ]
     
     var body: some View {
         ZStack {
             Image(scale_img)
                 .resizable()
-                .frame(width: scale_width, height: scale_height)
+                .frame(width: scale_width + 10, height: scale_height)
             
             
             ZStack {
                 VStack {
                     HStack {
-                        Text(promptSelection[prompt])
+                        Text(vm.questionniare == "VRQOL" ? vm.vrqol[prompt] : vm.vhi[prompt])
                             .font(._question)
                             .foregroundColor(Color.BODY_COPY)
                             .multilineTextAlignment(.leading)
@@ -110,18 +98,19 @@ struct Scale: View {
                     HStack {
                         Text("Never")
                         Spacer()
-                        Text("Almost Never")
+                        Text("Almost\nNever")
                         Spacer()
                         Text("Sometimes")
                         Spacer()
-                        Text("Almost Always")
+                        Text("Almost\nAlways")
                         Spacer()
                         Text("Always")
                     }
-                    .padding(.horizontal, 15)
+                    .padding(.horizontal, 10)
+                    .padding(.trailing, 5)
                     .font(._question)
                     .foregroundColor(Color.BODY_COPY)
-                    .padding(.bottom, 31)
+                    .padding(.bottom, 15)
                 }
             }
         }

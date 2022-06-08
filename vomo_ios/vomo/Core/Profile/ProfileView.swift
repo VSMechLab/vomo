@@ -14,7 +14,7 @@ import CoreImage.CIFilterBuiltins
 
 struct ProfileView: View {
     @EnvironmentObject var viewRouter: ViewRouter
-    @EnvironmentObject var recordingState: RecordingState
+    @EnvironmentObject var recordingState: RecordState
     
     @State private var name = UserDefaults.standard.string(forKey: "name") ?? ""
     @State private var gender = UserDefaults.standard.string(forKey: "gender") ?? ""
@@ -26,6 +26,11 @@ struct ProfileView: View {
     @State private var fteProfile = false
     @State private var focusSelection = UserDefaults.standard.integer(forKey: "focus_selection")
     
+    @State private var firstName = UserDefaults.standard.string(forKey: "first_name") ?? ""
+    @State private var lastName = UserDefaults.standard.string(forKey: "last_name") ?? ""
+    
+    var genders = ["other", "male", "female", "prefer not to say"]
+    
     let genderKey = "gender", dobKey = "dob"
     let voiceOnsetKey = "voiceOnset", currentSmokerKey = "currentSmoker"
     let haveRefluxKey = "haveReflux", haveAsthmaKey = "haveAsthma"
@@ -33,11 +38,10 @@ struct ProfileView: View {
     let unselect_img = "VM_Unselect-Btn-Gry-Field"
     let entry_img = "VM_12-entry-field"
     let button_img = "VM_Gradient-Btn"
-    let fieldWidth =  UIScreen.main.bounds.width - 50
     let toggleHeight: CGFloat = 37 * 0.95
     let img_selected = "VM_Prpl-Square-Btn copy"
     let img_unselected = "VM_Prpl-Check-Square-Btn"
-    let prompt = ["a custom", "the Spasmodic Dysphonia", "the Recurrent Pappiloma", "the Parkinson's Disease", "the Gender-Affirming Care", "the Vocal Fold/Paresis", "no"]
+    let prompt = ["a custom", "the Spasmodic Dysphonia", "the Recurrent Pappiloma", "the Parkinson's Disease", "the Gender-Affirming Care", "the Vocal Fold/Paresis", "the default"]
     
     let content_width = 317.5
     
@@ -56,21 +60,38 @@ struct ProfileView: View {
                 
                 VStack(alignment: .leading) {
                     Group {
-                        Text("Name")
+                        Text("First Name")
+                            .font(._fieldLabel)
                         
                         ZStack {
                             Image(entry_img)
                                 .resizable()
-                                .frame(height: toggleHeight)
+                                .frame(width: content_width, height: toggleHeight)
                                 .cornerRadius(7)
                             
                             HStack {
-                                TextField(self.name.isEmpty ? "First and Last Name" : self.name, text: self.$name)
-                                    .font(self.name.isEmpty ? ._fieldCopyItalic : ._fieldCopyRegular)
+                                TextField(self.firstName.isEmpty ? "First Name" : self.firstName, text: self.$firstName)
+                                    .font(self.firstName.isEmpty ? ._fieldCopyItalic : ._fieldCopyRegular)
                             }.padding(.horizontal, 5)
-                        }.frame(height: toggleHeight)
+                        }.frame(width: content_width, height: toggleHeight)
+                        
+                        Text("Last Name")
+                            .font(._fieldLabel)
+                        
+                        ZStack {
+                            Image(entry_img)
+                                .resizable()
+                                .frame(width: content_width, height: toggleHeight)
+                                .cornerRadius(7)
+                            
+                            HStack {
+                                TextField(self.lastName.isEmpty ? "Last Name" : self.lastName, text: self.$lastName)
+                                    .font(self.lastName.isEmpty ? ._fieldCopyItalic : ._fieldCopyRegular)
+                            }.padding(.horizontal, 5)
+                        }.frame(width: content_width, height: toggleHeight)
                         
                         Text("Gender")
+                            .font(._fieldLabel)
                         
                         ZStack {
                             Image(entry_img)
@@ -79,12 +100,64 @@ struct ProfileView: View {
                                 .cornerRadius(7)
                             
                             HStack {
-                                TextField(self.gender.isEmpty ? "Gender" : self.gender, text: self.$gender)
-                                    .font(self.gender.isEmpty ? ._fieldCopyItalic : ._fieldCopyRegular)
+                                Menu {
+                                    Picker("choose", selection: $gender) {
+                                        ForEach(genders, id: \.self) { gend in
+                                            Text("\(gend)")
+                                                .font(._fieldCopyRegular)
+                                        }
+                                    }
+                                    .labelsHidden()
+                                    .pickerStyle(InlinePickerStyle())
+
+                                } label: {
+                                    Text("\(gender == "" ? "Select gender" : gender)")
+                                        .font(._fieldCopyRegular)
+                                }
+                                .frame(maxHeight: 400)
+                                Spacer()
+                                
+                                /*
+                                HStack(spacing: 0) {
+                                    Menu {
+                                        Picker("choose", selection: $selectedVisit) {
+                                            ForEach(visitTypes, id: \.self) { type in
+                                                Text(type)
+                                                    .font(._fieldCopyRegular)
+                                            }
+                                        }
+                                        .labelsHidden()
+                                        .pickerStyle(InlinePickerStyle())
+                                    } label: {
+                                        Text("\(selectedVisit == "" ? "Select appointment type" : selectedVisit)")
+                                            .font(._fieldCopyRegular)
+                                    }
+                                    .frame(maxHeight: 400)
+                                    Spacer()
+                                }
+                                .padding(.horizontal, 5)
+                                .frame(height: 40)
+                                .background(Color.white)
+                                .cornerRadius(12)*/
+                                
+                                
+                                /*
+                                Picker("pick here", selection: $gender) {
+                                    ForEach(genders, id: \.self) {
+                                        Text($0)
+                                            .foregroundColor(.gray)
+                                    }.foregroundColor(.gray)
+                                }.foregroundColor(.gray)
+                                .frame(maxHeight: 400)
+                                .foregroundColor(.red)
+                                Spacer()*/
                             }.padding(.horizontal, 5)
-                        }.frame(height: toggleHeight)
+                        }
+                        .frame(height: toggleHeight)
+                        .transition(.slide)
                         
                         Text("Date of Birth")
+                            .font(._fieldLabel)
                         
                         ZStack {
                             Image(entry_img)
@@ -101,6 +174,7 @@ struct ProfileView: View {
                     
                     Group {
                         Text("Voice Onset")
+                            .font(._fieldLabel)
                         
                         HStack(spacing: 0) {
                             Button("") { self.voice_onset = true }.buttonStyle(YesButton(selected: voice_onset))
@@ -110,6 +184,7 @@ struct ProfileView: View {
                         
                         
                         Text("Current Smoker / Vaper?")
+                            .font(._fieldLabel)
                         
                         HStack(spacing: 0) {
                             Button("") { self.current_smoker = true }.buttonStyle(YesButton(selected: current_smoker))
@@ -118,6 +193,7 @@ struct ProfileView: View {
                         }
                         
                         Text("Currently Have Reflux?")
+                            .font(._fieldLabel)
                         
                         HStack(spacing: 0) {
                             Button("") { self.have_reflux = true }.buttonStyle(YesButton(selected: have_reflux))
@@ -127,6 +203,7 @@ struct ProfileView: View {
                         
                         
                         Text("Currently Have Asthma?")
+                            .font(._fieldLabel)
                         
                         HStack(spacing: 0) {
                             Button("") { self.have_asthma = true }.buttonStyle(YesButton(selected: have_asthma))
@@ -152,12 +229,17 @@ struct ProfileView: View {
                         }
                         Spacer()
                     }
+                    .padding(.vertical, 5)
                     
                     
                     HStack {
                         Spacer()
-                        Button("") { save() }.buttonStyle(SubmissionButton(label: "Update"))
-                            .padding(.bottom, 80)
+                        Button(action: {
+                            save()
+                        }) {
+                            SubmissionButton(label: "SAVE")
+                        }
+                        .padding(.bottom, 80)
                         Spacer()
                     }
                     .frame(width: content_width)
@@ -175,6 +257,9 @@ struct ProfileView: View {
         UserDefaults.standard.set(self.current_smoker, forKey: currentSmokerKey)
         UserDefaults.standard.set(self.have_reflux, forKey: haveRefluxKey)
         UserDefaults.standard.set(self.have_asthma, forKey: haveAsthmaKey)
+        
+        UserDefaults.standard.set(self.firstName, forKey:  "first_name")
+        UserDefaults.standard.set(self.lastName, forKey:  "last_name")
     }
 }
 

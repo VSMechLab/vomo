@@ -42,7 +42,7 @@ public struct Line: View {
                               geometry: geometry,
                               style: style,
                               trimTo: didCellAppear ? 1.0 : 0.0)
-                    .animation(.easeIn)
+                .animation(Animation.easeInOut(duration: 1.0), value: 0.1)
                 if self.showIndicator {
                     IndicatorPoint()
                         .position(self.getClosestPointOnPath(geometry: geometry, touchLocation: self.touchLocation))

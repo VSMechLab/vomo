@@ -5,16 +5,11 @@
 //  Created by Neil McGrogan on 5/18/22.
 //
 
-import SwiftUI
+import Foundation
 
-struct Array: View {
-    var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
-    }
-}
-
-struct Array_Previews: PreviewProvider {
-    static var previews: some View {
-        Array()
+public extension Array where Element: Hashable {
+    func uniqued() -> [Element] {
+        var seen = Set<Element>()
+        return filter{ seen.insert($0).inserted }
     }
 }
