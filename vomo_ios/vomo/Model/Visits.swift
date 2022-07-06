@@ -10,11 +10,11 @@ import Combine
 import SwiftUI
 
 class Visits: ObservableObject {
+    let key: String = "visits"
+    
     @Published var visits: [VisitModel] = [] {
         didSet { save() }
     }
-    
-    let key: String = "visits"
     
     func getItems() {
         self.getVisits()
@@ -28,7 +28,6 @@ class Visits: ObservableObject {
         
         self.visits = savedItems
     }
-    
     
     func save() {
         if let encodedData = try? JSONEncoder().encode(visits) {

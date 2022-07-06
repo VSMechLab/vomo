@@ -37,6 +37,16 @@ struct PersonalQuestionView: View {
     
     @State var date: Date = .now
     
+    // CHANGED: add method to get dob
+    func getDOB() -> Date {
+        return date
+    }
+    
+    // CHANGED: add method to set dob
+    func setDOB(newDate: Date) {
+        self.date = newDate
+    }
+    
     var body: some View {
         VStack {
             Spacer()
@@ -47,9 +57,14 @@ struct PersonalQuestionView: View {
                 Text("Sign ")
                     .font(._headline)
                 
-                Text("Up.")
+                Text("Up")
                     .font(._headline)
                     .foregroundColor(Color.DARK_PURPLE)
+                
+                // CHANGED: changed the period to teal
+                Text(".")
+                    .font(._headline)
+                    .foregroundColor(Color.TEAL)
                 
                 Spacer()
             }
@@ -99,10 +114,15 @@ struct PersonalQuestionView: View {
                         withAnimation() {
                             self.showCalendar.toggle()
                         }
-                        dob = date.toDOB()
+                        
+//                        dob = date.toDOB()
+                        // CHANGED: change date format
+                        self.dob = date.toString(dateFormat: "MM/dd/yyyy")
+                        
                     }) {
                         HStack {
-                            Text(date.toDOB())
+                            // CHANGE: fix date format
+                            Text(date.toString(dateFormat: "MM/dd/yyyy"))
                                 .font(._bodyCopy)
                             /*
                             TextField(self.dob.isEmpty ? "00/00/0000" : self.dob, text: self.$dob)
@@ -113,9 +133,11 @@ struct PersonalQuestionView: View {
                                 .resizable()
                                 .frame(width: 20, height: 10)
                                 .rotationEffect(Angle(degrees:  showCalendar ? 180 : 0))
-                        }.padding(.horizontal, 7)
+                        } //End HStack
+                        .padding(.horizontal, 7)
                     }
-                }.frame(width: content_width, height: toggleHeight)
+                } //end ZStack
+                .frame(width: content_width, height: toggleHeight)
                 
                 ZStack {
                     if showCalendar {
@@ -123,7 +145,7 @@ struct PersonalQuestionView: View {
                             .datePickerStyle(WheelDatePickerStyle())
                             .frame(maxHeight: 400)
                     }
-                }
+                } // End ZStack
                 .transition(.slide)
             }
             
@@ -162,7 +184,8 @@ extension PersonalQuestionView {
                 Spacer()
                 
                 Button(action: {
-                    dob = date.toDOB()
+                    // CHANGED: fix date format
+                    dob = date.toString(dateFormat: "MM/dd/yyyy")
                     if self.firstName != "" && self.lastName != "" && self.dob != "" /* && self.acceptedTerms != false */ {
                         UserDefaults.standard.set(self.acceptedTerms, forKey:  "accepts_terms")
                         UserDefaults.standard.set(self.firstName, forKey:  "first_name")
@@ -224,5 +247,12 @@ extension PersonalQuestionView {
         }
         .padding(.vertical)
         .multilineTextAlignment(.center)
+    }
+}
+
+// CHANGED: added preview
+struct Previews_PersonalQuestionView_Previews: PreviewProvider {
+    static var previews: some View {
+        PersonalQuestionView()
     }
 }

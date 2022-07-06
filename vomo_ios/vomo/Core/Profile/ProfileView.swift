@@ -29,7 +29,15 @@ struct ProfileView: View {
     @State private var firstName = UserDefaults.standard.string(forKey: "first_name") ?? ""
     @State private var lastName = UserDefaults.standard.string(forKey: "last_name") ?? ""
     
-    var genders = ["other", "male", "female", "prefer not to say"]
+    // CHANGED: create new variables for date of voice problem onset and sex
+    @State private var date_voice_onset = UserDefaults.standard.string(forKey: "dateVoiceOnset")
+    @State private var sex = UserDefaults.standard.string(forKey: "sex") ?? ""
+    
+    // CHANGED: capitalized the options for consistency, updated option choices
+    var genders = ["Other", "Genderqueer", "Non-binary", "Female", "Male"]
+    
+    // CHANGED: added sex assigned at birth options
+    var sexes = ["Other", "Female", "Male"]
     
     let genderKey = "gender", dobKey = "dob"
     let voiceOnsetKey = "voiceOnset", currentSmokerKey = "currentSmoker"
@@ -45,18 +53,30 @@ struct ProfileView: View {
     
     let content_width = 317.5
     
+    // CHANGED: add variables for date picker wheel
+    @State private var showCalendar = false
+    @State var date: Date = .now
+    let arrow_img = "VM_Dropdown-Btn"
+    
+    // CHANGED: add variables for onset date picker
+    @State private var showOnsetCal = false
+    @State var dateOnset: Date = .now
+    
     var body: some View {
         VStack(spacing: 0) {
             Text("Profile")
                 .font(._headline)
             
             ScrollView(showsIndicators: false) {
-                Text("Please enter the address assosciated with\nyour account")
+                // CHANGED: removed confusing message below 'profile' title
+                /*Text("Please enter the address assosciated with\nyour account")
                     .font(._bodyCopy)
                     .foregroundColor(Color.BODY_COPY)
                     .multilineTextAlignment(.center)
+                 */
                 
                 ProfilePicturePicker()
+                    .padding(.top) // CHANGED: added top padding
                 
                 VStack(alignment: .leading) {
                     Group {
@@ -90,72 +110,6 @@ struct ProfileView: View {
                             }.padding(.horizontal, 5)
                         }.frame(width: content_width, height: toggleHeight)
                         
-                        Text("Gender")
-                            .font(._fieldLabel)
-                        
-                        ZStack {
-                            Image(entry_img)
-                                .resizable()
-                                .frame(height: toggleHeight)
-                                .cornerRadius(7)
-                            
-                            HStack {
-                                Menu {
-                                    Picker("choose", selection: $gender) {
-                                        ForEach(genders, id: \.self) { gend in
-                                            Text("\(gend)")
-                                                .font(._fieldCopyRegular)
-                                        }
-                                    }
-                                    .labelsHidden()
-                                    .pickerStyle(InlinePickerStyle())
-
-                                } label: {
-                                    Text("\(gender == "" ? "Select gender" : gender)")
-                                        .font(._fieldCopyRegular)
-                                }
-                                .frame(maxHeight: 400)
-                                Spacer()
-                                
-                                /*
-                                HStack(spacing: 0) {
-                                    Menu {
-                                        Picker("choose", selection: $selectedVisit) {
-                                            ForEach(visitTypes, id: \.self) { type in
-                                                Text(type)
-                                                    .font(._fieldCopyRegular)
-                                            }
-                                        }
-                                        .labelsHidden()
-                                        .pickerStyle(InlinePickerStyle())
-                                    } label: {
-                                        Text("\(selectedVisit == "" ? "Select appointment type" : selectedVisit)")
-                                            .font(._fieldCopyRegular)
-                                    }
-                                    .frame(maxHeight: 400)
-                                    Spacer()
-                                }
-                                .padding(.horizontal, 5)
-                                .frame(height: 40)
-                                .background(Color.white)
-                                .cornerRadius(12)*/
-                                
-                                
-                                /*
-                                Picker("pick here", selection: $gender) {
-                                    ForEach(genders, id: \.self) {
-                                        Text($0)
-                                            .foregroundColor(.gray)
-                                    }.foregroundColor(.gray)
-                                }.foregroundColor(.gray)
-                                .frame(maxHeight: 400)
-                                .foregroundColor(.red)
-                                Spacer()*/
-                            }.padding(.horizontal, 5)
-                        }
-                        .frame(height: toggleHeight)
-                        .transition(.slide)
-                        
                         Text("Date of Birth")
                             .font(._fieldLabel)
                         
@@ -165,15 +119,150 @@ struct ProfileView: View {
                                 .frame(height: toggleHeight)
                                 .cornerRadius(5)
                             
-                            HStack {
-                                TextField(self.dob.isEmpty ? "00/00/0000" : self.dob, text: self.$dob)
-                                    .font(self.dob.isEmpty ? ._fieldCopyItalic : ._fieldCopyRegular)
-                            }.padding(.horizontal, 7)
-                        }.frame(height: toggleHeight)
+                            // CHANGED: swapped text field for date picker
+                            Button(action: {
+                                withAnimation() {
+                                    self.showCalendar.toggle()
+                                }
+
+                                self.dob = self.date.toDOB()
+                                
+                            }) {
+                                HStack {
+                                    Text(self.date.toString(dateFormat: "MM/dd/yyyy"))
+                                        .font(._bodyCopy)
+                                    
+                                    Spacer()
+                                    
+                                    Image(arrow_img)
+                                        .resizable()
+                                        .frame(width: 20, height: 10)
+                                        .rotationEffect(Angle(degrees:  showCalendar ? 180 : 0))
+                                } //End HStack
+                                .padding(.horizontal, 7)
+                            }
+
+//                            HStack {
+//                                TextField(self.dob.isEmpty ? "00/00/0000" : self.dob, text: self.$dob)
+//                                    .font(self.dob.isEmpty ? ._fieldCopyItalic : ._fieldCopyRegular)
+//                            }.padding(.horizontal, 7)
+                        } // End ZStack
+                        .frame(height: toggleHeight)
+                        
+                        // CHANGED: added date picker
+                        ZStack {
+                            if showCalendar {
+                                DatePicker("", selection: $date, in: ...Date.now, displayedComponents: .date)
+                                    .datePickerStyle(WheelDatePickerStyle())
+                                    .frame(maxHeight: 400)
+                            }
+                        } // End ZStack
+                        .transition(.slide)
                     }
                     
+                    // CHANGED: added sex assigned at birth field
+                    Text("Sex (assigned at birth)")
+                        .font(._fieldLabel)
+                    
+                    ZStack {
+                        Image(entry_img)
+                            .resizable()
+                            .frame(height: toggleHeight)
+                            .cornerRadius(7)
+                        
+                        HStack {
+                            Menu {
+                                Picker("choose", selection: $sex) {
+                                    ForEach(sexes, id: \.self) { sex in
+                                        Text("\(sex)")
+                                            .font(._fieldCopyRegular)
+                                    }
+                                }
+                                .labelsHidden()
+                                .pickerStyle(InlinePickerStyle())
+
+                            } label: {
+                                // CHANGED: capitalize the g for consistency
+                                Text("\(sex == "" ? "Select Sex" : sex)")
+                                    .font(._fieldCopyRegular)
+                            }
+                            .frame(maxHeight: 400)
+                            
+                            Spacer()
+                        } // End HStack
+                        .padding(.horizontal, 5)
+                    } // End ZStack
+                    .frame(height: toggleHeight)
+                    .transition(.slide)
+                    
+                    Text("Gender")
+                        .font(._fieldLabel)
+                    
+                    ZStack {
+                        Image(entry_img)
+                            .resizable()
+                            .frame(height: toggleHeight)
+                            .cornerRadius(7)
+                        
+                        HStack {
+                            Menu {
+                                Picker("choose", selection: $gender) {
+                                    ForEach(genders, id: \.self) { gender in
+                                        Text("\(gender)")
+                                            .font(._fieldCopyRegular)
+                                    }
+                                }
+                                .labelsHidden()
+                                .pickerStyle(InlinePickerStyle())
+
+                            } label: {
+                                // CHANGED: capitalize the g for consistency
+                                Text("\(gender == "" ? "Select Gender" : gender)")
+                                    .font(._fieldCopyRegular)
+                            }
+                            .frame(maxHeight: 400)
+                            Spacer()
+                            
+                            /*HStack(spacing: 0) {
+                                Menu {
+                                    Picker("choose", selection: $selectedVisit) {
+                                        ForEach(visitTypes, id: \.self) { type in
+                                            Text(type)
+                                                .font(._fieldCopyRegular)
+                                        }
+                                    }
+                                    .labelsHidden()
+                                    .pickerStyle(InlinePickerStyle())
+                                } label: {
+                                    Text("\(selectedVisit == "" ? "Select appointment type" : selectedVisit)")
+                                        .font(._fieldCopyRegular)
+                                }
+                                .frame(maxHeight: 400)
+                                Spacer()
+                            }
+                            .padding(.horizontal, 5)
+                            .frame(height: 40)
+                            .background(Color.white)
+                            .cornerRadius(12)*/
+                            
+                            /*Picker("pick here", selection: $gender) {
+                                ForEach(genders, id: \.self) {
+                                    Text($0)
+                                        .foregroundColor(.gray)
+                                }.foregroundColor(.gray)
+                            }.foregroundColor(.gray)
+                            .frame(maxHeight: 400)
+                            .foregroundColor(.red)
+                            Spacer()*/
+                        } // End HStack
+                        .padding(.horizontal, 5)
+                    } // End ZStack
+                    .frame(height: toggleHeight)
+                    .transition(.slide)
+                    
                     Group {
-                        Text("Voice Onset")
+                        // CHANGED: added Problem
+                        Text("Voice Problem Onset")
                             .font(._fieldLabel)
                         
                         HStack(spacing: 0) {
@@ -182,8 +271,49 @@ struct ProfileView: View {
                             Button("") { self.voice_onset = false }.buttonStyle(NoButton(selected: voice_onset))
                         }
                         
+                        // CHANGED: added date of onset selection
+                        Group {
+                            VStack (alignment: .leading) {
+                                if self.voice_onset {
+                                    Text("Date of Onset")
+                                        .font(._fieldLabel)
+                                    
+                                    ZStack {
+                                        Image(entry_img)
+                                            .resizable()
+                                            .frame(height: toggleHeight)
+                                            .cornerRadius(5)
+                                        
+                                        Button(action: {
+                                            withAnimation() {
+                                                self.showOnsetCal.toggle()
+                                            }
+                                            self.date_voice_onset = self.dateOnset.toDOB()
+                                        }) {
+                                            HStack {
+                                                Text(self.dateOnset.toString(dateFormat: "MM/dd/yyyy"))
+                                                    .font(._bodyCopy)
+                                                Spacer()
+                                                Image(arrow_img)
+                                                    .resizable()
+                                                    .frame(width: 20, height: 10)
+                                                    .rotationEffect(Angle(degrees:  showOnsetCal ? 180 : 0))
+                                            }.padding(.horizontal, 7)
+                                        }
+                                    }.frame(height: toggleHeight)
+
+                                    ZStack {
+                                        if showOnsetCal {
+                                            DatePicker("", selection: $dateOnset, in: ...Date.now, displayedComponents: .date)
+                                                .datePickerStyle(WheelDatePickerStyle())
+                                                .frame(maxHeight: 400)
+                                        } // End if
+                                    }.transition(.slide)
+                                } // End if
+                            } // End VStack
+                        } // End group
                         
-                        Text("Current Smoker / Vaper?")
+                        /* Text("Current Smoker / Vaper?")
                             .font(._fieldLabel)
                         
                         HStack(spacing: 0) {
@@ -209,7 +339,7 @@ struct ProfileView: View {
                             Button("") { self.have_asthma = true }.buttonStyle(YesButton(selected: have_asthma))
                             Spacer()
                             Button("") { self.have_asthma = false }.buttonStyle(NoButton(selected: have_asthma))
-                        }
+                        }*/
                     }
                 }
                 .font(._coverBodyCopy)
@@ -246,7 +376,13 @@ struct ProfileView: View {
                 }.frame(width: content_width)
             }
             .frame(width: content_width)
-        }.padding(.vertical)
+            // CHANGED: added what date loads upon open
+            .onAppear() {
+                self.date = self.dob.toDateFromDOB() ?? PersonalQuestionView().getDOB()
+                self.dateOnset = self.date_voice_onset?.toDateFromDOB() ?? .now
+            }
+        }
+        .padding(.vertical)
     }
     
     func save() {
@@ -260,6 +396,17 @@ struct ProfileView: View {
         
         UserDefaults.standard.set(self.firstName, forKey:  "first_name")
         UserDefaults.standard.set(self.lastName, forKey:  "last_name")
+        
+        // CHANGED: add onset date and sex to saved values
+        UserDefaults.standard.set(self.date_voice_onset, forKey: "dateVoiceOnset")
+        UserDefaults.standard.set(self.sex, forKey: "sex")
+    }
+}
+
+// CHANGED: added preview
+struct Previews_ProfileView_Previews: PreviewProvider {
+    static var previews: some View {
+        ProfileView()
     }
 }
 

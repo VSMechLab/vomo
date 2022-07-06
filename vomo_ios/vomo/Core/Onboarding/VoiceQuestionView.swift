@@ -27,7 +27,7 @@ struct VoiceQuestionView: View {
             
             header
             
-            Spacer()
+            // CHANGED: removed spacer
             
             customizeSection
             
@@ -59,16 +59,23 @@ extension VoiceQuestionView {
                     .font(._headline)
                     .foregroundColor(Color.DARK_PURPLE)
                 
+                // CHANGED: changed the period to teal
+                Text(".")
+                    .font(._headline)
+                    .foregroundColor(Color.TEAL)
+                
                 Spacer()
-            }
+            } // End HStack
+            // CHANGED: adjusted padding
             .padding(.bottom, 10)
             
             Text("Choose your voice plan")
                 .font(._bodyCopy)
                 .foregroundColor(Color.BODY_COPY)
                 .multilineTextAlignment(.center)
-        }
-    }
+                .padding(.bottom, 20) // CHANGED: adjusted padding
+        } // End VStack
+    } //End header
     
     private var customizeSection: some View {
         Button(action: {
@@ -81,18 +88,30 @@ extension VoiceQuestionView {
                 
                 HStack {
                     VStack(alignment: .leading) {
+                        // CHANGED: added spacers to center text
+                        Spacer()
+                        Spacer()
+                        Spacer()
+                        
                         Text("Have VoMo Choose for Me")
                             .foregroundColor(voice_plan == 1 ? Color.white : Color.gray)
                             .font(._buttonFieldCopyLarger)
                         
-                        Text("Optimize my plan based on my voice diagnosis")
+                        Text("Optimize my plan based on my voice diagnosis.")
                             .foregroundColor(voice_plan == 1 ? Color.white : Color.DARK_PURPLE)
                             .font(._subCopy)
-                    }
+                        
+                        // CHANGED: added spacers to center text
+                        Spacer()
+                        Spacer()
+                        Spacer()
+                        Spacer()
+                    } // End VStack
                     .padding(.leading, 60)
                     Spacer()
-                }
-            }.frame(height: 85)
+                } //End HStack
+            } //End VStack
+            .frame(height: 85)
         }.padding(.top, -20)
     }
     
@@ -107,14 +126,25 @@ extension VoiceQuestionView {
                 
                 HStack {
                     VStack(alignment: .leading) {
+                        // CHANGED: added spacers to center text
+                        Spacer()
+                        Spacer()
+                        Spacer()
+                        
                         Text("Customize My Own Plan")
                             .foregroundColor(voice_plan == 1 ? Color.gray : Color.white)
                             .font(._buttonFieldCopyLarger)
                         
-                        Text("Let me decide which takss and measurements I want")
+                        Text("Let me decide which tasks and measurements I want.")
                             .foregroundColor(voice_plan == 1 ? Color.DARK_PURPLE : Color.white)
                             .font(._subCopy)
-                    }
+                        
+                        // CHANGED: added spacers to center text
+                        Spacer()
+                        Spacer()
+                        Spacer()
+                        Spacer()
+                    } // End VStack
                     .padding(.leading, 60)
                     Spacer()
                 }
@@ -186,3 +216,4 @@ extension VoiceQuestionView {
         }
     }
 }
+

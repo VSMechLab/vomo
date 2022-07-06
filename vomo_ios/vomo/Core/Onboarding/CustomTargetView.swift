@@ -58,7 +58,7 @@ struct CustomTargetView: View {
             
             vocalTaskSection
             
-            accousticParametersSection
+            acousticParametersSection
             
             questionnairesSection
             
@@ -66,6 +66,13 @@ struct CustomTargetView: View {
             
             navSection
         }.frame(width: content_width)
+    }
+}
+
+// CHANGED: added preview
+struct CustomTargetView_Previews: PreviewProvider {
+    static var previews: some View {
+        CustomTargetView()
     }
 }
 
@@ -163,11 +170,11 @@ extension CustomTargetView {
         }.padding(.vertical, 3)
     }
     
-    private var accousticParametersSection: some View {
+    private var acousticParametersSection: some View {
         Group {
             // Accoustic Parameters
             HStack(spacing: 0) {
-                Text("Accoustic Parameters")
+                Text("Acoustic Parameters") // CHANGED: fixed typo
                     .font(._fieldLabel)
                 
                 Spacer()
@@ -305,6 +312,9 @@ extension CustomTargetView {
                             .resizable()
                         
                         VStack(alignment: .leading) {
+                            // CHANGED: added spacers to center text
+                            Spacer()
+                            Spacer()
                             Text("VRQOL")
                                 .foregroundColor(questionnaires == 1 ? Color.white : Color.gray)
                                 .font(._buttonFieldCopyLarger)
@@ -312,8 +322,11 @@ extension CustomTargetView {
                             Text("Voice-Related Quality of Life")
                                 .foregroundColor(questionnaires == 1 ? Color.white : Color.DARK_PURPLE)
                                 .font(._subCopy)
+                            Spacer()
+                            Spacer()
                         }
                         .padding(.leading, 60)
+                        .padding(.top, -5) // CHANGED: added padding
                     }
                     .frame(width: content_width + 20, height: 70)
                 }
@@ -326,6 +339,9 @@ extension CustomTargetView {
                             .resizable()
                         
                         VStack(alignment: .leading) {
+                            // CHANGED: added spacers to center text
+                            Spacer()
+                            Spacer()
                             Text("Vocal Effort")
                                 .foregroundColor(questionnaires == 2 ? Color.white : Color.gray)
                                 .font(._buttonFieldCopyLarger)
@@ -333,6 +349,8 @@ extension CustomTargetView {
                             Text("Ratings of physcial and mental effort to make a voice")
                                 .foregroundColor(questionnaires == 2 ? Color.white : Color.DARK_PURPLE)
                                 .font(._subCopy)
+                            Spacer()
+                            Spacer()
                         }
                         .padding(.leading, 60)
                         .padding(.top, -5)

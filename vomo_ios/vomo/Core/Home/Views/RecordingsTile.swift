@@ -51,13 +51,14 @@ struct EmptyTile: View {
         ZStack {
             Rectangle()
                 .foregroundColor(.white)
-                .cornerRadius(5)
+                .cornerRadius(10) // CHANGED: rounded corners more, was 5
                 .frame(width: 70, height: 70, alignment: .center)
                 .shadow(color: Color.gray.opacity(0.6), radius: 2, x: 0, y: 0)
             VStack(spacing: -4) {
-                Text("Add recording")
+                Text("Start Entry") // CHANGED: recording -> entry
                     .font(._day)
                     .foregroundColor(Color.BODY_COPY)
+                    .padding(.bottom, 5) // CHANGED: added padding to center +
                 
                 Text("+")
                     .font(._date)

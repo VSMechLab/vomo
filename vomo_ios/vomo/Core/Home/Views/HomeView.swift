@@ -23,9 +23,11 @@ struct HomeView: View {
     
     @State private var focusSelection = UserDefaults.standard.integer(forKey: "focus_selection")
     let edited_before = UserDefaults.standard.bool(forKey: "edited_before")
-    let username = UserDefaults.standard.string(forKey: "name") ?? ""
+    // CHANGED: fixed so it grabs first name from profile/onboarding
+    let username = UserDefaults.standard.string(forKey: "first_name") ?? ""
     
-    let prompt = ["a custom", "the Spasmodic Dysphonia", "the Recurrent Pappiloma", "the Parkinson's Disease", "the Gender-Affirming Care", "the Vocal Fold/Paresis", "the default"]
+    // CHANGED: fixed track names per Friedman's comments
+    let prompt = ["a custom", "the Spasmodic Dysphonia", "the Recurrent Respiratory Pappiloma", "the Parkinson's Disease", "the Gender-Affirming Voice Care", "the Vocal Fold/Paresis", "the default"]
     
     let forwardArrow = "VoMo-App-Assets_2_arrow-gif"
     
@@ -188,7 +190,8 @@ extension HomeView {
                     Spacer()
                     
                     Button(action: {
-                        self.viewRouter.currentPage = .scoresView
+                        // CHANGED: fixed destination to activity/goals page
+                        self.viewRouter.currentPage = .activityView
                     }) {
                         HomeActivityGraph()
                     }
@@ -208,3 +211,5 @@ extension HomeView {
         }
     }
 }
+
+

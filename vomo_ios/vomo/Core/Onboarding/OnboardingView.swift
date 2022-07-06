@@ -59,18 +59,17 @@ struct OnboardingView: View {
             
             Spacer()
             
-            Button(action: {
-                viewRouter.currentPage = .personalQuestionView
-            }) {
+            Button(action: {viewRouter.currentPage = .personalQuestionView}) {
                 SubmissionButton(label: "GET STARTED")
             }
             .frame(width: content_width, height: 55, alignment: .center)
             .padding(.top, 30)
-            .padding(.bottom)
-        }.onAppear {
+            .padding(.bottom, 40) //CHANGE: added more padding
+        } // End VStack
+        .onAppear {
             UserDefaults.standard.set(false, forKey: "edited_before")
-        }
-    }
+        } //End onAppear
+    } //end body
 }
 
 struct OnboardingView_Previews: PreviewProvider {
