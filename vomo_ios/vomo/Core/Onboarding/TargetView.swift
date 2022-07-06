@@ -54,7 +54,7 @@ struct TargetView: View {
                             .resizable()
                             .scaledToFit()
                         
-                        Text("Recurrent Pappilloma")
+                        Text("Recurrent Respiratory Papilomatosis (RRP)") // CHANGED: added respiratory and RRP
                             .font(._buttonFieldCopy)
                             .foregroundColor(userSettings.focusSelection == 2 ? Color.white : Color.BODY_COPY)
                             .multilineTextAlignment(.leading)
@@ -88,7 +88,7 @@ struct TargetView: View {
                             .resizable()
                             .scaledToFit()
                         
-                        Text("Gender-Affirming Care")
+                        Text("Gender-Affirming Voice Care") // CHANGED: added voice
                             .font(._buttonFieldCopy)
                             .foregroundColor(userSettings.focusSelection == 4 ? Color.white : Color.BODY_COPY)
                             .multilineTextAlignment(.leading)
@@ -159,13 +159,13 @@ extension TargetView {
                 
                 Spacer()
             }
-            .padding(.bottom, 20)
+            .padding(.bottom, 10)
             
             Text("VoMo will customize your app based on your selection.")
                 .font(._bodyCopy)
                 .foregroundColor(Color.BODY_COPY)
                 .multilineTextAlignment(.center)
-                .padding(.bottom, 20)
+                .padding(.bottom, 10)
         }.frame(width: svm.content_width + 100)
     }
     
@@ -237,5 +237,12 @@ extension TargetView {
             }
             .frame(width: svm.content_width, height: 55)
         }
+    }
+}
+
+// CHANGED: added preview
+struct TargetView_Previews: PreviewProvider {
+    static var previews: some View {
+        TargetView()
     }
 }

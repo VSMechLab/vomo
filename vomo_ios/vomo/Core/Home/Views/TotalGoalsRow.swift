@@ -42,7 +42,8 @@ struct TotalGoalsRow: View {
                     .font(._stats)
                     .foregroundColor(Color.BLUE)
                 
-                Text("ADD A VISIT")
+                // CHANGED: changed text to track visits
+                Text("TRACK VISITS")
                     .font(._statsLabel)
                     .foregroundColor(Color.BODY_COPY)
             }.frame(width: 100)
@@ -70,13 +71,19 @@ struct TotalGoalsRow: View {
             }.frame(width: 100)
             
             VStack(alignment: .center) {
-                ZStack {
-                    ProgressBar(level: self.comp_profile, color: Color.TEAL)
-                    
-                    Image(complete_img)
-                        .resizable()
-                        .frame(width: 35, height: 30, alignment: .center)
-                }.frame(width: 30)
+                // CHANGED: add button functionality to check icon
+                Button(action: {
+                    viewRouter.currentPage = .activityView
+                }) {
+                    ZStack {
+                        ProgressBar(level: self.comp_profile, color: Color.TEAL)
+
+                        Image(complete_img)
+                            .resizable()
+                            .frame(width: 35, height: 30, alignment: .center)
+                    }
+                    .frame(width: 30)
+                }
                 
                 Text("\(self.comp_profile * 100)%")
                     .font(._stats)

@@ -44,9 +44,14 @@ struct PersonalQuestionView: View {
                 Text("Sign ")
                     .font(._headline)
                 
-                Text("Up.")
+                Text("Up")
                     .font(._headline)
                     .foregroundColor(Color.DARK_PURPLE)
+                
+                // CHANGED: changed the period to teal
+                Text(".")
+                    .font(._headline)
+                    .foregroundColor(Color.TEAL)
                 
                 Spacer()
             }
@@ -96,10 +101,11 @@ struct PersonalQuestionView: View {
                         withAnimation() {
                             self.showCalendar.toggle()
                         }
-                        userSettings.dob = date.toDOB()
+                        self.userSettings.dob = date.toString(dateFormat: "MM/dd/yyyy")
                     }) {
                         HStack {
-                            Text(date.toDOB())
+                            // CHANGE: fix date format
+                            Text(date.toString(dateFormat: "MM/dd/yyyy"))
                                 .font(._bodyCopy)
                             /*
                             TextField(self.dob.isEmpty ? "00/00/0000" : self.dob, text: self.$dob)
@@ -136,6 +142,16 @@ struct PersonalQuestionView: View {
             date = self.userSettings.dob.toDateFromDOB() ?? .now
         }
     }
+    
+    // CHANGED: add method to get dob
+    func getDOB() -> Date {
+        return date
+    }
+
+    // CHANGED: add method to set dob
+    func setDOB(newDate: Date) {
+        self.date = newDate
+    }
 }
 
 extension PersonalQuestionView {
@@ -159,7 +175,8 @@ extension PersonalQuestionView {
                 Spacer()
                 
                 Button(action: {
-                    userSettings.dob = self.date.toDOB()
+                    // CHANGED: fix date format
+                    userSettings.dob = date.toString(dateFormat: "MM/dd/yyyy")
                     if self.userSettings.firstName != "" && self.userSettings.lastName != "" && self.userSettings.dob != "" /* && self.acceptedTerms != false */ {
                         viewRouter.currentPage = .voiceQuestionView
                     }
@@ -168,7 +185,6 @@ extension PersonalQuestionView {
                         Text("Next")
                             .foregroundColor(Color.DARK_PURPLE)
                             .font(._pageNavLink)
-                        
                         
                         Image(nav_img)
                             .resizable()
@@ -221,5 +237,12 @@ extension PersonalQuestionView {
         }
         .padding(.vertical)
         .multilineTextAlignment(.center)
+    }
+}
+
+// CHANGED: added preview
+struct Previews_PersonalQuestionView_Previews: PreviewProvider {
+    static var previews: some View {
+        PersonalQuestionView()
     }
 }

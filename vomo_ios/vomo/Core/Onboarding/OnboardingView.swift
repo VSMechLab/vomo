@@ -66,8 +66,9 @@ struct OnboardingView: View {
             }
             .frame(width: svm.content_width, height: 55, alignment: .center)
             .padding(.top, 30)
-            .padding(.bottom)
-        }.onAppear {
+            .padding(.bottom, 40) //CHANGE: added more padding
+        } // End VStack
+        .onAppear {
             UserDefaults.standard.set(false, forKey: "edited_before")
         }
     }

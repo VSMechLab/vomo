@@ -24,6 +24,7 @@
 		AD158E6C279919A500C3119A /* VoMoApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD158E6B279919A500C3119A /* VoMoApp.swift */; };
 		AD158E6E279919A500C3119A /* RecordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD158E6D279919A500C3119A /* RecordView.swift */; };
 		AD158E73279919A600C3119A /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AD158E72279919A600C3119A /* Preview Assets.xcassets */; };
+		AD1B945F2876147600E64227 /* ProfilePicturePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD1B945E2876147600E64227 /* ProfilePicturePicker.swift */; };
 		AD26BA1A2829F4C000AC1A7B /* BarChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD26BA192829F4C000AC1A7B /* BarChart.swift */; };
 		AD26BA1C2829F4C900AC1A7B /* BarChartCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD26BA1B2829F4C900AC1A7B /* BarChartCell.swift */; };
 		AD26BA1E2829F4DD00AC1A7B /* BarChartCellShape.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD26BA1D2829F4DD00AC1A7B /* BarChartCellShape.swift */; };
@@ -133,6 +134,7 @@
 		AD158E6B279919A500C3119A /* VoMoApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoMoApp.swift; sourceTree = "<group>"; };
 		AD158E6D279919A500C3119A /* RecordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordView.swift; sourceTree = "<group>"; };
 		AD158E72279919A600C3119A /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		AD1B945E2876147600E64227 /* ProfilePicturePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ProfilePicturePicker.swift; path = vomo/Core/Profile/ProfilePicturePicker.swift; sourceTree = SOURCE_ROOT; };
 		AD26BA192829F4C000AC1A7B /* BarChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = BarChart.swift; path = vomo/Graphs/BarChart/BarChart.swift; sourceTree = SOURCE_ROOT; };
 		AD26BA1B2829F4C900AC1A7B /* BarChartCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = BarChartCell.swift; path = vomo/Graphs/BarChart/BarChartCell.swift; sourceTree = SOURCE_ROOT; };
 		AD26BA1D2829F4DD00AC1A7B /* BarChartCellShape.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = BarChartCellShape.swift; path = vomo/Graphs/BarChart/BarChartCellShape.swift; sourceTree = SOURCE_ROOT; };
@@ -499,17 +501,9 @@
 		ADC5A60228358506000C73DF /* Home */ = {
 			isa = PBXGroup;
 			children = (
-				ADC5A6032835854E000C73DF /* ViewModels */,
 				ADC5A6042835855B000C73DF /* Views */,
 			);
 			path = Home;
-			sourceTree = "<group>";
-		};
-		ADC5A6032835854E000C73DF /* ViewModels */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = ViewModels;
 			sourceTree = "<group>";
 		};
 		ADC5A6042835855B000C73DF /* Views */ = {
@@ -576,6 +570,7 @@
 			isa = PBXGroup;
 			children = (
 				ADD6846727D82DB100FF23D2 /* ProfileView.swift */,
+				AD1B945E2876147600E64227 /* ProfilePicturePicker.swift */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -766,6 +761,7 @@
 				ADA0E0D8282561A900CF05D1 /* Line.swift in Sources */,
 				ADA0E0BA28255EDA00CF05D1 /* ChartValue.swift in Sources */,
 				ADCAB38C285FAABD002F650C /* SharedViewModel.swift in Sources */,
+				AD1B945F2876147600E64227 /* ProfilePicturePicker.swift in Sources */,
 				ADFF4309280E4CA3008F721B /* RecordingSection.swift in Sources */,
 				AD0A0C622846A65300D9C8DA /* VisitTypeRow.swift in Sources */,
 				AD26BA202829F4E600AC1A7B /* BarChartRow.swift in Sources */,

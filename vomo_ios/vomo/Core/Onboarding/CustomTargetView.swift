@@ -40,7 +40,7 @@ struct CustomTargetView: View {
             
             vocalTaskSection
             
-            accousticParametersSection
+            acousticParametersSection
             
             questionnairesSection
             
@@ -145,11 +145,11 @@ extension CustomTargetView {
         }.padding(.vertical, 3)
     }
     
-    private var accousticParametersSection: some View {
+    private var acousticParametersSection: some View {
         Group {
-            // Accoustic Parameters
+            // Acoustic Parameters
             HStack(spacing: 0) {
-                Text("Accoustic Parameters")
+                Text("Acoustic Parameters")
                     .font(._fieldLabel)
                 
                 Spacer()
@@ -294,6 +294,7 @@ extension CustomTargetView {
                                 .font(._subCopy)
                         }
                         .padding(.leading, svm.content_width / 5)
+                        .padding(.top, -5) // CHANGED: added padding
                     }
                 }
                 
@@ -315,6 +316,7 @@ extension CustomTargetView {
                                 .font(._subCopy)
                         }
                         .padding(.leading, svm.content_width / 5)
+                        .padding(.top, -5)
                     }
                 }
                 .padding(.top, -10)
@@ -377,5 +379,12 @@ extension CustomTargetView {
             }
             .frame(width: svm.content_width, height: 55)
         }
+    }
+}
+
+// CHANGED: added preview
+struct CustomTargetView_Previews: PreviewProvider {
+    static var previews: some View {
+        CustomTargetView()
     }
 }

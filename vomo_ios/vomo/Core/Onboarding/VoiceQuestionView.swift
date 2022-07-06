@@ -26,11 +26,9 @@ struct VoiceQuestionView: View {
             
             header
             
-            Spacer()
+            haveVoMoChooseSection
             
             customizeSection
-            
-            haveVoMoChooseSection
             
             Spacer()
             
@@ -58,6 +56,11 @@ extension VoiceQuestionView {
                     .font(._headline)
                     .foregroundColor(Color.DARK_PURPLE)
                 
+                // CHANGED: changed the period to teal
+                Text(".")
+                    .font(._headline)
+                    .foregroundColor(Color.TEAL)
+                
                 Spacer()
             }
             .padding(.bottom, 10)
@@ -66,10 +69,11 @@ extension VoiceQuestionView {
                 .font(._bodyCopy)
                 .foregroundColor(Color.BODY_COPY)
                 .multilineTextAlignment(.center)
+                .padding(.bottom, 20)
         }.frame(width: svm.content_width)
     }
     
-    private var customizeSection: some View {
+    private var haveVoMoChooseSection: some View {
         Button(action: {
             self.userSettings.voice_plan = 1
         }) {
@@ -84,18 +88,19 @@ extension VoiceQuestionView {
                             .foregroundColor(userSettings.voice_plan == 1 ? Color.white : Color.gray)
                             .font(._buttonFieldCopyLarger)
                         
-                        Text("Optimize my plan based on my voice diagnosis")
+                        Text("Optimize my plan based on my voice diagnosis.")
                             .foregroundColor(userSettings.voice_plan == 1 ? Color.white : Color.DARK_PURPLE)
                             .font(._subCopy)
                     }
                     .padding(.leading, svm.content_width / 5)
+                    
                     Spacer()
                 }
             }
         }.padding(.top, -20)
     }
     
-    private var haveVoMoChooseSection: some View {
+    private var customizeSection: some View {
         Button(action: {
             self.userSettings.voice_plan = 2
         }) {
@@ -110,11 +115,12 @@ extension VoiceQuestionView {
                             .foregroundColor(userSettings.voice_plan == 1 ? Color.gray : Color.white)
                             .font(._buttonFieldCopyLarger)
                         
-                        Text("Let me decide which takss and measurements I want")
+                        Text("Let me decide which tasks and measurements I want.")
                             .foregroundColor(userSettings.voice_plan == 1 ? Color.DARK_PURPLE : Color.white)
                             .font(._subCopy)
                     }
                     .padding(.leading, svm.content_width / 5)
+                    
                     Spacer()
                 }
             }

@@ -141,7 +141,7 @@ extension HomePopup {
                 }
             }) {
                 HStack {
-                    Text(date.toDOB())
+                    Text(date.toString(dateFormat: "MM/dd/yyyy"))
                         .font(._bodyCopy)
                     Spacer()
                     Image(arrow_img)
@@ -157,8 +157,11 @@ extension HomePopup {
             ZStack {
                 if showCalendar {
                     DatePicker("", selection: $date, in: Date.now..., displayedComponents: .date)
+                    // CHANGED: removed in: Date.now..., so dates can be selected before current date
+                    DatePicker("", selection: $date, displayedComponents: .date)
                         .datePickerStyle(WheelDatePickerStyle())
                         .frame(maxWidth: 275, maxHeight: 200)
+                        .frame(maxWidth: 275, maxHeight: 175) // CHANGED: adjusted height ot 175 from 200 to keep w/in bounds of pop up box
                         .clipped()
                 }
             }
