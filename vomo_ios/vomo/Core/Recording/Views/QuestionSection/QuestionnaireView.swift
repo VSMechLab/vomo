@@ -12,6 +12,7 @@ struct QuestionnaireView: View {
     @EnvironmentObject var viewRouter: ViewRouter
     @EnvironmentObject var entries: Entries
     @State private var vm = RecordingViewModel()
+    @State private var svm = SharedViewModel()
     
     @State private var q1 = -1
     @State private var q2 = -1
@@ -24,8 +25,6 @@ struct QuestionnaireView: View {
     @State private var q9 = -1
     @State private var q10 = -1
     @State private var q11 = -1
-    
-    let content_width: CGFloat = 317.5
     let button_img = "VM_Gradient-Btn"
     
     var body: some View {
@@ -66,13 +65,17 @@ struct QuestionnaireView: View {
                     Scale(position: self.$q11, prompt: 10)
                 }
                 
-                Button(action: {
-                    self.entries.questionnaires.append(QuestionnaireModel(createdAt: .now, q1: self.q1, q2: self.q2, q3: self.q3, q4: self.q4, q5: self.q5, q6: self.q6, q7: self.q7, q8: self.q8, q9: self.q9, q10: self.q10, q11: self.q11))
-                }) {
-                    SubmissionButton(label: "Submit")
+                HStack {
+                    Spacer()
+                    Button(action: {
+                        self.entries.questionnaires.append(QuestionnaireModel(createdAt: .now, q1: self.q1, q2: self.q2, q3: self.q3, q4: self.q4, q5: self.q5, q6: self.q6, q7: self.q7, q8: self.q8, q9: self.q9, q10: self.q10, q11: self.q11))
+                    }) {
+                        SubmissionButton(label: "Submit")
+                    }
+                    Spacer()
                 }
             }
-            .frame(width: content_width)
+            .frame(width: svm.content_width)
             .padding(.bottom, 100)
         }
     }

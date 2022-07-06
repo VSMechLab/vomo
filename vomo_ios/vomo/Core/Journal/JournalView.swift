@@ -19,7 +19,7 @@ struct JournalView: View {
     let button_img = "VM_Gradient-Btn"
 
     
-    let content_width: CGFloat = 317.5
+    @State private var svm = SharedViewModel()
     
     @State private var name = ""
     @State private var note = ""
@@ -42,7 +42,7 @@ struct JournalView: View {
             ZStack {
                 Image(banner_img)
                     .resizable()
-                    .frame(height: 190)
+                    .scaledToFit()
                 
                 VStack(alignment: .leading) {
                     Spacer()
@@ -60,7 +60,7 @@ struct JournalView: View {
                 }
                 .padding()
                 .font(._subHeadline)
-                .frame(width: content_width, height: 190)
+                .frame(width: svm.content_width, height: 190)
             }
             
             VStack(spacing: 0) {
@@ -104,7 +104,7 @@ struct JournalView: View {
             }
             
             addNoteButton
-        }.frame(width: content_width)
+        }.frame(width: svm.content_width)
     }
 }
 

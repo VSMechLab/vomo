@@ -9,7 +9,9 @@ import SwiftUI
 import Foundation
 
 struct RecordingViewModel {
-    let prompt: [String] = ["Say 'ahh' for\n5 seconds", "say 'ahhh' for\nas long as you can", "Say 'A raindbow is a\ndivision of white light\ninto many beautiful colors'"]
+    @ObservedObject var userSettings = UserSettings()
+    
+    let prompt: [String] = ["Say 'ahh' for\n5 seconds", "Say 'ahhh' for\nas long as you can", "Say 'A rainbow is a\ndivision of white light\ninto many beautiful colors'"]
     let audio: [String] = ["KR_sustained_Ah_1", "KR_sustained_Ah_1", "KR_rainbow_1"]
     
     let next_img = "VM_next-nav-btn"
@@ -17,22 +19,18 @@ struct RecordingViewModel {
     let navArrowWidth = CGFloat(20)
     let navArrowHeight = CGFloat(25)
     
-    let content_width: CGFloat = 317.5
-    
-    var focusSelection = UserDefaults.standard.integer(forKey: "focus_selection")
-    
     var taskList: [String] {
         var returnable: [String] = []
-        if UserDefaults.standard.bool(forKey: "all_tasks") || focusSelection != 0 {
+        if userSettings.allTasks || userSettings.focusSelection != 0 {
             return ["vowel", "max_pt", "rainbow_s"]
         } else {
-            if UserDefaults.standard.bool(forKey: "vowel") {
+            if userSettings.vowel {
                 returnable.append("vowel")
             }
-            if UserDefaults.standard.bool(forKey: "max_pt") {
+            if userSettings.maxPT {
                 returnable.append("max_pt")
             }
-            if UserDefaults.standard.bool(forKey: "rainbow_s") {
+            if userSettings.rainbowS {
                 returnable.append("rainbow_s")
             }
             return returnable
@@ -44,9 +42,9 @@ struct RecordingViewModel {
             VRQOL = 1
             VHI = 2
          */
-        if UserDefaults.standard.integer(forKey: "questionnaires") == 1 {
+        if userSettings.questionnaires == 1 {
             return "VRQOL"
-        } else if UserDefaults.standard.integer(forKey: "questionnaires") == 2 {
+        } else if userSettings.questionnaires == 2 {
             return "VHI"
         } else { return "VRQOL" }
     }

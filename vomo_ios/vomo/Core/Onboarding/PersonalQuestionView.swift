@@ -10,10 +10,7 @@ import SwiftUI
 struct PersonalQuestionView: View {
     @EnvironmentObject var viewRouter: ViewRouter
     
-    @State private var acceptedTerms = UserDefaults.standard.bool(forKey: "accepts_terms")
-    @State private var firstName = UserDefaults.standard.string(forKey: "first_name") ?? ""
-    @State private var lastName = UserDefaults.standard.string(forKey: "last_name") ?? ""
-    @State private var dob = UserDefaults.standard.string(forKey: "dob") ?? ""
+    @ObservedObject var userSettings = UserSettings()
     
     let logo = "VM_0-Loading-Screen-logo"
     let entry_img = "VM_12-entry-field"
@@ -25,7 +22,7 @@ struct PersonalQuestionView: View {
     let img_selected = "VM_Prpl-Square-Btn copy"
     let img_unselected = "VM_Prpl-Check-Square-Btn"
     
-    let content_width = 317.5
+    @State private var svm = SharedViewModel()
     
     let arrow_img = "VM_Dropdown-Btn"
     
@@ -62,14 +59,14 @@ struct PersonalQuestionView: View {
                 ZStack {
                     Image(entry_img)
                         .resizable()
-                        .frame(width: content_width, height: toggleHeight)
+                        .frame(width: svm.content_width, height: toggleHeight)
                         .cornerRadius(7)
                     
                     HStack {
-                        TextField(self.firstName.isEmpty ? "First Name" : self.firstName, text: self.$firstName)
-                            .font(self.firstName.isEmpty ? ._fieldCopyItalic : ._fieldCopyRegular)
+                        TextField(self.userSettings.firstName.isEmpty ? "First Name" : self.userSettings.firstName, text: $userSettings.firstName)
+                            .font(self.userSettings.firstName.isEmpty ? ._fieldCopyItalic : ._fieldCopyRegular)
                     }.padding(.horizontal, 5)
-                }.frame(width: content_width, height: toggleHeight)
+                }.frame(width: svm.content_width, height: toggleHeight)
                 
                 Text("Last Name")
                     .font(._fieldLabel)
@@ -77,14 +74,14 @@ struct PersonalQuestionView: View {
                 ZStack {
                     Image(entry_img)
                         .resizable()
-                        .frame(width: content_width, height: toggleHeight)
+                        .frame(width: svm.content_width, height: toggleHeight)
                         .cornerRadius(7)
                     
                     HStack {
-                        TextField(self.lastName.isEmpty ? "Last Name" : self.lastName, text: self.$lastName)
-                            .font(self.lastName.isEmpty ? ._fieldCopyItalic : ._fieldCopyRegular)
+                        TextField(self.userSettings.lastName.isEmpty ? "Last Name" : self.userSettings.lastName, text: $userSettings.lastName)
+                            .font(self.userSettings.lastName.isEmpty ? ._fieldCopyItalic : ._fieldCopyRegular)
                     }.padding(.horizontal, 5)
-                }.frame(width: content_width, height: toggleHeight)
+                }.frame(width: svm.content_width, height: toggleHeight)
                 
                 Text("Date of Birth")
                     .font(._fieldLabel)
@@ -92,14 +89,14 @@ struct PersonalQuestionView: View {
                 ZStack {
                     Image(entry_img)
                         .resizable()
-                        .frame(width: content_width, height: toggleHeight)
+                        .frame(width: svm.content_width, height: toggleHeight)
                         .cornerRadius(5)
                     
                     Button(action: {
                         withAnimation() {
                             self.showCalendar.toggle()
                         }
-                        dob = date.toDOB()
+                        userSettings.dob = date.toDOB()
                     }) {
                         HStack {
                             Text(date.toDOB())
@@ -115,7 +112,7 @@ struct PersonalQuestionView: View {
                                 .rotationEffect(Angle(degrees:  showCalendar ? 180 : 0))
                         }.padding(.horizontal, 7)
                     }
-                }.frame(width: content_width, height: toggleHeight)
+                }.frame(width: svm.content_width, height: toggleHeight)
                 
                 ZStack {
                     if showCalendar {
@@ -134,9 +131,9 @@ struct PersonalQuestionView: View {
             navSection
             
         }
-        .frame(width: content_width)
+        .frame(width: svm.content_width)
         .onAppear() {
-            date = self.dob.toDateFromDOB() ?? .now
+            date = self.userSettings.dob.toDateFromDOB() ?? .now
         }
     }
 }
@@ -162,12 +159,8 @@ extension PersonalQuestionView {
                 Spacer()
                 
                 Button(action: {
-                    dob = date.toDOB()
-                    if self.firstName != "" && self.lastName != "" && self.dob != "" /* && self.acceptedTerms != false */ {
-                        UserDefaults.standard.set(self.acceptedTerms, forKey:  "accepts_terms")
-                        UserDefaults.standard.set(self.firstName, forKey:  "first_name")
-                        UserDefaults.standard.set(self.lastName, forKey:  "last_name")
-                        UserDefaults.standard.set(self.dob, forKey:  "dob")
+                    userSettings.dob = self.date.toDOB()
+                    if self.userSettings.firstName != "" && self.userSettings.lastName != "" && self.userSettings.dob != "" /* && self.acceptedTerms != false */ {
                         viewRouter.currentPage = .voiceQuestionView
                     }
                 }) {
@@ -184,19 +177,23 @@ extension PersonalQuestionView {
                     }
                 }
             }
-            .frame(width: content_width, height: 55, alignment: .center)
+            .frame(width: svm.content_width, height: 55, alignment: .center)
         }
     }
     
     private var termsSection: some View {
         HStack(spacing: 0) {
+            /*
             Button(action: {
-                self.acceptedTerms.toggle()
+                /*
+                self.userSettings.acceptedTerms.toggle()
+                */
             }) {
-                Image(acceptedTerms ? img_unselected : img_selected)
+                Image(self.userSettings.$acceptedTerms ? img_unselected : img_selected)
                     .resizable()
                     .frame(width: 20, height: 20)
             }
+            */
             
             Text("By signing up you accept the ")
                 .foregroundColor(Color.BODY_COPY)

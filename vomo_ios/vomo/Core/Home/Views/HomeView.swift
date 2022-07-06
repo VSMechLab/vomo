@@ -19,11 +19,12 @@ struct HomeView: View {
     @EnvironmentObject var retrieve: Retrieve
     
     let background_img = "VM_7-cover-waves-gfx"
-    let content_width = 317.5
+    
+    @State private var svm = SharedViewModel()
     
     @State private var focusSelection = UserDefaults.standard.integer(forKey: "focus_selection")
     let edited_before = UserDefaults.standard.bool(forKey: "edited_before")
-    let username = UserDefaults.standard.string(forKey: "name") ?? ""
+    let username = UserDefaults.standard.string(forKey: "first_name") ?? ""
     
     let prompt = ["a custom", "the Spasmodic Dysphonia", "the Recurrent Pappiloma", "the Parkinson's Disease", "the Gender-Affirming Care", "the Vocal Fold/Paresis", "the default"]
     
@@ -45,7 +46,7 @@ struct HomeView: View {
                     Spacer()
                 }
                 .font(._headline)
-                .frame(width: content_width)
+                .frame(width: svm.content_width)
                 
                 HStack(spacing: 0) {
                     Text("You are on \(prompt[focusSelection]) track ")
@@ -60,9 +61,10 @@ struct HomeView: View {
                     Spacer()
                 }
                 .font(._bodyCopy)
-                .frame(width: content_width)
+                .frame(width: svm.content_width)
                 
                 HomeWidget()
+                    .frame(width: svm.content_width)
                 
                 totalGoalsSection
                 
@@ -108,7 +110,7 @@ extension HomeView {
                 }
             }
             TotalGoalsRow(audioRecorder: AudioRecorder(), visitPopup: self.$visitPopup)
-        }.frame(width: content_width)
+        }.frame(width: svm.content_width)
     }
     
     private var entriesSection: some View {
@@ -134,11 +136,11 @@ extension HomeView {
                     .font(._CTALink)
                     .foregroundColor(Color.DARK_PURPLE)
                 }
-            }.frame(width: content_width)
+            }.frame(width: svm.content_width)
             
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 5) {
-                    Color.white.frame(width: (UIScreen.main.bounds.width - content_width) / 2)
+                    Color.white.frame(width: (UIScreen.main.bounds.width - svm.content_width) / 2)
                     /*ForEach(entries.uniqueDays().reversed(), id: \.self) { entry in
                         Button(action: {
                             viewRouter.currentPage = .entryView
@@ -176,7 +178,7 @@ extension HomeView {
                         .font(._subHeadline)
                     
                     Spacer()
-                }.frame(width: content_width)
+                }.frame(width: svm.content_width)
                 
                 HStack(alignment: .top, spacing: 5) {
                     Button(action: {
@@ -195,7 +197,7 @@ extension HomeView {
                 }
                 .font(._fieldLabel)
                 .foregroundColor(.white)
-                .frame(width: content_width)
+                .frame(width: svm.content_width)
             }
         }
     }

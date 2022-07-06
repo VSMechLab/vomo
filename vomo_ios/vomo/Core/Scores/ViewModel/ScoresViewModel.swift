@@ -28,7 +28,6 @@ struct ScoresViewModel {
     let pitchKey = "pitchKey"
     let cppKey = "cppKey"
     
-    let content_width = 317.5
 }
 
 extension ScoresViewModel {

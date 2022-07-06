@@ -12,12 +12,13 @@ struct Activityiew: View {
     @State private var goalOneSelect = false
     @State private var goalTwoSelect = false
     
+    @State private var svm = SharedViewModel()
+    
     let entry_img = "VM_12-entry-field"
     let entry_height: CGFloat = 37 * 0.95
     let next_img = "VM_next-nav-btn"
     let navArrowWidth = CGFloat(20)
     let navArrowHeight = CGFloat(25)
-    let content_width: CGFloat = 317.5
     let dropdown_img = "VM_Dropdown-Btn"
     let select_img = "VM_Select-Btn"
     let unselect_img = "VM_Unselect-Btn"
@@ -125,7 +126,7 @@ struct Activityiew: View {
                     
                     Spacer()
                 }
-                .frame(width: content_width)
+                .frame(width: svm.content_width)
             }
             
             Spacer()
@@ -141,6 +142,9 @@ struct Activityiew: View {
             } else {
                 Spacer().frame(width: navArrowWidth)
             }
+        }
+        .onAppear() {
+            print(UIScreen.main.bounds.width)
         }.padding()
     }
 }

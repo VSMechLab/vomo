@@ -116,7 +116,6 @@ class Entries: ObservableObject {
             arr1.append(item.createdAt.removeTimeStamp!)
         }
         
-        
         for item in self.journals {
             arr1.append(item.createdAt.removeTimeStamp!)
         }

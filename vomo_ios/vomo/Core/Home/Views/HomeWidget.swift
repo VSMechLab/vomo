@@ -16,23 +16,25 @@ struct HomeWidget: View {
         ZStack {
             Image(widget_img)
                 .resizable()
+                .scaledToFit()
             
-            VStack(spacing: 0) {
-                VStack(spacing: 0) {
-                    Spacer()
-                }.frame(width: 317.5, height: 155 / 2)
-                
-                VStack(spacing: 0) {
-                    Text(quotes.findQuote())
-                        .font(._coverBodyCopy)
-                        .foregroundColor(Color.white)
-                        .multilineTextAlignment(.center)
-                        .padding(.bottom, 10)
-                        .padding(.horizontal)
-                    Spacer()
-                }.frame(width: 317.5, height: 155 / 2)
+            GeometryReader { geometry in
+                VStack {
+                    Color.gray.opacity(0)
+                        .frame(height: geometry.size.height / 2)
+                    VStack {
+                        Text(quotes.findQuote())
+                            .font(._coverBodyCopy)
+                            .foregroundColor(Color.white)
+                            .multilineTextAlignment(.center)
+                            .padding(.bottom, 10)
+                            .padding(.horizontal)
+                        Spacer()
+                    }
+                    .frame(height: geometry.size.height / 2)
+                }.frame(height: geometry.size.height)
             }
-        }.frame(width: 317.5, height: 155)
+        }
     }
 }
 

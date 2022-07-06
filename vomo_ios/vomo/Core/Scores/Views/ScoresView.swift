@@ -19,6 +19,9 @@ struct ScoresView: View {
     @State private var scoresModifier = false
     @State private var pitchThreshold = 0
     @State private var focusSelection = UserDefaults.standard.integer(forKey: "focus_selection")
+    
+    @State private var svm = SharedViewModel()
+    
     var body: some View {
         ZStack {
             ScrollView(showsIndicators: false) {
@@ -44,7 +47,7 @@ struct ScoresView: View {
                     //Text("Pitches threshold data: \(vm.readPitch()[0])")
                     
                     graphSection
-                }.frame(width: vm.content_width)
+                }.frame(width: svm.content_width)
             }
             
             if scoresModifier {

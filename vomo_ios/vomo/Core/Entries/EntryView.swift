@@ -17,7 +17,9 @@ struct EntryView: View {
     
     @State private var active = -1
     
-    let content_width: CGFloat = 317.5
+    
+    @State private var svm = SharedViewModel()
+    
     let logo = "VoMo-App-Assets_2_journals-gfx"//"VM_record-nav-icon"
     let dropdown = "VM_Dropdown-Btn"
     let focus: Date
@@ -148,7 +150,7 @@ struct EntryView: View {
             }
             
             Spacer()
-        }.frame(width: content_width)
+        }.frame(width: svm.content_width)
     }
 }
 

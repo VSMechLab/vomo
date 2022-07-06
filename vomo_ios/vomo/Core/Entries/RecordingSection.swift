@@ -17,7 +17,9 @@ struct RecordingSection: View {
     
     let focus: Date
     let type: String
-    let content_width: CGFloat = 317.5
+    
+    @State private var svm = SharedViewModel()
+    
     let logo = "VM_record-nav-ds-icon"
     let dropdown = "VM_Dropdown-Btn"
     let timer = Timer.publish(every: 1 / 60, on: .main, in: .common).autoconnect()
@@ -58,7 +60,7 @@ struct RecordingSection: View {
             .font(._coverBodyCopy)
         }
         .padding(.vertical)
-        .frame(width: content_width)
+        .frame(width: svm.content_width)
         .foregroundColor(Color.white)
         .background(Color.BRIGHT_PURPLE)
         .onAppear() {

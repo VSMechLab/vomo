@@ -10,18 +10,18 @@ import SwiftUI
 struct TargetView: View {
     @EnvironmentObject var viewRouter: ViewRouter
     
+    @ObservedObject var userSettings = UserSettings()
+    
     let logo = "VM_0-Loading-Screen-logo"
     let select_img = "VM_Select-Btn-Prpl-Field"
     let unselect_img = "VM_Unselect-Btn-Gry-Field"
     
     let nav_img = "VM_Dropdown-Btn"
     
-    @State private var focusSelection = UserDefaults.standard.integer(forKey: "focus_selection")
-    @State private var edited_before = UserDefaults.standard.bool(forKey: "edited_before")
     let buttonWidth: CGFloat = 160
     let buttonHeight: CGFloat = 35
     
-    let content_width = 317.5
+    @State private var svm = SharedViewModel()
     
     var body: some View {
         VStack {
@@ -31,104 +31,104 @@ struct TargetView: View {
             
             HStack {
                 Button(action: {
-                    self.focusSelection = 1
+                    self.userSettings.focusSelection = 1
                 }) {
                     ZStack(alignment: .leading) {
-                        Image(focusSelection == 1 ? select_img : unselect_img)
+                        Image(userSettings.focusSelection == 1 ? select_img : unselect_img)
                             .resizable()
-                            .frame(width: buttonWidth, height: buttonHeight)
+                            .scaledToFit()
                         
                         Text("Spasmodic Dysphonia")
                             .font(._buttonFieldCopy)
-                            .foregroundColor(focusSelection == 1 ? Color.white : Color.BODY_COPY)
+                            .foregroundColor(userSettings.focusSelection == 1 ? Color.white : Color.BODY_COPY)
                             .multilineTextAlignment(.leading)
-                            .padding(.leading, 26)
+                            .padding(.leading, svm.content_width / 12.5)
                     }
-                }.frame(width: buttonWidth, height: buttonHeight)
+                }
                                 
                 Button(action: {
-                    self.focusSelection = 2
+                    self.userSettings.focusSelection = 2
                 }) {
                     ZStack(alignment: .leading) {
-                        Image(focusSelection == 2 ? select_img : unselect_img)
+                        Image(userSettings.focusSelection == 2 ? select_img : unselect_img)
                             .resizable()
-                            .frame(width: buttonWidth, height: buttonHeight)
+                            .scaledToFit()
                         
                         Text("Recurrent Pappilloma")
                             .font(._buttonFieldCopy)
-                            .foregroundColor(focusSelection == 2 ? Color.white : Color.BODY_COPY)
+                            .foregroundColor(userSettings.focusSelection == 2 ? Color.white : Color.BODY_COPY)
                             .multilineTextAlignment(.leading)
-                            .padding(.leading, 26)
+                            .padding(.leading, svm.content_width / 12.5)
                     }
-                }.frame(width: buttonWidth, height: buttonHeight)
+                }
             }
             
             HStack {
                 Button(action: {
-                    self.focusSelection = 3
+                    self.userSettings.focusSelection = 3
                 }) {
                     ZStack(alignment: .leading) {
-                        Image(focusSelection == 3 ? select_img : unselect_img)
+                        Image(userSettings.focusSelection == 3 ? select_img : unselect_img)
                             .resizable()
-                            .frame(width: buttonWidth, height: buttonHeight)
+                            .scaledToFit()
                         
                         Text("Parkinson's Disease")
                             .font(._buttonFieldCopy)
-                            .foregroundColor(focusSelection == 3 ? Color.white : Color.BODY_COPY)
+                            .foregroundColor(userSettings.focusSelection == 3 ? Color.white : Color.BODY_COPY)
                             .multilineTextAlignment(.leading)
-                            .padding(.leading, 26)
+                            .padding(.leading, svm.content_width / 12.5)
                     }
-                }.frame(width: buttonWidth, height: buttonHeight)
+                }
                 
                 Button(action: {
-                    self.focusSelection = 4
+                    self.userSettings.focusSelection = 4
                 }) {
                     ZStack(alignment: .leading) {
-                        Image(focusSelection == 4 ? select_img : unselect_img)
+                        Image(userSettings.focusSelection == 4 ? select_img : unselect_img)
                             .resizable()
-                            .frame(width: buttonWidth, height: buttonHeight)
+                            .scaledToFit()
                         
                         Text("Gender-Affirming Care")
                             .font(._buttonFieldCopy)
-                            .foregroundColor(focusSelection == 4 ? Color.white : Color.BODY_COPY)
+                            .foregroundColor(userSettings.focusSelection == 4 ? Color.white : Color.BODY_COPY)
                             .multilineTextAlignment(.leading)
-                            .padding(.leading, 26)
+                            .padding(.leading, svm.content_width / 12.5)
                     }
-                }.frame(width: buttonWidth, height: buttonHeight)
+                }
             }
             
             HStack {
                 Button(action: {
-                    self.focusSelection = 5
+                    self.userSettings.focusSelection = 5
                 }) {
                     ZStack(alignment: .leading) {
-                        Image(focusSelection == 5 ? select_img : unselect_img)
+                        Image(userSettings.focusSelection == 5 ? select_img : unselect_img)
                             .resizable()
-                            .frame(width: buttonWidth, height: buttonHeight)
+                            .scaledToFit()
                         
                         Text("Vocal Fold Paralysis / Paresis")
                             .font(._buttonFieldCopy)
-                            .foregroundColor(focusSelection == 5 ? Color.white : Color.BODY_COPY)
+                            .foregroundColor(userSettings.focusSelection == 5 ? Color.white : Color.BODY_COPY)
                             .multilineTextAlignment(.leading)
-                            .padding(.leading, 26)
+                            .padding(.leading, svm.content_width / 12.5)
                     }
-                }.frame(width: buttonWidth, height: buttonHeight)
+                }
                 
                 Button(action: {
-                    self.focusSelection = 6
+                    self.userSettings.focusSelection = 6
                 }) {
                     ZStack(alignment: .leading) {
-                        Image(focusSelection == 6 ? select_img : unselect_img)
+                        Image(userSettings.focusSelection == 6 ? select_img : unselect_img)
                             .resizable()
-                            .frame(width: buttonWidth, height: buttonHeight)
+                            .scaledToFit()
                         
                         Text("None of the Above (Default)")
                             .font(._buttonFieldCopy)
-                            .foregroundColor(focusSelection == 6 ? Color.white : Color.BODY_COPY)
+                            .foregroundColor(userSettings.focusSelection == 6 ? Color.white : Color.BODY_COPY)
                             .multilineTextAlignment(.leading)
-                            .padding(.leading, 26)
+                            .padding(.leading, svm.content_width / 12.5)
                     }
-                }.frame(width: buttonWidth, height: buttonHeight)
+                }
             }
             
             infoSection
@@ -136,7 +136,7 @@ struct TargetView: View {
             Spacer()
             
             navSection
-        }.frame(width: content_width)
+        }.frame(width: svm.content_width)
     }
 }
 
@@ -166,7 +166,7 @@ extension TargetView {
                 .foregroundColor(Color.BODY_COPY)
                 .multilineTextAlignment(.center)
                 .padding(.bottom, 20)
-        }.frame(width: content_width + 100)
+        }.frame(width: svm.content_width + 100)
     }
     
     private var infoSection: some View {
@@ -184,7 +184,7 @@ extension TargetView {
     private var navSection: some View {
         Group {
             HStack {
-                if !edited_before {
+                if !userSettings.edited_before {
                     Circle()
                         .foregroundColor(Color.gray)
                         .frame(width: 4, height: 4, alignment: .center)
@@ -219,7 +219,7 @@ extension TargetView {
                 
                 Button(action: {
                     UserDefaults.standard.set(true, forKey:  "edited_before")
-                    UserDefaults.standard.set(self.focusSelection, forKey:  "focus_selection")
+                    UserDefaults.standard.set(self.userSettings.focusSelection, forKey:  "focus_selection")
                     viewRouter.currentPage = .homeView
                 }) {
                     HStack(spacing: 5) {
@@ -235,7 +235,7 @@ extension TargetView {
                     }
                 }
             }
-            .frame(width: content_width, height: 55)
+            .frame(width: svm.content_width, height: 55)
         }
     }
 }

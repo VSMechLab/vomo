@@ -15,11 +15,11 @@ import SwiftUI
 struct OnboardingView: View {
     @EnvironmentObject var viewRouter: ViewRouter
     
+    @State private var svm = SharedViewModel()
+    
     let recording_background_img = "VM_Waves-Gfx"
     let logo = "VM_VoMo-Logo-WhBG"
     let button_img = "VM_Gradient-Btn"
-    
-    let content_width = 317.5
     
     var body: some View {
         VStack {
@@ -48,7 +48,7 @@ struct OnboardingView: View {
                 .foregroundColor(Color.BODY_COPY)
                 .multilineTextAlignment(.center)
                 .padding(.horizontal, 30)
-                .frame(width: content_width)
+                .frame(width: svm.content_width)
             
             Spacer()
             
@@ -64,7 +64,7 @@ struct OnboardingView: View {
             }) {
                 SubmissionButton(label: "GET STARTED")
             }
-            .frame(width: content_width, height: 55, alignment: .center)
+            .frame(width: svm.content_width, height: 55, alignment: .center)
             .padding(.top, 30)
             .padding(.bottom)
         }.onAppear {

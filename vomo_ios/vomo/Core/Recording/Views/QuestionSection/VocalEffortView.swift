@@ -1,5 +1,5 @@
 //
-//  VocalEffort.swift
+//  VocalEffortView.swift
 //  VoMo
 //
 //  Created by Neil McGrogan on 5/18/22.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct VocalEffort: View {
+struct VocalEffortView: View {
     @EnvironmentObject var viewRouter: ViewRouter
     @EnvironmentObject var entries: Entries
     

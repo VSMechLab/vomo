@@ -29,7 +29,7 @@ struct RecordBackground: View {
             ZStack {
                 Image(demi_circle_img)
                     .resizable()
-                    .frame(width: UIScreen.main.bounds.width + 10, height: 210, alignment: .center)
+                    .scaledToFit()
                     .edgesIgnoringSafeArea(.all)
                     .shadow(color: Color.gray.opacity(0.8), radius: 0.75)
                 

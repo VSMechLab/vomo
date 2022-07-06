@@ -14,6 +14,7 @@ struct ContentView: View {
     @EnvironmentObject var recordingState: RecordState
     @State private var audioPlayerPrerecordings: AVAudioPlayer?
     
+    @State private var svm = SharedViewModel()
     @State private var vm = RecordingViewModel()
     @State private var exercise = 0
     @State private var playLast = false
@@ -25,8 +26,10 @@ struct ContentView: View {
                 RecordBackground(timerCount: self.$timer)
             }
             
-            HStack {
+            HStack(spacing: 0) {
                 backSection
+                    .padding(.leading, 2)
+                    .background(Color.gray.opacity(0.2))
                 
                 Spacer()
                 
@@ -37,7 +40,7 @@ struct ContentView: View {
                     case 3:
                         QuestionnaireView()
                     case 4:
-                        VocalEffort()
+                        VocalEffortView()
                     case 5:
                         JournalView()
                         Spacer()
@@ -45,11 +48,14 @@ struct ContentView: View {
                         Text("ERROR")
                     }
                 }
-                .frame(width: vm.content_width)
+                .frame(width: svm.content_width - 10)
+                .background(Color.green.opacity(0.1))
                 
                 Spacer()
                 
                 nextSection
+                    .padding(.trailing, 2)
+                    .background(Color.gray.opacity(0.2))
             }
             .padding()
             .onAppear() {
@@ -98,11 +104,12 @@ extension ContentView {
                     }) {
                         Image(vm.next_img)
                             .resizable()
+                            .scaledToFit()
                             .rotationEffect(Angle(degrees: 180))
-                            .frame(width: vm.navArrowWidth, height: vm.navArrowHeight)
                     }
                     Spacer()
                 }
+                .frame(width: vm.navArrowWidth)
             } else {
                 Spacer().frame(width: vm.navArrowWidth)
             }
@@ -122,10 +129,12 @@ extension ContentView {
                     }) {
                         Image(vm.next_img)
                             .resizable()
+                            .scaledToFit()
                             .frame(width: vm.navArrowWidth, height: vm.navArrowHeight)
                     }
                     Spacer()
                 }
+                .frame(width: vm.navArrowWidth)
             } else {
                 Spacer().frame(width: vm.navArrowWidth)
             }

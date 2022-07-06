@@ -16,18 +16,13 @@ struct ProfileView: View {
     @EnvironmentObject var viewRouter: ViewRouter
     @EnvironmentObject var recordingState: RecordState
     
-    @State private var name = UserDefaults.standard.string(forKey: "name") ?? ""
-    @State private var gender = UserDefaults.standard.string(forKey: "gender") ?? ""
-    @State private var dob = UserDefaults.standard.string(forKey: "dob") ?? ""
-    @State private var voice_onset = UserDefaults.standard.bool(forKey: "voiceOnset")
-    @State private var current_smoker = UserDefaults.standard.bool(forKey: "currentSmoker")
-    @State private var have_reflux = UserDefaults.standard.bool(forKey: "haveReflux")
-    @State private var have_asthma = UserDefaults.standard.bool(forKey: "haveAsthma")
-    @State private var fteProfile = false
-    @State private var focusSelection = UserDefaults.standard.integer(forKey: "focus_selection")
+    @ObservedObject var userSettings = UserSettings()
     
-    @State private var firstName = UserDefaults.standard.string(forKey: "first_name") ?? ""
-    @State private var lastName = UserDefaults.standard.string(forKey: "last_name") ?? ""
+    @State private var gender = UserDefaults.standard.string(forKey: "gender") ?? ""
+    
+    
+    
+    @State private var fteProfile = false
     
     var genders = ["other", "male", "female", "prefer not to say"]
     
@@ -43,7 +38,7 @@ struct ProfileView: View {
     let img_unselected = "VM_Prpl-Check-Square-Btn"
     let prompt = ["a custom", "the Spasmodic Dysphonia", "the Recurrent Pappiloma", "the Parkinson's Disease", "the Gender-Affirming Care", "the Vocal Fold/Paresis", "the default"]
     
-    let content_width = 317.5
+    @State private var svm = SharedViewModel()
     
     var body: some View {
         VStack(spacing: 0) {
@@ -66,14 +61,14 @@ struct ProfileView: View {
                         ZStack {
                             Image(entry_img)
                                 .resizable()
-                                .frame(width: content_width, height: toggleHeight)
+                                .frame(width: svm.content_width, height: toggleHeight)
                                 .cornerRadius(7)
                             
                             HStack {
-                                TextField(self.firstName.isEmpty ? "First Name" : self.firstName, text: self.$firstName)
-                                    .font(self.firstName.isEmpty ? ._fieldCopyItalic : ._fieldCopyRegular)
+                                TextField(self.userSettings.firstName.isEmpty ? "First Name" : self.userSettings.firstName, text: $userSettings.firstName)
+                                    .font(self.userSettings.firstName.isEmpty ? ._fieldCopyItalic : ._fieldCopyRegular)
                             }.padding(.horizontal, 5)
-                        }.frame(width: content_width, height: toggleHeight)
+                        }.frame(width: svm.content_width, height: toggleHeight)
                         
                         Text("Last Name")
                             .font(._fieldLabel)
@@ -81,14 +76,14 @@ struct ProfileView: View {
                         ZStack {
                             Image(entry_img)
                                 .resizable()
-                                .frame(width: content_width, height: toggleHeight)
+                                .frame(width: svm.content_width, height: toggleHeight)
                                 .cornerRadius(7)
                             
                             HStack {
-                                TextField(self.lastName.isEmpty ? "Last Name" : self.lastName, text: self.$lastName)
-                                    .font(self.lastName.isEmpty ? ._fieldCopyItalic : ._fieldCopyRegular)
+                                TextField(self.userSettings.lastName.isEmpty ? "Last Name" : self.userSettings.lastName, text: $userSettings.lastName)
+                                    .font(self.userSettings.lastName.isEmpty ? ._fieldCopyItalic : ._fieldCopyRegular)
                             }.padding(.horizontal, 5)
-                        }.frame(width: content_width, height: toggleHeight)
+                        }.frame(width: svm.content_width, height: toggleHeight)
                         
                         Text("Gender")
                             .font(._fieldLabel)
@@ -166,8 +161,8 @@ struct ProfileView: View {
                                 .cornerRadius(5)
                             
                             HStack {
-                                TextField(self.dob.isEmpty ? "00/00/0000" : self.dob, text: self.$dob)
-                                    .font(self.dob.isEmpty ? ._fieldCopyItalic : ._fieldCopyRegular)
+                                TextField(self.userSettings.dob.isEmpty ? "00/00/0000" : self.userSettings.dob, text: $userSettings.dob)
+                                    .font(self.userSettings.dob.isEmpty ? ._fieldCopyItalic : ._fieldCopyRegular)
                             }.padding(.horizontal, 7)
                         }.frame(height: toggleHeight)
                     }
@@ -177,9 +172,9 @@ struct ProfileView: View {
                             .font(._fieldLabel)
                         
                         HStack(spacing: 0) {
-                            Button("") { self.voice_onset = true }.buttonStyle(YesButton(selected: voice_onset))
+                            Button("") { self.userSettings.voice_onset = true }.buttonStyle(YesButton(selected: userSettings.voice_onset))
                             Spacer()
-                            Button("") { self.voice_onset = false }.buttonStyle(NoButton(selected: voice_onset))
+                            Button("") { self.userSettings.voice_onset = false }.buttonStyle(NoButton(selected: userSettings.voice_onset))
                         }
                         
                         
@@ -187,18 +182,18 @@ struct ProfileView: View {
                             .font(._fieldLabel)
                         
                         HStack(spacing: 0) {
-                            Button("") { self.current_smoker = true }.buttonStyle(YesButton(selected: current_smoker))
+                            Button("") { self.userSettings.current_smoker = true }.buttonStyle(YesButton(selected: userSettings.current_smoker))
                             Spacer()
-                            Button("") { self.current_smoker = false }.buttonStyle(NoButton(selected: current_smoker))
+                            Button("") { self.userSettings.current_smoker = false }.buttonStyle(NoButton(selected: userSettings.current_smoker))
                         }
                         
                         Text("Currently Have Reflux?")
                             .font(._fieldLabel)
                         
                         HStack(spacing: 0) {
-                            Button("") { self.have_reflux = true }.buttonStyle(YesButton(selected: have_reflux))
+                            Button("") { self.userSettings.have_reflux = true }.buttonStyle(YesButton(selected: userSettings.have_reflux))
                             Spacer()
-                            Button("") { self.have_reflux = false }.buttonStyle(NoButton(selected: have_reflux))
+                            Button("") { self.userSettings.have_reflux = false }.buttonStyle(NoButton(selected: userSettings.have_reflux))
                         }
                         
                         
@@ -206,9 +201,9 @@ struct ProfileView: View {
                             .font(._fieldLabel)
                         
                         HStack(spacing: 0) {
-                            Button("") { self.have_asthma = true }.buttonStyle(YesButton(selected: have_asthma))
+                            Button("") { self.userSettings.have_asthma = true }.buttonStyle(YesButton(selected: userSettings.have_asthma))
                             Spacer()
-                            Button("") { self.have_asthma = false }.buttonStyle(NoButton(selected: have_asthma))
+                            Button("") { self.userSettings.have_asthma = false }.buttonStyle(NoButton(selected: userSettings.have_asthma))
                         }
                     }
                 }
@@ -216,7 +211,7 @@ struct ProfileView: View {
                 
                 VStack(alignment: .leading, spacing: 5) {
                     HStack(spacing: 0) {
-                        Text("You are on \(prompt[focusSelection]) track ")
+                        Text("You are on \(prompt[userSettings.focusSelection]) track ")
                             .font(._bodyCopy)
                             .foregroundColor(Color.BODY_COPY)
                         Button(action: {
@@ -242,24 +237,15 @@ struct ProfileView: View {
                         .padding(.bottom, 80)
                         Spacer()
                     }
-                    .frame(width: content_width)
-                }.frame(width: content_width)
+                    .frame(width: svm.content_width)
+                }.frame(width: svm.content_width)
             }
-            .frame(width: content_width)
+            .frame(width: svm.content_width)
         }.padding(.vertical)
     }
     
     func save() {
-        UserDefaults.standard.set(self.name, forKey:  "name")
-        UserDefaults.standard.set(self.dob, forKey:  "dob")
         UserDefaults.standard.set(self.gender, forKey:  "gender")
-        UserDefaults.standard.set(self.voice_onset, forKey:  voiceOnsetKey)
-        UserDefaults.standard.set(self.current_smoker, forKey: currentSmokerKey)
-        UserDefaults.standard.set(self.have_reflux, forKey: haveRefluxKey)
-        UserDefaults.standard.set(self.have_asthma, forKey: haveAsthmaKey)
-        
-        UserDefaults.standard.set(self.firstName, forKey:  "first_name")
-        UserDefaults.standard.set(self.lastName, forKey:  "last_name")
     }
 }
 
@@ -422,123 +408,3 @@ struct ImagePicker: UIViewControllerRepresentable {
         Coordinator(self)
     }
 }
-
-/*
- 
- var body: some View {
-     VStack {
-         Button("load Image now") {
-             loadImage()
-         }
-         
-         ZStack {
-             
-             if image == nil {
-                 Text("Tap to select a picture")
-                     .foregroundColor(.white).font(.headline).padding()
-                     .background(Color.gray).cornerRadius(10)
-             } else {
-                 image?
-                     .resizable()
-                     .frame(width: 150, height: 150)
-                     .clipShape(Circle())
-                     .onAppear() {
-                         print("image default is: \(String(describing: image))")
-                     }
-             }
-         }
-         .onTapGesture {
-             showingImagePicker = true
-         }
-
-         /*
-         HStack {
-             Text("Intensity")
-             Slider(value: $filterIntensity)
-                 .onChange(of: filterIntensity) { _ in applyProcessing() }
-         }
-         .padding(.vertical)
-          */
-         
-         HStack {
-             /*
-             Button("Change Filter") {
-                 showingFilterSheet = true
-             }
-             */
-
-             Spacer()
-
-             Button("Save", action: save)
-             
-             Spacer()
-         }
-     }
-     .onAppear() {
-         self.loadImage()
-     }
-     .padding([.horizontal, .bottom])
-     .navigationTitle("Instafilter")
-     .onChange(of: inputImage) { _ in loadImage() }
-     .sheet(isPresented: $showingImagePicker) {
-         ImagePicker(image: $inputImage)
-     }
-     /*
-     .confirmationDialog("Select a filter", isPresented: $showingFilterSheet) {
-         Button("Crystallize") { setFilter(CIFilter.crystallize()) }
-         Button("Edges") { setFilter(CIFilter.edges()) }
-         Button("Gaussian Blur") { setFilter(CIFilter.gaussianBlur()) }
-         Button("Pixellate") { setFilter(CIFilter.pixellate()) }
-         Button("Sepia Tone") { setFilter(CIFilter.sepiaTone()) }
-         Button("Unsharp Mask") { setFilter(CIFilter.unsharpMask()) }
-         Button("Vignette") { setFilter(CIFilter.vignette()) }
-         Button("Cancel", role: .cancel) { }
-     }*/
- }
-     
- func loadImage() {
-     guard let inputImage = inputImage else { return }
-
-
-     let beginImage = CIImage(image: inputImage)
-     currentFilter.setValue(beginImage, forKey: kCIInputImageKey)
-     applyProcessing()
- }
-
- func save() {
-     guard let processedImage = processedImage else { return }
-
-     let imageSaver = ImageSaver()
-
-     imageSaver.successHandler = {
-         print("Success!")
-     }
-
-     imageSaver.errorHandler = {
-         print("Oops! \($0.localizedDescription)")
-     }
-
-     imageSaver.writeToPhotoAlbum(image: processedImage)
- }
-
- func applyProcessing() {
-     let inputKeys = currentFilter.inputKeys
-
-     if inputKeys.contains(kCIInputIntensityKey) { currentFilter.setValue(filterIntensity, forKey: kCIInputIntensityKey) }
-     if inputKeys.contains(kCIInputRadiusKey) { currentFilter.setValue(filterIntensity * 200, forKey: kCIInputRadiusKey) }
-     if inputKeys.contains(kCIInputScaleKey) { currentFilter.setValue(filterIntensity * 10, forKey: kCIInputScaleKey) }
-
-     guard let outputImage = currentFilter.outputImage else { return }
-
-     if let cgimg = context.createCGImage(outputImage, from: outputImage.extent) {
-         let uiImage = UIImage(cgImage: cgimg)
-         image = Image(uiImage: uiImage)
-         processedImage = uiImage
-     }
- }
-
- func setFilter(_ filter: CIFilter) {
-     currentFilter = filter
-     loadImage()
- }
- */

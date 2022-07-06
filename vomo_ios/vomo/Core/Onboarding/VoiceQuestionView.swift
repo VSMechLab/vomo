@@ -10,16 +10,15 @@ import SwiftUI
 struct VoiceQuestionView: View {
     @EnvironmentObject var viewRouter: ViewRouter
     
+    @ObservedObject var userSettings = UserSettings()
+    
     let logo = "VM_0-Loading-Screen-logo"
     let select_img = "VM_4-Select-Btn-Prpl-Field"
     let unselect_img = "VM_4-Unselect-Btn-Wht-Field"
     
     let nav_img = "VM_Dropdown-Btn"
     
-    let content_width = 317.5
-    
-    @State private var voice_plan = UserDefaults.standard.integer(forKey: "voice_plan")
-    @State private var edited_before = UserDefaults.standard.bool(forKey: "edited_before")
+    @State private var svm = SharedViewModel()
     
     var body: some View {
         VStack {
@@ -36,7 +35,7 @@ struct VoiceQuestionView: View {
             Spacer()
             
             navSection
-        }.frame(width: content_width)
+        }.frame(width: svm.content_width)
     }
 }
 
@@ -67,65 +66,65 @@ extension VoiceQuestionView {
                 .font(._bodyCopy)
                 .foregroundColor(Color.BODY_COPY)
                 .multilineTextAlignment(.center)
-        }
+        }.frame(width: svm.content_width)
     }
     
     private var customizeSection: some View {
         Button(action: {
-            self.voice_plan = 1
+            self.userSettings.voice_plan = 1
         }) {
             ZStack {
-                Image(voice_plan == 1 ? select_img : unselect_img)
+                Image(userSettings.voice_plan == 1 ? select_img : unselect_img)
                     .resizable()
-                    .frame(height: 85)
+                    .scaledToFit()
                 
                 HStack {
                     VStack(alignment: .leading) {
                         Text("Have VoMo Choose for Me")
-                            .foregroundColor(voice_plan == 1 ? Color.white : Color.gray)
+                            .foregroundColor(userSettings.voice_plan == 1 ? Color.white : Color.gray)
                             .font(._buttonFieldCopyLarger)
                         
                         Text("Optimize my plan based on my voice diagnosis")
-                            .foregroundColor(voice_plan == 1 ? Color.white : Color.DARK_PURPLE)
+                            .foregroundColor(userSettings.voice_plan == 1 ? Color.white : Color.DARK_PURPLE)
                             .font(._subCopy)
                     }
-                    .padding(.leading, 60)
+                    .padding(.leading, svm.content_width / 5)
                     Spacer()
                 }
-            }.frame(height: 85)
+            }
         }.padding(.top, -20)
     }
     
     private var haveVoMoChooseSection: some View {
         Button(action: {
-            self.voice_plan = 2
+            self.userSettings.voice_plan = 2
         }) {
             ZStack {
-                Image(voice_plan == 1 ? unselect_img : select_img)
+                Image(userSettings.voice_plan == 1 ? unselect_img : select_img)
                     .resizable()
-                    .frame(height: 85)
+                    .scaledToFit()
                 
                 HStack {
                     VStack(alignment: .leading) {
                         Text("Customize My Own Plan")
-                            .foregroundColor(voice_plan == 1 ? Color.gray : Color.white)
+                            .foregroundColor(userSettings.voice_plan == 1 ? Color.gray : Color.white)
                             .font(._buttonFieldCopyLarger)
                         
                         Text("Let me decide which takss and measurements I want")
-                            .foregroundColor(voice_plan == 1 ? Color.DARK_PURPLE : Color.white)
+                            .foregroundColor(userSettings.voice_plan == 1 ? Color.DARK_PURPLE : Color.white)
                             .font(._subCopy)
                     }
-                    .padding(.leading, 60)
+                    .padding(.leading, svm.content_width / 5)
                     Spacer()
                 }
-            }.frame(height: 85)
+            }
         }.padding(.top, -20)
     }
     
     private var navSection: some View {
         Group {
             HStack {
-                if !edited_before {
+                if !userSettings.edited_before {
                     Circle()
                         .foregroundColor(Color.gray)
                         .frame(width: 4, height: 4, alignment: .center)
@@ -141,7 +140,7 @@ extension VoiceQuestionView {
             }
             
             HStack {
-                if !edited_before {
+                if !userSettings.edited_before {
                     Button(action: {
                         viewRouter.currentPage = .personalQuestionView
                     }) {
@@ -161,11 +160,9 @@ extension VoiceQuestionView {
                 Spacer()
                 
                 Button(action: {
-                    if self.voice_plan == 1 {
-                        UserDefaults.standard.set(self.voice_plan, forKey:  "voice_plan")
+                    if self.userSettings.voice_plan == 1 {
                         viewRouter.currentPage = .targetView
-                    } else if self.voice_plan == 2 {
-                        UserDefaults.standard.set(self.voice_plan, forKey:  "voice_plan")
+                    } else if self.userSettings.voice_plan == 2 {
                         viewRouter.currentPage = .customTargetView
                     }
                 }) {
@@ -182,7 +179,7 @@ extension VoiceQuestionView {
                     }
                 }
             }
-            .frame(width: content_width, height: 55, alignment: .center)
+            .frame(width: svm.content_width, height: 55, alignment: .center)
         }
     }
 }

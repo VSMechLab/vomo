@@ -10,6 +10,8 @@ import SwiftUI
 struct CustomTargetView: View {
     @EnvironmentObject var viewRouter: ViewRouter
     
+    @ObservedObject var userSettings = UserSettings()
+    
     let logo = "VM_0-Loading-Screen-logo"
     let large_select_img = "VM_6-Select-Btn-Prpl-Field"
     let large_unselect_img = "VM_6-Unselect-Btn-Wht-Field"
@@ -19,27 +21,7 @@ struct CustomTargetView: View {
     
     let nav_img = "VM_Dropdown-Btn"
     
-    //let buttonWidth: CGFloat = 165
-    let buttonHeight: CGFloat = 37 * 0.95
-    
-    let content_width = 317.5
-    
-    
-    @State private var vowel = UserDefaults.standard.bool(forKey: "vowel")
-    @State private var maxPT = UserDefaults.standard.bool(forKey: "max_pt")
-    @State private var rainbowS = UserDefaults.standard.bool(forKey: "rainbow_s")
-    @State private var allTasks = UserDefaults.standard.bool(forKey: "all_tasks")
-    
-    @State private var pitch = UserDefaults.standard.bool(forKey: "pitch")
-    @State private var CPP = UserDefaults.standard.bool(forKey: "cpp")
-    @State private var intensity = UserDefaults.standard.bool(forKey: "intensity")
-    @State private var HNR = UserDefaults.standard.bool(forKey: "hnr")
-    @State private var minPitch = UserDefaults.standard.bool(forKey: "min_pitch")
-    @State private var maxPitch = UserDefaults.standard.bool(forKey: "max_pitch")
-    
-    @State private var accousticParameters = UserDefaults.standard.integer(forKey: "accoustic_parameters")
-    @State private var questionnaires = UserDefaults.standard.integer(forKey: "questionnaires")
-    @State private var edited_before = UserDefaults.standard.bool(forKey: "edited_before")
+    @State private var svm = SharedViewModel()
     
     var body: some View {
         VStack {
@@ -53,7 +35,7 @@ struct CustomTargetView: View {
                     .font(._fieldLabel)
                 
                 Spacer()
-            }.frame(width: content_width)
+            }.frame(width: svm.content_width)
             .padding(.bottom, -5)
             
             vocalTaskSection
@@ -65,7 +47,7 @@ struct CustomTargetView: View {
             Spacer()
             
             navSection
-        }.frame(width: content_width)
+        }.frame(width: svm.content_width)
     }
 }
 
@@ -88,76 +70,76 @@ extension CustomTargetView {
         VStack(spacing: 0) {
             HStack {
                 Button(action: {
-                    self.vowel.toggle()
-                    self.allTasks = false
+                    self.userSettings.vowel.toggle()
+                    self.userSettings.allTasks = false
                 }) {
                     ZStack(alignment: .leading) {
-                        Image(self.vowel ? select_img : unselect_img)
+                        Image(self.userSettings.vowel ? select_img : unselect_img)
                             .resizable()
-                            .frame(height: buttonHeight)
+                            .scaledToFit()
                         
                         Text("Vowel")
                             .font(._buttonFieldCopy)
-                            .foregroundColor(self.vowel ? Color.white : Color.BODY_COPY)
+                            .foregroundColor(self.userSettings.vowel ? Color.white : Color.BODY_COPY)
                             .multilineTextAlignment(.leading)
-                            .padding(.leading, 26)
+                            .padding(.leading, svm.content_width / 12.5)
                     }
-                }.frame(height: buttonHeight)
+                }
                 
                 Button(action: {
-                    self.rainbowS.toggle()
-                    self.allTasks = false
+                    self.userSettings.rainbowS.toggle()
+                    self.userSettings.allTasks = false
                 }) {
                     ZStack(alignment: .leading) {
-                        Image(self.rainbowS ? select_img : unselect_img)
+                        Image(self.userSettings.rainbowS ? select_img : unselect_img)
                             .resizable()
-                            .frame(height: buttonHeight)
+                            .scaledToFit()
                         
                         Text("Rainbow Sequences")
                             .font(._buttonFieldCopy)
-                            .foregroundColor(self.rainbowS ? Color.white : Color.BODY_COPY)
+                            .foregroundColor(self.userSettings.rainbowS ? Color.white : Color.BODY_COPY)
                             .multilineTextAlignment(.leading)
-                            .padding(.leading, 26)
+                            .padding(.leading, svm.content_width / 12.5)
                     }
-                }.frame(height: buttonHeight)
+                }
             }
             
             HStack {
                 Button(action: {
-                    self.maxPT.toggle()
-                    self.allTasks = false
+                    self.userSettings.maxPT.toggle()
+                    self.userSettings.allTasks = false
                 }) {
                     ZStack(alignment: .leading) {
-                        Image(self.maxPT ? select_img : unselect_img)
+                        Image(self.userSettings.maxPT ? select_img : unselect_img)
                             .resizable()
-                            .frame(height: buttonHeight)
+                            .scaledToFit()
                         
                         Text("Maximum Phonation Time")
                             .font(._buttonFieldCopy)
-                            .foregroundColor(self.maxPT ? Color.white : Color.BODY_COPY)
+                            .foregroundColor(self.userSettings.maxPT ? Color.white : Color.BODY_COPY)
                             .multilineTextAlignment(.leading)
-                            .padding(.leading, 26)
+                            .padding(.leading, svm.content_width / 12.5)
                     }
-                }.frame(height: buttonHeight)
+                }
                 
                 Button(action: {
-                    self.vowel = false
-                    self.maxPT = false
-                    self.rainbowS = false
-                    self.allTasks.toggle()
+                    self.userSettings.vowel = false
+                    self.userSettings.maxPT = false
+                    self.userSettings.rainbowS = false
+                    self.userSettings.allTasks.toggle()
                 }) {
                     ZStack(alignment: .leading) {
-                        Image(self.allTasks ? select_img : unselect_img)
+                        Image(self.userSettings.allTasks ? select_img : unselect_img)
                             .resizable()
-                            .frame(height: buttonHeight)
+                            .scaledToFit()
                         
                         Text("All Tasks")
                             .font(._buttonFieldCopy)
-                            .foregroundColor(self.allTasks ? Color.white : Color.BODY_COPY)
+                            .foregroundColor(self.userSettings.allTasks ? Color.white : Color.BODY_COPY)
                             .multilineTextAlignment(.leading)
-                            .padding(.leading, 26)
+                            .padding(.leading, svm.content_width / 12.5)
                     }
-                }.frame(height: buttonHeight)
+                }
             }
             .padding(.vertical, 15)
         }.padding(.vertical, 3)
@@ -171,112 +153,110 @@ extension CustomTargetView {
                     .font(._fieldLabel)
                 
                 Spacer()
-            }.frame(width: content_width)
+            }.frame(width: svm.content_width)
             .padding(.bottom, -5)
             
             Group {
-                
-                
                 HStack {
                     Button(action: {
-                        self.pitch.toggle()
+                        self.userSettings.pitch.toggle()
                     }) {
                         ZStack(alignment: .leading) {
-                            Image(self.pitch ? select_img : unselect_img)
+                            Image(self.userSettings.pitch ? select_img : unselect_img)
                                 .resizable()
-                                .frame(height: buttonHeight)
+                                .scaledToFit()
                             
                             Text("Pitch")
                                 .font(._buttonFieldCopy)
-                                .foregroundColor(self.pitch ? Color.white : Color.BODY_COPY)
+                                .foregroundColor(self.userSettings.pitch ? Color.white : Color.BODY_COPY)
                                 .multilineTextAlignment(.leading)
-                                .padding(.leading, 26)
+                                .padding(.leading, svm.content_width / 12.5)
                         }
-                    }.frame(height: buttonHeight)
+                    }
                                     
                     Button(action: {
-                        self.CPP.toggle()
+                        self.userSettings.CPP.toggle()
                     }) {
                         ZStack(alignment: .leading) {
-                            Image(self.CPP ? select_img : unselect_img)
+                            Image(self.userSettings.CPP ? select_img : unselect_img)
                                 .resizable()
-                                .frame(height: buttonHeight)
+                                .scaledToFit()
                             
                             Text("CPP")
                                 .font(._buttonFieldCopy)
-                                .foregroundColor(self.CPP ? Color.white : Color.BODY_COPY)
+                                .foregroundColor(self.userSettings.CPP ? Color.white : Color.BODY_COPY)
                                 .multilineTextAlignment(.leading)
-                                .padding(.leading, 26)
+                                .padding(.leading, svm.content_width / 12.5)
                         }
-                    }.frame(height: buttonHeight)
+                    }
                 }
                 
                 HStack {
                     Button(action: {
-                        self.intensity.toggle()
+                        self.userSettings.intensity.toggle()
                     }) {
                         ZStack(alignment: .leading) {
-                            Image(self.intensity ? select_img : unselect_img)
+                            Image(self.userSettings.intensity ? select_img : unselect_img)
                                 .resizable()
-                                .frame(height: buttonHeight)
+                                .scaledToFit()
                             
                             Text("Intensity")
                                 .font(._buttonFieldCopy)
-                                .foregroundColor(self.intensity ? Color.white : Color.BODY_COPY)
+                                .foregroundColor(self.userSettings.intensity ? Color.white : Color.BODY_COPY)
                                 .multilineTextAlignment(.leading)
-                                .padding(.leading, 26)
+                                .padding(.leading, svm.content_width / 12.5)
                         }
-                    }.frame(height: buttonHeight)
+                    }
                     
                     Button(action: {
-                        self.HNR.toggle()
+                        self.userSettings.HNR.toggle()
                     }) {
                         ZStack(alignment: .leading) {
-                            Image(self.HNR ? select_img : unselect_img)
+                            Image(self.userSettings.HNR ? select_img : unselect_img)
                                 .resizable()
-                                .frame(height: buttonHeight)
+                                .scaledToFit()
                             
                             Text("HNR")
                                 .font(._buttonFieldCopy)
-                                .foregroundColor(self.HNR ? Color.white : Color.BODY_COPY)
+                                .foregroundColor(self.userSettings.HNR ? Color.white : Color.BODY_COPY)
                                 .multilineTextAlignment(.leading)
-                                .padding(.leading, 26)
+                                .padding(.leading, svm.content_width / 12.5)
                         }
-                    }.frame(height: buttonHeight)
+                    }
                 }
                 
                 HStack {
                     Button(action: {
-                        self.minPitch.toggle()
+                        self.userSettings.minPitch.toggle()
                     }) {
                         ZStack(alignment: .leading) {
-                            Image(self.minPitch ? select_img : unselect_img)
+                            Image(self.userSettings.minPitch ? select_img : unselect_img)
                                 .resizable()
-                                .frame(height: buttonHeight)
+                                .scaledToFit()
                             
                             Text("Minimum Pitch")
                                 .font(._buttonFieldCopy)
-                                .foregroundColor(self.minPitch ? Color.white : Color.BODY_COPY)
+                                .foregroundColor(self.userSettings.minPitch ? Color.white : Color.BODY_COPY)
                                 .multilineTextAlignment(.leading)
-                                .padding(.leading, 26)
+                                .padding(.leading, svm.content_width / 12.5)
                         }
-                    }.frame(height: buttonHeight)
+                    }
                     
                     Button(action: {
-                        self.maxPitch.toggle()
+                        self.userSettings.maxPitch.toggle()
                     }) {
                         ZStack(alignment: .leading) {
-                            Image(self.maxPitch ? select_img : unselect_img)
+                            Image(self.userSettings.maxPitch ? select_img : unselect_img)
                                 .resizable()
-                                .frame(height: buttonHeight)
+                                .scaledToFit()
                             
                             Text("Maximum Pitch")
                                 .font(._buttonFieldCopy)
-                                .foregroundColor(self.maxPitch ? Color.white : Color.BODY_COPY)
+                                .foregroundColor(self.userSettings.maxPitch ? Color.white : Color.BODY_COPY)
                                 .multilineTextAlignment(.leading)
-                                .padding(.leading, 26)
+                                .padding(.leading, svm.content_width / 12.5)
                         }
-                    }.frame(height: buttonHeight)
+                    }
                 }
                 .padding(.bottom, 15)
             }.padding(.vertical, 3)
@@ -292,62 +272,61 @@ extension CustomTargetView {
                     .font(._fieldLabel)
                 
                 Spacer()
-            }.frame(width: content_width)
+            }.frame(width: svm.content_width)
             .padding(.bottom, -5)
-            
             
             VStack(spacing: 0) {
                 Button(action: {
-                    questionnaires = 1
+                    userSettings.questionnaires = 1
                 }) {
                     ZStack(alignment: .leading) {
-                        Image(questionnaires == 1 ? large_select_img : large_unselect_img)
+                        Image(userSettings.questionnaires == 1 ? large_select_img : large_unselect_img)
                             .resizable()
+                            .scaledToFit()
                         
                         VStack(alignment: .leading) {
                             Text("VRQOL")
-                                .foregroundColor(questionnaires == 1 ? Color.white : Color.gray)
+                                .foregroundColor(userSettings.questionnaires == 1 ? Color.white : Color.gray)
                                 .font(._buttonFieldCopyLarger)
                             
                             Text("Voice-Related Quality of Life")
-                                .foregroundColor(questionnaires == 1 ? Color.white : Color.DARK_PURPLE)
+                                .foregroundColor(userSettings.questionnaires == 1 ? Color.white : Color.DARK_PURPLE)
                                 .font(._subCopy)
                         }
-                        .padding(.leading, 60)
+                        .padding(.leading, svm.content_width / 5)
                     }
-                    .frame(width: content_width + 20, height: 70)
                 }
                 
                 Button(action: {
-                    questionnaires = 2
+                    userSettings.questionnaires = 2
                 }) {
                     ZStack(alignment: .leading) {
-                        Image(questionnaires == 2 ? large_select_img : large_unselect_img)
+                        Image(userSettings.questionnaires == 2 ? large_select_img : large_unselect_img)
                             .resizable()
+                            .scaledToFit()
                         
                         VStack(alignment: .leading) {
                             Text("Vocal Effort")
-                                .foregroundColor(questionnaires == 2 ? Color.white : Color.gray)
+                                .foregroundColor(userSettings.questionnaires == 2 ? Color.white : Color.gray)
                                 .font(._buttonFieldCopyLarger)
                             
                             Text("Ratings of physcial and mental effort to make a voice")
-                                .foregroundColor(questionnaires == 2 ? Color.white : Color.DARK_PURPLE)
+                                .foregroundColor(userSettings.questionnaires == 2 ? Color.white : Color.DARK_PURPLE)
                                 .font(._subCopy)
                         }
-                        .padding(.leading, 60)
-                        .padding(.top, -5)
+                        .padding(.leading, svm.content_width / 5)
                     }
-                    .frame(width: content_width + 20, height: 70)
                 }
                 .padding(.top, -10)
             }
+            .padding(.horizontal, -5)
         }
     }
     
     private var navSection: some View {
         Group {
             HStack {
-                if !edited_before {
+                if !userSettings.edited_before {
                     Circle()
                         .foregroundColor(Color.gray)
                         .frame(width: 4, height: 4, alignment: .center)
@@ -381,7 +360,6 @@ extension CustomTargetView {
                 Spacer()
                 
                 Button(action: {
-                    saveAll()
                     viewRouter.currentPage = .homeView
                 }) {
                     HStack(spacing: 5) {
@@ -397,27 +375,7 @@ extension CustomTargetView {
                     }
                 }
             }
-            .frame(width: content_width, height: 55)
+            .frame(width: svm.content_width, height: 55)
         }
-    }
-    
-    func saveAll() {
-        UserDefaults.standard.set(true, forKey:  "edited_before")
-        UserDefaults.standard.set(0, forKey:  "focus_selection")
-        
-        UserDefaults.standard.set(self.vowel, forKey:  "vowel")
-        UserDefaults.standard.set(self.maxPT, forKey:  "max_pt")
-        UserDefaults.standard.set(self.rainbowS, forKey:  "rainbow_s")
-        UserDefaults.standard.set(self.allTasks, forKey:  "all_tasks")
-        
-        UserDefaults.standard.set(self.pitch, forKey:  "pitch")
-        UserDefaults.standard.set(self.CPP, forKey:  "cpp")
-        UserDefaults.standard.set(self.intensity, forKey:  "intensity")
-        UserDefaults.standard.set(self.HNR, forKey:  "hnr")
-        UserDefaults.standard.set(self.minPitch, forKey:  "min_pitch")
-        UserDefaults.standard.set(self.maxPitch, forKey:  "max_pitch")
-        
-        UserDefaults.standard.set(self.accousticParameters, forKey:  "accoustic_parameters")
-        UserDefaults.standard.set(self.questionnaires, forKey:  "questionnaires")
     }
 }

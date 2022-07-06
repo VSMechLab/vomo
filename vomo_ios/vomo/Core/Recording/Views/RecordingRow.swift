@@ -10,7 +10,7 @@ import SwiftUI
 struct RecordingRow: View {
     var audioURL: URL
     var str: String
-        
+    
     @ObservedObject var audioPlayer = AudioPlayer()
     
     var body: some View {

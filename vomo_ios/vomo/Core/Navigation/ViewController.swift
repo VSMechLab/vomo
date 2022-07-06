@@ -58,16 +58,23 @@ struct ViewController: View {
                 Spacer()
             }
             
+            statusBar
+            
             tabBar
         }
     }
 }
 
 extension ViewController {
+    private var statusBar: some View {
+        VStack {
+            Color.white.edgesIgnoringSafeArea(.top).frame(height: 0)
+            Spacer()
+        }
+    }
+    
     private var tabBar: some View {
         VStack(spacing: 0) {
-            Color.white.edgesIgnoringSafeArea(.top).frame(height: 0)
-            
             Spacer()
             
             if (viewRouter.currentPage != .onboardView) && (viewRouter.currentPage != .personalQuestionView) && (viewRouter.currentPage != .voiceQuestionView) && (viewRouter.currentPage != .targetView) && (viewRouter.currentPage != .customTargetView) {

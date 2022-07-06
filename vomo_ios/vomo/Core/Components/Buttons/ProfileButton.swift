@@ -9,6 +9,7 @@ import SwiftUI
 
 struct ProfileButton: View {
     @EnvironmentObject var viewRouter: ViewRouter
+    @State private var svm = SharedViewModel()
     let profile_img = "VM_7-avatar-photo-placeholder-gfx"
     
     var body: some View {
@@ -21,7 +22,7 @@ struct ProfileButton: View {
                     .resizable().frame(width: 60, height: 60, alignment: .center)
             }
         }
-        .frame(width: 317.5)
         .padding(.top, 4)
+        .frame(width: svm.content_width)
     }
 }

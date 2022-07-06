@@ -90,6 +90,9 @@ extension Font {
     static var _pageNavLink: Font {
         Font.custom("Roboto-Regular", size: 12)
     }
+    static var questionnaireScale: Font {
+        Font.custom("Roboto-Regular", size: 8)
+    }
 }
 
 struct FontView: View {

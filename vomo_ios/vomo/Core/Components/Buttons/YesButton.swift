@@ -12,11 +12,13 @@ struct YesButton: ButtonStyle {
     let select_img = "VM_Select-Btn-Prpl-Field"
     let unselect_img = "VM_Unselect-Btn-Gry-Field"
     
+    @State private var svm = SharedViewModel()
+    
     func makeBody(configuration: Configuration) -> some View {
         ZStack {
             Image(selected ? select_img : unselect_img)
                 .resizable()
-                .frame(height:  35)
+                .scaledToFit()
             
             HStack {
                 Text("Yes")

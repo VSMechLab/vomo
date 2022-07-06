@@ -11,7 +11,8 @@ struct Scale: View {
     let scale_img = "VM_11-scale-bg-ds"
     let select_img = "VM_11-select-btn-ds"
     
-    let scale_width: CGFloat = 317.5
+    @State private var svm = SharedViewModel()
+    
     let scale_height: CGFloat = 140
     
     @Binding var position: Int
@@ -23,7 +24,7 @@ struct Scale: View {
         ZStack {
             Image(scale_img)
                 .resizable()
-                .frame(width: scale_width + 10, height: scale_height)
+                .scaledToFit()
             
             
             ZStack {
@@ -89,7 +90,7 @@ struct Scale: View {
                         }.padding(.trailing, 4)
                     }
                     .padding(.horizontal, -5)
-                    .frame(width: scale_width - 30, alignment: .center)
+                    .frame(width: svm.content_width - 30, alignment: .center)
                     .padding(.bottom, 60)
                 }
                 
@@ -106,11 +107,11 @@ struct Scale: View {
                         Spacer()
                         Text("Always")
                     }
-                    .padding(.horizontal, 10)
-                    .padding(.trailing, 5)
-                    .font(._question)
+                    .padding(.horizontal, 20)
+                    .multilineTextAlignment(.center)
+                    .font(.questionnaireScale)
                     .foregroundColor(Color.BODY_COPY)
-                    .padding(.bottom, 15)
+                    .padding(.bottom, 20)
                 }
             }
         }
