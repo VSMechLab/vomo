@@ -73,6 +73,7 @@
 		ADA0E0E0282561CA00CF05D1 /* LineShape.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADA0E0DF282561CA00CF05D1 /* LineShape.swift */; };
 		ADA0E0E2282561D700CF05D1 /* LineShapeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADA0E0E1282561D700CF05D1 /* LineShapeView.swift */; };
 		ADA0E0E82827198500CF05D1 /* ActivityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADA0E0E72827198500CF05D1 /* ActivityView.swift */; };
+		ADAB43AF287751C500A853D7 /* GoalModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADAB43AE287751C500A853D7 /* GoalModel.swift */; };
 		ADBAE7F9282996A500A7BD1B /* Roboto-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = ADBAE7F8282996A500A7BD1B /* Roboto-Bold.ttf */; };
 		ADBAE7FC282996DF00A7BD1B /* Roboto-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = ADBAE7FB282996DF00A7BD1B /* Roboto-Medium.ttf */; };
 		ADBAE7FE282996E500A7BD1B /* Roboto-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = ADBAE7FD282996E500A7BD1B /* Roboto-Regular.ttf */; };
@@ -183,6 +184,7 @@
 		ADA0E0E1282561D700CF05D1 /* LineShapeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = LineShapeView.swift; path = vomo/Graphs/LineChart/LineShapeView.swift; sourceTree = SOURCE_ROOT; };
 		ADA0E0E52826E42600CF05D1 /* VoMo.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = VoMo.entitlements; sourceTree = "<group>"; };
 		ADA0E0E72827198500CF05D1 /* ActivityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ActivityView.swift; path = VoMo/Core/Activity/ActivityView.swift; sourceTree = SOURCE_ROOT; };
+		ADAB43AE287751C500A853D7 /* GoalModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = GoalModel.swift; path = vomo/Model/GoalModel.swift; sourceTree = SOURCE_ROOT; };
 		ADBAE7F8282996A500A7BD1B /* Roboto-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Roboto-Bold.ttf"; path = "../../Roboto/Roboto-Bold.ttf"; sourceTree = "<group>"; };
 		ADBAE7FB282996DF00A7BD1B /* Roboto-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Roboto-Medium.ttf"; path = "../../Roboto/Roboto-Medium.ttf"; sourceTree = "<group>"; };
 		ADBAE7FD282996E500A7BD1B /* Roboto-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Roboto-Regular.ttf"; path = "../../Roboto/Roboto-Regular.ttf"; sourceTree = "<group>"; };
@@ -242,6 +244,7 @@
 			children = (
 				ADCAB38B285FAABD002F650C /* SharedViewModel.swift */,
 				ADCAB39128750BEA002F650C /* UserSettings.swift */,
+				ADAB43AE287751C500A853D7 /* GoalModel.swift */,
 				ADFF4305280E46A5008F721B /* Entries.swift */,
 				AD0A0C5D28468A3700D9C8DA /* Visits.swift */,
 				AD3F0EBB2820334E00443591 /* EntryObjects */,
@@ -771,6 +774,7 @@
 				AD6699BC27F22F7600AE74D2 /* Recording.swift in Sources */,
 				AD26BA1C2829F4C900AC1A7B /* BarChartCell.swift in Sources */,
 				AD0A0C762849796000D9C8DA /* HomePitchGraph.swift in Sources */,
+				ADAB43AF287751C500A853D7 /* GoalModel.swift in Sources */,
 				ADFA927A279A1AC700F8758B /* ViewModel.swift in Sources */,
 				AD57E6442805D02600CDB31B /* BackUps.swift in Sources */,
 				ADA0E0B628255ECD00CF05D1 /* ChartBase.swift in Sources */,

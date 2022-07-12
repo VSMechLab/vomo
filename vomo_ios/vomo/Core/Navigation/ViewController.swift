@@ -51,7 +51,7 @@ struct ViewController: View {
                 case .entryView:
                     EntryView(focus: self.recordingState.selectedEntry)
                 case .activityView:
-                    Activityiew()
+                    ActivityView()
                 case .scoresView:
                     ScoresView()
                 }

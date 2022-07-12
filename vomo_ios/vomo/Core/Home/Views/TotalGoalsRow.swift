@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct TotalGoalsRow: View {
+    @ObservedObject var goal = GoalModel()
+    
     @ObservedObject var audioRecorder: AudioRecorder
     @EnvironmentObject var viewRouter: ViewRouter
     @EnvironmentObject var entries: Entries
@@ -50,7 +52,7 @@ struct TotalGoalsRow: View {
             
             VStack(alignment: .center) {
                 Button(action: {
-                    viewRouter.currentPage = .entryView
+                    viewRouter.currentPage = .activityView
                 }) {
                     ZStack {
                         ProgressBar(level: self.score, color: Color.DARK_PURPLE)
@@ -76,7 +78,7 @@ struct TotalGoalsRow: View {
                     viewRouter.currentPage = .activityView
                 }) {
                     ZStack {
-                        ProgressBar(level: self.comp_profile, color: Color.TEAL)
+                        ProgressBar(level: Int(goal.progress() * 10), color: Color.TEAL)
 
                         Image(complete_img)
                             .resizable()
@@ -85,11 +87,11 @@ struct TotalGoalsRow: View {
                     .frame(width: 30)
                 }
                 
-                Text("\(self.comp_profile * 100)%")
+                Text(goal.active() ?  "\(goal.progress() * 100)%" : "+")
                     .font(._stats)
                     .foregroundColor(Color.TEAL)
                 
-                Text("COMPLETED GOAL")
+                Text(goal.active() ? "GOAL PROGRESS" : "ADD A NEW GOAL")
                     .font(._statsLabel)
                     .foregroundColor(Color.BODY_COPY)
             }.frame(width: 100)
@@ -130,6 +132,6 @@ struct ProgressBar: View {
     }
     
     func progress() -> CGFloat {
-        return 1//CGFloat(CGFloat(level) / CGFloat(10))
+        return CGFloat(CGFloat(level) / CGFloat(10))
     }
 }

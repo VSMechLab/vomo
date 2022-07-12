@@ -95,21 +95,22 @@ struct ResultsSection: View {
                 }
                 
                 Color.white.frame(height: 1)
-                /*
+                
                 ForEach(audioRecorder.recordings, id: \.createdAt) { record in
                     if record.createdAt.toStringDay() == retrieve.focusDay.toStringDay() {
-                        Text("Record \(record.createdAt.toStringHour())")
-                            .font(._bodyCopy)
-                            .onAppear() {
-                                print("\(audioRecorder.signalProcess(file: record.fileURL))")
-                            }
-                        
-                        
-                        
-                        //Text("Function \()")
+                        HStack {
+                            Text("Record \(record.createdAt.toStringHour())")
+                            
+                            Spacer()
+                            
+                            Text("Function: ")
+                        }
+                        .font(._bodyCopy)
+                        .onAppear {
+                            audioRecorder.signalProcess(file: record.fileURL)
+                        }
                     }
                 }
-                */
             }
             .padding(.trailing, 5)
         }

@@ -44,7 +44,7 @@ class AudioRecorder: NSObject,ObservableObject {
         
         let settings = [
             AVFormatIDKey: Int(kAudioFormatAppleLossless), //Int(kAudioFormatMPEG4AAC),
-            AVSampleRateKey: 12000,
+            AVSampleRateKey: 16000,
             AVNumberOfChannelsKey: 1,
             AVEncoderAudioQualityKey: AVAudioQuality.high.rawValue
         ]
@@ -229,64 +229,59 @@ extension AudioRecorder {
 }
 
 extension AudioRecorder {
-    func signalProcess(file: URL!) -> Int {
-        /*
-         x: ndarray
-             Signal array
-         n: int
-             Number of data segments
-         p: int
-             Number of values to overlap
-         opt: str
-             Initial condition options. default sets the first `p` values to zero,
-             while 'nodelay' begins filling the buffer immediately.
-         */
-        
-        /*
-        var x: [(Int, Int)] = []
-        var n: Int = 0
-        var p: Int = 0
-        var opt: String = ""
-        
-        var pitch = AVAudioUnitTimePitch()
-        */
-        
-        //AVAsset *asset = [AVAsset assetWithURL:[NSURL fileURLWithPath:locationUrl]];
+    func signalProcess(file: URL!) -> CGSize {
+        let returnable: CGSize = CGSize(width: -1.0, height: -1.0)
         
         for record in recordings {
             if file == record.fileURL {
-                _ = AVAsset(url: record.fileURL)
-                /*
-                do {
-                    _ = try AVAssetReader(asset: asset) as AVAssetReader
-                    //print("Time in seconds: \(assetReader.timeRange)")
-                    
-                } catch {
-                    print("error")
-                }
-                //AVAssetReader.timeRange
-                if let firstTrack = asset.tracks.first {
-                    print("bitrate: \(firstTrack.estimatedDataRate), for file: \(record.fileURL.lastPathComponent)")
-                }
-                */
-                
-                
+                let asset = AVAsset(url: record.fileURL)
+                let track = asset.tracks[0]
                 
                 /*
-                let url = NSBundle.mainBundle.URLForResource(String(contentsOf: record.fileURL), withExtension: "m4a")
-                let file = try! AVAudioFile(forReading: url!)
-                let format = AVAudioFormat(commonFormat: .PCMFormatFloat32, sampleRate: file.fileFormat.sampleRate, channels: 1, interleaved: false)
-
-                let buf = AVAudioPCMBuffer(PCMFormat: format, frameCapacity: 1024)
-                try! file.readIntoBuffer(buf)
-
-                // this makes a copy, you might not want that
-                let floatArray = Array(UnsafeBufferPointer(start: buf.floatChannelData[0], count:Int(buf.frameLength)))
+                 Track is 2 seconds long, track length is 32000
+                 2 seconds * 16000 sample rate
+                 Track is an array of points, 16000 per second
+                 */
+                print("Track Length: \(asset.duration.value)")
                 
-                print("floatArray \(floatArray)\n")
-                */
+                // Pulls sample rate
+                print("Natural Time Scale: \(track.naturalTimeScale)\n")
             }
         }
-        return 1
+        return returnable
     }
 }
+
+
+/*
+let asset = AVAsset(url: record.fileURL)
+let track = asset.tracks[0]
+let desc = track.formatDescriptions[0] as! CMAudioFormatDescription
+let basic = CMAudioFormatDescriptionGetStreamBasicDescription(desc)
+print("Sample rate: \(track)")
+*/
+//returnable = (track.naturalSize)
+
+
+/*
+ x: ndarray
+     Signal array
+ n: int
+     Number of data segments
+ p: int
+     Number of values to overlap
+ opt: str
+     Initial condition options. default sets the first `p` values to zero,
+     while 'nodelay' begins filling the buffer immediately.
+ */
+
+/*
+var x: [(Int, Int)] = []
+var n: Int = 0
+var p: Int = 0
+var opt: String = ""
+
+var pitch = AVAudioUnitTimePitch()
+*/
+
+//AVAsset *asset = [AVAsset assetWithURL:[NSURL fileURLWithPath:locationUrl]];

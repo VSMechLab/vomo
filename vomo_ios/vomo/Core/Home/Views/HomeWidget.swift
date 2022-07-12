@@ -21,17 +21,17 @@ struct HomeWidget: View {
             GeometryReader { geometry in
                 VStack {
                     Color.gray.opacity(0)
-                        .frame(height: geometry.size.height / 2)
+                        .frame(height: geometry.size.height * 0.425)
                     VStack {
                         Text(quotes.findQuote())
                             .font(._coverBodyCopy)
                             .foregroundColor(Color.white)
                             .multilineTextAlignment(.center)
-                            .padding(.bottom, 10)
-                            .padding(.horizontal)
+                            .padding(.bottom, 1)
+                            .padding(.horizontal, 1)
                         Spacer()
                     }
-                    .frame(height: geometry.size.height / 2)
+                    .frame(height: geometry.size.height * 0.575)
                 }.frame(height: geometry.size.height)
             }
         }

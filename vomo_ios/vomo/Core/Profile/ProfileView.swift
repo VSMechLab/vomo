@@ -36,10 +36,6 @@ struct ProfileView: View {
     // CHANGED: added sex assigned at birth options
     var sexes = ["Other", "Female", "Male"]
     
-    
-    
-    
-    
     let genderKey = "gender", dobKey = "dob"
     let voiceOnsetKey = "voiceOnset", currentSmokerKey = "currentSmoker"
     let haveRefluxKey = "haveReflux", haveAsthmaKey = "haveAsthma"
@@ -72,91 +68,15 @@ struct ProfileView: View {
                     .padding(.top) // CHANGED: added top padding
                 
                 VStack(alignment: .leading) {
-                    Group {
-                        firstName
-                        
-                        lastName
-                        
-                        dateOfBirth
+                    firstName
+                    
+                    lastName
+                    
+                    dateOfBirth
 
-                            // CHANGED: added date picker
-                            ZStack {
-                                if showCalendar {
-                                    DatePicker("", selection: $date, in: ...Date.now, displayedComponents: .date)
-                                        .datePickerStyle(WheelDatePickerStyle())
-                                        .frame(maxHeight: 400)
-                                }
-                            } // End ZStack
-                            .transition(.slide)
-                        }
-
-                        // CHANGED: added sex assigned at birth field
-                        Text("Sex (assigned at birth)")
-                            .font(._fieldLabel)
-
-                        ZStack {
-                            Image(entry_img)
-                                .resizable()
-                                .frame(height: toggleHeight)
-                                .cornerRadius(7)
-
-                            HStack {
-                                Menu {
-                                    Picker("choose", selection: $sex) {
-                                        ForEach(sexes, id: \.self) { sex in
-                                            Text("\(sex)")
-                                                .font(._fieldCopyRegular)
-                                        }
-                                    }
-                                    .labelsHidden()
-                                    .pickerStyle(InlinePickerStyle())
-
-                                } label: {
-                                    // CHANGED: capitalize the g for consistency
-                                    Text("\(sex == "" ? "Select Sex" : sex)")
-                                        .font(._fieldCopyRegular)
-                                }
-                                .frame(maxHeight: 400)
-
-                                Spacer()
-                            } // End HStack
-                            .padding(.horizontal, 5)
-                        } // End ZStack
-                        .frame(height: toggleHeight)
-                        .transition(.slide)
-
-                        Text("Gender")
-                            .font(._fieldLabel)
-
-                        ZStack {
-                            Image(entry_img)
-                                .resizable()
-                                .frame(height: toggleHeight)
-                                .cornerRadius(7)
-
-                            HStack {
-                                Menu {
-                                    Picker("choose", selection: $gender) {
-                                        ForEach(genders, id: \.self) { gender in
-                                            Text("\(gender)")
-                                                .font(._fieldCopyRegular)
-                                        }
-                                    }
-                                    .labelsHidden()
-                                    .pickerStyle(InlinePickerStyle())
-
-                                } label: {
-                                    // CHANGED: capitalize the g for consistency
-                                    Text("\(gender == "" ? "Select Gender" : gender)")
-                                        .font(._fieldCopyRegular)
-                                }
-                                .frame(maxHeight: 400)
-                                Spacer()
-                            } // End HStack
-                            .padding(.horizontal, 5)
-                        } // End ZStack
-                        .frame(height: toggleHeight)
-                        .transition(.slide)
+                    sexAtBirth
+                    
+                    genderOption
                     
                     Group {
                         // CHANGED: added Problem
@@ -351,6 +271,92 @@ extension ProfileView {
 //                            }.padding(.horizontal, 7)
                 } // End ZStack
                 .frame(height: toggleHeight)
+            
+            // CHANGED: added date picker
+            ZStack {
+                if showCalendar {
+                    DatePicker("", selection: $date, in: ...Date.now, displayedComponents: .date)
+                        .datePickerStyle(WheelDatePickerStyle())
+                        .frame(maxHeight: 400)
+                }
+            } // End ZStack
+            .transition(.slide)
+        }
+    }
+    
+    private var sexAtBirth: some View {
+        Group {
+            // CHANGED: added sex assigned at birth field
+            Text("Sex (assigned at birth)")
+                .font(._fieldLabel)
+
+            ZStack {
+                Image(entry_img)
+                    .resizable()
+                    .frame(height: toggleHeight)
+                    .cornerRadius(7)
+
+                HStack {
+                    Menu {
+                        Picker("choose", selection: $sex) {
+                            ForEach(sexes, id: \.self) { sex in
+                                Text("\(sex)")
+                                    .font(._fieldCopyRegular)
+                            }
+                        }
+                        .labelsHidden()
+                        .pickerStyle(InlinePickerStyle())
+
+                    } label: {
+                        // CHANGED: capitalize the g for consistency
+                        Text("\(sex == "" ? "Select Sex" : sex)")
+                            .font(._fieldCopyRegular)
+                    }
+                    .frame(maxHeight: 400)
+
+                    Spacer()
+                } // End HStack
+                .padding(.horizontal, 5)
+            } // End ZStack
+            .frame(height: toggleHeight)
+            .transition(.slide)
+        }
+    }
+    
+    private var genderOption: some View {
+        Group {
+            Text("Gender")
+                .font(._fieldLabel)
+
+            ZStack {
+                Image(entry_img)
+                    .resizable()
+                    .frame(height: toggleHeight)
+                    .cornerRadius(7)
+
+                HStack {
+                    Menu {
+                        Picker("choose", selection: $gender) {
+                            ForEach(genders, id: \.self) { gender in
+                                Text("\(gender)")
+                                    .font(._fieldCopyRegular)
+                            }
+                        }
+                        .labelsHidden()
+                        .pickerStyle(InlinePickerStyle())
+
+                    } label: {
+                        // CHANGED: capitalize the g for consistency
+                        Text("\(gender == "" ? "Select Gender" : gender)")
+                            .font(._fieldCopyRegular)
+                    }
+                    .frame(maxHeight: 400)
+                    Spacer()
+                } // End HStack
+                .padding(.horizontal, 5)
+            } // End ZStack
+            .frame(height: toggleHeight)
+            .transition(.slide)
         }
     }
 }

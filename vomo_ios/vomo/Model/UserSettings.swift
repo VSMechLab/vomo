@@ -87,9 +87,9 @@ class UserSettings: ObservableObject {
             UserDefaults.standard.set(intensity, forKey: "intensity")
         }
     }
-    @Published var HNR: Bool {
+    @Published var duration: Bool {
         didSet {
-            UserDefaults.standard.set(HNR, forKey: "hnr")
+            UserDefaults.standard.set(duration, forKey: "hnr")
         }
     }
     @Published var minPitch: Bool {
@@ -165,7 +165,7 @@ class UserSettings: ObservableObject {
         self.pitch = UserDefaults.standard.object(forKey: "pitch") as? Bool ?? false
         self.CPP = UserDefaults.standard.object(forKey: "cpp") as? Bool ?? false
         self.intensity = UserDefaults.standard.object(forKey: "intensity") as? Bool ?? false
-        self.HNR = UserDefaults.standard.object(forKey: "hnr") as? Bool ?? false
+        self.duration = UserDefaults.standard.object(forKey: "hnr") as? Bool ?? false
         self.minPitch = UserDefaults.standard.object(forKey: "min_pitch") as? Bool ?? false
         self.maxPitch = UserDefaults.standard.object(forKey: "max_pitch") as? Bool ?? false
         

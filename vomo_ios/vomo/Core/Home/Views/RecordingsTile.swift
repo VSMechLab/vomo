@@ -30,9 +30,7 @@ struct RecordingsTile: View {
                     .font(._date)
                     .foregroundColor(color[colorSelect])
                 
-                Text(daysAgo().formatted() == "0" ? "Today": "\(daysAgo().formatted()) days ago")
-                    .font(._lastUsed)
-                    .foregroundColor(Color.BODY_COPY)
+                daysSince
             }
         }.padding(1)
     }
@@ -43,6 +41,16 @@ struct RecordingsTile: View {
         
         let delta = to - from
         return delta
+    }
+}
+
+extension RecordingsTile {
+    private var daysSince: some View {
+        Text(
+            daysAgo().formatted() == "0" ? "Today" : daysAgo().formatted() == "1" ?  "\(daysAgo().formatted()) day ago" : "\(daysAgo().formatted()) days ago"
+        )
+        .font(._lastUsed)
+        .foregroundColor(Color.BODY_COPY)
     }
 }
 
