@@ -58,21 +58,21 @@ struct RecordingViewModel {
         "6. I have trouble using the telephone (because of my voice).",
         "7. I have trouble doing my job or practicing my profession (because of my voice).",
         "8. I avoid going out socially (because of my voice).",
-        "9. I have to repeat myself to be understood",
+        "9. I have to repeat myself to be understood.",
         "10. I have become less outgoing (because of my voice).",
-        "The overall quality of my voice during the last two weeks has been:"
+        "11. The overall quality of my voice during the last two weeks has been:"
     ]
     let vhi = [
         "1. My voice makes it difficult for people to hear me.",
-        "2. I run out of air when I talk",
+        "2. I run out of air when I talk.",
         "3. People have difficulty understanding me in a noisy room.",
         "4. The sound of my voice varies throughout the day.",
         "5. My family has difficulty hearing me when I call them througout the house.",
         "6. I use the phone less often than I would like to.",
-        "7. I'm tense when talking to others because of my voice",
-        "8. I tend to avoid groups of people because of my voice",
-        "9. People seem iritated with my voice",
+        "7. I'm tense when talking to others because of my voice.",
+        "8. I tend to avoid groups of people because of my voice.",
+        "9. People seem irritated with my voice.",
         "10. People ask, \"Whats wrong with your voice?\"",
-        "The overall quality of my voice during the last two weeks has been:"
+        "11. The overall quality of my voice during the last two weeks has been:"
     ]
 }

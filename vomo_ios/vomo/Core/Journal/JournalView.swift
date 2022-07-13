@@ -24,6 +24,9 @@ struct JournalView: View {
     @State private var name = ""
     @State private var note = ""
     
+    
+    @FocusState private var focused: Bool
+    
     init() {
             UITextView.appearance().backgroundColor = .clear
         }
@@ -39,29 +42,7 @@ struct JournalView: View {
                 Spacer()
             }
             
-            ZStack {
-                Image(banner_img)
-                    .resizable()
-                    .scaledToFit()
-                
-                VStack(alignment: .leading) {
-                    Spacer()
-                    Text("How does")
-                        .foregroundColor(.white)
-                    Text("your voice")
-                        .foregroundColor(.BRIGHT_PURPLE.opacity(0.8))
-                    HStack(spacing: 0) {
-                        Text("feel today")
-                            .foregroundColor(.white)
-                        Text("?")
-                            .foregroundColor(.TEAL)
-                        Spacer()
-                    }
-                }
-                .padding()
-                .font(._subHeadline)
-                .frame(width: svm.content_width, height: 190)
-            }
+            widgetView
             
             VStack(spacing: 0) {
                 ZStack {
@@ -70,6 +51,7 @@ struct JournalView: View {
                         .frame(height: 30)
                     
                     TextField(self.name.isEmpty ? "Enter Note Name" : self.name, text: self.$name)
+                        .focused($focused)
                         .font(self.name.isEmpty ? ._fieldCopyItalic : ._fieldCopyRegular)
                         .foregroundColor(Color.black)
                         .padding(.leading, 8)
@@ -96,6 +78,7 @@ struct JournalView: View {
                     
                     TextEditor(text: self.$note)
                         .font(self.note.isEmpty ? ._fieldCopyItalic : ._fieldCopyRegular)
+                        .focused($focused)
                         .font(._fieldCopyRegular)
                         .padding(.leading, 5)
                 }
@@ -104,11 +87,47 @@ struct JournalView: View {
             }
             
             addNoteButton
-        }.frame(width: svm.content_width)
+        }
+        .frame(width: svm.content_width)
+        .toolbar {
+            ToolbarItemGroup(placement: .keyboard) {
+                Button("Done") {
+                    focused = false
+                }
+                .font(._subHeadline)
+                .foregroundColor(Color.DARK_PURPLE)
+            }
+        }
     }
 }
 
 extension JournalView {
+    private var widgetView: some View {
+        ZStack {
+            Image(banner_img)
+                .resizable()
+                .scaledToFit()
+            
+            VStack(alignment: .leading) {
+                Spacer()
+                Text("How does")
+                    .foregroundColor(.white)
+                Text("your voice")
+                    .foregroundColor(.BRIGHT_PURPLE.opacity(0.8))
+                HStack(spacing: 0) {
+                    Text("feel today")
+                        .foregroundColor(.white)
+                    Text("?")
+                        .foregroundColor(.TEAL)
+                    Spacer()
+                }
+            }
+            .padding()
+            .font(._subHeadline)
+            .frame(width: svm.content_width, height: 190)
+        }
+    }
+    
     private var addNoteButton: some View {
         Group {
             if self.name.isEmpty || self.note.isEmpty {

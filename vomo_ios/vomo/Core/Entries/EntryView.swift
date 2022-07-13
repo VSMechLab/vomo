@@ -78,10 +78,10 @@ struct EntryView: View {
                     if !entries.recordingsPresent {
                         ResultsSection(active: self.$active, focus: self.focus, type: "RESULTS")
                     } else {
-                        FieldOfEntry(active: self.$active, type: "RESULTS", logo: scores_logo, text: "View your accoustic and questionnaire scores")
+                        FieldOfEntry(active: self.$active, type: "RESULTS", logo: scores_logo, text: "View your acoustic and questionnaire scores")
                     }
                 } else {
-                    FieldOfEntry(active: self.$active, type: "RESULTS", logo: scores_logo, text: "View your accoustic and questionnaire scores")
+                    FieldOfEntry(active: self.$active, type: "RESULTS", logo: scores_logo, text: "View your acoustic and questionnaire scores")
                 }
                 
                 Divider()
@@ -90,10 +90,10 @@ struct EntryView: View {
                     if !entries.journalsPresent {
                         JournalSection(audioRecorder: AudioRecorder(), active: self.$active, focus: self.focus, type: "JOURNALS")
                     } else {
-                        FieldOfEntry(active: self.$active, type: "JOURNALS", logo: journal_logo, text: "View your journal entries here.")
+                        FieldOfEntry(active: self.$active, type: "JOURNALS", logo: journal_logo, text: "View your journal entries here")
                     }
                 } else {
-                    FieldOfEntry(active: self.$active, type: "JOURNALS", logo: journal_logo, text: "View your journal entries here.")
+                    FieldOfEntry(active: self.$active, type: "JOURNALS", logo: journal_logo, text: "View your journal entries here")
                 }
             }
             .transition(.slide)
