@@ -139,8 +139,6 @@ extension ResultsSection {
                 .resizable()
                 .frame(width: 55, height: 55)
                 .padding(.leading, 5)
-            
-            Spacer()
         }
     }
 }

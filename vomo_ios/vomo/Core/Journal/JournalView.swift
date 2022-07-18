@@ -11,7 +11,7 @@ struct JournalView: View {
     @EnvironmentObject var viewRouter: ViewRouter
     @EnvironmentObject var entries: Entries
     
-    let banner_img = "VoMo-App-Assets_2_13-freewrite-banner-FPO"
+    let banner_img = "VoMo-App-Assets_journalEntry-Banner"
     
     let tag_img = "VM_12-tags-entry-field"
     let field_img = "VM_12-entry-field"
@@ -103,29 +103,9 @@ struct JournalView: View {
 
 extension JournalView {
     private var widgetView: some View {
-        ZStack {
-            Image(banner_img)
-                .resizable()
-                .scaledToFit()
-            
-            VStack(alignment: .leading) {
-                Spacer()
-                Text("How does")
-                    .foregroundColor(.white)
-                Text("your voice")
-                    .foregroundColor(.BRIGHT_PURPLE.opacity(0.8))
-                HStack(spacing: 0) {
-                    Text("feel today")
-                        .foregroundColor(.white)
-                    Text("?")
-                        .foregroundColor(.TEAL)
-                    Spacer()
-                }
-            }
-            .padding()
-            .font(._subHeadline)
-            .frame(width: svm.content_width, height: 190)
-        }
+        Image(banner_img)
+            .resizable()
+            .scaledToFit()
     }
     
     private var addNoteButton: some View {

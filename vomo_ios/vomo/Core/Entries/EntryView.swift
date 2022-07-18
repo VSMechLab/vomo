@@ -45,7 +45,7 @@ struct EntryView: View {
             }
             
             HStack {
-                Text("Review and listen to your recordings here")
+                Text("Review your recordings, scores, and journal entries")
                     .font(._bodyCopy)
                     .foregroundColor(Color.BODY_COPY)
                     .multilineTextAlignment(.center)
@@ -64,12 +64,12 @@ struct EntryView: View {
             VStack(spacing: 0) {
                 if self.active == 1 {
                     if !entries.recordingsPresent {
-                        RecordingSection(active: self.$active, focus: self.focus, type: "RECORDING")
+                        RecordingSection(active: self.$active, focus: self.focus, type: "RECORDINGS")
                     } else {
-                        FieldOfEntry(active: self.$active, type: "RECORDING", logo: recording_logo, text: "Expand to playback previous recordings")
+                        FieldOfEntry(active: self.$active, type: "RECORDINGS", logo: recording_logo, text: "Expand to playback previous recordings")
                     }
                 } else {
-                    FieldOfEntry(active: self.$active, type: "RECORDING", logo: recording_logo, text: "Expand to playback previous recordings")
+                    FieldOfEntry(active: self.$active, type: "RECORDINGS", logo: recording_logo, text: "Expand to playback previous recordings")
                 }
                 
                 Divider()
@@ -182,7 +182,7 @@ struct FieldOfEntry: View {
             Spacer()
             
             Button(action: {
-                if type == "RECORDING" {
+                if type == "RECORDINGS" {
                     withAnimation {
                         self.active = 1
                     }

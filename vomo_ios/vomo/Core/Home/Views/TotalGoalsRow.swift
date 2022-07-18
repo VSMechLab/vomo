@@ -87,7 +87,7 @@ struct TotalGoalsRow: View {
                     .frame(width: 30)
                 }
                 
-                Text(goal.active() ?  "\(goal.progress() * 100)%" : "+")
+                Text(goal.active() ?  "\(goal.progress() * 100, specifier: "%.0f")%" : "+")
                     .font(._stats)
                     .foregroundColor(Color.TEAL)
                 

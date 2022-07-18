@@ -16,7 +16,7 @@ struct JournalSection: View {
     let focus: Date
     let type: String
     
-    let logo = "VM_record-nav-icon"
+    let logo = "VoMo-App-Assets_2_journals-gfx"
     let dropdown = "VM_Dropdown-Btn"
     
     var body: some View {

@@ -13,23 +13,20 @@ struct RecordingSection: View {
     @EnvironmentObject var audioRecorder: AudioRecorder
     @ObservedObject var audioPlayer = AudioPlayer()
     @EnvironmentObject var retrieve: Retrieve
+    
     @Binding var active: Int
     
     let focus: Date
     let type: String
-    
-    @State private var svm = SharedViewModel()
-    
     let logo = "VM_record-nav-ds-icon"
     let dropdown = "VM_Dropdown-Btn"
     let timer = Timer.publish(every: 1 / 60, on: .main, in: .common).autoconnect()
     
+    @State private var svm = SharedViewModel()
     @State private var selection = -1
     @State private var playAt: Date = .now
     @State private var deletionSelection: Date = .now
-    
     @State private var exercisesPresent: [String] = []
-    
     @State private var timeElapsed: Double = 0.0
     @State private var timeLeft: Double = 0.0
     
@@ -40,7 +37,6 @@ struct RecordingSection: View {
                     .resizable()
                     .frame(width: 55, height: 55)
                     .padding(.leading, 5)
-                Spacer()
             }
             
             VStack {
@@ -53,8 +49,6 @@ struct RecordingSection: View {
                 exerciseSelectionSection
                 
                 recordingsList
-                
-                Spacer()
             }
             .padding(.trailing, 5)
             .font(._coverBodyCopy)
@@ -76,7 +70,6 @@ struct RecordingSection: View {
                 retrieve.focusDayExercise = selection
             }
             self.retrieve.preciseRecord = audioRecorder.filterRecordingsDayExercise(focus: self.retrieve.focusDay, taskNum: selection).first?.createdAt ?? .now
-            print("by default: \(retrieve.focusDayExercise), and choosing record: \(retrieve.preciseRecord)")
         }
     }
     
@@ -98,7 +91,7 @@ extension RecordingSection {
                         .frame(height: 30)
                         .foregroundColor(Color.BODY_COPY.opacity(0.5))
                         .cornerRadius(10)
-                    Text("Vowel")
+                    Text("VOWEL")
                         .foregroundColor(Color.white)
                         .font(._fieldLabel)
                 }
@@ -112,8 +105,9 @@ extension RecordingSection {
                             .frame(height: 30)
                             .foregroundColor(selection == 1 ? .TEAL : .white)
                             .cornerRadius(10)
-                        Text("Vowel")
+                        Text("VOWEL")
                             .foregroundColor(selection == 1 ? .white : .black)
+                            .font(._fieldLabel)
                     }
                 }
             }
@@ -126,11 +120,13 @@ extension RecordingSection {
                         .cornerRadius(10)
                     Text("MPT")
                         .foregroundColor(Color.white)
+                        .font(._fieldLabel)
                 }
             } else {
                 Button(action: {
                     selection = 2
                     retrieve.focusDayExercise = selection
+                    self.retrieve.preciseRecord = audioRecorder.filterRecordingsDayExercise(focus: self.retrieve.focusDay, taskNum: selection).first?.createdAt ?? .now
                 }) {
                     ZStack {
                         Rectangle()
@@ -139,6 +135,8 @@ extension RecordingSection {
                             .cornerRadius(10)
                         Text("MPT")
                             .foregroundColor(selection == 2 ? .white : .black)
+                            .font(._fieldLabel)
+                        
                     }
                 }
             }
@@ -149,21 +147,24 @@ extension RecordingSection {
                         .frame(height: 30)
                         .foregroundColor(Color.BODY_COPY.opacity(0.5))
                         .cornerRadius(10)
-                    Text("Rainbow")
+                    Text("RAINBOW")
                         .foregroundColor(Color.white)
+                        .font(._fieldLabel)
                 }
             } else {
                 Button(action: {
                     selection = 3
                     retrieve.focusDayExercise = selection
+                    self.retrieve.preciseRecord = audioRecorder.filterRecordingsDayExercise(focus: self.retrieve.focusDay, taskNum: selection).first?.createdAt ?? .now
                 }) {
                     ZStack {
                         Rectangle()
                             .frame(height: 30)
                             .foregroundColor(selection == 3 ? .TEAL : .white)
                             .cornerRadius(10)
-                        Text("Rainbow")
+                        Text("RAINBOW")
                             .foregroundColor(selection == 3 ? .white : .black)
+                            .font(._fieldLabel)
                     }
                 }
             }
@@ -178,7 +179,7 @@ extension RecordingSection {
                 Spacer()
                 ForEach(audioRecorder.filterRecordingsDayExercise(focus: self.retrieve.focusDay, taskNum: self.retrieve.focusDayExercise), id: \.createdAt) { record in
                     if retrieve.preciseRecord == record.createdAt {
-                        Text("\((audioRecorder.assetTime(file: record.fileURL)), specifier: "%.2f")")
+                        Text("\((audioRecorder.assetTime(file: record.fileURL)), specifier: "%.0f")")
                             .foregroundColor(retrieve.preciseRecord == record.createdAt ? Color.white : Color.BODY_COPY)
                     }
                 }
@@ -204,19 +205,7 @@ extension RecordingSection {
                 .frame(width: geometry.size.width)
             }
             .frame(height: 6)
-            /*
-            ZStack {
-                HStack(spacing: 0) {
-                    Color.TEAL
-                    Color.white
-                }.frame(height: 2)
-                
-                Circle()
-                    .foregroundColor(Color.TEAL)
-                    .frame(width: 6)
-            }
-            .frame(height: 6)
-            */
+            
             HStack {
                 Text("\(self.timeElapsed, specifier: "%.2f")")
                 Spacer()
@@ -240,25 +229,26 @@ extension RecordingSection {
     }
     
     private var recordingsList: some View {
-        List {
-            ForEach(audioRecorder.filterRecordingsDayExercise(focus: self.retrieve.focusDay, taskNum: self.retrieve.focusDayExercise), id: \.createdAt) { record in
-                Button(action: {
-                    self.retrieve.preciseRecord = record.createdAt
-                }) {
-                    HStack(spacing: 0) {
-                        Text("Task: \(audioRecorder.fileTask(file: record.fileURL))")
-                        Spacer()
-                        Text("\(audioRecorder.fileName(file: record.fileURL))")
-                    }
-                    .foregroundColor(retrieve.preciseRecord == record.createdAt ? Color.white : Color.BODY_COPY)
-                    .font(._fieldLabel)
-                }.listRowBackground(Color.clear)
+        Group {
+            List {
+                ForEach(audioRecorder.filterRecordingsDayExercise(focus: self.retrieve.focusDay, taskNum: self.retrieve.focusDayExercise), id: \.createdAt) { record in
+                    Button(action: {
+                        self.retrieve.preciseRecord = record.createdAt
+                    }) {
+                        HStack(spacing: 0) {
+                            Text("Task: \(audioRecorder.fileTask(file: record.fileURL))")
+                            Spacer()
+                            Text("\(audioRecorder.fileName(file: record.fileURL))")
+                        }
+                        .foregroundColor(retrieve.preciseRecord == record.createdAt ? Color.white : Color.BODY_COPY)
+                        .font(._fieldLabel)
+                    }.listRowBackground(Color.clear)
+                }
             }
-            //.onDelete(perform: delete)
+            .listStyle(PlainListStyle())
+            .listRowInsets(.none)
+            .listRowSeparator(.hidden)
         }
-        .listStyle(PlainListStyle())
-        .listRowInsets(.none)
-        .listRowSeparator(.hidden)
     }
     
     private var headerSection: some View {
@@ -294,6 +284,7 @@ extension RecordingSection {
             }
             
             Spacer()
+            
             Button(action: {}) {
                 Image(systemName: "gobackward.5")
             }
@@ -309,9 +300,6 @@ extension RecordingSection {
                     }) {
                         Image(systemName: "play.circle")
                             .imageScale(.large)
-                    }
-                    .onAppear() {
-                        //retrieve.preciseRecord = audioRecorder.
                     }
                 } else {
                     Button(action: {
@@ -347,69 +335,3 @@ extension RecordingSection {
         return endTime
     }
 }
-
-/*
-.onAppear() {
-    if entries.tasksPresent(day: playAt).contains("One") {
-        self.selection = 1
-    } else {
-        if entries.tasksPresent(day: playAt).contains("Two") {
-            self.selection = 2
-        } else {
-            if entries.tasksPresent(day: playAt).contains("Three") {
-                self.selection = 3
-            }
-        }
-    }
-}
-*/
-
-/*
-VStack(alignment: .leading) {
-    HStack {
-        Text(type)
-        
-        Spacer()
-        
-        Button(action: {
-            self.active = 0
-        }) {
-            Image(dropdown)
-                .resizable()
-                .rotationEffect(.degrees(-180))
-                .frame(width: 25, height: 10, alignment: .center)
-        }
-    }
-    
-    if selection != -1 {
-        playbackBarSection
-        
-    }
-    
-    exerciseSectionSelection
-    
-    /*
-     
-     HStack {
-         Button(action: {
-             self.playAt = recording.createdAt
-             print(playAt)
-         }) {
-             HStack {
-                 Text("Recording at \(recording.taskNum): \(recording.createdAt.toString(dateFormat: "h:mm a"))").padding()
-                 
-                 Spacer()
-             }
-             .foregroundColor(playAt == recording.createdAt ? Color.white : Color.DARK_BLUE)
-             .background(playAt == recording.createdAt ? Color.TEAL : Color.white)
-             .cornerRadius(10)
-             .padding(2)
-             .onAppear() {
-                 playAt = entries.firstRecordingFromSpecifiedDay(day: focus, filterTask: selection)
-             }
-         }
-     }
-     
-     */
-}
-*/
