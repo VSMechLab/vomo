@@ -151,7 +151,7 @@ struct ProfileView: View {
                     }
                     .padding(.vertical, 5)
                     
-                    
+                    /*
                     HStack {
                         Spacer()
                         Button(action: {
@@ -162,7 +162,7 @@ struct ProfileView: View {
                         .padding(.bottom, 80)
                         Spacer()
                     }
-                    .frame(width: svm.content_width)
+                    .frame(width: svm.content_width)*/
                 }.frame(width: svm.content_width)
             }
             .frame(width: svm.content_width)

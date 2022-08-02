@@ -207,9 +207,9 @@ extension RecordingSection {
             .frame(height: 6)
             
             HStack {
-                Text("\(self.timeElapsed, specifier: "%.2f")")
+                Text("\(self.timeElapsed, specifier: "%.0f")")
                 Spacer()
-                Text("\(self.timeLeft, specifier: "%.2f")")
+                Text("\(self.timeLeft, specifier: "%.0f")")
             }
             .foregroundColor(Color.white)
             .font(._fieldLabel)
@@ -285,10 +285,6 @@ extension RecordingSection {
             
             Spacer()
             
-            Button(action: {}) {
-                Image(systemName: "gobackward.5")
-            }
-            
             Group {
                 if audioPlayer.isPlaying == false {
                     Button(action: {
@@ -311,10 +307,8 @@ extension RecordingSection {
                 }
             }.frame(height: 20)
             
-            Button(action: {}) {
-                Image(systemName: "goforward.5")
-            }
             Spacer()
+            
             Button(action: {
             }) {
                 Image(systemName: "ellipsis")

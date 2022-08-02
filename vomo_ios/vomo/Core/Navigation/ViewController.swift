@@ -124,5 +124,14 @@ extension ViewController {
         }
         .frame(width: UIScreen.main.bounds.width)
         .shadow(color: Color.gray.opacity(0.2), radius: 2, x: 0, y: 0)
+        
+        //if UIScene.main.bounds.height >
+        /*
+        .padding(.bottom,
+                 
+                 
+                 15)*/
+        
+        
     }
 }

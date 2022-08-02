@@ -19,6 +19,7 @@ struct ContentView: View {
     @State private var exercise = 0
     @State private var playLast = false
     @State private var timer = 0
+    @State private var submitAnimation = false
     
     var body: some View {
         ZStack {

@@ -114,7 +114,7 @@ struct EntryView: View {
                             Button(action: {
                                 self.retrieve.focusDay = day
                             }) {
-                                Text("\(day.formatted())")
+                                Text("\(day.toStringDay())")
                                     .font(retrieve.focusDay == day ? ._fieldLabel : ._pageNavLink)
                                     .foregroundColor(retrieve.focusDay == day ? Color.DARK_PURPLE : Color.BODY_COPY)
                             }
