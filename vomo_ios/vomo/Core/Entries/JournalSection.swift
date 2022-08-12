@@ -50,8 +50,10 @@ struct JournalSection: View {
                 VStack(alignment: .leading, spacing: 0) {
                     ForEach(entries.journals) { journal in
                         if focus.toString(dateFormat: "MM, dd, yyyy") == journal.createdAt.toString(dateFormat: "MM, dd, yyyy") {
+                            Color.white.frame(height: 1).opacity(0.7).padding(.bottom, 3).padding(.trailing, 3)
+                            
                             Text("\(journal.noteName)")
-                                .font(._fieldCopyRegular)
+                                .font(._disclaimerLink)
                             
                             Text("\(journal.note)")
                                 .font(._fieldCopyRegular)

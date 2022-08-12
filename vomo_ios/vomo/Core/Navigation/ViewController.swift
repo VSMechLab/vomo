@@ -15,6 +15,7 @@ struct ViewController: View {
     @EnvironmentObject var audioRecorder: AudioRecorder
     
     @State private var onboarded = true
+    @State private var variablePadding: CGFloat = 0
     
     let home_img = "VM_home-nav-icon"
     let journal_img = "VM_notes-nav-icon"
@@ -36,12 +37,21 @@ struct ViewController: View {
                     VoiceQuestionView()
                 case .homeView:
                     HomeView()
+                        .onAppear() {
+                            recordingState.unfocused = false
+                        }
                 case .recordView:
                     ContentView()
                 case .journalView:
                     JournalView()
+                        .onAppear() {
+                            recordingState.unfocused = false
+                        }
                 case .profileView:
                     ProfileView()
+                        .onAppear() {
+                            recordingState.unfocused = false
+                        }
                 case .playground:
                     APIPlayground()
                 case .targetView:
@@ -86,20 +96,13 @@ extension ViewController {
                             self.recordingState.state = 0
                         }.buttonStyle(TabIcons(image: home_img))
                         
-                        Button(action: {
-                            if viewRouter.currentPage == .recordView {
-                                if recordingState.state == 0 {
-                                    self.recordingState.state = 1
-                                    self.audioRecorder.startRecording(taskNum: self.recordingState.task)
-                                } else if recordingState.state == 1 {
-                                    self.recordingState.state = 2
-                                    self.audioRecorder.stopRecording()
-                                }
-                            } else {
-                                viewRouter.currentPage = .recordView
-                                self.recordingState.task = 1
-                            }
-                        }) {
+                        /*
+                         Recording state
+                         0. Not recording, able to be switched over to recording
+                         1. Actively recording
+                         2. Not recording, state locked at that time
+                         */
+                        if recordingState.state == 2 || recordingState.unfocused {
                             ZStack {
                                 Image(recordingState.state == 1 ? stop_img : start_img)
                                     .resizable()
@@ -109,7 +112,33 @@ extension ViewController {
                                 
                                 Text("\(self.recordingState.state)").hidden()
                             }
+                        } else {
+                            Button(action: {
+                                if viewRouter.currentPage == .recordView {
+                                    if recordingState.state == 0 {
+                                        self.recordingState.state = 1
+                                        self.audioRecorder.startRecording(taskNum: self.recordingState.task)
+                                    } else if recordingState.state == 1 {
+                                        self.recordingState.state = 2
+                                        self.audioRecorder.stopRecording()
+                                    }
+                                } else {
+                                    viewRouter.currentPage = .recordView
+                                    self.recordingState.task = 1
+                                }
+                            }) {
+                                ZStack {
+                                    Image(recordingState.state == 1 ? stop_img : start_img)
+                                        .resizable()
+                                        .frame(width: 125, height: 125)
+                                        .padding(.top, -50)
+                                        .shadow(radius: 1)
+                                    
+                                    Text("\(self.recordingState.state)").hidden()
+                                }
+                            }
                         }
+                        
                         
                         Button("") {
                             viewRouter.currentPage = .journalView
@@ -118,20 +147,18 @@ extension ViewController {
                     }
                 }
                 .background(Color.white)
-                .padding(.bottom, -25)
+                .padding(.bottom, self.variablePadding)
                 .shadow(radius: 1)
             }
         }
         .frame(width: UIScreen.main.bounds.width)
         .shadow(color: Color.gray.opacity(0.2), radius: 2, x: 0, y: 0)
-        
-        //if UIScene.main.bounds.height >
-        /*
-        .padding(.bottom,
-                 
-                 
-                 15)*/
-        
-        
+        .onAppear() {
+            if UIApplication.shared.windows[0].safeAreaInsets.bottom > 0 {
+                self.variablePadding = -25
+            } else {
+                self.variablePadding = -10
+            }
+        }
     }
 }

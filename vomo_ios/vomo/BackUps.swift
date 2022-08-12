@@ -20,13 +20,14 @@ struct RecordingsList: View {
         }
     }
     
+    
     func delete(at offsets: IndexSet) {
             
         var urlsToDelete = [URL]()
         for index in offsets {
             urlsToDelete.append(audioRecorder.recordings[index].fileURL)
         }
-        audioRecorder.deleteRecording(urlsToDelete: urlsToDelete)
+        //audioRecorder.deleteRecording(urlsToDelete: urlsToDelete)
     }
 }
 

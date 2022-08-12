@@ -21,6 +21,7 @@ struct ResultsSection: View {
     let dropdown = "VM_Dropdown-Btn"
     let info_img = "VM_info-icon"
     @State private var infoPopup = false
+    @State private var showDetails = false
     
     var body: some View {
         HStack(alignment: .top) {
@@ -45,90 +46,13 @@ struct ResultsSection: View {
                     }
                 }
                 
-                HStack(spacing: 0) {
-                    Text("Mean Pitch Vowel: ")
-                        .font(._bodyCopy)
-                    Text("XX")
-                        .font(._bodyCopyBold)
-                    Spacer()
-                    Button(action: {
-                        self.infoPopup.toggle()
-                    }) {
-                        Image(info_img)
-                            .resizable()
-                            .frame(width: 15, height: 15)
-                    }
-                }
-                
-                Color.white.frame(height: 1)
-                
-                HStack(spacing: 0) {
-                    Text("HNR Vowel: ")
-                        .font(._bodyCopy)
-                    Text("XX")
-                        .font(._bodyCopyBold)
-                    Spacer()
-                    Button(action: {
-                        self.infoPopup.toggle()
-                    }) {
-                        Image(info_img)
-                            .resizable()
-                            .frame(width: 15, height: 15)
-                    }
-                }
-                
-                Color.white.frame(height: 1)
-                
-                HStack(spacing: 0) {
-                    Text("VRQOL: ")
-                        .font(._bodyCopy)
-                    Text("XX")
-                        .font(._bodyCopyBold)
-                    Spacer()
-                    Button(action: {
-                        self.infoPopup.toggle()
-                    }) {
-                        Image(info_img)
-                            .resizable()
-                            .frame(width: 15, height: 15)
-                    }
-                }
-                
-                Color.white.frame(height: 1)
-                
-                ForEach(audioRecorder.recordings, id: \.createdAt) { record in
-                    if record.createdAt.toStringDay() == retrieve.focusDay.toStringDay() {
-                        HStack {
-                            Text("Record \(record.createdAt.toStringHour())")
-                            
-                            Spacer()
-                            
-                            Text("Function: ")
-                        }
-                        .font(._bodyCopy)
-                        .onAppear {
-                            audioRecorder.signalProcess(file: record.fileURL)
-                        }
-                    }
-                }
+                signalProcessingSection
             }
             .padding(.trailing, 5)
         }
         .padding(.vertical)
         .foregroundColor(Color.black)
         .background(Color.TEAL)
-    }
-    
-    func retrieveAudioURL(createdAt: Date) -> URL {
-        var returnURL: URL = URL(string: "https://apple.com/")!
-        
-        for recording in audioRecorder.recordings {
-            if recording.createdAt == createdAt {
-                returnURL = recording.fileURL
-            }
-        }
-        
-        return returnURL
     }
 }
 
@@ -141,26 +65,166 @@ extension ResultsSection {
                 .padding(.leading, 5)
         }
     }
-}
-/*
-List {
-    if !entries.questioinnairesPresent {
-        ForEach(entries.questionnaires) { questionnaire in
-            if focus.toString(dateFormat: "MM, dd, yyyy") == questionnaire.createdAt.toString(dateFormat: "MM, dd, yyyy") {
-                HStack {
-                    Text("Date: \(questionnaire.createdAt)")
-                    
-                    Spacer()
-                    
-                    VStack {
-                        Group {
-                            Text("Q1: \(questionnaire.q1)")
-                            Text("Q2: \(questionnaire.q2)")
-                            Text("Q3: \(questionnaire.q3)")
+    
+    private var signalProcessingSection: some View {
+        VStack(alignment: .leading, spacing: 1) {
+            HStack(spacing: 0) {
+                Text("Avg duration: ")
+                    .font(._bodyCopy)
+                Text("\(entries.avgDuration(criteria: retrieve.focusDay.toStringDay()), specifier: "%.2f")")
+                    .font(._bodyCopyBold)
+                Spacer()
+                Button(action: {
+                    self.infoPopup.toggle()
+                }) {
+                    Image(info_img)
+                        .resizable()
+                        .frame(width: 15, height: 15)
+                }
+            }
+            
+            Color.white.frame(height: 1)
+            
+            HStack(spacing: 0) {
+                Text("Avg intensity: ")
+                    .font(._bodyCopy)
+                Text("\(entries.avgIntensity(criteria: retrieve.focusDay.toStringDay()), specifier: "%.2f")")
+                    .font(._bodyCopyBold)
+                Spacer()
+                Button(action: {
+                    self.infoPopup.toggle()
+                }) {
+                    Image(info_img)
+                        .resizable()
+                        .frame(width: 15, height: 15)
+                }
+            }
+            
+            Color.white.frame(height: 1)
+            
+            if showDetails {
+                ForEach(entries.recordings, id: \.createdAt) { record in
+                    if record.createdAt.toStringDay() == retrieve.focusDay.toStringDay() {
+                        HStack(spacing: 0) {
+                            Text("Recorded at: ")
+                                .font(._bodyCopy)
+                            Text(record.createdAt.toStringHour())
+                                .font(._bodyCopyBold)
+                            Spacer()
+                            Button(action: {
+                                self.infoPopup.toggle()
+                            }) {
+                                Image(info_img)
+                                    .resizable()
+                                    .frame(width: 15, height: 15)
+                            }
                         }
+                        
+                        HStack(spacing: 0) {
+                            Text("Duration: ")
+                                .font(._bodyCopy)
+                            Text("\(record.duration, specifier: "%.2f") seconds")
+                                .font(._bodyCopyBold)
+                            Spacer()
+                            Button(action: {
+                                self.infoPopup.toggle()
+                            }) {
+                                Image(info_img)
+                                    .resizable()
+                                    .frame(width: 15, height: 15)
+                            }
+                        }
+                        
+                        HStack(spacing: 0) {
+                            Text("Intensity: ")
+                                .font(._bodyCopy)
+                            Text("\(record.intensity, specifier: "%.2f") decibels")
+                                .font(._bodyCopyBold)
+                            Spacer()
+                            Button(action: {
+                                self.infoPopup.toggle()
+                            }) {
+                                Image(info_img)
+                                    .resizable()
+                                    .frame(width: 15, height: 15)
+                            }
+                        }
+                        Color.white.frame(height: 1)
                     }
+                }
+                
+                HStack {
+                    Button(action: {
+                        self.showDetails.toggle()
+                    }) {
+                        Text("Show less")
+                            .font(._bodyCopyBold)
+                    }
+                    Spacer()
+                }
+            } else {
+                HStack {
+                    Button(action: {
+                        self.showDetails.toggle()
+                    }) {
+                        Text("Show more")
+                            .font(._bodyCopyBold)
+                    }
+                    Spacer()
                 }
             }
         }
     }
-}*/
+}
+/*
+ HStack(spacing: 0) {
+     Text("Mean Pitch Vowel: ")
+         .font(._bodyCopy)
+     Text("XX")
+         .font(._bodyCopyBold)
+     Spacer()
+     Button(action: {
+         self.infoPopup.toggle()
+     }) {
+         Image(info_img)
+             .resizable()
+             .frame(width: 15, height: 15)
+     }
+ }
+ 
+ Color.white.frame(height: 1)
+ 
+ HStack(spacing: 0) {
+     Text("HNR Vowel: ")
+         .font(._bodyCopy)
+     Text("XX")
+         .font(._bodyCopyBold)
+     Spacer()
+     Button(action: {
+         self.infoPopup.toggle()
+     }) {
+         Image(info_img)
+             .resizable()
+             .frame(width: 15, height: 15)
+     }
+ }
+ 
+ Color.white.frame(height: 1)
+ 
+ HStack(spacing: 0) {
+     Text("VRQOL: ")
+         .font(._bodyCopy)
+     Text("XX")
+         .font(._bodyCopyBold)
+     Spacer()
+     Button(action: {
+         self.infoPopup.toggle()
+     }) {
+         Image(info_img)
+             .resizable()
+             .frame(width: 15, height: 15)
+     }
+ }
+ 
+ Color.white.frame(height: 1)
+ */

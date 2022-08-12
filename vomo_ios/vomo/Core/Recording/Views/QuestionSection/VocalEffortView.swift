@@ -14,7 +14,6 @@ struct VocalEffortView: View {
     let button_img = "VM_Gradient-Btn"
     
     @State private var q1 = -1
-    @State private var q2 = -1
     
     @State private var submitAnimation = false
     
@@ -52,12 +51,11 @@ struct VocalEffortView: View {
                 Group {
                     Group {
                         EffortScale(position: self.$q1, prompt: 1)
-                        EffortScale(position: self.$q2, prompt: 2)
                     }
                 }
                 
                 Button(action: {
-                    self.entries.questionnairesEffort.append(QuestionnaireEffortModel(createdAt: .now, q1: self.q1, q2: self.q2))
+                    self.entries.questionnairesEffort.append(QuestionnaireEffortModel(createdAt: .now, q1: self.q1))
                     submitAnimation = true
                 }) {
                     ZStack {

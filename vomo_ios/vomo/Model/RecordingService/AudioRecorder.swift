@@ -9,8 +9,22 @@ import Foundation
 import SwiftUI
 import AVFoundation
 import Combine
+import UIKit
+import Accelerate // CHANGED: imported for vector math
+import AudioKit // CHANGED: also a package dependency
+import AVFAudio
+
+struct Processings {
+    var duration = Float(0) // Seconds
+    var intensity = Float(0) // Decibels
+    var pitch_mean = Float(0) // Hertz
+    var pitch_min = Float(0) // Hertz
+    var pitch_max = Float(0) // Hertz
+}
 
 class AudioRecorder: NSObject,ObservableObject {
+    
+    var processings = Processings()
     
     override init() {
         super.init()
@@ -21,7 +35,9 @@ class AudioRecorder: NSObject,ObservableObject {
     
     var audioRecorder: AVAudioRecorder!
     
-    var recordings = [Recording]()
+    /// Fix ToDo
+    //var recordings = [Recording]()
+    @Published var recordings = [Recording]()
     
     var recording = false {
         didSet {
@@ -66,13 +82,46 @@ class AudioRecorder: NSObject,ObservableObject {
         fetchRecordings()
     }
     
+    func process(fileURL: URL) -> Processings {
+        let metrics = signalProcess(fileURL: fileURL)
+        
+        return Processings(duration: metrics[0], intensity: metrics[1], pitch_mean: 1.0, pitch_min: 1.0, pitch_max: 1.0)
+    }
+    
+    func returnCreatedAt(fileURL: URL) -> Date {
+        var createdAt = Date()
+        for record in recordings {
+            if record.fileURL == fileURL {
+                createdAt = record.createdAt
+            }
+        }
+        return createdAt
+    }
+    
     func fetchRecordings() {
+        // Delete function was not working because fetchRecordings removes all and replaces 'recordings' with what is read from file
         recordings.removeAll()
         
         let fileManager = FileManager.default
         let documentDirectory = fileManager.urls(for: .documentDirectory, in: .userDomainMask)[0]
         let directoryContents = try! fileManager.contentsOfDirectory(at: documentDirectory, includingPropertiesForKeys: nil)
+        
+        /*
+         Within fetchRecordings we will run 2 checks.
+         
+         Check one reads the contents of directoryContents. It will match the contents with the recordings and ensure that all saved recordings exist
+         Check two erases an entry recording if it is no longer present
+         
+         
+         */
+        
         for audio in directoryContents {
+            /*
+            let metrics = signalProcess(fileURL: audio)
+            
+            print("Duration: \(metrics[0]), from: \(directoryContents.count), from recording count: \(recordings.count)")
+            let recording = Recording(fileURL: audio, createdAt: getCreationDate(for: audio), duration: metrics[0], intensity: metrics[1], pitch_mean: 1.0, pitch_min: 1.0, pitch_max: 1.0)
+            */
             let recording = Recording(fileURL: audio, createdAt: getCreationDate(for: audio))
             recordings.append(recording)
         }
@@ -105,6 +154,17 @@ class AudioRecorder: NSObject,ObservableObject {
         return filtered
     }
     
+    func taskNum(selection: Int, file: URL) -> Bool {
+        var taskNum = 0
+        taskNum = Int(String(file.lastPathComponent).suffix(5).prefix(1))!
+        
+        if selection == taskNum {
+            return true
+        } else {
+            return false
+        }
+    }
+    
     func uniqueDays() -> [Date] {
         var days: [Date] = []
         
@@ -115,15 +175,12 @@ class AudioRecorder: NSObject,ObservableObject {
         return days.uniqued()
     }
     
-    func deleteRecording(urlsToDelete: [URL]) {
-        
-        for url in urlsToDelete {
-            print("deleted: \(url.lastPathComponent)")
-            do {
-               try FileManager.default.removeItem(at: url)
-            } catch {
-                print("File could not be deleted!")
-            }
+    func deleteRecording(urlToDelete: URL) {
+        print("deleted: \(urlToDelete.lastPathComponent)")
+        do {
+           try FileManager.default.removeItem(at: urlToDelete)
+        } catch {
+            print("File could not be deleted!")
         }
         
         fetchRecordings()
@@ -229,59 +286,242 @@ extension AudioRecorder {
 }
 
 extension AudioRecorder {
-    func signalProcess(file: URL!) -> CGSize {
-        let returnable: CGSize = CGSize(width: -1.0, height: -1.0)
-        
-        for record in recordings {
-            if file == record.fileURL {
-                let asset = AVAsset(url: record.fileURL)
-                let track = asset.tracks[0]
-                
-                /*
-                 Track is 2 seconds long, track length is 32000
-                 2 seconds * 16000 sample rate
-                 Track is an array of points, 16000 per second
-                 */
-                print("Track Length: \(asset.duration.value)")
-                
-                // Pulls sample rate
-                print("Natural Time Scale: \(track.naturalTimeScale)\n")
-            }
-        }
-        return returnable
-    }
-}
+     // NOTE: command to get into Kermit's vomo project folder
+     // cd ~/Library/Mobile\ Documents/com~apple~CloudDocs/Documents/VoMoApp/vomo
+     
+    func signalProcess(fileURL: URL!) -> Array<Float> {
+        // Create AVAudioFile and extract some properties
+        let audioFile = try! AVAudioFile(forReading: fileURL)
+        let audioFormat = audioFile.processingFormat
+        let audioSamplingRate = Float(audioFormat.sampleRate)
+        let audioLengthSamples = Float(audioFile.length)
 
+        // Define processing parameters
+        let audioSegmentSize_sec: Float = 40e-3
+        let overlapPercentage: Float = 0.90
 
+        // Calculate the segment sizes needed for processing based off parameters
+        let audioSegmentSize_samples = Int(floor(audioSegmentSize_sec * audioSamplingRate))
+        let audioSegmentSize_overlap = Int(floor(Float(audioSegmentSize_samples) * overlapPercentage))
+
+        // Calculate the start position offset and number of extensions
+        let newStartPositionOffset = audioSegmentSize_samples - audioSegmentSize_overlap
+        let numberOfSegments = Int( floor( (audioLengthSamples - Float(audioSegmentSize_samples)) / Float(newStartPositionOffset) ) + 1 )
+
+         // For each recording, create an array of intensity values
+         for var record in recordings where !record.processed {
+             if fileURL == record.fileURL {
+                 // Create array of floats for the values calculated and audio buffer
+                 var signalIntensityValues: [Float]
+                 var signalPitchValues: [Float]
+                 var buffer = AVAudioPCMBuffer()
+
+                 do {
+                     buffer = try AVAudioPCMBuffer(url: fileURL)!
+                 }
+                 catch {
+                     print("ERROR: Could not create buffer!")
+                 }
+
+                 // Call the getIntensity function for the recording's buffer, returns unfiltered array
+                 signalIntensityValues = buffer.getIntensity(segmentSize: audioSegmentSize_samples, startOffset: newStartPositionOffset, segments: numberOfSegments)!
+
+                 // Call the getPitch function for the recording's buffer, returns unfiltered array
+                 signalPitchValues = buffer.getPitch(segmentSize: audioSegmentSize_samples, startOffset: newStartPositionOffset, segments: numberOfSegments, sampRate: audioSamplingRate)!
+
+                 // Determine noise level
+                 var noise_level: Float = 0.0
+                 vDSP_meanv(signalIntensityValues, 1, &noise_level, 10)
+                 noise_level += 10
+             
+                 // Filter out all values above noise level into a new filtered array
+                 var filteredIntensityValues = Array(repeating: Float(0), count: 1)
+                 var filteredPitchValues = [Float(0)]
+             
+                 for iv in signalIntensityValues.startIndex..<signalIntensityValues.endIndex {
+                     if signalIntensityValues[iv] > noise_level {
+                         filteredIntensityValues.append(signalIntensityValues[iv])
+                         filteredPitchValues.append(signalPitchValues[iv])
+                     }
+                 }
+
+                 // Remove initial zero in filtered arrays
+                 filteredIntensityValues.removeFirst()
+                 filteredPitchValues.removeFirst()
+
+                 // Call helper functions for metrics and save the values into the recording data model
+                 let dur: Float = calcDuration(filteredIntensityValues, audioSegmentSize_sec, overlapPercentage)
+                 processings.duration = dur
+                 
+                 let inten: Float = calcMeanIntensity(filteredIntensityValues)
+                 processings.intensity = inten
+                 
+                 let meanP: Float = calcMeanPitch(filteredPitchValues)
+                 processings.pitch_mean = meanP
+                 
+                 let minP: Float = calcMinPitch(filteredPitchValues)
+                 processings.pitch_min = minP
+                 
+                 let maxP: Float = calcMaxPitch(filteredPitchValues)
+                 processings.pitch_max = maxP
+                 
+                 // Change processing state to true
+                 let proc = true
+                 record.processed = proc
+                 
+                 // Return array of metrics
+                 return [dur, inten, meanP, minP, maxP]
+             }// End if
+         } //End for
+         // Catch all
+         return [0.0, 0.0, 0.0, 0.0, 0.0]
+     } // End fxn
+    
+     func calcDuration(_ intensityArray: [Float], _ segSize_sec: Float, _ overlapPercentage: Float) -> Float {
+         var duration: Float = 0.0
+         let num_samples = Float(intensityArray.count)
+
+         duration = num_samples * (segSize_sec * (1 - overlapPercentage))
+
+         return duration
+     } // End fxn
+     
+     func calcMeanIntensity(_ intensityValues: [Float]) -> Float {
+         var intensity: Float = 0.0
+
+         // Take the mean of the pitch values, uses filtered array
+         vDSP_meanv(intensityValues, 1, &intensity, vDSP_Length(intensityValues.count))
+
+         return intensity
+     } // End fxn
+     
+     func calcMeanPitch(_ pitchValues: [Float]) -> Float {
+         var pitch_mean: Float = 0.0
+
+         // Take the mean of the pitch values, uses filtered array
+         vDSP_meanv(pitchValues, 1, &pitch_mean, vDSP_Length(pitchValues.count))
+
+         return pitch_mean
+     } // End fxn
+     
+     func calcMinPitch(_ pitchValues: [Float]) -> Float {
+         var pitch_min: Float = 0.0
+
+         // Take the min of the pitch values, uses filtered array
+         vDSP_minv(pitchValues, 1, &pitch_min, vDSP_Length(pitchValues.count))
+
+         return pitch_min
+     } // End fxn
+     
+     func calcMaxPitch(_ pitchValues: [Float]) -> Float {
+         var pitch_max: Float = 0.0
+
+         // Take the min of the pitch values, uses filtered array
+         vDSP_maxv(pitchValues, 1, &pitch_max, vDSP_Length(pitchValues.count))
+
+         return pitch_max
+     } // End fxn
+ }
+
+/// Signal process 2 does not return anything
 /*
-let asset = AVAsset(url: record.fileURL)
-let track = asset.tracks[0]
-let desc = track.formatDescriptions[0] as! CMAudioFormatDescription
-let basic = CMAudioFormatDescriptionGetStreamBasicDescription(desc)
-print("Sample rate: \(track)")
-*/
-//returnable = (track.naturalSize)
+ func signalProcess2() -> Void {
+     // For each recording, create an array of intensity values
+     for var record in recordings where !record.processed {
+         // Create AVAudioFile and extract some properties
+         let audioFile = try! AVAudioFile(forReading: record.fileURL)
+         let audioFormat = audioFile.processingFormat
+         let audioSamplingRate = Float(audioFormat.sampleRate)
+         let audioLengthSamples = Float(audioFile.length)
 
+         // Define processing parameters
+         let audioSegmentSize_sec: Float = 40e-3
+         let overlapPercentage: Float = 0.90
 
-/*
- x: ndarray
-     Signal array
- n: int
-     Number of data segments
- p: int
-     Number of values to overlap
- opt: str
-     Initial condition options. default sets the first `p` values to zero,
-     while 'nodelay' begins filling the buffer immediately.
+         // Calculate the segment sizes needed for processing based off parameters
+         let audioSegmentSize_samples = Int(floor(audioSegmentSize_sec * audioSamplingRate))
+         let audioSegmentSize_overlap = Int(floor(Float(audioSegmentSize_samples) * overlapPercentage))
+
+         // Calculate the start position offset and number of extensions
+         let newStartPositionOffset = audioSegmentSize_samples - audioSegmentSize_overlap
+         let numberOfSegments = Int( floor( (audioLengthSamples - Float(audioSegmentSize_samples)) / Float(newStartPositionOffset) ) + 1 )
+
+         // Create array of floats for the values calculated and audio buffer
+         var signalIntensityValues: [Float]
+         var signalPitchValues: [Float]
+         var buffer = AVAudioPCMBuffer()
+
+         do {
+             buffer = try AVAudioPCMBuffer(url: record.fileURL)!
+         }
+         
+         catch {
+             print("ERROR: Could not create buffer!")
+         }
+
+         // Call the getIntensity function for the recording's buffer, returns unfiltered array
+         signalIntensityValues = buffer.getIntensity(segmentSize: audioSegmentSize_samples, startOffset: newStartPositionOffset, segments: numberOfSegments)!
+
+         // Call the getPitch function for the recording's buffer, returns unfiltered array
+         signalPitchValues = buffer.getPitch(segmentSize: audioSegmentSize_samples, startOffset: newStartPositionOffset, segments: numberOfSegments, sampRate: audioSamplingRate)!
+
+         // Determine noise level
+         var noise_level: Float = 0.0
+         vDSP_meanv(signalIntensityValues, 1, &noise_level, 10)
+         noise_level += 10
+
+         // Filter out all values above noise level into a new filtered array
+         var filteredIntensityValues = Array(repeating: Float(0), count: 1)
+         var filteredPitchValues = [Float(0)]
+
+         for iv in signalIntensityValues.startIndex..<signalIntensityValues.endIndex {
+             if signalIntensityValues[iv] > noise_level {
+                 filteredIntensityValues.append(signalIntensityValues[iv])
+                 filteredPitchValues.append(signalPitchValues[iv])
+             }
+         }
+
+         // Remove initial zero in filtered arrays
+         filteredIntensityValues.removeFirst()
+         filteredPitchValues.removeFirst()
+
+         // Call helper functions for metrics and save the values into the recording data model
+         let dur: Float = calcDuration(filteredIntensityValues, audioSegmentSize_sec, overlapPercentage)
+         processings.duration = dur
+
+         let inten: Float = calcMeanIntensity(filteredIntensityValues)
+         processings.intensity = inten
+
+         let meanP: Float = calcMeanPitch(filteredPitchValues)
+         processings.pitch_mean = meanP
+
+         let minP: Float = calcMinPitch(filteredPitchValues)
+         processings.pitch_min = minP
+
+         let maxP: Float = calcMaxPitch(filteredPitchValues)
+         processings.pitch_max = maxP
+
+         // Change processing state to true
+         let proc = true
+         record.processed = proc
+
+     } //End for
+ } // End fxn
  */
 
+// Deleting urls
 /*
-var x: [(Int, Int)] = []
-var n: Int = 0
-var p: Int = 0
-var opt: String = ""
-
-var pitch = AVAudioUnitTimePitch()
-*/
-
-//AVAsset *asset = [AVAsset assetWithURL:[NSURL fileURLWithPath:locationUrl]];
+ func deleteRecording(urlsToDelete: [URL]) {
+     
+     for url in urlsToDelete {
+         print("deleted: \(url.lastPathComponent)")
+         do {
+            try FileManager.default.removeItem(at: url)
+         } catch {
+             print("File could not be deleted!")
+         }
+     }
+     
+     fetchRecordings()
+ }
+ */

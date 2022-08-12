@@ -34,6 +34,9 @@ struct VoiceQuestionView: View {
             
             navSection
         }.frame(width: svm.content_width)
+            .onAppear() {
+                print(userSettings.voice_plan)
+            }
     }
 }
 
@@ -105,18 +108,18 @@ extension VoiceQuestionView {
             self.userSettings.voice_plan = 2
         }) {
             ZStack {
-                Image(userSettings.voice_plan == 1 ? unselect_img : select_img)
+                Image(userSettings.voice_plan == 2 ? select_img : unselect_img)
                     .resizable()
                     .scaledToFit()
                 
                 HStack {
                     VStack(alignment: .leading) {
                         Text("Customize My Own Plan")
-                            .foregroundColor(userSettings.voice_plan == 1 ? Color.gray : Color.white)
+                            .foregroundColor(userSettings.voice_plan == 2 ? Color.white : Color.gray)
                             .font(._buttonFieldCopyLarger)
                         
                         Text("Let me decide which tasks and measurements I want.")
-                            .foregroundColor(userSettings.voice_plan == 1 ? Color.DARK_PURPLE : Color.white)
+                            .foregroundColor(userSettings.voice_plan == 2 ? Color.white : Color.DARK_PURPLE)
                             .font(._subCopy)
                     }
                     .padding(.leading, svm.content_width / 5)

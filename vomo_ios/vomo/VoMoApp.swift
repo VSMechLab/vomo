@@ -44,7 +44,6 @@ struct SplashScreen: View {
             }
             .ignoresSafeArea(.all, edges: .all)
             .onAppear() {
-                print("Goal Active: \(goal.active())")
                 if !goal.active() {
                     goal.entered = 0
                 }

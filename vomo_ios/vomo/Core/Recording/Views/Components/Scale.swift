@@ -91,7 +91,7 @@ struct Scale: View {
                     }
                     .padding(.horizontal, -5)
                     .frame(width: svm.content_width - 30, alignment: .center)
-                    .padding(.bottom, 60)
+                    .padding(.bottom, 55)
                 }
                 
                 VStack {

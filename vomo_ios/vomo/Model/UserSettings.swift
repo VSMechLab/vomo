@@ -74,7 +74,7 @@ class UserSettings: ObservableObject {
     
     @Published var pitch: Bool {
         didSet {
-            UserDefaults.standard.set(allTasks, forKey: "pitch")
+            UserDefaults.standard.set(pitch, forKey: "pitch")
         }
     }
     @Published var CPP: Bool {
@@ -89,7 +89,7 @@ class UserSettings: ObservableObject {
     }
     @Published var duration: Bool {
         didSet {
-            UserDefaults.standard.set(duration, forKey: "hnr")
+            UserDefaults.standard.set(duration, forKey: "duration")
         }
     }
     @Published var minPitch: Bool {
@@ -126,6 +126,22 @@ class UserSettings: ObservableObject {
             UserDefaults.standard.set(voice_onset, forKey: "voiceOnset")
         }
     }
+    @Published var sexAtBirth: String {
+        didSet {
+            UserDefaults.standard.set(sexAtBirth, forKey: "sex_at_birth")
+        }
+    }
+    @Published var gender: String {
+        didSet {
+            UserDefaults.standard.set(gender, forKey: "gender")
+        }
+    }
+    @Published var dateOnset: String {
+        didSet {
+            UserDefaults.standard.set(dateOnset, forKey: "date_onset")
+        }
+    }
+    
     @Published var current_smoker: Bool {
         didSet {
             UserDefaults.standard.set(current_smoker, forKey: "currentSmoker")
@@ -165,7 +181,7 @@ class UserSettings: ObservableObject {
         self.pitch = UserDefaults.standard.object(forKey: "pitch") as? Bool ?? false
         self.CPP = UserDefaults.standard.object(forKey: "cpp") as? Bool ?? false
         self.intensity = UserDefaults.standard.object(forKey: "intensity") as? Bool ?? false
-        self.duration = UserDefaults.standard.object(forKey: "hnr") as? Bool ?? false
+        self.duration = UserDefaults.standard.object(forKey: "duration") as? Bool ?? false
         self.minPitch = UserDefaults.standard.object(forKey: "min_pitch") as? Bool ?? false
         self.maxPitch = UserDefaults.standard.object(forKey: "max_pitch") as? Bool ?? false
         
@@ -174,6 +190,13 @@ class UserSettings: ObservableObject {
         
         /// Profile Questions
         self.voice_onset = UserDefaults.standard.object(forKey: "voiceOnset") as? Bool ?? false
+        /*
+         Add sex (at birth), gender, Date Onset
+         */
+        self.sexAtBirth = UserDefaults.standard.object(forKey: "sex_at_birth") as? String ?? ""
+        self.gender = UserDefaults.standard.object(forKey: "gender") as? String ?? ""
+        self.dateOnset = UserDefaults.standard.object(forKey: "date_onset") as? String ?? ""
+        
         self.current_smoker = UserDefaults.standard.object(forKey: "currentSmoker") as? Bool ?? false
         self.have_reflux = UserDefaults.standard.object(forKey: "haveReflux") as? Bool ?? false
         self.have_asthma = UserDefaults.standard.object(forKey: "haveAsthma") as? Bool ?? false

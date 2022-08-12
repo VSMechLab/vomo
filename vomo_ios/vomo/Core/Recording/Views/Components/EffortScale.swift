@@ -8,12 +8,13 @@
 import SwiftUI
 
 struct EffortScale: View {
-    let scale_img = "VM_11-scale-bg-ds"
+    let scale_img = "VM_11-empty-scale-bg-ds"
     let select_img = "VM_11-select-btn-ds"
 
     @Binding var position: Int
     
     @State private var svm = SharedViewModel()
+    @State private var vm = RecordingViewModel()
     
     let prompt: Int
     
@@ -23,12 +24,95 @@ struct EffortScale: View {
                 .resizable()
                 .scaledToFit()
             
+            ZStack {
+                VStack {
+                    HStack {
+                        Text("How much effort did it take to make a voice?")
+                            .font(._question)
+                            .foregroundColor(Color.BODY_COPY)
+                            .multilineTextAlignment(.leading)
+                        Spacer()
+                    }
+                    
+                    Spacer()
+                }.padding()
+            }
+            
+            ZStack {
+                VStack(spacing: 0) {
+                    Spacer()
+                    
+                    HStack(spacing: 0) {
+                        // 0. Never
+                        Button(action: {
+                            self.position = 0
+                        }) {
+                            Image(position == 0 ? select_img : "").resizable().frame(width: 28, height: 28)
+                        }
+                        
+                        Spacer()
+                        
+                        // 1. Almost Never
+                        Button(action: {
+                            self.position = 1
+                        }) {
+                            Image(position == 1 ? select_img : "").resizable().frame(width: 28, height: 28)
+                        }
+                        
+                        Spacer()
+                        
+                        // 2. Sometimes
+                        Button(action: {
+                            self.position = 2
+                        }) {
+                            Image(position == 2 ? select_img : "").resizable().frame(width: 28, height: 28)
+                        }
+                        
+                        Spacer()
+                        
+                        // 3. Almost Always
+                        Button(action: {
+                            self.position = 3
+                        }) {
+                            Image(position == 3 ? select_img : "").resizable().frame(width: 28, height: 28)
+                        }
+                        
+                        Spacer()
+                        
+                        // 4. Always
+                        Button(action: {
+                            self.position = 4
+                        }) {
+                            Image(position == 4 ? select_img : "").resizable().frame(width: 28, height: 28)
+                        }.padding(.trailing, 4)
+                    }
+                    .padding(.horizontal, -5)
+                    .frame(width: svm.content_width - 30, alignment: .center)
+                    .padding(.bottom, 55)
+                }
+                
+                VStack {
+                    Spacer()
+                    HStack {
+                        Text("Minimal effort,\neasy speaking")
+                        Spacer()
+                        Text("Maximal effort,\nhard to speak")
+                    }
+                    .padding(.horizontal, 20)
+                    .multilineTextAlignment(.center)
+                    .font(.questionnaireScale)
+                    .foregroundColor(Color.BODY_COPY)
+                    .padding(.bottom, 20)
+                }
+            }
+            /*
             GeometryReader { geometry in
                 VStack(spacing: 0) {
                     Color.green.opacity(0.2).frame(height: geometry.size.height / 2)
                     Color.blue.opacity(0.2).frame(height: geometry.size.height / 2)
                 }
             }
+            */
         }.frame(width: svm.content_width)
     }
 }

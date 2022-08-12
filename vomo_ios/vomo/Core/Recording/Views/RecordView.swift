@@ -30,7 +30,6 @@ struct ContentView: View {
             HStack(spacing: 0) {
                 backSection
                     .padding(.leading, 2)
-                    .background(Color.gray.opacity(0.2))
                 
                 Spacer()
                 
@@ -38,25 +37,35 @@ struct ContentView: View {
                     switch exercise {
                     case 0..<3:
                         vocalSection
+                            .onAppear() {
+                                recordingState.unfocused = false
+                            }
                     case 3:
                         QuestionnaireView()
+                            .onAppear() {
+                                recordingState.unfocused = true
+                            }
                     case 4:
                         VocalEffortView()
+                            .onAppear() {
+                                recordingState.unfocused = true
+                            }
                     case 5:
                         JournalView()
+                            .onAppear() {
+                                recordingState.unfocused = true
+                            }
                         Spacer()
                     default:
                         Text("ERROR")
                     }
                 }
                 .frame(width: svm.content_width - 10)
-                .background(Color.green.opacity(0.1))
                 
                 Spacer()
                 
                 nextSection
                     .padding(.trailing, 2)
-                    .background(Color.gray.opacity(0.2))
             }
             .padding()
             .onAppear() {
@@ -73,22 +82,23 @@ struct ContentView: View {
 extension ContentView {
     private var vocalSection: some View {
         VStack {
-            VStack {
-                Spacer()
-                Text("\(recordingState.status())")
-                    .font(._recordStateStatus)
-                    .foregroundColor(Color.BODY_COPY)
-                    .padding()
-                Text(exercise != 3 ? vm.prompt[exercise] : "")
-                    .multilineTextAlignment(.center)
-                    .font(._headline)
-                Spacer()
+            Text("\(recordingState.status())")
+                .font(._recordStateStatus)
+                .foregroundColor(Color.BODY_COPY)
+                .padding()
+            Text(exercise != 3 ? vm.prompt[exercise] : "")
+                .multilineTextAlignment(.center)
+                .font(._headline)
+            
+            if recordingState.state != 2 {
                 promptPlaybackButton
+                    .padding(.bottom, 100)
             }
-            .frame(height: UIScreen.main.bounds.height / 3)
             
             Spacer()
         }
+        //.frame(height: UIScreen.main.bounds.height / 3)
+        //.padding(.top, 10)
     }
     
     private var backSection: some View {

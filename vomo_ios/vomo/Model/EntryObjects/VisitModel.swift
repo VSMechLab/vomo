@@ -10,10 +10,12 @@ import Foundation
 
 class VisitModel: Identifiable, Codable {
     var date: Date
-    var visitType: String
+    var type: String
+    var note: String
     
-    init(date: Date, visitType: String) {
+    init(date: Date, type: String, note: String) {
         self.date = date
-        self.visitType = visitType
+        self.type = type
+        self.note = note
     }
 }

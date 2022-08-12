@@ -25,7 +25,6 @@ struct RecordingSection: View {
     @State private var svm = SharedViewModel()
     @State private var selection = -1
     @State private var playAt: Date = .now
-    @State private var deletionSelection: Date = .now
     @State private var exercisesPresent: [String] = []
     @State private var timeElapsed: Double = 0.0
     @State private var timeLeft: Double = 0.0
@@ -78,11 +77,97 @@ struct RecordingSection: View {
         for index in offsets {
             urlsToDelete.append(audioRecorder.recordings[index].fileURL)
         }
-        audioRecorder.deleteRecording(urlsToDelete: urlsToDelete)
+        print("Deleting url here: \(urlsToDelete)")
+        audioRecorder.deleteRecording(urlToDelete: urlsToDelete.last!)
+        
+        entries.recordings.remove(atOffsets: offsets)
+        
+        for entry in entries.recordings {
+            print("Entry: \(entry.createdAt)")
+        }
+        for audio in audioRecorder.recordings {
+            print("Audio: \(audio.createdAt)")
+        }
     }
 }
 
 extension RecordingSection {
+    private var headerSection: some View {
+        HStack {
+            Text(type)
+                .font(._fieldLabel)
+            
+            Spacer()
+            
+            Button(action: {
+                withAnimation {
+                    self.active = 0
+                }
+            }) {
+                Image(dropdown)
+                    .resizable()
+                    .rotationEffect(.degrees(-180))
+                    .frame(width: 20, height: 8.5, alignment: .center)
+            }
+        }
+    }
+    
+    private var playHeader: some View {
+        Group {
+            HStack {
+                Text(retrieve.preciseRecord.toStringHour())
+                Spacer()
+                ForEach(audioRecorder.filterRecordingsDayExercise(focus: self.retrieve.focusDay, taskNum: self.retrieve.focusDayExercise), id: \.createdAt) { record in
+                    if retrieve.preciseRecord == record.createdAt {
+                        Text("\((audioRecorder.assetTime(file: record.fileURL)), specifier: "%.0f")")
+                            .foregroundColor(retrieve.preciseRecord == record.createdAt ? Color.white : Color.BODY_COPY)
+                    }
+                }
+            }
+            .font(._fieldLabel)
+            
+            GeometryReader { geometry in
+                ZStack {
+                    HStack(spacing: 0) {
+                        Color.TEAL
+                            .frame(width: geometry.size.width * self.timeElapsed / endTime(), height: 2)
+                        Color.white
+                            .frame(width: geometry.size.width * self.timeLeft / endTime(), height: 2)
+                    }
+                    HStack {
+                        Color.clear.frame(width: geometry.size.width * self.timeElapsed / endTime())
+                        Circle()
+                            .foregroundColor(Color.TEAL)
+                            .frame(width: 6)
+                        Color.clear.frame(width: geometry.size.width * self.timeLeft / endTime())
+                    }
+                }
+                .frame(width: geometry.size.width)
+            }
+            .frame(height: 6)
+            
+            HStack {
+                Text("\(self.timeElapsed, specifier: "%.0f")")
+                Spacer()
+                Text("\(self.timeLeft, specifier: "%.0f")")
+            }
+            .foregroundColor(Color.white)
+            .font(._fieldLabel)
+            .onAppear() {
+                self.timeLeft = endTime()
+            }
+            .onReceive(timer) { _ in
+                if timeElapsed < endTime() && audioPlayer.isPlaying {
+                    self.timeElapsed += 1 / 60
+                    self.timeLeft -= 1 / 60
+                } else {
+                    self.timeElapsed = 0
+                    self.timeLeft = endTime()
+                }
+            }
+        }
+    }
+    
     private var exerciseSelectionSection: some View {
         HStack {
             if !exercisesPresent.contains("1") {
@@ -99,6 +184,7 @@ extension RecordingSection {
                 Button(action: {
                     selection = 1
                     retrieve.focusDayExercise = selection
+                    self.retrieve.preciseRecord = audioRecorder.filterRecordingsDayExercise(focus: self.retrieve.focusDay, taskNum: selection).first?.createdAt ?? .now
                 }) {
                     ZStack {
                         Rectangle()
@@ -172,102 +258,29 @@ extension RecordingSection {
         .padding(.vertical)
     }
     
-    private var playHeader: some View {
-        Group {
-            HStack {
-                Text(focus.toStringHour())
-                Spacer()
-                ForEach(audioRecorder.filterRecordingsDayExercise(focus: self.retrieve.focusDay, taskNum: self.retrieve.focusDayExercise), id: \.createdAt) { record in
-                    if retrieve.preciseRecord == record.createdAt {
-                        Text("\((audioRecorder.assetTime(file: record.fileURL)), specifier: "%.0f")")
-                            .foregroundColor(retrieve.preciseRecord == record.createdAt ? Color.white : Color.BODY_COPY)
-                    }
-                }
-            }
-            .font(._fieldLabel)
-            
-            GeometryReader { geometry in
-                ZStack {
-                    HStack(spacing: 0) {
-                        Color.TEAL
-                            .frame(width: geometry.size.width * self.timeElapsed / endTime(), height: 2)
-                        Color.white
-                            .frame(width: geometry.size.width * self.timeLeft / endTime(), height: 2)
-                    }
-                    HStack {
-                        Color.clear.frame(width: geometry.size.width * self.timeElapsed / endTime())
-                        Circle()
-                            .foregroundColor(Color.TEAL)
-                            .frame(width: 6)
-                        Color.clear.frame(width: geometry.size.width * self.timeLeft / endTime())
-                    }
-                }
-                .frame(width: geometry.size.width)
-            }
-            .frame(height: 6)
-            
-            HStack {
-                Text("\(self.timeElapsed, specifier: "%.0f")")
-                Spacer()
-                Text("\(self.timeLeft, specifier: "%.0f")")
-            }
-            .foregroundColor(Color.white)
-            .font(._fieldLabel)
-            .onAppear() {
-                self.timeLeft = endTime()
-            }
-            .onReceive(timer) { _ in
-                if timeElapsed < endTime() && audioPlayer.isPlaying {
-                    self.timeElapsed += 1 / 60
-                    self.timeLeft -= 1 / 60
-                } else {
-                    self.timeElapsed = 0
-                    self.timeLeft = endTime()
-                }
-            }
-        }
-    }
-    
     private var recordingsList: some View {
         Group {
             List {
-                ForEach(audioRecorder.filterRecordingsDayExercise(focus: self.retrieve.focusDay, taskNum: self.retrieve.focusDayExercise), id: \.createdAt) { record in
-                    Button(action: {
-                        self.retrieve.preciseRecord = record.createdAt
-                    }) {
-                        HStack(spacing: 0) {
-                            Text("Task: \(audioRecorder.fileTask(file: record.fileURL))")
-                            Spacer()
-                            Text("\(audioRecorder.fileName(file: record.fileURL))")
-                        }
-                        .foregroundColor(retrieve.preciseRecord == record.createdAt ? Color.white : Color.BODY_COPY)
-                        .font(._fieldLabel)
-                    }.listRowBackground(Color.clear)
+                ForEach(audioRecorder.recordings, id: \.createdAt) { record in
+                    if record.createdAt.toStringDay() == retrieve.focusDay.toStringDay()  && audioRecorder.taskNum(selection: selection, file: record.fileURL) {
+                        Button(action: {
+                            self.retrieve.preciseRecord = record.createdAt
+                        }) {
+                            HStack(spacing: 0) {
+                                Text("Task: \(audioRecorder.fileTask(file: record.fileURL))")
+                                Spacer()
+                                Text("\(audioRecorder.fileName(file: record.fileURL))")
+                            }
+                            .foregroundColor(retrieve.preciseRecord == record.createdAt ? Color.white : Color.BODY_COPY)
+                            .font(._fieldLabel)
+                        }.listRowBackground(Color.clear)
+                    }
                 }
+                .onDelete(perform: delete)
             }
             .listStyle(PlainListStyle())
             .listRowInsets(.none)
             .listRowSeparator(.hidden)
-        }
-    }
-    
-    private var headerSection: some View {
-        HStack {
-            Text(type)
-                .font(._fieldLabel)
-            
-            Spacer()
-            
-            Button(action: {
-                withAnimation {
-                    self.active = 0
-                }
-            }) {
-                Image(dropdown)
-                    .resizable()
-                    .rotationEffect(.degrees(-180))
-                    .frame(width: 20, height: 8.5, alignment: .center)
-            }
         }
     }
     
@@ -280,7 +293,7 @@ extension RecordingSection {
                     }
                 }
             }) {
-                Image(systemName: "square.and.arrow.up.circle")
+                Image(systemName: "square.and.arrow.up")
             }
             
             Spacer()
@@ -299,7 +312,7 @@ extension RecordingSection {
                     }
                 } else {
                     Button(action: {
-                        //self.audioPlayer.stopPlayback()
+                        self.audioPlayer.stopPlayback()
                     }) {
                         Image(systemName: "stop.fill")
                             .imageScale(.large)

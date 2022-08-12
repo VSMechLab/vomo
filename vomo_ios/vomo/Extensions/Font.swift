@@ -15,6 +15,9 @@ extension Font {
     static var _subHeadline: Font {
         Font.custom("Roboto-Bold", size: 21)
     }
+    static var _subsubHeadline: Font {
+        Font.custom("Roboto-Bold", size: 14)
+    }
     static var _bodyCopy: Font {
         Font.custom("Roboto-Light", size: 12)
     }

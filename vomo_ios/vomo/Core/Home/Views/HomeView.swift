@@ -12,26 +12,23 @@ import Combine
 import AVFoundation
 
 struct HomeView: View {
-    @EnvironmentObject var viewRouter: ViewRouter
-    @EnvironmentObject var entries: Entries
-    @EnvironmentObject var recordingState: RecordState
     @EnvironmentObject var audioRecorder: AudioRecorder
-    @EnvironmentObject var retrieve: Retrieve
-    
-    let background_img = "VM_7-cover-waves-gfx"
-    
     @State private var svm = SharedViewModel()
+    @State private var vm = HomeViewModel()
+    
+    @EnvironmentObject var entries: Entries
+    @EnvironmentObject var viewRouter: ViewRouter
+    @EnvironmentObject var retrieve: Retrieve
+    @EnvironmentObject var recordingState: RecordState
     
     @State private var focusSelection = UserDefaults.standard.integer(forKey: "focus_selection")
+    @State private var visitPopup = false
+    
     let edited_before = UserDefaults.standard.bool(forKey: "edited_before")
     let username = UserDefaults.standard.string(forKey: "first_name") ?? ""
-    
-    // CHANGED: fixed track names per Friedman's comments
     let prompt = ["a custom", "the Spasmodic Dysphonia", "the Recurrent Respiratory Pappiloma", "the Parkinson's Disease", "the Gender-Affirming Voice Care", "the Vocal Fold/Paresis", "the default"]
-    
     let forwardArrow = "VoMo-App-Assets_2_arrow-gif"
-    
-    @State private var visitPopup = false
+    let background_img = "VM_7-cover-waves-gfx"
     
     var body: some View {
         ZStack {
@@ -42,7 +39,11 @@ struct HomeView: View {
                 
                 HStack(spacing: 0) {
                     Text("Hi, ")
-                    Text(username)
+                    Button(action: {
+                        viewRouter.currentPage = .playground
+                    }) {
+                        Text(username)
+                    }
                         .foregroundColor(Color.DARK_PURPLE)
                     Spacer()
                 }
@@ -80,7 +81,10 @@ struct HomeView: View {
             
             ZStack {
                 if visitPopup {
+                    Color.white.opacity(0.1).edgesIgnoringSafeArea(.all)
                     HomePopup(visitPopup: self.$visitPopup)
+                        .shadow(color: Color.gray.opacity(0.2), radius: 1, x: 0, y: 0)
+                        .shadow(radius: 1)
                 }
             }
             .transition(.scale)
@@ -97,6 +101,7 @@ extension HomeView {
                 Text("Total Goals")
                     .font(._subHeadline)
                 Spacer()
+                /*
                 Button(action: {
                     viewRouter.currentPage = .activityView
                 }) {
@@ -109,6 +114,7 @@ extension HomeView {
                     .font(._CTALink)
                     .foregroundColor(Color.DARK_PURPLE)
                 }
+                */
             }
             TotalGoalsRow(audioRecorder: AudioRecorder(), visitPopup: self.$visitPopup)
         }.frame(width: svm.content_width)
@@ -125,7 +131,7 @@ extension HomeView {
                         Button(action: {
                             if !audioRecorder.recordings.isEmpty {
                                 viewRouter.currentPage = .entryView
-                                recordingState.selectedEntry = entries.recordings.last?.createdAt ?? .now
+                                self.recordingState.selectedEntry = entries.recordings.last?.createdAt ?? .now
                             }
                         }) {
                             Text("Details")
@@ -210,5 +216,13 @@ extension HomeView {
             //Button("dev view") { self.viewRouter.currentPage = .playground }
             Spacer()
         }
+    }
+}
+
+struct HomeView_Previews: PreviewProvider {
+    static var previews: some View {
+        HomeView()
+            .environmentObject(AudioRecorder())
+            .environmentObject(Entries())
     }
 }

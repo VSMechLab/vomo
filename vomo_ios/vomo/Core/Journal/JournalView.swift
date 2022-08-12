@@ -114,6 +114,7 @@ struct JournalView: View {
                 .zIndex(1)
             }
         }
+        .focused($focused)
         .toolbar {
             ToolbarItemGroup(placement: .keyboard) {
                 Button("Done") {

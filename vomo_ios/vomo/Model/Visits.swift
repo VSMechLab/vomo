@@ -29,7 +29,6 @@ class Visits: ObservableObject {
         self.visits = savedItems
     }
     
-    
     func save() {
         if let encodedData = try? JSONEncoder().encode(visits) {
             UserDefaults.standard.set(encodedData, forKey: key)
@@ -37,6 +36,7 @@ class Visits: ObservableObject {
     }
     
     func saveVisits() {
-        self.saveVisits()
+        print("Fix later")
+        //self.saveVisits()
     }
 }

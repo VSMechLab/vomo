@@ -15,14 +15,12 @@ class GoalModel: ObservableObject {
         didSet {
             UserDefaults.standard.set(perWeek, forKey: "per_week")
             startDate = Date.now.toStringDay()
-            print(startDate)
         }
     }
     @Published var numWeeks: Int {
         didSet {
             UserDefaults.standard.set(numWeeks, forKey: "num_weeks")
             startDate = Date.now.toStringDay()
-            print(startDate)
         }
     }
     @Published var entered: Int {
@@ -77,12 +75,8 @@ extension GoalModel {
     
     func active() -> Bool {
         if startDate == "" || convertDate().timeIntervalSinceNow > endDate().timeIntervalSinceNow {
-            print("start: \(convertDate().timeIntervalSinceNow)")
-            print("end: \(endDate().timeIntervalSinceNow)")
             return false
         } else {
-            print("start: \(convertDate().timeIntervalSinceNow)")
-            print("end: \(endDate().timeIntervalSinceNow)")
             return true
         }
     }

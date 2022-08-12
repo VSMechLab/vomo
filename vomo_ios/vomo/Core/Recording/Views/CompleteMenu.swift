@@ -58,60 +58,11 @@ struct CompleteMenu: View {
                         }
                         
                         HStack {
-                            VStack {
-                                Button(action: {
-                                    if audioPlayer.isPlaying == false {
-                                        self.audioPlayer.startPlayback(audio: retreiveLastRecording())
-                                    } else {
-                                        self.audioPlayer.stopPlayback()
-                                    }
-                                    self.timer = 0
-                                }) {
-                                    Image(audioPlayer.isPlaying ? stop_play_img : play_img)
-                                        .resizable()
-                                        .frame(width: 40, height: 40)
-                                }
-                                
-                                Text(audioPlayer.isPlaying ? "Stop" : "Play")
-                                    .font(._bodyCopy)
-                                    .foregroundColor(Color.BODY_COPY)
-                            }
-                            .frame(width: 55)
+                            play
                             
-                            VStack {
-                                Button(action: {
-                                    self.recordingState.state = 0
-                                    self.entries.recordings.append(RecordingModel(createdAt: audioRecorder.recordings.last!.createdAt, taskNum: promptSelect + 1))
-                                    self.entries.saveItems()
-                                    self.timer = 0
-                                }) {
-                                    Image(approved_img)
-                                        .resizable()
-                                        .frame(width: 40, height: 40)
-                                }
-                                
-                                Text("Approved")
-                                    .font(._bodyCopy)
-                                    .foregroundColor(Color.BODY_COPY)
-                            }
-                            .frame(width: 55)
-                            .padding(.horizontal, 25)
-                            VStack {
-                                Button(action: {
-                                    deleteLastRecording()
-                                    self.recordingState.state = 0
-                                    self.timer = 0
-                                }) {
-                                    Image(retry_img)
-                                        .resizable()
-                                        .frame(width: 40, height: 40)
-                                }
-                                
-                                Text("Try Again")
-                                    .font(._bodyCopy)
-                                    .foregroundColor(Color.BODY_COPY)
-                            }
-                            .frame(width: 55)
+                            approved
+                            
+                            tryAgain
                         }
                     }.frame(width: 275, height: 150)
                 }
@@ -139,9 +90,84 @@ struct CompleteMenu: View {
     func delete(at offsets: IndexSet) {
             
         var urlsToDelete = [URL]()
+        
         for index in offsets {
             urlsToDelete.append(audioRecorder.recordings[index].fileURL)
         }
-        audioRecorder.deleteRecording(urlsToDelete: urlsToDelete)
+        audioRecorder.deleteRecording(urlToDelete: urlsToDelete.first!)
+    }
+}
+
+extension CompleteMenu {
+    private var play: some View {
+        VStack {
+            Button(action: {
+                if audioPlayer.isPlaying == false {
+                    self.audioPlayer.startPlayback(audio: retreiveLastRecording())
+                } else {
+                    self.audioPlayer.stopPlayback()
+                }
+                self.timer = 0
+            }) {
+                Image(audioPlayer.isPlaying ? stop_play_img : play_img)
+                    .resizable()
+                    .frame(width: 40, height: 40)
+            }
+            
+            Text(audioPlayer.isPlaying ? "Stop" : "Play")
+                .font(._bodyCopy)
+                .foregroundColor(Color.BODY_COPY)
+        }
+        .frame(width: 55)
+    }
+    
+    private var approved: some View {
+        VStack {
+            Button(action: {
+                // old code
+                self.recordingState.state = 0
+                // saves recording under entries.recordings
+                let processings = audioRecorder.process(fileURL: audioRecorder.recordings.last!.fileURL)
+                self.entries.recordings.append(RecordingModel(createdAt: audioRecorder.recordings.last?.createdAt ?? .now, duration: processings.duration, intensity: processings.intensity))
+                self.entries.saveItems()
+                self.timer = 0
+                
+                for entry in entries.recordings {
+                    print("Entry: \(entry.createdAt)")
+                }
+                for audio in audioRecorder.recordings {
+                    print("Audio: \(audio.createdAt)")
+                }
+            }) {
+                Image(approved_img)
+                    .resizable()
+                    .frame(width: 40, height: 40)
+            }
+            
+            Text("Approved")
+                .font(._bodyCopy)
+                .foregroundColor(Color.BODY_COPY)
+        }
+        .frame(width: 55)
+        .padding(.horizontal, 25)
+    }
+    
+    private var tryAgain: some View {
+        VStack {
+            Button(action: {
+                deleteLastRecording()
+                self.recordingState.state = 0
+                self.timer = 0
+            }) {
+                Image(retry_img)
+                    .resizable()
+                    .frame(width: 40, height: 40)
+            }
+            
+            Text("Try Again")
+                .font(._bodyCopy)
+                .foregroundColor(Color.BODY_COPY)
+        }
+        .frame(width: 55)
     }
 }

@@ -28,6 +28,12 @@ extension Date {
         return (strippedLhs.timeIntervalSinceReferenceDate - strippedRhs.timeIntervalSinceReferenceDate) / (24 * 60 * 60)
     }
     
+    static func + (lhs: Date, rhs: Date) -> TimeInterval {
+        let strippedLhs = lhs.removeTimeStamp!
+        let strippedRhs = rhs.removeTimeStamp!
+        return (strippedLhs.timeIntervalSinceReferenceDate + strippedRhs.timeIntervalSinceReferenceDate) / (24 * 60 * 60)
+    }
+    
     func toString( dateFormat format  : String ) -> String
     {
         let dateFormatter = DateFormatter()
@@ -72,6 +78,48 @@ extension Date {
     func toYear() -> String {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yy"
+        return dateFormatter.string(from: self)
+    }
+    
+    public var splitYear: Int {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy"
+        return Int(dateFormatter.string(from: self)) ?? 0
+    }
+    
+    public var splitMonth: Int {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "MM"
+        return Int(dateFormatter.string(from: self)) ?? 0
+    }
+    
+    public var splitDay: Int {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd"
+        return Int(dateFormatter.string(from: self)) ?? 0
+    }
+    
+    public var splitHour: Int {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "hh"
+        return Int(dateFormatter.string(from: self)) ?? 0
+    }
+    
+    public var splitMinute: Int {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "mm"
+        return Int(dateFormatter.string(from: self)) ?? 0
+    }
+    
+    public var splitSecond: Int {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "ss"
+        return Int(dateFormatter.string(from: self)) ?? 0
+    }
+    
+    public var isPM: String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "a"
         return dateFormatter.string(from: self)
     }
 }

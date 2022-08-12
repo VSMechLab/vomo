@@ -16,7 +16,7 @@ class ViewRouter: ObservableObject {
             UserDefaults.standard.set(true, forKey: "didLaunchBefore")
             currentPage = .onboardView
         } else {
-            currentPage = .onboardView
+            currentPage = .homeView
         }
     }
 }

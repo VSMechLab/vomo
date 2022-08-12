@@ -8,244 +8,365 @@
 import SwiftUI
 
 struct HomePopup: View {
+    @State private var svm = SharedViewModel()
+    @State private var vm = HomeViewModel()
+    
+    @EnvironmentObject var entries: Entries
+    @EnvironmentObject var viewRouter: ViewRouter
     @EnvironmentObject var visits: Visits
     
     @Binding var visitPopup: Bool
+    
+    @State private var date = Date()
+    @State private var type = ""
+    
     @State private var newVisit = false
-    
-    let exit_button = "VoMo-App-Assets_2_popup-close-btn"
-    let plus_button = "VoMo-App-Assets_2_8-plus-btn"
-    let button_img = "VM_Gradient-Btn"
-    let upcoming = "Upcoming"
-    let past = "past"
-    let arrow_img = "VM_Dropdown-Btn"
-    let entry_img = "VM_12-entry-field"
-    
     @State private var selected = "Upcoming"
-    @State private var date: Date = .now
     @State private var showCalendar = false
     @State private var showPicker = false
-    var visitTypes = ["Office Visit", "Therapy Visit", "Office Procedure", "Surgery", "Other"]
-    @State private var selectedVisit = ""
+    
+    @State private var note: String = ""
+    
+    @State private var showDate = false
+    @State private var showTime = false
+    
+    @State private var submitAnimation = false
+    
+    @State private var targetVisit = Date()
+    
+    let visitTypes = ["Office Visit", "Therapy Visit", "Office Procedure", "Surgery", "Other"]
+    
+    let toggleHeight: CGFloat = 37 * 0.95
+    
+    let button_img = "VM_Gradient-Btn"
+    let time_img = "_time-icon"
+    let date_img = "_date-icon"
+    let type_img = "_visit-type-icon"
+    let arrow_img = "VM_Dropdown-Btn"
     
     var body: some View {
-        VStack(spacing: 0) {
-            verticalCancelSection
-            HStack(spacing: 0) {
-                horizontalCancelSection
-                ZStack {
-                    Color.white.frame(width: 325, height: 475)
-                        .background(Color.white)
-                        .shadow(color: Color.gray, radius: 0.9)
-                    
-                    VStack {
-                        ZStack {
-                            Color.INPUT_FIELDS.cornerRadius(10)
-                            
-                            VStack {
-                                HStack {
-                                    Text(newVisit ? "Add new visit" : "Visit Log")
-                                        .font(._headline)
-                                    
-                                    Spacer()
-                                    
-                                    Button(action: {
-                                        withAnimation {
-                                            self.visitPopup.toggle()
-                                        }
-                                    }) {
-                                        Image(exit_button)
-                                            .resizable()
-                                            .frame(width: 17, height: 17)
-                                    }
-                                }.padding(5)
-                                
-                                VStack {
-                                    if self.newVisit {
-                                        newVisitSection
-                                    } else {
-                                        Button(action: {
-                                            withAnimation() {
-                                                self.newVisit.toggle()
-                                            }
-                                        }) {
-                                            SubmissionButton(label: "+ NEW VISIT")
-                                        }
-                                        .padding(.top, 5)
-                                        
-                                        HStack(spacing: 0) {
-                                            VStack(alignment: .leading) {
-                                                Text("Upcoming")
-                                                    .foregroundColor(selected == upcoming ? Color.black : Color.gray)
-                                                if selected == upcoming {
-                                                    Color.TEAL.frame(height: 7)
-                                                } else {
-                                                    Color.gray.frame(height: 7)
-                                                }
-                                            }
-                                            .onTapGesture {
-                                                if selected != upcoming {
-                                                    self.selected = upcoming
-                                                }
-                                            }
-                                            
-                                            VStack(alignment: .leading) {
-                                                Text("Past")
-                                                    .foregroundColor(selected == past ? Color.black : Color.gray)
-                                                if selected == past {
-                                                    Color.TEAL.frame(height: 7)
-                                                } else {
-                                                    Color.gray.frame(height: 7)
-                                                }
-                                            }
-                                            .onTapGesture {
-                                                if selected != past {
-                                                    self.selected = past
-                                                }
-                                            }
-                                        }
-                                        .font(._fieldLabel)
-                                        .frame(width: 300)
-                                        
-                                        visitLog
-                                    }
-                                }
-                                .transition(.slide)
-                                
-                            }.padding(.horizontal, 3)
-                        }
-                    }
-                    .padding()
-                    .frame(width: 325, height: 450)
+        ZStack {
+            VStack {
+                header
+                
+                if self.newVisit {
+                    newVisitForm
+                } else {
+                    visitLogs
                 }
-                horizontalCancelSection
             }
-            verticalCancelSection
+            .frame(width: svm.content_width * 0.9)
+            .background(Color.white)
+            .cornerRadius(2)
+            .onAppear() {
+                self.visits.getItems()
+            }
+            
+            if submitAnimation {
+                animationSection
+            }
         }
-        .onAppear() {
-            visits.getItems()
+    }
+    
+    func addNote(date: Date, type: String) {
+        for visit in visits.visits {
+            if visit.date == targetVisit {
+                print(visit.date)
+            }
         }
-        .padding()
     }
 }
 
 extension HomePopup {
-    private var newVisitSection: some View {
-        VStack(alignment: .leading) {
-            Text("Date of appointment")
-                .font(._fieldLabel)
+    private var header: some View {
+        VStack(spacing: 0) {
+            HStack {
+                Spacer()
+                Button(action: {
+                    self.visitPopup.toggle()
+                }) {
+                    Image(vm.exit_button)
+                        .resizable()
+                        .frame(width: 17, height: 17)
+                }
+            }.padding(5)
+            HStack {
+                Text(newVisit ? "Add new visit" : "Visit Log")
+                    .font(._subHeadline)
+                Spacer()
+            }.padding(5)
+            
+        }
+    }
+    
+    private var newVisitForm: some View {
+        VStack(spacing: 10) {
+            HStack {
+                Text("Date")
+                    .font(._subsubHeadline)
+                Spacer()
+            }
             
             Button(action: {
                 withAnimation() {
-                    self.showCalendar.toggle()
+                    self.showTime = false
+                    self.showDate.toggle()
                 }
             }) {
-                HStack {
-                    Text(date.toString(dateFormat: "MM/dd/yyyy"))
-                        .font(._bodyCopy)
-                    Spacer()
-                    Image(arrow_img)
-                        .resizable()
-                        .frame(width: 20, height: 10)
-                        .rotationEffect(Angle(degrees:  showCalendar ? 180 : 0))
-                }.padding(.horizontal, 7)
+                ZStack {
+                    Color.white.cornerRadius(20).frame(height: toggleHeight)
+                    
+                    HStack {
+                        Image(date_img)
+                            .resizable()
+                            .scaledToFit()
+                            .frame(height: toggleHeight * 0.8)
+                            .padding(.leading)
+                        Text(date == .now ? "Enter appointment date" : date.toString(dateFormat: "MM/dd/yyyy"))
+                            .font(._fieldCopyRegular)
+                        Spacer()
+                    }
+                }
             }
-            .frame(height: 40)
-            .background(Color.white)
-            .cornerRadius(12)
             
             ZStack {
-                if showCalendar {
+                if showDate {
                     DatePicker("", selection: $date, in: Date.now..., displayedComponents: .date)
-                    // CHANGED: removed in: Date.now..., so dates can be selected before current date
-                    DatePicker("", selection: $date, displayedComponents: .date)
                         .datePickerStyle(WheelDatePickerStyle())
-                        .frame(maxWidth: 275, maxHeight: 200)
-                        .frame(maxWidth: 275, maxHeight: 175) // CHANGED: adjusted height ot 175 from 200 to keep w/in bounds of pop up box
+                        .frame(maxWidth: 260, maxHeight: 175)
                         .clipped()
                 }
             }
             .transition(.slide)
             
-            Text("Appointment type")
-                .font(._fieldLabel)
-            
-            HStack(spacing: 0) {
-                Menu {
-                    Picker("choose", selection: $selectedVisit) {
-                        ForEach(visitTypes, id: \.self) { type in
-                            Text(type)
-                                .font(._fieldCopyRegular)
-                        }
-                    }
-                    .labelsHidden()
-                    .pickerStyle(InlinePickerStyle())
-                } label: {
-                    Text("\(selectedVisit == "" ? "Select appointment type" : selectedVisit)")
-                        .font(._fieldCopyRegular)
-                }
-                .frame(maxHeight: 400)
+            HStack {
+                Text("Time")
+                    .font(._subsubHeadline)
                 Spacer()
             }
-            .padding(.horizontal, 5)
-            .frame(height: 40)
-            .background(Color.white)
-            .cornerRadius(12)
             
-            Spacer()
+            Button(action: {
+                withAnimation() {
+                    self.showDate = false
+                    self.showTime.toggle()
+                }
+            }) {
+                ZStack {
+                    Color.white.cornerRadius(20).frame(height: toggleHeight)
+                    
+                    HStack {
+                        Image(time_img)
+                            .resizable()
+                            .scaledToFit()
+                            .frame(height: toggleHeight * 0.8)
+                            .padding(.leading)
+                        Text(self.date.toStringHour())
+                            .font(._fieldCopyRegular)
+                        Spacer()
+                    }
+                }
+            }
+            
+            ZStack {
+                if showTime {
+                    DatePicker("", selection: $date, displayedComponents: .hourAndMinute)
+                        .datePickerStyle(WheelDatePickerStyle())
+                        .frame(maxWidth: 260, maxHeight: 175)
+                        .clipped()
+                }
+            }
+            .transition(.slide)
             
             HStack {
+                Text("Type")
+                    .font(._subsubHeadline)
                 Spacer()
+            }
+            
+            Button(action: {
+                withAnimation() {
+                    self.showDate = false
+                    self.showTime = false
+                }
+            }) {
+                ZStack {
+                    Color.white.cornerRadius(20).frame(height: toggleHeight)
+                    
+                    HStack {
+                        Image(type_img)
+                            .resizable()
+                            .scaledToFit()
+                            .frame(height: toggleHeight * 0.8)
+                            .padding(.leading)
+                        
+                        
+                        Menu {
+                            Picker("Choose One", selection: $type) {
+                                ForEach(visitTypes, id: \.self) { visit in
+                                    Text("\(visit)")
+                                        .font(._fieldCopyRegular)
+                                }
+                            }
+                            .labelsHidden()
+                            .pickerStyle(InlinePickerStyle())
+
+                        } label: {
+                            Text("\(type == "" ? "Choose Type" : type)")
+                                .font(._fieldCopyRegular)
+                        }
+                        
+                        Spacer()
+                    }
+                }
+            }
+            
+            if !showDate && !showTime && self.type != "" {
                 Button(action: {
-                    withAnimation() {
-                        self.newVisit.toggle()
-                    }
-                    visits.visits.append(VisitModel(date: date, visitType: selectedVisit))
+                    submitAnimation = true
+                    self.visits.visits.append(VisitModel(date: self.date, type: self.type, note: ""))
+                    self.newVisit.toggle()
+                    
+                    print("\nAppointment Date: \(date)")
                 }) {
-                    SubmissionButton(label: "SUBMIT")
-                }
-                Spacer()
-            }
-            .padding(.bottom)
-        }
-        .padding(.horizontal, 5)
-        .padding(.top)
-        .frame(width: 300)
-    }
-    
-    private var visitLog: some View {
-        Group {
-            if selected == upcoming {
-                ScrollView(showsIndicators: false) {
-                    ForEach(visits.visits) { visit in
-                        VisitTypeRow(visit: visit, img: plus_button)
+                    ZStack {
+                        Image(button_img)
+                            .resizable()
+                            .scaledToFit()
+                        
+                        Text("Save")
+                            .font(._BTNCopy)
+                            .foregroundColor(Color.white)
                     }
+                    .padding(.horizontal)
                 }
-                .font((._fieldLabel))
-            } else {
-                ScrollView(showsIndicators: false) {
-                    ForEach(visits.visits) { visit in
-                        VisitTypeRow(visit: visit, img: plus_button)
-                    }
+            } else if !showDate && !showTime && self.type == "" {
+                ZStack {
+                    Image(button_img)
+                        .resizable()
+                        .scaledToFit()
+                    
+                    Text("Save")
+                        .font(._BTNCopy)
+                        .foregroundColor(Color.gray)
                 }
-                .font((._fieldLabel))
+                .padding(.horizontal)
             }
         }
+        .padding(10)
+        .background(
+                Color.INPUT_FIELDS.cornerRadius(25)
+        )
+        .padding(5)
     }
     
-    private var verticalCancelSection: some View {
-        Button(action: {
-            self.visitPopup.toggle()
-        }) {
-            Color.white.opacity(0)
+    private var visitLogs: some View {
+        VStack {
+            Button(action: {
+                withAnimation() {
+                    self.newVisit.toggle()
+                }
+            }) {
+                SubmissionButton(label: "+ NEW VISIT")
+            }
+            .padding(.top, 5)
+            
+            HStack(spacing: 0) {
+                VStack(alignment: .leading) {
+                    Text("Upcoming")
+                        .foregroundColor(selected == vm.upcoming ? Color.black : Color.gray)
+                        .padding(.leading, 2.5)
+                    if selected == vm.upcoming {
+                        Color.TEAL.frame(height: 7)
+                    } else {
+                        Color.gray.frame(height: 7)
+                    }
+                }
+                .onTapGesture {
+                    if selected != vm.upcoming {
+                        self.selected = vm.upcoming
+                    }
+                }
+                
+                VStack(alignment: .leading) {
+                    Text("Past")
+                        .foregroundColor(selected == vm.past ? Color.black : Color.gray)
+                        .padding(.leading, 2.5)
+                    if selected == vm.past {
+                        Color.TEAL.frame(height: 7)
+                    } else {
+                        Color.gray.frame(height: 7)
+                    }
+                }
+                .onTapGesture {
+                    if selected != vm.past {
+                        self.selected = vm.past
+                    }
+                }
+            }
+            .font(._fieldLabel)
+            
+            Group {
+                if selected == vm.upcoming {
+                    ScrollView(showsIndicators: false) {
+                        ForEach(visits.visits.reversed()) { visit in
+                            if visit.date > .now {
+                                VisitTypeRow(note: self.$note, targetVisit: self.$targetVisit, visit: visit, img: vm.plus_button)
+                            }
+                        }
+                    }
+                    .font((._fieldLabel))
+                    .frame(maxHeight: 250)
+                } else {
+                    ScrollView(showsIndicators: false) {
+                        ForEach(visits.visits.reversed()) { visit in
+                            if visit.date < .now {
+                                VisitTypeRow(note: self.$note, targetVisit: self.$targetVisit, visit: visit, img: vm.plus_button)
+                            }
+                        }
+                    }
+                    .font((._fieldLabel))
+                    .frame(maxHeight: 250)
+                }
+            }
         }
     }
     
-    private var horizontalCancelSection: some View {
-        Button(action: {
-            self.visitPopup.toggle()
-        }) {
-            Color.white.opacity(0).frame(height: 450)
+    private var animationSection: some View {
+        ZStack {
+            Color.gray
+                .frame(width: 125, height: 125)
+                .cornerRadius(10)
+            
+            VStack {
+                Image(systemName: "checkmark")
+                    .font(.largeTitle)
+                    .foregroundColor(Color.white)
+                    .padding(.vertical)
+                Text("Visit Added!")
+                    .foregroundColor(Color.white)
+                    .font(._BTNCopy)
+                    .padding(.bottom)
+            }
         }
+        .onAppear() {
+            withAnimation(.easeOut(duration: 2.5)) {
+                submitAnimation.toggle()
+            }
+        }
+        .opacity(submitAnimation ? 0.6 : 0.0)
+        .zIndex(1)
+    }
+    
+    private var visitRow: some View {
+        VStack {
+            Text("teset")
+        }
+    }
+}
+
+struct HomePopup_Previews: PreviewProvider {
+    static var previews: some View {
+        HomePopup(visitPopup: .constant(true))
+            .environmentObject(Visits())
     }
 }

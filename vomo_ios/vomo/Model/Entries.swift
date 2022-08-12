@@ -125,12 +125,49 @@ class Entries: ObservableObject {
 }
 
 extension Entries {
-    func eraseRecording(index: Int) {
-        if index <= recordings.count - 1 {
-            recordings.remove(at: index)
+    func avgDuration(criteria: String) -> Float {
+        var totalDur: Float = 0
+        var index: Float = 0
+        for record in recordings {
+            if record.createdAt.toStringDay() == criteria {
+                totalDur += record.duration
+                index += 1
+            }
+        }
+        return totalDur / index
+    }
+    
+    func avgIntensity(criteria: String) -> Float {
+        var totalInten: Float = 0
+        var index: Float = 0
+        for record in recordings {
+            if record.createdAt.toStringDay() == criteria {
+                totalInten += record.intensity
+                index += 1
+            }
+        }
+        return totalInten / index
+    }
+    
+    func entrySearch(createdAt: Date) {
+        /// Searches by createdAt date to return specific recording's duration
+        for record in recordings {
+            if createdAt == record.createdAt {
+                print("Record found here: \(record.createdAt) matched")
+            }
         }
     }
     
+    func eraseRecord(createdAt: Date) {
+        /// Searches by createdAt date to return specific recording's duration
+        for record in recordings {
+            if createdAt == record.createdAt {
+                print("Should have removed here: \(record.createdAt) matched")
+            }
+        }
+    }
+    
+    /*
     func firstRecordingFromSpecifiedDay(day: Date, filterTask: Int) -> Date {
         var target: Date = .now
         
@@ -144,35 +181,21 @@ extension Entries {
             }
         } else {
             for record in recordings {
+                /*
                 if day.toStringDay() == record.createdAt.toStringDay() && record.taskNum == filterTask {
                     target = record.createdAt
                     return target
-                }
+                }*/
             }
         }
         return target
     }
-    
-    func tasksPresent(day: Date) -> [String] {
-        var target: [String] = []
-        
-        for record in recordings {
-            if day.toStringDay() == record.createdAt.toStringDay() {
-                if record.taskNum == 1 {
-                    target.append("One")
-                } else if record.taskNum == 2 {
-                    target.append("Two")
-                } else if record.taskNum == 3 {
-                    target.append("Three")
-                }
-            }
-        }
-        
-        return target
-    }
+    */
     
     var recordingsPresent: Bool {
-        return self.recordings.isEmpty
+        // depricated, implement solution that looks at the AudioRecorder
+        return false
+        //return self.recordings.isEmpty
     }
     var journalsPresent: Bool {
         return self.journals.isEmpty
@@ -222,6 +245,7 @@ class RecordState: ObservableObject {
     @Published var state = 0
     @Published var task = 0
     @Published var selectedEntry: Date = .now
+    @Published var unfocused = false
     func status() -> String {
         switch state {
         case 0:

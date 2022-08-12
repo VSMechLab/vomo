@@ -16,5 +16,4 @@ import Foundation
 
 struct SharedViewModel {
     let content_width = 317.5//UIScreen.main.bounds.width * 0.85
-    
 }

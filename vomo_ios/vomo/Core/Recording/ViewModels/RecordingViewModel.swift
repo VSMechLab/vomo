@@ -11,7 +11,7 @@ import Foundation
 struct RecordingViewModel {
     @ObservedObject var userSettings = UserSettings()
     
-    let prompt: [String] = ["Say 'ahh' for\n5 seconds", "Say 'ahhh' for\nas long as you can", "Say 'A rainbow is a\ndivision of white light\ninto many beautiful colors'"]
+    let prompt: [String] = ["Say 'ahh' for\n5 seconds", "Say 'ahhh' for\nas long as you can", "Say 'The rainbow is a division of white light into many beautiful colors. These take the shape of a long round arch, with its path high above, and its two ends apparently beyond the horizon'"]
     let audio: [String] = ["KR_sustained_Ah_1", "KR_sustained_Ah_1", "KR_rainbow_1"]
     
     let next_img = "VM_next-nav-btn"
