@@ -233,9 +233,17 @@ extension ProfileView {
                 .font(._fieldLabel)
             
             HStack(spacing: 0) {
-                Button("") { self.userSettings.voice_onset = true }.buttonStyle(YesButton(selected: userSettings.voice_onset))
+                Button("") {
+                    withAnimation() {
+                        self.userSettings.voice_onset = true
+                    }
+                }.buttonStyle(YesButton(selected: userSettings.voice_onset))
                 Spacer()
-                Button("") { self.userSettings.voice_onset = false }.buttonStyle(NoButton(selected: userSettings.voice_onset))
+                Button("") {
+                    withAnimation() {
+                        self.userSettings.voice_onset = false
+                    }
+                }.buttonStyle(NoButton(selected: userSettings.voice_onset))
             }
             
             // CHANGED: added date of onset selection
@@ -276,6 +284,7 @@ extension ProfileView {
                     } // End if
                 } // End VStack
             } // End group
+            .transition(.slide)
         }
     }
     

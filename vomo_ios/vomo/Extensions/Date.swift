@@ -48,6 +48,20 @@ extension Date {
         return dateFormatter.string(from: self)
     }
     
+    func toViewableDate() -> String
+    {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "MMMM dd, yyyy at hh:mm a"
+        return dateFormatter.string(from: self)
+    }
+    
+    func toViewableTime() -> String
+    {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "hh:mm a"
+        return dateFormatter.string(from: self)
+    }
+    
     func toDOB() -> String
     {
         let dateFormatter = DateFormatter()

@@ -112,6 +112,12 @@ extension RecordingSection {
         }
     }
     
+    func returnMMSS(num: Double) -> String {
+        let minutes = Int(num) / 60 % 60
+        let seconds = Int(num) % 60
+        return String(format: "%02d:%02d", minutes, seconds)
+    }
+    
     private var playHeader: some View {
         Group {
             HStack {
@@ -119,7 +125,7 @@ extension RecordingSection {
                 Spacer()
                 ForEach(audioRecorder.filterRecordingsDayExercise(focus: self.retrieve.focusDay, taskNum: self.retrieve.focusDayExercise), id: \.createdAt) { record in
                     if retrieve.preciseRecord == record.createdAt {
-                        Text("\((audioRecorder.assetTime(file: record.fileURL)), specifier: "%.0f")")
+                        Text("\(returnMMSS(num: audioRecorder.assetTime(file: record.fileURL)))")
                             .foregroundColor(retrieve.preciseRecord == record.createdAt ? Color.white : Color.BODY_COPY)
                     }
                 }
@@ -147,9 +153,9 @@ extension RecordingSection {
             .frame(height: 6)
             
             HStack {
-                Text("\(self.timeElapsed, specifier: "%.0f")")
+                Text("\(returnMMSS(num: self.timeElapsed))")
                 Spacer()
-                Text("\(self.timeLeft, specifier: "%.0f")")
+                Text("\(returnMMSS(num: self.timeLeft))")
             }
             .foregroundColor(Color.white)
             .font(._fieldLabel)

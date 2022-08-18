@@ -32,6 +32,7 @@
 		AD26BA23282A13BC00AC1A7B /* ScoresView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD26BA22282A13BC00AC1A7B /* ScoresView.swift */; };
 		AD3F0EC4282057D700443591 /* QuestionnaireEffortModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD3F0EC3282057D700443591 /* QuestionnaireEffortModel.swift */; };
 		AD3F9FF6280E52E2007E6327 /* EntryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD3F9FF5280E52E2007E6327 /* EntryView.swift */; };
+		AD4650AD28AEE1B1007C28BD /* GoalsNotifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD4650AC28AEE1B1007C28BD /* GoalsNotifications.swift */; };
 		AD57E6402805CFBD00CDB31B /* RecordBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD57E63F2805CFBD00CDB31B /* RecordBackground.swift */; };
 		AD57E6422805CFFA00CDB31B /* CompleteMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD57E6412805CFFA00CDB31B /* CompleteMenu.swift */; };
 		AD57E6442805D02600CDB31B /* BackUps.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD57E6432805D02600CDB31B /* BackUps.swift */; };
@@ -82,7 +83,7 @@
 		ADA0E0E82827198500CF05D1 /* ActivityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADA0E0E72827198500CF05D1 /* ActivityView.swift */; };
 		ADA1EC9B2899C6B000EE58E3 /* AVAduioPCMBuffer.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADA1EC9A2899C6B000EE58E3 /* AVAduioPCMBuffer.swift */; };
 		ADA1EC9E2899C99400EE58E3 /* AudioKitUI in Frameworks */ = {isa = PBXBuildFile; productRef = ADA1EC9D2899C99400EE58E3 /* AudioKitUI */; };
-		ADAB43AF287751C500A853D7 /* GoalModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADAB43AE287751C500A853D7 /* GoalModel.swift */; };
+		ADAB43AF287751C500A853D7 /* Goal.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADAB43AE287751C500A853D7 /* Goal.swift */; };
 		ADBAE7F9282996A500A7BD1B /* Roboto-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = ADBAE7F8282996A500A7BD1B /* Roboto-Bold.ttf */; };
 		ADBAE7FC282996DF00A7BD1B /* Roboto-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = ADBAE7FB282996DF00A7BD1B /* Roboto-Medium.ttf */; };
 		ADBAE7FE282996E500A7BD1B /* Roboto-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = ADBAE7FD282996E500A7BD1B /* Roboto-Regular.ttf */; };
@@ -148,6 +149,7 @@
 		AD26BA22282A13BC00AC1A7B /* ScoresView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ScoresView.swift; path = VoMo/Core/Scores/Views/ScoresView.swift; sourceTree = SOURCE_ROOT; };
 		AD3F0EC3282057D700443591 /* QuestionnaireEffortModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = QuestionnaireEffortModel.swift; path = vomo/Model/EntryObjects/QuestionnaireEffortModel.swift; sourceTree = SOURCE_ROOT; };
 		AD3F9FF5280E52E2007E6327 /* EntryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntryView.swift; sourceTree = "<group>"; };
+		AD4650AC28AEE1B1007C28BD /* GoalsNotifications.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = GoalsNotifications.swift; path = vomo/Core/Activity/GoalsNotifications.swift; sourceTree = SOURCE_ROOT; };
 		AD57E63F2805CFBD00CDB31B /* RecordBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordBackground.swift; sourceTree = "<group>"; };
 		AD57E6412805CFFA00CDB31B /* CompleteMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompleteMenu.swift; sourceTree = "<group>"; };
 		AD57E6432805D02600CDB31B /* BackUps.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackUps.swift; sourceTree = "<group>"; };
@@ -197,7 +199,7 @@
 		ADA0E0E52826E42600CF05D1 /* VoMo.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = VoMo.entitlements; sourceTree = "<group>"; };
 		ADA0E0E72827198500CF05D1 /* ActivityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ActivityView.swift; path = VoMo/Core/Activity/ActivityView.swift; sourceTree = SOURCE_ROOT; };
 		ADA1EC9A2899C6B000EE58E3 /* AVAduioPCMBuffer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AVAduioPCMBuffer.swift; path = vomo/Extensions/AVAduioPCMBuffer.swift; sourceTree = SOURCE_ROOT; };
-		ADAB43AE287751C500A853D7 /* GoalModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = GoalModel.swift; path = vomo/Model/GoalModel.swift; sourceTree = SOURCE_ROOT; };
+		ADAB43AE287751C500A853D7 /* Goal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Goal.swift; path = vomo/Model/Goal.swift; sourceTree = SOURCE_ROOT; };
 		ADBAE7F8282996A500A7BD1B /* Roboto-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Roboto-Bold.ttf"; path = "../../Roboto/Roboto-Bold.ttf"; sourceTree = "<group>"; };
 		ADBAE7FB282996DF00A7BD1B /* Roboto-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Roboto-Medium.ttf"; path = "../../Roboto/Roboto-Medium.ttf"; sourceTree = "<group>"; };
 		ADBAE7FD282996E500A7BD1B /* Roboto-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Roboto-Regular.ttf"; path = "../../Roboto/Roboto-Regular.ttf"; sourceTree = "<group>"; };
@@ -254,7 +256,7 @@
 			children = (
 				ADCAB38B285FAABD002F650C /* SharedViewModel.swift */,
 				ADCAB39128750BEA002F650C /* UserSettings.swift */,
-				ADAB43AE287751C500A853D7 /* GoalModel.swift */,
+				ADAB43AE287751C500A853D7 /* Goal.swift */,
 				ADFF4305280E46A5008F721B /* Entries.swift */,
 				AD0A0C5D28468A3700D9C8DA /* Visits.swift */,
 				AD3F0EBB2820334E00443591 /* EntryObjects */,
@@ -636,6 +638,7 @@
 			isa = PBXGroup;
 			children = (
 				ADA0E0E72827198500CF05D1 /* ActivityView.swift */,
+				AD4650AC28AEE1B1007C28BD /* GoalsNotifications.swift */,
 			);
 			path = Activity;
 			sourceTree = "<group>";
@@ -826,7 +829,7 @@
 				AD26BA1C2829F4C900AC1A7B /* BarChartCell.swift in Sources */,
 				AD0A0C762849796000D9C8DA /* HomePitchGraph.swift in Sources */,
 				AD67CECC28A49858006AF596 /* ProfileViewModel.swift in Sources */,
-				ADAB43AF287751C500A853D7 /* GoalModel.swift in Sources */,
+				ADAB43AF287751C500A853D7 /* Goal.swift in Sources */,
 				ADFA927A279A1AC700F8758B /* ViewModel.swift in Sources */,
 				AD57E6442805D02600CDB31B /* BackUps.swift in Sources */,
 				ADA0E0B628255ECD00CF05D1 /* ChartBase.swift in Sources */,
@@ -850,6 +853,7 @@
 				AD0A0C5A2846632200D9C8DA /* ScoresPitchGraph.swift in Sources */,
 				AD0A0C742849778200D9C8DA /* HomeActivityGraph.swift in Sources */,
 				AD9EC7012804EE18007F0395 /* CustomTargetView.swift in Sources */,
+				AD4650AD28AEE1B1007C28BD /* GoalsNotifications.swift in Sources */,
 				ADCE4C002835896E007EBACE /* VocalEffortView.swift in Sources */,
 				ADA0E0CC2825602A00CF05D1 /* ChartLabel.swift in Sources */,
 				ADA0E0C828255FD900CF05D1 /* View+Extension.swift in Sources */,
@@ -1009,9 +1013,9 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = VoMo/VoMo.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: The University of Cincinnati";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 7;
+				CURRENT_PROJECT_VERSION = 8;
 				DEVELOPMENT_ASSET_PATHS = "\"VoMo/Preview Content\"";
 				DEVELOPMENT_TEAM = E3GYNLB224;
 				ENABLE_PREVIEWS = YES;
@@ -1032,7 +1036,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1.6;
+				MARKETING_VERSION = 1.1.7;
 				PRODUCT_BUNDLE_IDENTIFIER = edu.uc.vomo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = edu.uc.vomo;
@@ -1048,9 +1052,9 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = VoMo/VoMo.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: The University of Cincinnati";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 7;
+				CURRENT_PROJECT_VERSION = 8;
 				DEVELOPMENT_ASSET_PATHS = "\"VoMo/Preview Content\"";
 				DEVELOPMENT_TEAM = E3GYNLB224;
 				ENABLE_PREVIEWS = YES;
@@ -1071,7 +1075,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1.6;
+				MARKETING_VERSION = 1.1.7;
 				PRODUCT_BUNDLE_IDENTIFIER = edu.uc.vomo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = edu.uc.vomo;

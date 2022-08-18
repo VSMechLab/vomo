@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct TotalGoalsRow: View {
-    @ObservedObject var goal = GoalModel()
+    @ObservedObject var goal = Goal()
     
     @ObservedObject var audioRecorder: AudioRecorder
     @EnvironmentObject var viewRouter: ViewRouter

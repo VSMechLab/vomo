@@ -18,8 +18,6 @@ struct VoMoApp: App {
 }
 
 struct SplashScreen: View {
-    @ObservedObject var goal = GoalModel()
-    
     @State var animate = false
     @State var endSplash = false
     @State var hideAnimation = false
@@ -43,11 +41,6 @@ struct SplashScreen: View {
                     .frame(width: UIScreen.main.bounds.width)
             }
             .ignoresSafeArea(.all, edges: .all)
-            .onAppear() {
-                if !goal.active() {
-                    goal.entered = 0
-                }
-            }
             .onAppear(perform: animateSplash)
             .opacity(endSplash ? 0 : 1)
         } else {
@@ -59,6 +52,7 @@ struct SplashScreen: View {
                 .environmentObject(Entries())
                 .environmentObject(Retrieve())
                 .environmentObject(Visits())
+                .environmentObject(Goal())
                 .foregroundColor(Color.black)
                 .background(Color.white)
                 .preferredColorScheme(.light)

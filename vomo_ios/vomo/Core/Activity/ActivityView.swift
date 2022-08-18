@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ActivityView: View {
-    @ObservedObject var goal = GoalModel()
+    @ObservedObject var goal = Goal()
     
     @State private var page = 0
     @State private var goalOneSelect = false
@@ -45,18 +45,7 @@ struct ActivityView: View {
                 
                 ActivityGraph()
                 
-                Group {
-                    Text("Goals")
-                        .font(._headline)
-                    
-                    Text("Define your goals here.")
-                        .font(._bodyCopy)
-                        .foregroundColor(Color.BODY_COPY)
-                    
-                    perWeek
-                    
-                    numWeeks
-                }
+                GoalsNotifications()
                 
                 Spacer()
             }
@@ -69,116 +58,5 @@ struct ActivityView: View {
 }
 
 extension ActivityView {
-    private var perWeek: some View {
-        Group {
-            Text("Goal 1: Number of entries per week")
-                .font(._fieldCopyRegular)
-            ZStack {
-                Image(entry_img)
-                    .resizable()
-                    .frame(height: entry_height)
-                    .cornerRadius(7)
-                
-                HStack {
-                    Menu {
-                        Picker("2x week", selection: $goal.perWeek) {
-                            ForEach(perWeekOptions, id: \.self) { option in
-                                Text("\(option)")
-                                    .font(._bodyCopy)
-                            }
-                        }
-                        .labelsHidden()
-                        .pickerStyle(InlinePickerStyle())
-
-                    } label: {
-                        HStack {
-                            Text("\(goal.perWeek == 0 ? 0 : goal.perWeek)x per week")
-                                .font(._bodyCopy)
-                            Spacer()
-                            Image(arrow_img)
-                                .resizable()
-                                .frame(width: 20, height: 10)
-                                //.rotationEffect(Angle(degrees:   ? 180 : 0))
-                        }
-                    }
-                    .frame(maxHeight: 400)
-                }.padding(.horizontal, 5)
-            }.frame(height: entry_height)
-            
-        }
-    }
     
-    private var numWeeks: some View {
-        Group {
-            Text("Goal 2: Number of weeks to achieve goal")
-                .font(._fieldCopyRegular)
-            
-            ZStack {
-                Image(entry_img)
-                    .resizable()
-                    .frame(height: entry_height)
-                    .cornerRadius(7)
-                
-                HStack {
-                    Menu {
-                        Picker("2x week", selection: $goal.numWeeks) {
-                            ForEach(perWeekOptions, id: \.self) { option in
-                                HStack {
-                                    Text("\(option)")
-                                        .font(._bodyCopy)
-                                }
-                            }
-                        }
-                        .labelsHidden()
-                        .pickerStyle(InlinePickerStyle())
-
-                    } label: {
-                        HStack {
-                            Text(goal.numWeeks == 1 ? "\(goal.numWeeks == 0 ? 0 : goal.numWeeks) week" : "\(goal.numWeeks == 0 ? 0 : goal.numWeeks) weeks")
-                                .font(._bodyCopy)
-                            Spacer()
-                            Image(arrow_img)
-                                .resizable()
-                                .frame(width: 20, height: 10)
-                                //.rotationEffect(Angle(degrees:   ? 180 : 0))
-                        }
-                    }
-                    .frame(maxHeight: 400)
-                }.padding(.horizontal, 5)
-            }.frame(height: entry_height)
-            
-        }
-    }
 }
-
-/*
- ZStack {
-     Image(entry_img)
-         .resizable()
-         .frame(height: toggleHeight)
-         .cornerRadius(7)
-
-     HStack {
-         Menu {
-             Picker("choose", selection: $gender) {
-                 ForEach(genders, id: \.self) { gender in
-                     Text("\(gender)")
-                         .font(._fieldCopyRegular)
-                 }
-             }
-             .labelsHidden()
-             .pickerStyle(InlinePickerStyle())
-
-         } label: {
-             // CHANGED: capitalize the g for consistency
-             Text("\(gender == "" ? "Select Gender" : gender)")
-                 .font(._fieldCopyRegular)
-         }
-         .frame(maxHeight: 400)
-         Spacer()
-     } // End HStack
-     .padding(.horizontal, 5)
- } // End ZStack
- .frame(height: toggleHeight)
- .transition(.slide)
- */

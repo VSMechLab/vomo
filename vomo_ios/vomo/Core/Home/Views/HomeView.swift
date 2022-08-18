@@ -38,11 +38,11 @@ struct HomeView: View {
                 ProfileButton()
                 
                 HStack(spacing: 0) {
-                    Text("Hi, ")
+                    Text("Hi, \(username)")
                     Button(action: {
                         viewRouter.currentPage = .playground
                     }) {
-                        Text(username)
+                        //Text(username)
                     }
                         .foregroundColor(Color.DARK_PURPLE)
                     Spacer()
@@ -50,17 +50,17 @@ struct HomeView: View {
                 .font(._headline)
                 .frame(width: svm.content_width)
                 
-                HStack(spacing: 0) {
-                    Text("You are on \(prompt[focusSelection]) track ")
-                        .foregroundColor(Color.BODY_COPY)
-                    Button(action: {
-                        viewRouter.currentPage = .voiceQuestionView
-                    }) {
+                Button(action: {
+                    viewRouter.currentPage = .voiceQuestionView
+                }) {
+                    HStack(spacing: 0) {
+                        Text("You are on \(prompt[focusSelection]) track ")
                         Text("Edit.")
                             .underline()
-                            .foregroundColor(Color.DARK_PURPLE)
+                        Spacer()
                     }
-                    Spacer()
+                    .foregroundColor(Color.DARK_PURPLE)
+                    
                 }
                 .font(._bodyCopy)
                 .frame(width: svm.content_width)
@@ -101,20 +101,6 @@ extension HomeView {
                 Text("Total Goals")
                     .font(._subHeadline)
                 Spacer()
-                /*
-                Button(action: {
-                    viewRouter.currentPage = .activityView
-                }) {
-                    HStack(spacing: 1) {
-                        Text("Adjust Goals")
-                        Image(forwardArrow)
-                            .resizable()
-                            .frame(width: 17.5, height: 5)
-                    }
-                    .font(._CTALink)
-                    .foregroundColor(Color.DARK_PURPLE)
-                }
-                */
             }
             TotalGoalsRow(audioRecorder: AudioRecorder(), visitPopup: self.$visitPopup)
         }.frame(width: svm.content_width)
@@ -126,23 +112,6 @@ extension HomeView {
                 Text("Entries")
                     .font(._subHeadline)
                 Spacer()
-                Button(action: {}) {
-                    HStack(spacing: 1) {
-                        Button(action: {
-                            if !audioRecorder.recordings.isEmpty {
-                                viewRouter.currentPage = .entryView
-                                self.recordingState.selectedEntry = entries.recordings.last?.createdAt ?? .now
-                            }
-                        }) {
-                            Text("Details")
-                        }
-                        Image(forwardArrow)
-                            .resizable()
-                            .frame(width: 17.5, height: 5)
-                    }
-                    .font(._CTALink)
-                    .foregroundColor(Color.DARK_PURPLE)
-                }
             }.frame(width: svm.content_width)
             
             ScrollView(.horizontal, showsIndicators: false) {

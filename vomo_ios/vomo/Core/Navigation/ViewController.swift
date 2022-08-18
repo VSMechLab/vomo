@@ -13,6 +13,7 @@ struct ViewController: View {
     @EnvironmentObject var keyboard: Keyboard
     @EnvironmentObject var recordingState: RecordState
     @EnvironmentObject var audioRecorder: AudioRecorder
+    @EnvironmentObject var goal: Goal
     
     @State private var onboarded = true
     @State private var variablePadding: CGFloat = 0
@@ -159,6 +160,8 @@ extension ViewController {
             } else {
                 self.variablePadding = -10
             }
+            goal.requestPermission()
+            goal.updateNotificationSuite()
         }
     }
 }

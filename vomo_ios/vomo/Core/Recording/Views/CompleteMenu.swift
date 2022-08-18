@@ -15,6 +15,7 @@ struct CompleteMenu: View {
     @EnvironmentObject var recordingState: RecordState
     @EnvironmentObject var audioRecorder: AudioRecorder
     @ObservedObject var audioPlayer = AudioPlayer()
+    @EnvironmentObject var goal: Goal
     
     @Binding var playLast: Bool
     @Binding var promptSelect: Int
@@ -137,6 +138,10 @@ extension CompleteMenu {
                 }
                 for audio in audioRecorder.recordings {
                     print("Audio: \(audio.createdAt)")
+                }
+                
+                if goal.isActive() {
+                    goal.entered += 1
                 }
             }) {
                 Image(approved_img)

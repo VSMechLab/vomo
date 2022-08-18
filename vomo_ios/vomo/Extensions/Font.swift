@@ -45,14 +45,19 @@ extension Font {
     static var _CTALink: Font {
         Font.custom("Roboto-Regular", size: 10)
     }
+    
+        //.font(._day)
+        //.font(._date)
+        //.font(._lastUsed)
+    
     static var _day: Font {
-        Font.custom("Roboto-Regular", size: 10)
+        Font.custom("Roboto-Regular", size: 14)
     }
     static var _date: Font {
-        Font.custom("Roboto-Regular", size: 32)
+        Font.custom("Roboto-Regular", size: 38)
     }
     static var _lastUsed: Font {
-        Font.custom("Roboto-Regular", size: 6)
+        Font.custom("Roboto-Regular", size: 12)
     }
     static var _recordStateStatus: Font {
         Font.custom("Roboto-Light", size: 15)
