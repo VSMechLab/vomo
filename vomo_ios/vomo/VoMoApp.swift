@@ -53,6 +53,7 @@ struct SplashScreen: View {
                 .environmentObject(Retrieve())
                 .environmentObject(Visits())
                 .environmentObject(Goal())
+                .environmentObject(Notification())
                 .foregroundColor(Color.black)
                 .background(Color.white)
                 .preferredColorScheme(.light)

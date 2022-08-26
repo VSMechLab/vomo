@@ -73,6 +73,7 @@ struct TotalGoalsRow: View {
             }.frame(width: 100)
             
             VStack(alignment: .center) {
+                /// To do fix
                 // CHANGED: add button functionality to check icon
                 Button(action: {
                     viewRouter.currentPage = .activityView
@@ -87,11 +88,11 @@ struct TotalGoalsRow: View {
                     .frame(width: 30)
                 }
                 
-                Text(goal.active() ?  "\(goal.progress() * 100, specifier: "%.0f")%" : "+")
+                Text(goal.isActive() ?  "\(goal.progress() * 100, specifier: "%.0f")%" : "+")
                     .font(._stats)
                     .foregroundColor(Color.TEAL)
                 
-                Text(goal.active() ? "GOAL PROGRESS" : "ADD A NEW GOAL")
+                Text(goal.isActive() ? "GOAL PROGRESS" : "ADD A NEW GOAL")
                     .font(._statsLabel)
                     .foregroundColor(Color.BODY_COPY)
             }.frame(width: 100)

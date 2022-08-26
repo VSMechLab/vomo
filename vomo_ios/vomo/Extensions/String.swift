@@ -9,6 +9,14 @@ import SwiftUI
 import Foundation
 
 extension String {
+    func toFullDate() -> Date? {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd/MM/yyyy HH:mm"
+        dateFormatter.timeZone = TimeZone.current
+        dateFormatter.locale = Locale.current
+        return dateFormatter.date(from: self) // replace Date String
+    }
+    
     func toDate() -> Date? {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "dd/MMM/yyyy"

@@ -36,6 +36,16 @@ struct ScoresView: View {
                         .multilineTextAlignment(.leading)
                     
                     /*
+                    Find a way to save threshold values for the metrics
+                     6 types, an array of 3 items, low, target, high
+                     18 items saved total
+                     
+                     Save one entire array?
+                     Save individual elements
+                     
+                     [pitch_low, pitch_mid, pitch_high, cpp_low, cpp_mid,....max_pitch_high]
+                     
+                     
                     UserDefaults.standard.bool(forKey: "pitch")
                     UserDefaults.standard.bool(forKey: "cpp")
                     UserDefaults.standard.bool(forKey: "intensity")

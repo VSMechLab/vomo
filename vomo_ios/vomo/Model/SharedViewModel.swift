@@ -16,4 +16,6 @@ import Foundation
 
 struct SharedViewModel {
     let content_width = 325.0//UIScreen.main.bounds.width * 0.85
+    
+    let button_img = "VM_Gradient-Btn"
 }

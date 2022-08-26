@@ -24,48 +24,12 @@ struct ScoresViewModel {
     // Access Shared Defaults Object
     let userDefaults = UserDefaults.standard
     
-    // Keys
-    let pitchKey = "pitchKey"
-    let cppKey = "cppKey"
+    // Read/Get Array of Strings
+    //var thresholds: [Double] = userDefaults.array(forKey: "myKey") ?? [0.0]
     
-}
-
-extension ScoresViewModel {
-    func savePitch(one: Int, two: Int, three: Int) {
-        let arrStr = [String(one), String(two), String(three)]
-        
-        // Write/Set Array of Integers
-        userDefaults.set(arrStr, forKey: pitchKey)
-    }
+    // Append String to Array of Strings
+    //thresholds.append(10)
     
-    func saveCPP(one: Int, two: Int, three: Int) {
-        let arrStr = [String(one), String(two), String(three)]
-        
-        // Write/Set Array of Integers
-        userDefaults.set(arrStr, forKey: cppKey)
-    }
-}
-
-extension ScoresViewModel {
-    func readPitch() -> [Int] {
-        var arr: [Int] = []
-        // Read/Get Array of Integers
-        let strArr: [String] = userDefaults.stringArray(forKey: pitchKey) ?? []
-        if strArr.count == 3 {
-            arr = [Int(strArr[0]) ?? 0, Int(strArr[1]) ?? 0,Int(strArr[2]) ?? 0]
-        }
-        
-        return arr
-    }
-    
-    func readCPP() -> [Int] {
-        var arr: [Int] = []
-        // Read/Get Array of Integers
-        let strArr: [String] = userDefaults.stringArray(forKey: cppKey) ?? []
-        if strArr.count == 3 {
-            arr = [Int(strArr[0]) ?? 0, Int(strArr[1]) ?? 0,Int(strArr[2]) ?? 0]
-        }
-        
-        return arr
-    }
+    // Write/Set Array of Strings
+    //userDefaults.set(strings, forKey: "myKey")
 }

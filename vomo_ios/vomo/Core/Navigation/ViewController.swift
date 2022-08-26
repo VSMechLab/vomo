@@ -14,6 +14,7 @@ struct ViewController: View {
     @EnvironmentObject var recordingState: RecordState
     @EnvironmentObject var audioRecorder: AudioRecorder
     @EnvironmentObject var goal: Goal
+    @EnvironmentObject var notification: Notification
     
     @State private var onboarded = true
     @State private var variablePadding: CGFloat = 0
@@ -160,8 +161,12 @@ extension ViewController {
             } else {
                 self.variablePadding = -10
             }
-            goal.requestPermission()
-            goal.updateNotificationSuite()
+            
+            notification.requestPermission()
+            
+            notification.getPending()
+            notification.updateNotifications(triggers: goal.triggers())
+            notification.getPending()
         }
     }
 }

@@ -45,7 +45,7 @@ struct ActivityView: View {
                 
                 ActivityGraph()
                 
-                GoalsNotifications()
+                GoalEntryView()
                 
                 Spacer()
             }
@@ -55,8 +55,4 @@ struct ActivityView: View {
             print(UIScreen.main.bounds.width)
         }.padding()
     }
-}
-
-extension ActivityView {
-    
 }
