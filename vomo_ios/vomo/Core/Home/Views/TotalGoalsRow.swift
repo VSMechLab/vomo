@@ -8,11 +8,10 @@
 import SwiftUI
 
 struct TotalGoalsRow: View {
-    @ObservedObject var goal = Goal()
-    
     @ObservedObject var audioRecorder: AudioRecorder
     @EnvironmentObject var viewRouter: ViewRouter
     @EnvironmentObject var entries: Entries
+    @EnvironmentObject var settings: Settings
     
     let recordings_img = "VoMo-App-Assets_2_8-entry-gfx"
     let start_img = "VoMo-App-Assets_2_8-visit-gfx"
@@ -52,7 +51,7 @@ struct TotalGoalsRow: View {
             
             VStack(alignment: .center) {
                 Button(action: {
-                    viewRouter.currentPage = .activityView
+                    viewRouter.currentPage = .home
                 }) {
                     ZStack {
                         ProgressBar(level: self.score, color: Color.DARK_PURPLE)
@@ -76,10 +75,10 @@ struct TotalGoalsRow: View {
                 /// To do fix
                 // CHANGED: add button functionality to check icon
                 Button(action: {
-                    viewRouter.currentPage = .activityView
+                    viewRouter.currentPage = .home
                 }) {
                     ZStack {
-                        ProgressBar(level: Int(goal.progress() * 10), color: Color.TEAL)
+                        ProgressBar(level: Int(settings.progress() * 10), color: Color.TEAL)
 
                         Image(complete_img)
                             .resizable()
@@ -88,11 +87,11 @@ struct TotalGoalsRow: View {
                     .frame(width: 30)
                 }
                 
-                Text(goal.isActive() ?  "\(goal.progress() * 100, specifier: "%.0f")%" : "+")
+                Text(settings.isActive() ?  "\(settings.progress() * 100, specifier: "%.0f")%" : "+")
                     .font(._stats)
                     .foregroundColor(Color.TEAL)
                 
-                Text(goal.isActive() ? "GOAL PROGRESS" : "ADD A NEW GOAL")
+                Text(settings.isActive() ? "GOAL PROGRESS" : "ADD A NEW GOAL")
                     .font(._statsLabel)
                     .foregroundColor(Color.BODY_COPY)
             }.frame(width: 100)
@@ -101,7 +100,7 @@ struct TotalGoalsRow: View {
     }
     
     func daysAgo() -> Double {
-        let from: Date = entries.recordings.last?.createdAt ?? .now
+        let from: Date = audioRecorder.recordings.last?.createdAt ?? .now
         let to: Date = .now
 
         let delta = to - from

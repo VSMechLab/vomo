@@ -43,9 +43,11 @@ struct BarChartCellShape_Previews: PreviewProvider {
         Group {
             BarChartCellShape(value: 0.75)
                 .fill(Color.red)
+                .padding()
 
             BarChartCellShape(value: 0.3)
                 .fill(Color.blue)
+                .padding()
         }
     }
 }

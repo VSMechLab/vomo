@@ -12,11 +12,9 @@ struct RecordingSection: View {
     @EnvironmentObject var entries: Entries
     @EnvironmentObject var audioRecorder: AudioRecorder
     @ObservedObject var audioPlayer = AudioPlayer()
-    @EnvironmentObject var retrieve: Retrieve
     
     @Binding var active: Int
     
-    let focus: Date
     let type: String
     let logo = "VM_record-nav-ds-icon"
     let dropdown = "VM_Dropdown-Btn"
@@ -57,18 +55,18 @@ struct RecordingSection: View {
         .foregroundColor(Color.white)
         .background(Color.BRIGHT_PURPLE)
         .onAppear() {
-            exercisesPresent = audioRecorder.tasksPresent(day: retrieve.focusDay)
-            if audioRecorder.tasksPresent(day: retrieve.focusDay).contains("1") {
+            exercisesPresent = audioRecorder.tasksPresent(day: entries.focusDay)
+            if audioRecorder.tasksPresent(day: entries.focusDay).contains("1") {
                 selection = 1
-                retrieve.focusDayExercise = selection
-            } else if audioRecorder.tasksPresent(day: retrieve.focusDay).contains("2") {
+                entries.focusDayExercise = selection
+            } else if audioRecorder.tasksPresent(day: entries.focusDay).contains("2") {
                 selection = 2
-                retrieve.focusDayExercise = selection
-            } else if audioRecorder.tasksPresent(day: retrieve.focusDay).contains("3") {
+                entries.focusDayExercise = selection
+            } else if audioRecorder.tasksPresent(day: entries.focusDay).contains("3") {
                 selection = 3
-                retrieve.focusDayExercise = selection
+                entries.focusDayExercise = selection
             }
-            self.retrieve.preciseRecord = audioRecorder.filterRecordingsDayExercise(focus: self.retrieve.focusDay, taskNum: selection).first?.createdAt ?? .now
+            //self.entries.preciseRecord = audioRecorder.filterRecordingsDayExercise(focus: self.entries.focusDay, taskNum: selection).first?.createdAt ?? .now
         }
     }
     
@@ -79,15 +77,6 @@ struct RecordingSection: View {
         }
         print("Deleting url here: \(urlsToDelete)")
         audioRecorder.deleteRecording(urlToDelete: urlsToDelete.last!)
-        
-        entries.recordings.remove(atOffsets: offsets)
-        
-        for entry in entries.recordings {
-            print("Entry: \(entry.createdAt)")
-        }
-        for audio in audioRecorder.recordings {
-            print("Audio: \(audio.createdAt)")
-        }
     }
 }
 
@@ -121,12 +110,12 @@ extension RecordingSection {
     private var playHeader: some View {
         Group {
             HStack {
-                Text(retrieve.preciseRecord.toStringHour())
+                Text(entries.preciseRecord.toStringHour())
                 Spacer()
-                ForEach(audioRecorder.filterRecordingsDayExercise(focus: self.retrieve.focusDay, taskNum: self.retrieve.focusDayExercise), id: \.createdAt) { record in
-                    if retrieve.preciseRecord == record.createdAt {
+                ForEach(audioRecorder.filterRecordingsDayExercise(focus: self.entries.focusDay, taskNum: self.entries.focusDayExercise), id: \.createdAt) { record in
+                    if entries.preciseRecord == record.createdAt {
                         Text("\(returnMMSS(num: audioRecorder.assetTime(file: record.fileURL)))")
-                            .foregroundColor(retrieve.preciseRecord == record.createdAt ? Color.white : Color.BODY_COPY)
+                            .foregroundColor(entries.preciseRecord == record.createdAt ? Color.white : Color.BODY_COPY)
                     }
                 }
             }
@@ -189,8 +178,8 @@ extension RecordingSection {
             } else {
                 Button(action: {
                     selection = 1
-                    retrieve.focusDayExercise = selection
-                    self.retrieve.preciseRecord = audioRecorder.filterRecordingsDayExercise(focus: self.retrieve.focusDay, taskNum: selection).first?.createdAt ?? .now
+                    entries.focusDayExercise = selection
+                    self.entries.preciseRecord = audioRecorder.filterRecordingsDayExercise(focus: self.entries.focusDay, taskNum: selection).first?.createdAt ?? .now
                 }) {
                     ZStack {
                         Rectangle()
@@ -217,8 +206,8 @@ extension RecordingSection {
             } else {
                 Button(action: {
                     selection = 2
-                    retrieve.focusDayExercise = selection
-                    self.retrieve.preciseRecord = audioRecorder.filterRecordingsDayExercise(focus: self.retrieve.focusDay, taskNum: selection).first?.createdAt ?? .now
+                    entries.focusDayExercise = selection
+                    self.entries.preciseRecord = audioRecorder.filterRecordingsDayExercise(focus: self.entries.focusDay, taskNum: selection).first?.createdAt ?? .now
                 }) {
                     ZStack {
                         Rectangle()
@@ -246,8 +235,8 @@ extension RecordingSection {
             } else {
                 Button(action: {
                     selection = 3
-                    retrieve.focusDayExercise = selection
-                    self.retrieve.preciseRecord = audioRecorder.filterRecordingsDayExercise(focus: self.retrieve.focusDay, taskNum: selection).first?.createdAt ?? .now
+                    entries.focusDayExercise = selection
+                    self.entries.preciseRecord = audioRecorder.filterRecordingsDayExercise(focus: self.entries.focusDay, taskNum: selection).first?.createdAt ?? .now
                 }) {
                     ZStack {
                         Rectangle()
@@ -268,18 +257,20 @@ extension RecordingSection {
         Group {
             List {
                 ForEach(audioRecorder.recordings, id: \.createdAt) { record in
-                    if record.createdAt.toStringDay() == retrieve.focusDay.toStringDay()  && audioRecorder.taskNum(selection: selection, file: record.fileURL) {
+                    if record.createdAt.toDay() == entries.focusDay.toDay()  && audioRecorder.taskNum(selection: selection, file: record.fileURL) {
                         Button(action: {
-                            self.retrieve.preciseRecord = record.createdAt
+                            self.entries.preciseRecord = record.createdAt
                         }) {
                             HStack(spacing: 0) {
                                 Text("Task: \(audioRecorder.fileTask(file: record.fileURL))")
                                 Spacer()
                                 Text("\(audioRecorder.fileName(file: record.fileURL))")
                             }
-                            .foregroundColor(retrieve.preciseRecord == record.createdAt ? Color.white : Color.BODY_COPY)
+                            .foregroundColor(entries.preciseRecord == record.createdAt ? Color.white : Color.BODY_COPY)
                             .font(._fieldLabel)
-                        }.listRowBackground(Color.clear)
+                        }
+                        .listRowBackground(Color.clear)
+                        
                     }
                 }
                 .onDelete(perform: delete)
@@ -294,7 +285,7 @@ extension RecordingSection {
         HStack {
             Button(action: {
                 for record in audioRecorder.recordings {
-                    if record.createdAt == retrieve.preciseRecord {
+                    if record.createdAt == entries.preciseRecord {
                         audioRecorder.saveFile(file: record.fileURL)
                     }
                 }
@@ -308,7 +299,7 @@ extension RecordingSection {
                 if audioPlayer.isPlaying == false {
                     Button(action: {
                         for record in audioRecorder.recordings {
-                            if record.createdAt == retrieve.preciseRecord {
+                            if record.createdAt == entries.preciseRecord {
                                 self.audioPlayer.startPlayback(audio: record.fileURL)
                             }
                         }
@@ -339,8 +330,8 @@ extension RecordingSection {
     func endTime() -> Double {
         var endTime = 1.0
         
-        for record in audioRecorder.filterRecordingsDayExercise(focus: self.retrieve.focusDay, taskNum: self.retrieve.focusDayExercise) {
-            if retrieve.preciseRecord == record.createdAt {
+        for record in audioRecorder.filterRecordingsDayExercise(focus: self.entries.focusDay, taskNum: self.entries.focusDayExercise) {
+            if entries.preciseRecord == record.createdAt {
                 endTime = audioRecorder.assetTime(file: record.fileURL)
             }
         }

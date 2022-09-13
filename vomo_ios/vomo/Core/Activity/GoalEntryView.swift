@@ -10,8 +10,8 @@ import SwiftUI
 
 
 struct GoalEntryView: View {
-    @EnvironmentObject var goal: Goal
     @EnvironmentObject var notification: Notification
+    @EnvironmentObject var settings: Settings
     
     @State private var svm = SharedViewModel()
     @State private var perWeek = 0
@@ -42,7 +42,7 @@ struct GoalEntryView: View {
             
             header
             
-            if goal.isActive() {
+            if settings.isActive() {
                 informSection
             } else {
                 settingSection
@@ -68,11 +68,11 @@ extension GoalEntryView {
     private var informSection: some View {
         VStack(alignment: .leading) {
             VStack(alignment: .leading) {
-                if goal.isActive() {
-                    Text("Your goal is active as of \(goal.startDate)")
+                if settings.isActive() {
+                    Text("Your goal is active as of \(settings.startDate)")
                 }
-                Text("The goal will last \(goal.numWeeks) and you will complete \(goal.perWeek) enteries per week")
-                Text("Your have entered \(goal.entered) so far")
+                Text("The goal will last \(settings.numWeeks) and you will complete \(settings.perWeek) enteries per week")
+                Text("Your have entered \(settings.entered) so far")
             }
             .font(._bodyCopy)
             .foregroundColor(Color.BODY_COPY)
@@ -124,7 +124,7 @@ extension GoalEntryView {
                             .font(._bodyCopy)
                         Spacer()
                         
-                        DownArrow()
+                        Arrow()
                     }.padding(.horizontal, 5)
                 }
             }
@@ -151,7 +151,7 @@ extension GoalEntryView {
                             .font(._bodyCopy)
                         Spacer()
                         
-                        DownArrow()
+                        Arrow()
                     }.padding(.horizontal, 5)
                 }
             }
@@ -173,9 +173,9 @@ extension GoalEntryView {
                 
                 if numWeeks != 0 && perWeek != 0 {
                     Button(action: {
-                        goal.setGoal(nWeeks: numWeeks, nPerWeek: perWeek)
+                        settings.setGoal(nWeeks: numWeeks, nPerWeek: perWeek)
                         
-                        notification.updateNotifications(triggers: goal.triggers())
+                        notification.updateNotifications(triggers: settings.triggers())
                     }) {
                         SubmissionButton(label: "SET GOAL")
                     }
@@ -194,14 +194,13 @@ extension GoalEntryView {
     func clearGoal() {
         self.numWeeks = 0
         self.perWeek = 0
-        self.goal.clearGoal()
+        self.settings.clearGoal()
     }
 }
 
 struct GoalEntryView_Previews: PreviewProvider {
     static var previews: some View {
         GoalEntryView()
-            .environmentObject(Goal())
             .environmentObject(Notification())
     }
 }

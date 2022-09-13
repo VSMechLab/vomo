@@ -53,6 +53,7 @@ extension Date {
         return dateFormatter.string(from: self)
     }
     
+    /// "dd/MM/yyyy HH:mm"
     func toStringDay() -> String
     {
         let dateFormatter = DateFormatter()
@@ -146,6 +147,14 @@ extension Date {
     public var isPM: String {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "a"
+        return dateFormatter.string(from: self)
+    }
+    
+    /// "dd/MM/yyyy"
+    func toDay() -> String
+    {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "MM/dd/yy"
         return dateFormatter.string(from: self)
     }
 }

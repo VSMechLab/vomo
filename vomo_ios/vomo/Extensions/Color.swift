@@ -12,10 +12,13 @@ extension Color {
     static let TEAL = Color(red: 0/255, green: 215/255, blue: 206/255)
     static let BLUE = Color(red: 40/255, green: 95/255, blue: 200/255)
     static var DARK_BLUE = Color(red: 50/255, green: 40/255, blue: 140/255)
-    static var HEADLINE_COPY = Color(red: 35/255, green: 35/255, blue: 35/255)
-    static var BODY_COPY = Color(red: 125/255, green: 125/255, blue: 125/255)
-    static var INPUT_FIELDS = Color(red: 235/255, green: 235/255, blue: 235/255)
     static var DARK_PURPLE = Color(red: 135/255, green: 130/255, blue: 225/255)
+    /// Darkest Gray
+    static var HEADLINE_COPY = Color(red: 35/255, green: 35/255, blue: 35/255)
+    /// Medium Gray
+    static var BODY_COPY = Color(red: 125/255, green: 125/255, blue: 125/255)
+    /// Lightest Gray
+    static var INPUT_FIELDS = Color(red: 235/255, green: 235/255, blue: 235/255)
 }
 
 struct ColorView: View {

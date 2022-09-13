@@ -9,6 +9,16 @@ import SwiftUI
 import Foundation
 
 extension Font {
+    /// Bar Graph Bar Label
+    static var _barLabel: Font {
+        Font.custom("Roboto-Light", size: 15)
+    }
+    
+    /// Medium Bar Graph Bar Label
+    static var _barLabelBold: Font {
+        Font.custom("Roboto-Medium", size: 15)
+    }
+    /// Size 30, bold
     static var _headline: Font {
         Font.custom("Roboto-Bold", size: 30)
     }
@@ -59,8 +69,9 @@ extension Font {
     static var _lastUsed: Font {
         Font.custom("Roboto-Regular", size: 12)
     }
+    /// Recording State Timer
     static var _recordStateStatus: Font {
-        Font.custom("Roboto-Light", size: 15)
+        Font.custom("Roboto-Regular", size: 17)
     }
     static var _question: Font {
         Font.custom("Roboto-Light", size: 12)
@@ -95,8 +106,9 @@ extension Font {
     static var _subCopy: Font {
         Font.custom("Roboto-Regular", size: 8)
     }
+    /// Navigation between pages
     static var _pageNavLink: Font {
-        Font.custom("Roboto-Regular", size: 12)
+        Font.custom("Roboto-Regular", size: 15)
     }
     static var questionnaireScale: Font {
         Font.custom("Roboto-Regular", size: 8)

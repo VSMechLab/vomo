@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct VisitTypeRow: View {
-    @EnvironmentObject var visits: Visits
+    @EnvironmentObject var entries: Entries
     
     @State private var vm = HomeViewModel()
     @State private var droppedDown = false
@@ -126,16 +126,16 @@ struct VisitTypeRow: View {
     
     func addNote(date: Date) {
         var index = 0
-        for visit in visits.visits {
+        for visit in entries.visits {
             if visit.date == targetVisit {
-                visits.visits[index].note = note
+                entries.visits[index].note = note
             }
             index += 1
         }
         index = 0
-        for visit in visits.visits {
+        for visit in entries.visits {
             if visit.date == targetVisit {
-                print(visits.visits[index].note)
+                print(entries.visits[index].note)
             }
             index += 1
         }

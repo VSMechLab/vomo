@@ -13,7 +13,6 @@ struct HomePopup: View {
     
     @EnvironmentObject var entries: Entries
     @EnvironmentObject var viewRouter: ViewRouter
-    @EnvironmentObject var visits: Visits
     
     @Binding var visitPopup: Bool
     
@@ -59,7 +58,7 @@ struct HomePopup: View {
             .background(Color.white)
             .cornerRadius(2)
             .onAppear() {
-                self.visits.getItems()
+                self.entries.getItems()
             }
             
             if submitAnimation {
@@ -69,7 +68,7 @@ struct HomePopup: View {
     }
     
     func addNote(date: Date, type: String) {
-        for visit in visits.visits {
+        for visit in entries.visits {
             if visit.date == targetVisit {
                 print(visit.date)
             }
@@ -223,7 +222,7 @@ extension HomePopup {
             if !showDate && !showTime && self.type != "" {
                 Button(action: {
                     submitAnimation = true
-                    self.visits.visits.append(VisitModel(date: self.date, type: self.type, note: ""))
+                    self.entries.visits.append(VisitModel(date: self.date, type: self.type, note: ""))
                     self.newVisit.toggle()
                     
                     print("\nAppointment Date: \(date)")
@@ -308,7 +307,7 @@ extension HomePopup {
             Group {
                 if selected == vm.upcoming {
                     ScrollView(showsIndicators: false) {
-                        ForEach(visits.visits.reversed()) { visit in
+                        ForEach(entries.visits.reversed()) { visit in
                             if visit.date > .now {
                                 VisitTypeRow(note: self.$note, targetVisit: self.$targetVisit, visit: visit, img: vm.plus_button)
                             }
@@ -318,7 +317,7 @@ extension HomePopup {
                     .frame(maxHeight: 250)
                 } else {
                     ScrollView(showsIndicators: false) {
-                        ForEach(visits.visits.reversed()) { visit in
+                        ForEach(entries.visits.reversed()) { visit in
                             if visit.date < .now {
                                 VisitTypeRow(note: self.$note, targetVisit: self.$targetVisit, visit: visit, img: vm.plus_button)
                             }
@@ -367,6 +366,6 @@ extension HomePopup {
 struct HomePopup_Previews: PreviewProvider {
     static var previews: some View {
         HomePopup(visitPopup: .constant(true))
-            .environmentObject(Visits())
+            .environmentObject(Entries())
     }
 }

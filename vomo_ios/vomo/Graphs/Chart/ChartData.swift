@@ -31,6 +31,10 @@ public class ChartData: ObservableObject {
     var isInNegativeDomain: Bool {
         (points.min() ?? 0.0) < 0
     }
+    
+    var max: Double {
+        (points.max() ?? 0.0)
+    }
 
     /// Initialize with data array
     /// - Parameter data: Array of `Double`

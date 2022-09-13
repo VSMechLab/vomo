@@ -16,7 +16,7 @@ struct ProfileButton: View {
         HStack(spacing: 0) {
             Spacer()
             Button(action: {
-                viewRouter.currentPage = .profileView
+                viewRouter.currentPage = .home
             }) {
                 Image(profile_img)
                     .resizable().frame(width: 60, height: 60, alignment: .center)

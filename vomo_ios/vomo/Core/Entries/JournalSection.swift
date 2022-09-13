@@ -13,7 +13,6 @@ struct JournalSection: View {
     @ObservedObject var audioPlayer = AudioPlayer()
     @Binding var active: Int
     
-    let focus: Date
     let type: String
     
     let logo = "VoMo-App-Assets_2_journals-gfx"
@@ -49,6 +48,7 @@ struct JournalSection: View {
                 // vomoJournalText
                 VStack(alignment: .leading, spacing: 0) {
                     ForEach(entries.journals) { journal in
+                        /*
                         if focus.toString(dateFormat: "MM, dd, yyyy") == journal.createdAt.toString(dateFormat: "MM, dd, yyyy") {
                             Color.white.frame(height: 1).opacity(0.7).padding(.bottom, 3).padding(.trailing, 3)
                             
@@ -58,7 +58,7 @@ struct JournalSection: View {
                             Text("\(journal.note)")
                                 .font(._fieldCopyRegular)
                                 .multilineTextAlignment(.leading)
-                        }
+                        }*/
                     }
                 }
             }

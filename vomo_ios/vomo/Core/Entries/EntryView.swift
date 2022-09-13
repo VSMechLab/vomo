@@ -9,7 +9,6 @@ import SwiftUI
 
 struct EntryView: View {
     @EnvironmentObject var entries: Entries
-    @EnvironmentObject var retrieve: Retrieve
     
     @ObservedObject var audioPlayer = AudioPlayer()
     
@@ -22,7 +21,6 @@ struct EntryView: View {
     
     let logo = "VoMo-App-Assets_2_journals-gfx"//"VM_record-nav-icon"
     let dropdown = "VM_Dropdown-Btn"
-    let focus: Date
     
     let recording_logo = "VM_record-nav-ds-icon"
     let scores_logo = "VoMo-App-Assets_2_scores-gfx"
@@ -54,7 +52,7 @@ struct EntryView: View {
             }
             
             HStack {
-                Text("\(retrieve.focusDay.toString(dateFormat: "MMM d, yyyy"))")
+                Text("\(entries.focusDay.toString(dateFormat: "MMM d, yyyy"))")
                 Spacer()
             }
             .font(._fieldLabel)
@@ -62,9 +60,10 @@ struct EntryView: View {
             .padding(.bottom, -5)
             
             VStack(spacing: 0) {
+                /*
                 if self.active == 1 {
                     if !entries.recordingsPresent {
-                        RecordingSection(active: self.$active, focus: self.focus, type: "RECORDINGS")
+                        RecordingSection(active: self.$active, type: "RECORDINGS")
                     } else {
                         FieldOfEntry(active: self.$active, type: "RECORDINGS", logo: recording_logo, text: "Expand to playback previous recordings")
                     }
@@ -76,7 +75,7 @@ struct EntryView: View {
                 
                 if self.active == 2 {
                     if !entries.recordingsPresent {
-                        ResultsSection(active: self.$active, focus: self.focus, type: "RESULTS")
+                        ResultsSection(active: self.$active, type: "RESULTS")
                     } else {
                         FieldOfEntry(active: self.$active, type: "RESULTS", logo: scores_logo, text: "View your acoustic and questionnaire scores")
                     }
@@ -88,13 +87,13 @@ struct EntryView: View {
                 
                 if self.active == 3 {
                     if !entries.journalsPresent {
-                        JournalSection(audioRecorder: AudioRecorder(), active: self.$active, focus: self.focus, type: "JOURNALS")
+                        JournalSection(audioRecorder: AudioRecorder(), active: self.$active, type: "JOURNALS")
                     } else {
                         FieldOfEntry(active: self.$active, type: "JOURNALS", logo: journal_logo, text: "View your journal entries here")
                     }
                 } else {
                     FieldOfEntry(active: self.$active, type: "JOURNALS", logo: journal_logo, text: "View your journal entries here")
-                }
+                }*/
             }
             .transition(.slide)
             .background()
@@ -112,11 +111,11 @@ struct EntryView: View {
                     List {
                         ForEach(audioRecorder.uniqueDays().reversed(), id: \.self) { day in
                             Button(action: {
-                                self.retrieve.focusDay = day
+                                self.entries.focusDay = day
                             }) {
                                 Text("\(day.toStringDay())")
-                                    .font(retrieve.focusDay == day ? ._fieldLabel : ._pageNavLink)
-                                    .foregroundColor(retrieve.focusDay == day ? Color.DARK_PURPLE : Color.BODY_COPY)
+                                    .font(entries.focusDay == day ? ._fieldLabel : ._pageNavLink)
+                                    .foregroundColor(entries.focusDay == day ? Color.DARK_PURPLE : Color.BODY_COPY)
                             }
                         }
                     }

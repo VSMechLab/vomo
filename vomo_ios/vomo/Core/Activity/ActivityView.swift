@@ -8,8 +8,6 @@
 import SwiftUI
 
 struct ActivityView: View {
-    @ObservedObject var goal = Goal()
-    
     @State private var page = 0
     @State private var goalOneSelect = false
     @State private var goalTwoSelect = false
@@ -42,8 +40,6 @@ struct ActivityView: View {
                         .font(._bodyCopy)
                         .foregroundColor(Color.BODY_COPY)
                 }
-                
-                ActivityGraph()
                 
                 GoalEntryView()
                 

@@ -8,6 +8,17 @@
 import SwiftUI
 import UIKit
 
+/*
+ 
+ Audit entire code base starting here
+ Refactor code base
+ Delete unneeded functionality
+ Clean and redesign code
+ Build out SharedViewModel
+ Build components library
+ 
+ */
+
 @main
 struct VoMoApp: App {
     var body: some Scene {
@@ -45,14 +56,10 @@ struct SplashScreen: View {
             .opacity(endSplash ? 0 : 1)
         } else {
             ViewController()
-                .environmentObject(AudioRecorder())
                 .environmentObject(ViewRouter())
-                .environmentObject(Keyboard())
-                .environmentObject(RecordState())
+                .environmentObject(AudioRecorder())
                 .environmentObject(Entries())
-                .environmentObject(Retrieve())
-                .environmentObject(Visits())
-                .environmentObject(Goal())
+                .environmentObject(Settings())
                 .environmentObject(Notification())
                 .foregroundColor(Color.black)
                 .background(Color.white)
@@ -68,8 +75,6 @@ struct SplashScreen: View {
             withAnimation(Animation.linear(duration: 0.35)) {
                 endSplash.toggle()
             }
-            
-            
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                 self.hideAnimation.toggle()
             }
@@ -78,7 +83,6 @@ struct SplashScreen: View {
 }
 
 class AppDelegate: UIResponder, UIApplicationDelegate {
-
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         return true

@@ -11,10 +11,8 @@ struct ResultsSection: View {
     @EnvironmentObject var entries: Entries
     @EnvironmentObject var audioRecorder: AudioRecorder
     @ObservedObject var audioPlayer = AudioPlayer()
-    @EnvironmentObject var retrieve: Retrieve
     @Binding var active: Int
     
-    let focus: Date
     let type: String
     
     let logo = "VoMo-App-Assets_2_scores-gfx"
@@ -71,8 +69,8 @@ extension ResultsSection {
             HStack(spacing: 0) {
                 Text("Avg duration: ")
                     .font(._bodyCopy)
-                Text("\(entries.avgDuration(criteria: retrieve.focusDay.toStringDay()), specifier: "%.2f")")
-                    .font(._bodyCopyBold)
+                //Text("\(entries.avgDuration(criteria: entries.focusDay.toDay()), specifier: "%.2f")")
+                  ///  .font(._bodyCopyBold)
                 Spacer()
                 Button(action: {
                     self.infoPopup.toggle()
@@ -88,8 +86,8 @@ extension ResultsSection {
             HStack(spacing: 0) {
                 Text("Avg intensity: ")
                     .font(._bodyCopy)
-                Text("\(entries.avgIntensity(criteria: retrieve.focusDay.toStringDay()), specifier: "%.2f")")
-                    .font(._bodyCopyBold)
+                //Text("\(entries.avgIntensity(criteria: entries.focusDay.toDay()), specifier: "%.2f")")
+                  //  .font(._bodyCopyBold)
                 Spacer()
                 Button(action: {
                     self.infoPopup.toggle()
@@ -103,8 +101,8 @@ extension ResultsSection {
             Color.white.frame(height: 1)
             
             if showDetails {
-                ForEach(entries.recordings, id: \.createdAt) { record in
-                    if record.createdAt.toStringDay() == retrieve.focusDay.toStringDay() {
+                /*ForEach(entries.recordings, id: \.createdAt) { record in
+                    if record.createdAt.toDay() == entries.focusDay.toDay() {
                         HStack(spacing: 0) {
                             Text("Recorded at: ")
                                 .font(._bodyCopy)
@@ -161,7 +159,7 @@ extension ResultsSection {
                             .font(._bodyCopyBold)
                     }
                     Spacer()
-                }
+                }*/
             } else {
                 HStack {
                     Button(action: {

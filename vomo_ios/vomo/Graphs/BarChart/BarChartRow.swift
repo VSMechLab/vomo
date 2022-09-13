@@ -35,7 +35,7 @@ public struct BarChartRow: View {
                         BarChartCell(value: chartData.normalisedPoints[index],
                                      index: index,
                                      gradientColor: self.style.foregroundColor.rotate(for: index),
-                                     touchLocation: self.touchLocation)
+                                     touchLocation: self.touchLocation, fullValue: chartData.points[index])
                             .scaleEffect(self.getScaleSize(touchLocation: self.touchLocation, index: index), anchor: .bottom)
                             .animation(Animation.easeInOut(duration: 0.2), value: 0.1)
                     }
