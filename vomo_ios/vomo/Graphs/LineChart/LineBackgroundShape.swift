@@ -35,4 +35,3 @@ struct LineBackgroundShape_Previews: PreviewProvider {
         }
     }
 }
-

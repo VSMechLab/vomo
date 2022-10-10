@@ -12,8 +12,8 @@ struct ViewController: View {
     @EnvironmentObject var viewRouter: ViewRouter
     @EnvironmentObject var notification: Notification
     @EnvironmentObject var settings: Settings
-    
     @State private var variablePadding: CGFloat = 0
+    let svm = SharedViewModel()
     
     var body: some View {
         VStack(spacing: 0) {
@@ -21,8 +21,10 @@ struct ViewController: View {
             
             Spacer()
             
-            tabBar
-                .padding(.bottom, self.variablePadding)
+            if !settings.keyboardShown && viewRouter.currentPage != .onboard {
+                tabBar
+                    .padding(.bottom, self.variablePadding)
+            }
         }
         .onAppear() {
             var keyWindow: UIWindow? {
@@ -69,12 +71,47 @@ extension ViewController {
     
     private var tabBar: some View {
         HStack {
-            Button("Home") { viewRouter.currentPage = .home }.frame(width: UIScreen.main.bounds.width / 3)
-            Button("Record") { viewRouter.currentPage = .record }.frame(width: UIScreen.main.bounds.width / 3)
-            Button("Progress") { viewRouter.currentPage = .progress }.frame(width: UIScreen.main.bounds.width / 3)
+            Button(action: {
+                viewRouter.currentPage = .home
+            }) {
+                VStack(spacing: 5) {
+                    Image(svm.home_icon)
+                        .resizable()
+                        .frame(width: 18, height: 18)
+                    
+                    Text("Home")
+                        .foregroundColor(viewRouter.currentPage == .home ? Color.DARK_PURPLE : Color.gray)
+                }.frame(width: UIScreen.main.bounds.width / 3)
+            }
+            Button(action: {
+                viewRouter.currentPage = .record
+            }) {
+                VStack(spacing: 5) {
+                    Image(svm.home_icon)
+                        .resizable()
+                        .frame(width: 18, height: 18)
+                    
+                    Text("Recording")
+                        .foregroundColor(viewRouter.currentPage == .record ? Color.DARK_PURPLE : Color.gray)
+                }.frame(width: UIScreen.main.bounds.width / 3)
+            }
+            Button(action: {
+                viewRouter.currentPage = .progress
+            }) {
+                VStack(spacing: 5) {
+                    Image(svm.home_icon)
+                        .resizable()
+                        .frame(width: 18, height: 18)
+                    
+                    Text("Progress")
+                        .foregroundColor(viewRouter.currentPage == .progress ? Color.DARK_PURPLE : Color.gray)
+                }.frame(width: UIScreen.main.bounds.width / 3)
+            }
         }
+        .font(._tabBarFont)
         .frame(width: UIScreen.main.bounds.width)
-        .padding(.top)
+        .padding(.bottom, -5)
+        .padding(.top, 7.5)
         .background(Color.white)
         .shadow(color: Color.gray.opacity(0.2), radius: 2, x: 0, y: 0)
     }

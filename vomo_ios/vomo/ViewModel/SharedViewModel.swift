@@ -17,9 +17,13 @@ import Foundation
 struct SharedViewModel {
     /// Maximum width content will occupy on screen
     let content_width = 325.0
-    
     /// Padding for entry fields with text or images overlayed
     let fieldPadding = 7.0
+    
+    /// Tab bar items
+    let home_icon = "VM_home-nav-icon"
+    let record_icon = "VM_home-nav-icon"
+    let progress_icon = "VM_home-nav-icon"
     
     let button_img = "VM_Gradient-Btn"
     let profile_img = "VM_7-avatar-photo-placeholder-gfx"
@@ -57,19 +61,8 @@ struct SharedViewModel {
         }
     }
     
-    var questionniare: String {
-        /*
-            VRQOL = 1
-            VHI = 2
-         */
-        if settings.questionnaires == 1 {
-            return "VRQOL"
-        } else if settings.questionnaires == 2 {
-            return "VHI"
-        } else { return "VRQOL" }
-    }
-    
     let vrqol = [
+        "VRQOL",
         "1. I have trouble speaking loudly or being heard in noisy situations.",
         "2. I run out of air and need to take frequent breaths when talking.",
         "3. I sometimes do not know what will come out when I begin speaking.",
@@ -83,6 +76,7 @@ struct SharedViewModel {
         "11. The overall quality of my voice during the last two weeks has been:"
     ]
     let vhi = [
+        "VHI",
         "1. My voice makes it difficult for people to hear me.",
         "2. I run out of air when I talk.",
         "3. People have difficulty understanding me in a noisy room.",
@@ -95,6 +89,17 @@ struct SharedViewModel {
         "10. People ask, \"Whats wrong with your voice?\"",
         "11. The overall quality of my voice during the last two weeks has been:"
     ]
+    
+    var questions: [String] {
+        if settings.questionnaires == 1 {
+            return vrqol
+        } else if settings.questionnaires == 2 {
+            return vhi
+        } else {
+            return []
+        }
+    }
+    
     let record_img = "VM_record-nav-ds-icon"
     let stop_img = "VM_stop-nav-ds-icon"
     
@@ -103,4 +108,21 @@ struct SharedViewModel {
     let approved_img = "VM_appr-btn"
     let play_img = "VM_play-btn"
     let retry_img = "VM_retry-btn"
+    
+    /// Journal items
+    let banner_img = "VoMo-App-Assets_journalEntry-Banner"
+    let tag_img = "VM_12-tags-entry-field"
+    let field_img = "VM_12-entry-field"
+    
+    /// Onboarding items
+    let logo = "VM_VoMo-Logo-WhBG"
+    
+    /// Questionnaire Models
+    let scale_img = "VM_11-scale-bg-ds"
+    let empty_scale_img = "VM_11-empty-scale-bg-ds"
+    let select_img = "VM_11-select-btn-ds"
+    let scale_height: CGFloat = 140
+    
+    /// Exit button
+    let exit_button = "VoMo-App-Assets_2_popup-close-btn"
 }

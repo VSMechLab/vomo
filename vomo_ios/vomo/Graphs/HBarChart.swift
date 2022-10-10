@@ -34,7 +34,7 @@ struct HBarChart: View {
             VStack(alignment: .leading) {
                 if label != "" {
                     Text(label)
-                        .font(._coverBodyCopy)
+                        .font(._recordingPopUp)
                         .foregroundColor(Color.white)
                 }
                 

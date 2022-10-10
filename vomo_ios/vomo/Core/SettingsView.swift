@@ -62,8 +62,12 @@ struct SettingsView: View {
 
 extension SettingsView {
     private var header: some View {
-        Text("Settings")
-            .font(._headline)
+        HStack {
+            Text("Settings")
+                .font(._title)
+            Spacer()
+        }
+        .padding(.vertical)
     }
     
     private var firstName: some View {

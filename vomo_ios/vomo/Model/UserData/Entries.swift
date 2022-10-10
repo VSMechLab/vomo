@@ -11,8 +11,8 @@ import AVFoundation
 import SwiftUI
 
 class Entries: ObservableObject {
-    @Published var visits: [VisitModel] = [] {
-        didSet { saveVisits() }
+    @Published var interventions: [InterventionModel] = [] {
+        didSet { saveInterventions() }
     }
     @Published var questionnaires: [QuestionnaireModel] = [] {
         didSet { saveQuestionnaireItems() }
@@ -41,12 +41,12 @@ class Entries: ObservableObject {
         return returnable
     }
     
-    let questionnairesItemsKey: String = "saved_questionnaires", questionnairesEffortItemsKey: String = "saved_questionnaires_effort", journalsItemsKey: String = "saved_journals", visitItemsKey: String = "visits"
+    let questionnairesItemsKey: String = "saved_questionnaires", questionnairesEffortItemsKey: String = "saved_questionnaires_effort", journalsItemsKey: String = "saved_journals", interventionItemsKey: String = "saved_intervention"
     
     func getItems() {
         self.getQuestionnaires()
         self.getJournals()
-        self.getVisits()
+        self.getInterventions()
     }
     
     
@@ -68,13 +68,13 @@ class Entries: ObservableObject {
         self.journals = savedItems
     }
     
-    func getVisits() {
+    func getInterventions() {
         guard
-            let data = UserDefaults.standard.data(forKey: visitItemsKey),
-            let savedItems = try? JSONDecoder().decode([VisitModel].self, from: data)
+            let data = UserDefaults.standard.data(forKey: interventionItemsKey),
+            let savedItems = try? JSONDecoder().decode([InterventionModel].self, from: data)
         else { return }
         
-        self.visits = savedItems
+        self.interventions = savedItems
     }
     
     func saveQuestionnaireItems() {
@@ -88,7 +88,7 @@ class Entries: ObservableObject {
             UserDefaults.standard.set(encodedData, forKey: journalsItemsKey)
         }
     }
-    func saveVisits() {
+    func saveInterventions() {
         print("Fix later")
         //self.saveVisits()
     }

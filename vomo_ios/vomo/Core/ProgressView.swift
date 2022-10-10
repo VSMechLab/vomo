@@ -10,27 +10,74 @@ import SwiftUI
 struct ProgressView: View {
     @EnvironmentObject var entries: Entries
     @EnvironmentObject var audioRecorder: AudioRecorder
+    let svm = SharedViewModel()
     var body: some View {
-        VStack {
-            Button(action: {
-            }) {
-                Text("Progress")
-                    .bold()
-            }
+        VStack(alignment: .leading) {
+            header
             
+            Text("Recordings")
+                .bold()
             List {
                 ForEach(audioRecorder.recordings, id: \.createdAt) { record in
                     HStack {
-                        Text("\(record.createdAt.toStringDay())")
-                            .foregroundColor(Color.DARK_BLUE)
-                        Text("Duration: \(audioRecorder.returnProcessing(createdAt: record.createdAt).duration, specifier: "%.0f")s")
+                        VStack(alignment: .leading) {
+                            Text("\(record.createdAt.toStringDay())")
+                                .bold()
+                            Text("Duration: \(audioRecorder.returnProcessing(createdAt: record.createdAt).duration, specifier: "%.2f")s, intensity: \(audioRecorder.returnProcessing(createdAt: record.createdAt).intensity, specifier: "%.1f")hz")
+                        }
+                        Spacer()
                         PlaybackButton(file: record.fileURL)
+                            .font(.title)
                     }
-                }//.onDelete(perform: delete)
+                }.onDelete(perform: delete)
             }
-            .onAppear() {
-                print(audioRecorder.recordings)
+            .listStyle(PlainListStyle())
+            .padding(.horizontal, -10)
+            
+            Text("Questionnaires")
+                .bold()
+            List {
+                ForEach(entries.questionnaires) { response in
+                    VStack(alignment: .leading) {
+                        Text("Date: \(response.createdAt.toStringDay())")
+                            .bold()
+                        Text("Question 1: \(response.responses[1])")
+                        Text("Question 2: \(response.responses[2])")
+                        Text("Question 3: \(response.responses[3])")
+                    }
+                }//.onDelete(perform: nil)
             }
+            .listStyle(PlainListStyle())
+            .padding(.horizontal, -10)
+        }
+        .padding(.vertical)
+        .frame(width: svm.content_width)
+        .onAppear() {
+            entries.getItems()
+        }
+    }
+    
+    func delete(at offsets: IndexSet) {
+        var urlsToDelete = [URL]()
+        for index in offsets {
+            print(audioRecorder.recordings[index].fileURL)
+            urlsToDelete.append(audioRecorder.recordings[index].fileURL)
+        }
+        print("Deleting url here: \(urlsToDelete)")
+        audioRecorder.deleteRecording(urlToDelete: urlsToDelete.last!)
+    }
+}
+
+extension ProgressView {
+    private var header: some View {
+        VStack(alignment: .leading) {
+            Text("Progress")
+                .bold()
+                .font(._title)
+            Text("Log some recordings, questionnaires, journals and interventions and view them bellow. The purpose of this page is to ensure that I am able to pull everything the user saves properly, without items disapearing or getting corrupted.")
+                .font(._subTitle)
+                .foregroundColor(Color.BODY_COPY)
+                .multilineTextAlignment(.leading)
         }
     }
 }
@@ -43,64 +90,4 @@ struct ProgressView_Previews: PreviewProvider {
     }
 }
 
-private struct PlaybackButton: View {
-    @ObservedObject var audioPlayer = AudioPlayer()
-    let file: URL
-    var body: some View {
-        Button(action: {
-            if audioPlayer.isPlaying {
-                audioPlayer.stopPlayback()
-            } else {
-                audioPlayer.startPlayback(audio: file)
-            }
-        }) {
-            Image(systemName: audioPlayer.isPlaying ? "stop.circle.fill" : "play.circle.fill")
-        }
-    }
-}
 
-/*
-func delete(at offsets: IndexSet) {
-    var urlsToDelete = [URL]()
-    for index in offsets {
-        print(audioRecorder.recordings[index].fileURL)
-        entries.removeAtCreated(createdAt: audioRecorder.recordings[index].createdAt)
-        urlsToDelete.append(audioRecorder.recordings[index].fileURL)
-    }
-    print("Deleting url here: \(urlsToDelete)")
-    audioRecorder.deleteRecording(urlToDelete: urlsToDelete.last!)
-}
-
-func findRecord(createdAt: Date) -> Float {
-    var ret: Float = 0.0
-    for entry in entries.recordings {
-        if createdAt == entry.createdAt {
-            ret = entry.intensity
-        }
-    }
-    return ret
-}
-
-/// - get rid of this function
-/// - add function that returns processings based on the date of the entry
-/// - function lives in entries.recordings
-func matchEntry(createdAt: Date) -> Bool {
-    var result = false
-    for entry in entries.recordings {
-        if createdAt == entry.createdAt {
-            result = true
-        }
-    }
-    return result
-}
-
-func syncEntry() {
-    for record in audioRecorder.recordings {
-        if !matchEntry(createdAt: record.createdAt) {
-            let processings = audioRecorder.process(fileURL: record.fileURL)
-            
-            self.entries.recordings.append(RecordingModel(createdAt: record.createdAt, duration: processings.duration, intensity: processings.intensity))
-            self.entries.saveItems()
-        }
-    }
-}*/

@@ -37,7 +37,7 @@ struct EntryView: View {
             
             HStack {
                 Text("Entry for ")
-                    .font(._headline)
+                    .font(._title)
                 
                 Spacer()
             }

@@ -13,6 +13,9 @@ import UserNotifications
 class Settings: ObservableObject {
     let defaults = UserDefaults.standard
 
+    /// Showing and hiding on the basis of wether the keyboard is shown or not
+    @Published var keyboardShown = false
+    
     /// Stores the goal amount of enteries to be logged per week
     @Published var perWeek: Int {
         didSet { defaults.set(perWeek, forKey: "per_week") }
@@ -216,22 +219,17 @@ class Settings: ObservableObject {
         self.maxPT = UserDefaults.standard.object(forKey: "max_pt") as? Bool ?? false
         self.rainbowS = UserDefaults.standard.object(forKey: "rainbow_s") as? Bool ?? false
         self.allTasks = UserDefaults.standard.object(forKey: "all_tasks") as? Bool ?? false
-        
         self.pitch = UserDefaults.standard.object(forKey: "pitch") as? Bool ?? false
         self.CPP = UserDefaults.standard.object(forKey: "cpp") as? Bool ?? false
         self.intensity = UserDefaults.standard.object(forKey: "intensity") as? Bool ?? false
         self.duration = UserDefaults.standard.object(forKey: "duration") as? Bool ?? false
         self.minPitch = UserDefaults.standard.object(forKey: "min_pitch") as? Bool ?? false
         self.maxPitch = UserDefaults.standard.object(forKey: "max_pitch") as? Bool ?? false
-        
         self.accousticParameters = UserDefaults.standard.object(forKey: "accoustic_parameters") as? Bool ?? false
         self.questionnaires = UserDefaults.standard.object(forKey: "questionnaires") as? Int ?? 0
         
-        /// Profile Questions
+        /// Settings View Questions
         self.voice_onset = UserDefaults.standard.object(forKey: "voiceOnset") as? Bool ?? false
-        /*
-         Add sex (at birth), gender, Date Onset
-         */
         self.sexAtBirth = UserDefaults.standard.object(forKey: "sex_at_birth") as? String ?? ""
         self.gender = UserDefaults.standard.object(forKey: "gender") as? String ?? ""
         self.dateOnset = UserDefaults.standard.object(forKey: "date_onset") as? String ?? ""
@@ -246,11 +244,6 @@ class Settings: ObservableObject {
         self.entered = defaults.object(forKey: "entered") as? Int ?? 0
         self.startDate = defaults.object(forKey: "start_date") as? String ?? ""
     }
-    
-    
-    
-    
-    
 }
 
 extension Settings {

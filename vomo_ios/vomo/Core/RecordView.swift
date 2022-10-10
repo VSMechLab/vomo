@@ -11,12 +11,14 @@ import Combine
 import AVFoundation
 
 struct RecordView: View {
+    @EnvironmentObject var viewRouter: ViewRouter
     @EnvironmentObject var settings: Settings
     @EnvironmentObject var audioRecorder: AudioRecorder
     
     @State private var audioPlayerPrerecordings: AVAudioPlayer?
     @State private var exercise = 0
-    @State private var popUp = false
+    @State private var completePopUp = false
+    @State private var landingPopUp = true
     @State private var time: Int = 0
     
     let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
@@ -31,21 +33,25 @@ struct RecordView: View {
             }.frame(height: UIScreen.main.bounds.height / 2)
             
             VStack {
-                if exercise == 0 {
-                    landing
-                } else {
-                    exercises
-                }
+                grayButton
+                
+                exercises
                 
                 Spacer()
+                
                 arrows
             }
             .frame(width: svm.content_width)
             
-            if popUp {
+            if landingPopUp {
                 ZStack {
                     Color.white.opacity(0.001)
-                    CompleteMenu(popUp: $popUp)
+                    landingPopUpSection
+                }
+            } else if completePopUp {
+                ZStack {
+                    Color.white.opacity(0.001)
+                    CompleteMenu(popUp: $completePopUp)
                 }
             }
         }
@@ -56,27 +62,75 @@ struct RecordView: View {
 }
 
 extension RecordView {
-    private var landing: some View {
-        VStack {
-            Text("Record your voice")
-                .multilineTextAlignment(.center)
-                .font(._headline)
+    private var grayButton: some View {
+        HStack {
+            Button(action: {
+                self.viewRouter.currentPage = .home
+            }) {
+                Text("EXIT")
+                    .font(Font._subTitle)
+                    .padding(.horizontal)
+                    .padding(.vertical, 7.5)
+                    .foregroundColor(Color.HEADLINE_COPY)
+                    .background(Color.INPUT_FIELDS)
+                    .cornerRadius(10)
+            }
             
-            Text("Hold the phone 5 inches from your face")
-                .font(._recordStateStatus)
-                .foregroundColor(Color.BODY_COPY)
+            Spacer()
         }
+    }
+    
+    private var landingPopUpSection: some View {
+        VStack(alignment: .leading) {
+            HStack {
+                Spacer()
+                Button(action: {
+                    self.landingPopUp.toggle()
+                }) {
+                    Image(svm.exit_button)
+                        .resizable()
+                        .frame(width: 17, height: 17)
+                }
+                
+            }
+            
+            VStack {
+                Text("Find a quiet place indoors, hold your phone at a comfortable distance away from your face")
+                    .font(._recordingPopUp)
+                    .multilineTextAlignment(.leading)
+            }
+            .padding(5)
+            .background(Color.INPUT_FIELDS)
+            .cornerRadius(12)
+            .padding(5)
+            
+            HStack {
+                Button(action: {
+                    self.landingPopUp.toggle()
+                }) {
+                    Text("I'M READY")
+                        .font(._BTNCopy)
+                        .foregroundColor(Color.white)
+                }
+            }
+            .frame(width: svm.content_width * 0.80)
+            .background(Color.DARK_PURPLE)
+        }
+        .padding(.top)
+        .background(Color.white)
+        .shadow(color: Color.gray, radius: 1)
+        .frame(width: svm.content_width * 0.80)
     }
     
     private var exercises: some View {
         VStack(spacing: 10) {
             Text("\(audioRecorder.recording ? "Recording..." : " ")")
-                .font(._recordStateStatus)
+                .font(._subTitle)
                 .foregroundColor(Color.BODY_COPY)
             
-            Text("\(settings.taskList[exercise - 1].prompt)")
+            Text("\(settings.taskList[exercise].prompt)")
                 .multilineTextAlignment(.center)
-                .font(._headline)
+                .font(._title)
             
             if !audioRecorder.recording {
                 promptPlaybackButton
@@ -95,7 +149,7 @@ extension RecordView {
             Button(action: {
                 if audioRecorder.recording {
                     audioRecorder.stopRecording()
-                    self.popUp.toggle()
+                    self.completePopUp.toggle()
                     self.time = 0
                 } else {
                     audioRecorder.startRecording(taskNum: exercise)
@@ -110,7 +164,7 @@ extension RecordView {
     
     private var arrows: some View {
         HStack {
-            if (audioRecorder.recording || self.popUp) {
+            if (audioRecorder.recording || self.completePopUp) {
                 GrayArrow()
                     .rotationEffect(Angle(degrees: -180))
                 Text("Back")
@@ -130,7 +184,7 @@ extension RecordView {
             
             Spacer()
             
-            if (audioRecorder.recording || self.popUp) && self.exercise != settings.endIndex {
+            if (audioRecorder.recording || self.completePopUp) && self.exercise != settings.endIndex {
                 Text("Next")
                     .foregroundColor(Color.BODY_COPY)
                     .font(._pageNavLink)
@@ -166,6 +220,7 @@ extension RecordView {
 struct RecordView_Previews: PreviewProvider {
     static var previews: some View {
         RecordView()
+            .environmentObject(ViewRouter())
             .environmentObject(Settings())
             .environmentObject(AudioRecorder())
     }

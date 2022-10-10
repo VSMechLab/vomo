@@ -22,7 +22,7 @@ struct CompleteMenu: View {
     var body: some View {
         VStack {
             Text("Recording complete!")
-                .font(._coverBodyCopy)
+                .font(._recordingPopUp)
                 .padding(.vertical)
             
             HStack {

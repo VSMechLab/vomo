@@ -48,7 +48,7 @@ struct RecordingSection: View {
                 recordingsList
             }
             .padding(.trailing, 5)
-            .font(._coverBodyCopy)
+            .font(._recordingPopUp)
         }
         .padding(.vertical)
         .frame(width: svm.content_width)

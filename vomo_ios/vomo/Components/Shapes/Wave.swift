@@ -18,7 +18,7 @@ struct Wave: View {
     private func wave(path: Path) -> Path {
         var path = path
         let viewBoundsHeight: CGFloat = UIScreen.main.bounds.width
-        let centerY = viewBoundsHeight / 2
+        let centerY = viewBoundsHeight
         let amplitude = CGFloat(3) - abs(fmod(CGFloat(elapsed), 3) - 1.5) * 2
         
         func f(_ x: Int) -> CGFloat {
@@ -37,7 +37,7 @@ struct Wave: View {
         return Path { path in
             path = wave(path: path)
         }
-        .stroke(color, lineWidth: 2.5)
+        .stroke(color, lineWidth: 1.75)
         .onAppear {
             Timer.scheduledTimer(withTimeInterval: 0.001, repeats: true) { _ in
                 if recording {

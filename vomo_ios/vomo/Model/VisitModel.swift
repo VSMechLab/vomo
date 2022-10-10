@@ -8,7 +8,7 @@
 import SwiftUI
 import Foundation
 
-class VisitModel: Identifiable, Codable {
+class InterventionModel: Identifiable, Codable {
     var date: Date
     var type: String
     var note: String

@@ -9,18 +9,25 @@ import SwiftUI
 import Foundation
 
 extension Font {
+    /// Title, Size 30, Bold
+    static var _title: Font {
+        Font.custom("Roboto-Bold", size: 30)
+    }
+    /// Subtitle, Size 17, Regular
+    static var _subTitle: Font {
+        Font.custom("Roboto-Regular", size: 17)
+    }
     /// Bar Graph Bar Label
     static var _barLabel: Font {
         Font.custom("Roboto-Light", size: 15)
     }
-    
     /// Medium Bar Graph Bar Label
     static var _barLabelBold: Font {
         Font.custom("Roboto-Medium", size: 15)
     }
-    /// Size 30, bold
-    static var _headline: Font {
-        Font.custom("Roboto-Bold", size: 30)
+    /// Tab bar font size 14, medium
+    static var _tabBarFont: Font {
+        Font.custom("Roboto-Medium", size: 14)
     }
     static var _subHeadline: Font {
         Font.custom("Roboto-Bold", size: 21)
@@ -43,8 +50,8 @@ extension Font {
     static var _BTNCopyUnbold: Font {
         Font.custom("Roboto-Light", size: 20)
     }
-    static var _coverBodyCopy: Font {
-        Font.custom("Roboto-Bold", size: 16)
+    static var _recordingPopUp: Font {
+        Font.custom("Roboto-Regular", size: 18)
     }
     static var _stats: Font {
         Font.custom("Roboto-Medium", size: 10)
@@ -55,11 +62,6 @@ extension Font {
     static var _CTALink: Font {
         Font.custom("Roboto-Regular", size: 10)
     }
-    
-        //.font(._day)
-        //.font(._date)
-        //.font(._lastUsed)
-    
     static var _day: Font {
         Font.custom("Roboto-Regular", size: 14)
     }
@@ -68,10 +70,6 @@ extension Font {
     }
     static var _lastUsed: Font {
         Font.custom("Roboto-Regular", size: 12)
-    }
-    /// Recording State Timer
-    static var _recordStateStatus: Font {
-        Font.custom("Roboto-Regular", size: 17)
     }
     static var _question: Font {
         Font.custom("Roboto-Light", size: 12)
@@ -120,7 +118,7 @@ struct FontView: View {
         VStack {
             Group {
                 Text("Hi, Victoria")
-                    .font(._headline)
+                    .font(._title)
                 Text("Track your voice over time and share vocal health information with your clinical provider all in one place")
                     .font(._bodyCopy)
                     .multilineTextAlignment(.center)
@@ -132,7 +130,7 @@ struct FontView: View {
                 .font(._BTNCopy)
             
             Text("Some at home voice therapy today will keep the doctor away")
-                .font(._coverBodyCopy)
+                .font(._recordingPopUp)
                 .multilineTextAlignment(.center)
             
             Group {

@@ -14,14 +14,6 @@ import Accelerate // CHANGED: imported for vector math
 import AudioKit // CHANGED: also a package dependency
 import AVFAudio
 
-/*
- 
- Add an array storing processings and an identifiable createdAt
- this createdAt will store a date, referencable to recordings
- able to be selected and have that data pulled
- 
- */
-
 class AudioRecorder: NSObject,ObservableObject {
     var processings = Processings()
     
@@ -47,6 +39,7 @@ class AudioRecorder: NSObject,ObservableObject {
         fetchRecordings()
         getProcessedData()
     }
+    
     func returnProcessing(createdAt: Date) -> ProcessedData {
         var ret = ProcessedData(createdAt: .now, duration: 99.1, intensity: 99.1)
         for data in processedData {
@@ -145,6 +138,12 @@ class AudioRecorder: NSObject,ObservableObject {
         } else {
             return false
         }
+    }
+    
+    func howContains() {
+        let expenses = [21.37, 55.21, 9.32, 10.18, 388.77, 11.41]
+        let hasBigPurchase = expenses.contains { $0 > 100 }
+        ///     //'hasBigPurchase' == true
     }
     
     func uniqueDays() -> [Date] {
