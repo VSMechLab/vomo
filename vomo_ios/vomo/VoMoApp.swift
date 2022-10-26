@@ -24,6 +24,7 @@ struct VoMoApp: App {
     var body: some Scene {
         WindowGroup {
             SplashScreen()
+                .dynamicTypeSize(.medium)
         }
     }
 }

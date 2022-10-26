@@ -14,7 +14,7 @@ struct SubmissionButton: View {
         ZStack {
             Image(button_img)
                 .resizable()
-                .frame(width: 225, height: 40)
+                .frame(width: 250, height: 46)
             
             Text(label)
                 .font(._BTNCopy)

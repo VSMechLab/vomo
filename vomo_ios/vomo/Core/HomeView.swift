@@ -14,51 +14,153 @@ import SwiftUI
 
 struct HomeView: View {
     @EnvironmentObject var viewRouter: ViewRouter
+    @EnvironmentObject var settings: Settings
+    let svm = SharedViewModel()
     var body: some View {
-        ZStack {
-            HomeBackground()
-            quickLinks
-        }
+        quickLinks
     }
 }
 
 extension HomeView {
     private var quickLinks: some View {
-        VStack(spacing: 20) {
-            Text("Home")
-                .font(._title)
+        VStack {
+            settingsSection
             
-            // Nothing left to do as of yet
-            Button("Settings") {
-                viewRouter.currentPage = .settings
-            }.foregroundColor(Color.green)
+            greetingSection
             
-            // Selecting certain options will mess with what task is saved
-            // Fix that issue
-            Button("Record") {
-                viewRouter.currentPage = .record
-            }.foregroundColor(Color.yellow)
+            Spacer()
             
-            // Good for now
-            Button("Questionnaire") {
-                viewRouter.currentPage = .questionnaire
-            }.foregroundColor(Color.green)
+            progressTitleSection
             
-            // Done button sometimes does not show up
-            Button("Journal") {
-                viewRouter.currentPage = .journal
-            }.foregroundColor(Color.yellow)
+            recordSection
             
-            // Nothing left to do as of yet
-            Button("My Progress") {
-                viewRouter.currentPage = .progress
-            }.foregroundColor(Color.green)
+            questJournalSection
             
-            // Add/Complete this view
-            Button("Intervention Log") {
-                viewRouter.currentPage = .intervention
-            }.foregroundColor(Color.red)
+            wavesSection
+            
+            progressSection
+            
+            interventionSection
         }
+    }
+}
+
+extension HomeView {
+    private var settingsSection: some View {
+        HStack {
+            Spacer()
+            
+            Button(action: {
+                viewRouter.currentPage = .settings
+            }) {
+                Image(svm.home_settings_img)
+                    .resizable()
+                    .frame(width: 35, height: 35)
+            }
+        }
+        .frame(width: svm.content_width)
+    }
+    
+    private var greetingSection: some View {
+        HStack(spacing: 0) {
+            Text("Hi, ")
+                .font(._title)
+            Text(settings.firstName)
+                .foregroundColor(Color.DARK_PURPLE)
+                .font(._title)
+            Spacer()
+        }
+        .frame(width: svm.content_width)
+    }
+    
+    private var progressTitleSection: some View {
+        HStack(spacing: 0) {
+            Spacer()
+            Text("Progress ")
+                .foregroundColor(Color.DARK_PURPLE)
+            Text("for this week")
+            Text(".")
+                .foregroundColor(Color.TEAL)
+            Spacer()
+        }
+        .font(._title1)
+        .frame(width: svm.content_width)
+    }
+    
+    private var recordSection: some View {
+        Button(action: {
+            viewRouter.currentPage = .record
+        }) {
+            ZStack {
+                ProgressBar(level: 3, color: Color.DARK_PURPLE)
+                
+                Image(svm.home_record_img)
+                    .resizable()
+                    .frame(width: 90, height: 90, alignment: .center)
+            }
+        }
+        .frame(width: svm.content_width)
+    }
+    
+    private var questJournalSection: some View {
+        HStack {
+            Spacer()
+            Button(action: {
+                viewRouter.currentPage = .questionnaire
+            }) {
+                ZStack {
+                    ProgressBar(level: 3, color: Color.BLUE)
+                    
+                    Image(svm.home_question_img)
+                        .resizable()
+                        .frame(width: 90, height: 90, alignment: .center)
+                }
+            }
+            Spacer()
+            Button(action: {
+                viewRouter.currentPage = .journal
+            }) {
+                ZStack {
+                    ProgressBar(level: 3, color: Color.TEAL)
+                    
+                    Image(svm.home_journal_img)
+                        .resizable()
+                        .frame(width: 90, height: 90, alignment: .center)
+                }
+            }
+            Spacer()
+        }
+        .frame(width: svm.content_width)
+    }
+    
+    private var wavesSection: some View {
+        Image(svm.home_wave_img)
+            .resizable()
+            .frame(width: UIScreen.main.bounds.width, height: 50)
+            .padding(.vertical)
+    }
+    
+    private var progressSection: some View {
+        Button(action: {
+            viewRouter.currentPage = .progress
+        }) {
+            Image(svm.home_progress_img)
+                .resizable()
+                .frame(width: svm.content_width, height: 90)
+        }
+        .padding(.bottom, -10)
+        .frame(width: svm.content_width)
+    }
+    
+    private var interventionSection: some View {
+        Button(action: {
+            viewRouter.currentPage = .intervention
+        }) {
+            Image(svm.home_intervention_img)
+                .resizable()
+                .frame(width: svm.content_width, height: 95)
+        }
+        .frame(width: svm.content_width)
     }
 }
 
@@ -67,5 +169,34 @@ struct HomeView_Previews: PreviewProvider {
         HomeView()
             .environmentObject(AudioRecorder())
             .environmentObject(Entries())
+            .environmentObject(Settings())
+    }
+}
+
+struct ProgressBar: View {
+    var level: Int
+    var color: Color
+    
+    var body: some View {
+        VStack {
+            ZStack {
+                Circle()
+                    .stroke(lineWidth: 10)
+                    .foregroundColor(Color.gray)
+                    .opacity(0.10)
+                
+                Circle()
+                    .trim(from: 0.0, to: CGFloat(min(progress(), 1.0)))
+                    .stroke(style: StrokeStyle(lineWidth: 10, lineCap: .round, lineJoin: .round))
+                    .foregroundColor(color)
+                    .rotationEffect(Angle(degrees: -90))
+                    .animation(.linear, value: 1)
+                    .opacity(0.90)
+            }.frame(width: 110, height: 110, alignment: .center)
+        }
+    }
+    
+    func progress() -> CGFloat {
+        return CGFloat(CGFloat(level) / CGFloat(10))
     }
 }

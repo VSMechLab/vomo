@@ -175,7 +175,7 @@ extension SettingsView {
     
     private var voiceProblemOnsetSection: some View {
         Group {
-            Text("Voice Problem Onset")
+            Text("Did your voice problem begin on a specific date?")
             
             HStack(spacing: 0) {
                 Button("") {
@@ -191,15 +191,37 @@ extension SettingsView {
                 }.buttonStyle(NoButton(selected: settings.voice_onset))
             }
             
+            /*
+             
+             Group {
+                 Text("Date of Birth")
+                 
+                 DateEntryField(toggle: self.$showCalendar, date: self.$settings.dob)
+                 
+                 ZStack {
+                     if showCalendar {
+                         DatePicker("", selection: $date, in: ...Date.now, displayedComponents: .date)
+                             .datePickerStyle(WheelDatePickerStyle())
+                             .frame(maxWidth: svm.content_width * 0.9)
+                     }
+                 }
+                 .transition(.slide)
+                 .onChange(of: date) { value in
+                     self.settings.dob = self.date.toDOB()
+                 }
+             }
+             
+             */
+            
             VStack (alignment: .leading) {
                 if self.settings.voice_onset {
-                    Text("Date of Onset")
+                    Text("When did your voice problem begin?")
                     
                     DateEntryField(toggle: self.$showOnsetCal, date: self.$settings.dateOnset)
                     
                     ZStack {
                         if showOnsetCal {
-                            DatePicker("", selection: $dateOnset, in: ...Date.now, displayedComponents: .date)
+                            DatePicker("Pick date", selection: $dateOnset, in: ...Date.now, displayedComponents: .date)
                                 .datePickerStyle(WheelDatePickerStyle())
                                 .frame(maxWidth: svm.content_width * 0.9, maxHeight: 400)
                         }
@@ -228,6 +250,7 @@ extension SettingsView {
                     .foregroundColor(Color.DARK_PURPLE)
                 Spacer()
             }
+            .padding(.vertical, 5)
         }
     }
 }

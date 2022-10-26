@@ -16,24 +16,29 @@ import Foundation
 
 struct SharedViewModel {
     /// Maximum width content will occupy on screen
-    let content_width = 325.0
+    let content_width = 340.0
     /// Padding for entry fields with text or images overlayed
     let fieldPadding = 7.0
     
     /// Tab bar items
     let home_icon = "VM_home-nav-icon"
-    let record_icon = "VM_home-nav-icon"
-    let progress_icon = "VM_home-nav-icon"
+    let record_icon = "VoMo-App-Outline_8_RECORD_BTN_PRPL"
+    let selected_record_icon = "VoMo-App-Outline_8_RECORD_BTN_GREY"
+    let progress_icon = "VoMo-App-Outline_8_PROGRESS_BTN_GREY"
+    let selected_progress_icon = "VoMo-App-Outline_8_PROGRESS_BTN_PRPL"
     
     let button_img = "VM_Gradient-Btn"
     let profile_img = "VM_7-avatar-photo-placeholder-gfx"
     
     /// For Profile
-    let genders = ["Other", "Genderqueer", "Non-binary", "Female", "Male"]
-    var sexes = ["Other", "Female", "Male"]
+    let genders = ["Male", "Female", "Non-binary", "Genderqueer", "Other"]
+    var sexes = ["Male", "Female", "Other"]
     let vocalIssues = ["a custom", "the Spasmodic Dysphonia", "the Recurrent Pappiloma", "the Parkinson's Disease", "the Gender-Affirming Care", "the Vocal Fold/Paresis", "the default"]
     
     /// Items for recording
+    let selected_do_not_show_img = "VM_Prpl-Check-Square-Btn"
+    let unselected_do_not_show_img = "VM_Prpl-Square-Btn copy"
+    let background_img = "VoMo-App-Outline_8_RECORD_POPUP_IMG"
     @ObservedObject var settings = Settings()
     
     let audio: [String] = ["KR_sustained_Ah_1", "KR_sustained_Ah_1", "KR_rainbow_1"]
@@ -61,21 +66,8 @@ struct SharedViewModel {
         }
     }
     
-    let vrqol = [
-        "VRQOL",
-        "1. I have trouble speaking loudly or being heard in noisy situations.",
-        "2. I run out of air and need to take frequent breaths when talking.",
-        "3. I sometimes do not know what will come out when I begin speaking.",
-        "4. I am sometimes anxious or frustrated (because of my voice).",
-        "5. I sometimes get depressed (because of my voice).",
-        "6. I have trouble using the telephone (because of my voice).",
-        "7. I have trouble doing my job or practicing my profession (because of my voice).",
-        "8. I avoid going out socially (because of my voice).",
-        "9. I have to repeat myself to be understood.",
-        "10. I have become less outgoing (because of my voice).",
-        "11. The overall quality of my voice during the last two weeks has been:"
-    ]
-    let vhi = [
+    
+    let vhi: [String] = [
         "VHI",
         "1. My voice makes it difficult for people to hear me.",
         "2. I run out of air when I talk.",
@@ -87,17 +79,23 @@ struct SharedViewModel {
         "8. I tend to avoid groups of people because of my voice.",
         "9. People seem irritated with my voice.",
         "10. People ask, \"Whats wrong with your voice?\"",
-        "11. The overall quality of my voice during the last two weeks has been:"
+    ]
+    
+    let vocal_effort: [String] = [
+        "Vocal Effort",
+        "How much effort did it take to make a voice?"
     ]
     
     var questions: [String] {
-        if settings.questionnaires == 1 {
-            return vrqol
-        } else if settings.questionnaires == 2 {
-            return vhi
-        } else {
-            return []
+        var ret: [String] = []
+        
+        if settings.vhi {
+            ret += vhi
         }
+        if settings.vocalEffort {
+            ret += vocal_effort
+        }
+        return ret
     }
     
     let record_img = "VM_record-nav-ds-icon"
@@ -118,11 +116,27 @@ struct SharedViewModel {
     let logo = "VM_VoMo-Logo-WhBG"
     
     /// Questionnaire Models
-    let scale_img = "VM_11-scale-bg-ds"
-    let empty_scale_img = "VM_11-empty-scale-bg-ds"
+    let start_scale_img = "VoMo-App-Outline_8_RATING_KEY_GFX"
+    let scale_img = "VoMo-App-Outline_8_RATING_SCALE_GFX_PRPL"
+    let empty_scale_img = "VoMo-App-Outline_8_RATING_SCALE2_GFX_PRPL"
     let select_img = "VM_11-select-btn-ds"
     let scale_height: CGFloat = 140
     
     /// Exit button
     let exit_button = "VoMo-App-Assets_2_popup-close-btn"
+    
+    /// Home View
+    let home_question_img = "VoMo-App-Outline_8_QUESTIONS_GFX"
+    let home_record_img = "VoMo-App-Outline_8_RECORD_GFX"
+    let home_journal_img = "VoMo-App-Outline_8_JOURNAL_GFX"
+    let home_progress_img = "VoMo-App-Outline_8_PROGRESS_BTN"
+    let home_intervention_img = "VoMo-App-Outline_8_INTERVENTION_BTN"
+    let home_settings_img = "VoMo-App-Outline_8_SETTINGS_BTN"
+    let home_wave_img = "VM_Waves-Gfx"
+    
+    
+    
+    /// Progress View
+    let filled_img = "VM_Gradient-Btn"
+    let empty_img = "VoMo-App-Outline_8_CLEAR_BTN"
 }

@@ -21,7 +21,7 @@ struct ViewController: View {
             
             Spacer()
             
-            if !settings.keyboardShown && viewRouter.currentPage != .onboard {
+            if !settings.keyboardShown && viewRouter.currentPage != .onboard && viewRouter.currentPage != .home {
                 tabBar
                     .padding(.bottom, self.variablePadding)
             }
@@ -68,7 +68,13 @@ extension ViewController {
             }
         }
     }
-    
+    /*
+    let home_icon = "VM_home-nav-icon"
+    let record_icon = "VoMo-App-Outline_8_RECORD_BTN_PRPL"
+    let selected_record_icon = "VoMo-App-Outline_8_RECORD_BTN_GREY"
+    let  = "VoMo-App-Outline_8_PROGRESS_BTN_GREY"
+    let selected_progress_icon = "VoMo-App-Outline_8_PROGRESS_BTN_PRPL"
+    */
     private var tabBar: some View {
         HStack {
             Button(action: {
@@ -77,21 +83,23 @@ extension ViewController {
                 VStack(spacing: 5) {
                     Image(svm.home_icon)
                         .resizable()
-                        .frame(width: 18, height: 18)
+                        .frame(width: 27.5, height: 27.5)
                     
-                    Text("Home")
-                        .foregroundColor(viewRouter.currentPage == .home ? Color.DARK_PURPLE : Color.gray)
+                    Text("HOME")
+                        .font(Font._tabTitle)
+                        .foregroundColor(Color.gray)
                 }.frame(width: UIScreen.main.bounds.width / 3)
             }
             Button(action: {
                 viewRouter.currentPage = .record
             }) {
                 VStack(spacing: 5) {
-                    Image(svm.home_icon)
+                    Image(viewRouter.currentPage == .record ? svm.record_icon : svm.selected_record_icon)
                         .resizable()
-                        .frame(width: 18, height: 18)
+                        .frame(width: 17.5, height: 27.5)
                     
-                    Text("Recording")
+                    Text("RECORDING")
+                        .font(Font._tabTitle)
                         .foregroundColor(viewRouter.currentPage == .record ? Color.DARK_PURPLE : Color.gray)
                 }.frame(width: UIScreen.main.bounds.width / 3)
             }
@@ -99,11 +107,12 @@ extension ViewController {
                 viewRouter.currentPage = .progress
             }) {
                 VStack(spacing: 5) {
-                    Image(svm.home_icon)
+                    Image(viewRouter.currentPage == .progress ? svm.selected_progress_icon : svm.progress_icon)
                         .resizable()
-                        .frame(width: 18, height: 18)
+                        .frame(width: 37, height: 27.5)
                     
-                    Text("Progress")
+                    Text("PROGRESS")
+                        .font(Font._tabTitle)
                         .foregroundColor(viewRouter.currentPage == .progress ? Color.DARK_PURPLE : Color.gray)
                 }.frame(width: UIScreen.main.bounds.width / 3)
             }

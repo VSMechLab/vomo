@@ -57,28 +57,14 @@ extension Date {
     func toStringDay() -> String
     {
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "dd/MM/yyyy HH:mm"
-        return dateFormatter.string(from: self)
-    }
-    
-    func toViewableDate() -> String
-    {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "MMMM dd, yyyy"
-        return dateFormatter.string(from: self)
-    }
-    
-    func toViewableTime() -> String
-    {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "hh:mm a"
+        dateFormatter.dateFormat = "MM/dd/yyyy HH:mm"
         return dateFormatter.string(from: self)
     }
     
     func toDOB() -> String
     {
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "dd/MM/yyyy"
+        dateFormatter.dateFormat = "M/d/yyyy"
         return dateFormatter.string(from: self)
     }
     
@@ -86,13 +72,6 @@ extension Date {
     {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "hh:mm a"
-        return dateFormatter.string(from: self)
-    }
-    
-    func toFullDate() -> String
-    {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "dd/MMM/yyyy, hh:mm a"
         return dateFormatter.string(from: self)
     }
     
@@ -154,7 +133,16 @@ extension Date {
     func toDay() -> String
     {
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "MM/dd/yy"
+        // May need to be changed back. This was changed to prevent leadig zeros on dates
+        //dateFormatter.dateFormat = "MM/dd/yy"
+        dateFormatter.dateFormat = "M/d/yy"
         return dateFormatter.string(from: self)
+    }
+    /// "DDD"
+    func dayOfWeek() -> String
+    {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "EEE"
+        return dateFormatter.string(from: self).uppercased()
     }
 }

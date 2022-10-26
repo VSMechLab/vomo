@@ -165,6 +165,8 @@ extension JournalView {
                     self.name = ""
                     self.note = ""
                     submitAnimation = true
+                    
+                    if settings.isActive() { settings.journalEntered += 1 }
                 }) {
                     SubmissionButton(label: "ADD NOTE")
                         .padding(.top, 10)

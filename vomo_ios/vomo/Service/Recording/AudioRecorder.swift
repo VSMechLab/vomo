@@ -140,12 +140,6 @@ class AudioRecorder: NSObject,ObservableObject {
         }
     }
     
-    func howContains() {
-        let expenses = [21.37, 55.21, 9.32, 10.18, 388.77, 11.41]
-        let hasBigPurchase = expenses.contains { $0 > 100 }
-        ///     //'hasBigPurchase' == true
-    }
-    
     func uniqueDays() -> [Date] {
         var days: [Date] = []
         
@@ -185,6 +179,24 @@ class AudioRecorder: NSObject,ObservableObject {
             }
         }
         return str
+    }
+    
+    func taskNum(file: URL!) -> String {
+        var str = ""
+        for record in recordings {
+            if record.fileURL == file {
+                str = record.fileURL.lastPathComponent.suffix(5).prefix(1) + ""
+            }
+        }
+        if str == "1" {
+            return "vowel"
+        } else if str == "2" {
+            return "mpt"
+        } else if str == "3" {
+            return "rainbow"
+        } else {
+            return "rainbow"
+        }
     }
     
     func saveFile(file: URL!) -> Void {

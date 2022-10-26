@@ -1,0 +1,21 @@
+{
+  "images" : [
+    {
+      "filename" : "VoMo-App-Outline_8_PROGRESS_BTN_GREY.png",
+      "idiom" : "universal",
+      "scale" : "1x"
+    },
+    {
+      "idiom" : "universal",
+      "scale" : "2x"
+    },
+    {
+      "idiom" : "universal",
+      "scale" : "3x"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

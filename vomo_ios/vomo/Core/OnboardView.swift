@@ -158,7 +158,7 @@ extension OnboardView {
                         ForEach(startIndex...4, id: \.self) { step in
                             Circle()
                                 .foregroundColor(stepSwitch == step ? Color.DARK_PURPLE : Color.gray)
-                                .frame(width: stepSwitch == step ? 6 : 4, height: stepSwitch == step ? 6 : 4, alignment: .center)
+                                .frame(width: stepSwitch == step ? 8.5 : 6, height: stepSwitch == step ? 8.5 : 6, alignment: .center)
                         }
                     }
                 }
@@ -381,7 +381,6 @@ extension VoiceQuestionView {
             Text("Choose your voice plan")
                 .font(._bodyCopy)
                 .foregroundColor(Color.BODY_COPY)
-                .multilineTextAlignment(.center)
                 .padding(.bottom, 20)
         }.frame(width: svm.content_width)
     }
@@ -400,10 +399,12 @@ extension VoiceQuestionView {
                         Text("Have VoMo Choose for Me")
                             .foregroundColor(settings.voice_plan == 1 ? Color.white : Color.gray)
                             .font(._buttonFieldCopyLarger)
+                            .multilineTextAlignment(.leading)
                         
                         Text("Optimize my plan based on my voice diagnosis.")
                             .foregroundColor(settings.voice_plan == 1 ? Color.white : Color.DARK_PURPLE)
                             .font(._subCopy)
+                            .multilineTextAlignment(.leading)
                     }
                     .padding(.leading, svm.content_width / 5)
                     
@@ -427,8 +428,10 @@ extension VoiceQuestionView {
                         Text("Customize My Own Plan")
                             .foregroundColor(settings.voice_plan == 2 ? Color.white : Color.gray)
                             .font(._buttonFieldCopyLarger)
+                            .multilineTextAlignment(.leading)
                         
                         Text("Let me decide which tasks and measurements I want.")
+                            .multilineTextAlignment(.leading)
                             .foregroundColor(settings.voice_plan == 2 ? Color.white : Color.DARK_PURPLE)
                             .font(._subCopy)
                     }
@@ -630,19 +633,23 @@ struct CustomTargetView: View {
     
     @State private var svm = SharedViewModel()
     
+    let vocalTasks = ["Vowel", "Maximum Phonation Time (MPT)", "Rainbow Sequence"]
+    
     var body: some View {
         VStack {
             Spacer()
             
             header
             
-            vocalTaskSection
-            
-            acousticParametersSection
-            
-            questionnairesSection
-            
-            Spacer()
+            ScrollView(showsIndicators: false) {
+                vocalTaskSection
+                
+                acousticParametersSection
+                
+                questionnairesSection
+                
+                Spacer()
+            }
         }.frame(width: svm.content_width)
     }
 }
@@ -668,42 +675,80 @@ extension CustomTargetView {
             Text("Vocal Tasks")
                 .font(._fieldLabel)
             
-            VStack(spacing: 7) {
-                HStack {
-                    Button(action: {
+            ForEach(vocalTasks, id: \.self) { task in
+                Button(action: {
+                    if task == "Vowel" {
                         self.settings.vowel.toggle()
-                        self.settings.allTasks = false
-                    }) {
-                        SelectionImage(picked: self.settings.vowel, text: "Vowel")
-                    }
-                    
-                    Button(action: {
-                        self.settings.rainbowS.toggle()
-                        self.settings.allTasks = false
-                    }) {
-                        SelectionImage(picked: self.settings.rainbowS, text: "Rainbow Sequences")
-                    }
-                }
-                .frame(height: svm.content_width * 0.105576)
-                
-                HStack {
-                    Button(action: {
+                    } else if task == "Maximum Phonation Time (MPT)" {
                         self.settings.maxPT.toggle()
-                        self.settings.allTasks = false
-                    }) {
-                        SelectionImage(picked: self.settings.maxPT, text: "MPT")
+                    } else if task == "Rainbow Sequence" {
+                        self.settings.rainbowS.toggle()
                     }
-                    
-                    Button(action: {
-                        self.settings.vowel = false
-                        self.settings.maxPT = false
-                        self.settings.rainbowS = false
-                        self.settings.allTasks.toggle()
-                    }) {
-                        SelectionImage(picked: self.settings.allTasks, text: "All Tasks")
+                }) {
+                    ZStack(alignment: .leading) {
+                        VStack {
+                            if task == "Vowel" {
+                                Image(settings.vowel ? large_select_img : large_unselect_img)
+                                    .resizable()
+                                    .scaledToFit()
+                                    .shadow(color: Color.gray.opacity(0.5), radius: 1)
+                            }
+                            if task == "Maximum Phonation Time (MPT)" {
+                                Image(settings.maxPT ? large_select_img : large_unselect_img)
+                                    .resizable()
+                                    .scaledToFit()
+                                    .shadow(color: Color.gray.opacity(0.5), radius: 1)
+                            }
+                            if task == "Rainbow Sequence" {
+                                Image(settings.rainbowS ? large_select_img : large_unselect_img)
+                                    .resizable()
+                                    .scaledToFit()
+                                    .shadow(color: Color.gray.opacity(0.5), radius: 1)
+                            }
+                        }
+                        
+                        VStack(alignment: .leading, spacing: 0) {
+                            if task == "Vowel" {
+                                Text(task)
+                                    .foregroundColor(settings.vowel ? Color.white : Color.gray)
+                                    .font(._buttonFieldCopyLarger)
+                            }
+                            if task == "Maximum Phonation Time (MPT)" {
+                                Text(task)
+                                    .foregroundColor(settings.maxPT ? Color.white : Color.gray)
+                                    .font(._buttonFieldCopyLarger)
+                            }
+                            if task == "Rainbow Sequence" {
+                                Text(task)
+                                    .foregroundColor(settings.rainbowS ? Color.white : Color.gray)
+                                    .font(._buttonFieldCopyLarger)
+                            }
+                            
+                            if task == "Vowel" {
+                                Text("Say ahh for 5 seconds")
+                                    .foregroundColor(settings.vowel ? Color.white : Color.DARK_PURPLE)
+                                    .font(._subCopy)
+                                    .multilineTextAlignment(.leading)
+                                    .padding(.trailing, 2)
+                            }
+                            if task == "Maximum Phonation Time (MPT)" {
+                                Text("Say ahh for as long as you can")
+                                    .foregroundColor(settings.maxPT ? Color.white : Color.DARK_PURPLE)
+                                    .font(._subCopy)
+                                    .multilineTextAlignment(.leading)
+                                    .padding(.trailing, 2)
+                            }
+                            if task == "Rainbow Sequence" {
+                                Text("The rainbow is a division of white light into many beautiful colors...")
+                                    .foregroundColor(settings.rainbowS ? Color.white : Color.DARK_PURPLE)
+                                    .font(._subCopy)
+                                    .multilineTextAlignment(.leading)
+                                    .padding(.trailing, 2)
+                            }
+                        }
+                        .padding(.leading, svm.content_width / 6)
                     }
                 }
-                .frame(height: svm.content_width * 0.105576)
             }
         }.padding(.top, 10)
     }
@@ -725,7 +770,7 @@ extension CustomTargetView {
                     Button(action: {
                         self.settings.CPP.toggle()
                     }) {
-                        SelectionImage(picked: self.settings.CPP, text: "CPP")
+                        SelectionImage(picked: self.settings.CPP, text: "Cepstral Peak Prominence (CPP)")
                     }
                 }.frame(height: svm.content_width * 0.105576)
                 
@@ -768,51 +813,57 @@ extension CustomTargetView {
             Text("Questionnaires")
                 .font(._fieldLabel)
             
-            VStack(spacing: 7) {
-                Button(action: {
-                    settings.questionnaires = 1
-                }) {
-                    ZStack(alignment: .leading) {
-                        Image(settings.questionnaires == 1 ? large_select_img : large_unselect_img)
-                            .resizable()
-                            .scaledToFit()
+            /// vhi
+            Button(action: {
+                settings.vhi.toggle()
+            }) {
+                ZStack(alignment: .leading) {
+                    Image(settings.vhi ? large_select_img : large_unselect_img)
+                        .resizable()
+                        .scaledToFit()
+                        .shadow(color: Color.gray.opacity(0.5), radius: 1)
+                    
+                    VStack(alignment: .leading) {
+                        Text("VHI")
+                            .foregroundColor(settings.vhi ? Color.white : Color.gray)
+                            .font(._buttonFieldCopyLarger)
+                            .multilineTextAlignment(.leading)
                         
-                        VStack(alignment: .leading) {
-                            Text("VRQOL")
-                                .foregroundColor(settings.questionnaires == 1 ? Color.white : Color.gray)
-                                .font(._buttonFieldCopyLarger)
-                            
-                            Text("Voice-Related Quality of Life")
-                                .foregroundColor(settings.questionnaires == 1 ? Color.white : Color.DARK_PURPLE)
-                                .font(._subCopy)
-                        }.padding(.leading, svm.content_width / 5)
-                    }
+                        Text("Vocal Handicap Index (VHI)-10")
+                            .foregroundColor(settings.vhi ? Color.white : Color.DARK_PURPLE)
+                            .font(._subCopy)
+                            .multilineTextAlignment(.leading)
+                            .padding(.trailing, 2)
+                    }.padding(.leading, svm.content_width / 6)
                 }
-                
-                Button(action: {
-                    settings.questionnaires = 2
-                }) {
-                    ZStack(alignment: .leading) {
-                        Image(settings.questionnaires == 2 ? large_select_img : large_unselect_img)
-                            .resizable()
-                            .scaledToFit()
-                        
-                        VStack(alignment: .leading) {
-                            Text("Vocal Effort")
-                                .foregroundColor(settings.questionnaires == 2 ? Color.white : Color.gray)
-                                .font(._buttonFieldCopyLarger)
-                            
-                            Text("Ratings of physcial and mental effort to make a voice")
-                                .foregroundColor(settings.questionnaires == 2 ? Color.white : Color.DARK_PURPLE)
-                                .font(._subCopy)
-                        }
-                        .padding(.leading, svm.content_width / 5)
-                    }
-                }
-                .padding(.top, -10)
-                
-                Spacer()
             }
+            
+            /// vocal effort
+            Button(action: {
+                settings.vocalEffort.toggle()
+            }) {
+                ZStack(alignment: .leading) {
+                    Image(settings.vocalEffort ? large_select_img : large_unselect_img)
+                        .resizable()
+                        .scaledToFit()
+                        .shadow(color: Color.gray.opacity(0.5), radius: 1)
+                    
+                    VStack(alignment: .leading, spacing: 0) {
+                        Text("Vocal Effort")
+                            .foregroundColor(settings.vocalEffort ? Color.white : Color.gray)
+                            .font(._buttonFieldCopyLarger)
+                        
+                        Text("Ratings of physical and mental effort to make a voice")
+                            .foregroundColor(settings.vocalEffort ? Color.white : Color.DARK_PURPLE)
+                            .font(._subCopy)
+                            .multilineTextAlignment(.leading)
+                            .padding(.trailing, 2)
+                    }
+                    .padding(.leading, svm.content_width / 6)
+                }
+            }
+            
+            Spacer()
         }
         .padding(.top, 10)
     }
@@ -864,7 +915,9 @@ struct GoalEntryView: View {
     @EnvironmentObject var settings: Settings
     
     @State private var svm = SharedViewModel()
-    @State private var perWeek = 0
+    @State private var recordPerWeek = 0
+    @State private var questsPerWeek = 0
+    @State private var journalsPerWeek = 0
     @State private var numWeeks = 0
     
     let perWeekOptions = [1, 2, 3, 4, 5, 6, 7]
@@ -913,17 +966,36 @@ extension GoalEntryView {
                 .font(._title)
             
             Spacer()
-        }
+        }.padding(.vertical)
     }
     
     private var informSection: some View {
         VStack(alignment: .leading) {
             VStack(alignment: .leading) {
                 if settings.isActive() {
-                    Text("Your goal is active as of \(settings.startDate)")
+                    Text("Your goal is active as of \(settings.startDate).")
+                        .padding(.vertical, 5)
                 }
-                Text("The goal will last \(settings.numWeeks) and you will complete \(settings.perWeek) enteries per week")
-                Text("Your have entered \(settings.entered) so far")
+                Text("The goal will last \(settings.numWeeks) weeks and you will complete \(settings.recordPerWeek) recordings, \(settings.journalsPerWeek) journals, and \(settings.surveysPerWeek) questionnaires,  per week.")
+                
+                VStack {
+                    HStack(spacing: 5) {
+                        Circle().foregroundColor(.black).frame(width: 8, height: 8)
+                        Text("Your have entered \(settings.recordEntered) recordings so far")
+                        Spacer()
+                    }
+                    HStack(spacing: 5) {
+                        Circle().foregroundColor(.black).frame(width: 8, height: 8)
+                        Text("Your have entered \(settings.journalEntered) journals so far")
+                        Spacer()
+                    }
+                    HStack(spacing: 5) {
+                        Circle().foregroundColor(.black).frame(width: 8, height: 8)
+                        Text("Your have entered \(settings.questionnaireEntered) questionnaires so far")
+                        Spacer()
+                    }
+                }
+                .padding(.vertical)
             }
             .font(._bodyCopy)
             .foregroundColor(Color.BODY_COPY)
@@ -956,87 +1028,147 @@ extension GoalEntryView {
                 .foregroundColor(Color.BODY_COPY)
                 .padding(.bottom)
             
-            Text("Number of entries per week")
-                .font(._fieldLabel)
-            
-            Menu {
-                Picker("", selection: $perWeek) {
-                    ForEach(perWeekOptions, id: \.self) { option in
-                        Text("\(option)")
-                            .font(._bodyCopy)
-                    }
-                }
-            } label: {
-                ZStack {
-                    EntryField()
-                    
-                    HStack {
-                        Text("\(perWeek == 0 ? 0 : perWeek) per week")
-                            .font(._bodyCopy)
-                        Spacer()
+            ScrollView {
+                VStack(alignment: .leading) {
+                    Group {
+                        Text("Number of recordings per week")
+                            .font(._fieldLabel)
                         
-                        Arrow()
-                    }.padding(.horizontal, 5)
-                }
-            }
-            .padding(.bottom, 10)
-            
-            Text("Number of weeks to achieve goal")
-                .font(._fieldLabel)
-            
-            Menu {
-                Picker("", selection: $numWeeks) {
-                    ForEach(perWeekOptions, id: \.self) { option in
-                        HStack {
-                            Text("\(option)")
-                                .font(._bodyCopy)
+                        Menu {
+                            Picker("", selection: $recordPerWeek) {
+                                ForEach(perWeekOptions, id: \.self) { option in
+                                    Text("\(option)")
+                                        .font(._bodyCopy)
+                                }
+                            }
+                        } label: {
+                            ZStack {
+                                EntryField()
+                                
+                                HStack {
+                                    Text("\(recordPerWeek == 0 ? 0 : recordPerWeek) per week")
+                                        .font(._bodyCopy)
+                                    Spacer()
+                                    
+                                    Arrow()
+                                }.padding(.horizontal, 5)
+                            }
+                        }
+                        .padding(.bottom, 10)
+                    }
+                    
+                    Group {
+                        Text("Number of questionnaires per week")
+                            .font(._fieldLabel)
+                        
+                        Menu {
+                            Picker("", selection: $questsPerWeek) {
+                                ForEach(perWeekOptions, id: \.self) { option in
+                                    Text("\(option)")
+                                        .font(._bodyCopy)
+                                }
+                            }
+                        } label: {
+                            ZStack {
+                                EntryField()
+                                
+                                HStack {
+                                    Text("\(questsPerWeek == 0 ? 0 : questsPerWeek) per week")
+                                        .font(._bodyCopy)
+                                    Spacer()
+                                    
+                                    Arrow()
+                                }.padding(.horizontal, 5)
+                            }
+                        }
+                        .padding(.bottom, 10)
+                    }
+                    
+                    Group {
+                        Text("Number of journals per week")
+                            .font(._fieldLabel)
+                        
+                        Menu {
+                            Picker("", selection: $journalsPerWeek) {
+                                ForEach(perWeekOptions, id: \.self) { option in
+                                    Text("\(option)")
+                                        .font(._bodyCopy)
+                                }
+                            }
+                        } label: {
+                            ZStack {
+                                EntryField()
+                                
+                                HStack {
+                                    Text("\(journalsPerWeek == 0 ? 0 : journalsPerWeek) per week")
+                                        .font(._bodyCopy)
+                                    Spacer()
+                                    
+                                    Arrow()
+                                }.padding(.horizontal, 5)
+                            }
+                        }
+                        .padding(.bottom, 10)
+                    }
+                    
+                    Text("Number of weeks to achieve goal")
+                        .font(._fieldLabel)
+                    
+                    Menu {
+                        Picker("", selection: $numWeeks) {
+                            ForEach(perWeekOptions, id: \.self) { option in
+                                HStack {
+                                    Text("\(option)")
+                                        .font(._bodyCopy)
+                                }
+                            }
+                        }
+                    } label: {
+                        ZStack {
+                            EntryField()
+                            
+                            HStack {
+                                Text(numWeeks == 1 ? "\(numWeeks == 0 ? 0 : numWeeks) week" : "\(numWeeks == 0 ? 0 : numWeeks) weeks")
+                                    .font(._bodyCopy)
+                                Spacer()
+                                
+                                Arrow()
+                            }.padding(.horizontal, 5)
                         }
                     }
-                }
-            } label: {
-                ZStack {
-                    EntryField()
+                    .padding(.bottom, 10)
+                    
+                    Text("Ensure notifications are turned on by going to Settings -> Vomo -> Notifications -> Allow Notifications.")
+                        .font(._bodyCopy)
+                        .foregroundColor(Color.BODY_COPY)
+                    Text("If this does not work, delete notifications, redownload the app and allow notifications when the alert appears.")
+                        .font(._bodyCopy)
+                        .foregroundColor(Color.BODY_COPY)
+                    Text("Notifications will be delivered at 7pm every day, as long as the goal is running and set, until more complexity is added into the system.")
+                        .font(._bodyCopy)
+                        .foregroundColor(Color.BODY_COPY)
+                        .padding(.bottom)
                     
                     HStack {
-                        Text(numWeeks == 1 ? "\(numWeeks == 0 ? 0 : numWeeks) week" : "\(numWeeks == 0 ? 0 : numWeeks) weeks")
-                            .font(._bodyCopy)
                         Spacer()
                         
-                        Arrow()
-                    }.padding(.horizontal, 5)
-                }
-            }
-            .padding(.bottom, 10)
-            
-            Text("Ensure notifications are turned on by going to Settings -> Vomo -> Notifications -> Allow Notifications")
-                .font(._bodyCopy)
-                .foregroundColor(Color.BODY_COPY)
-            Text("If this does not work, delete notifications, redownload the app and allow notifications when the alert appears.")
-                .font(._bodyCopy)
-                .foregroundColor(Color.BODY_COPY)
-            Text("Notifications will be delivered at 7pm every day, as long as the goal is running and set, until more complexity is added into the system")
-                .font(._bodyCopy)
-                .foregroundColor(Color.BODY_COPY)
-                .padding(.bottom)
-            
-            HStack {
-                Spacer()
-                
-                if numWeeks != 0 && perWeek != 0 {
-                    Button(action: {
-                        settings.setGoal(nWeeks: numWeeks, nPerWeek: perWeek)
+                        if numWeeks != 0 {
+                            Button(action: {
+                                settings.setGoal(nWeeks: numWeeks, records: recordPerWeek, quests: questsPerWeek, journs: journalsPerWeek)
+                                
+                                notification.updateNotifications(triggers: settings.triggers())
+                            }) {
+                                SubmissionButton(label: "SET GOAL")
+                            }
+                            .padding(.top, 10)
+                        } else {
+                            SubmissionButton(label: "SET GOAL")
+                            .padding(.top, 10)
+                        }
                         
-                        notification.updateNotifications(triggers: settings.triggers())
-                    }) {
-                        SubmissionButton(label: "SET GOAL")
+                        Spacer()
                     }
-                    .padding(.top, 10)
-                } else {
-                    SubmissionButton(label: "SET GOAL")
-                    .padding(.top, 10)
                 }
-                
-                Spacer()
             }
         }
         .foregroundColor(Color.black)
@@ -1044,7 +1176,9 @@ extension GoalEntryView {
     
     func clearGoal() {
         self.numWeeks = 0
-        self.perWeek = 0
+        self.recordPerWeek = 0
+        self.journalsPerWeek = 0
+        self.questsPerWeek = 0
         self.settings.clearGoal()
     }
 }

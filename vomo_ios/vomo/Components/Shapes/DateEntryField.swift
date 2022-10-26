@@ -24,7 +24,7 @@ struct DateEntryField: View {
                         .font(._bodyCopy)
                     Spacer()
                     Arrow()
-                        .rotationEffect(Angle(degrees: toggle ? 180 : 0))
+                        .rotationEffect(Angle(degrees: toggle ? 90 : 0))
                 }
                 .padding(.horizontal, svm.fieldPadding)
             }

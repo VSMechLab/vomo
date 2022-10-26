@@ -18,7 +18,7 @@ struct RecordView: View {
     @State private var audioPlayerPrerecordings: AVAudioPlayer?
     @State private var exercise = 0
     @State private var completePopUp = false
-    @State private var landingPopUp = true
+    @State private var landingPopUp = false
     @State private var time: Int = 0
     
     let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
@@ -40,6 +40,13 @@ struct RecordView: View {
                 Spacer()
                 
                 arrows
+                
+                /*
+                /// Remove later
+                Button("reset popup") {
+                    
+                    settings.hidePopUp = false
+                }*/
             }
             .frame(width: svm.content_width)
             
@@ -51,12 +58,27 @@ struct RecordView: View {
             } else if completePopUp {
                 ZStack {
                     Color.white.opacity(0.001)
-                    CompleteMenu(popUp: $completePopUp)
+                    CompleteMenu(popUp: $completePopUp, exercise: $exercise)
                 }
             }
         }
         .onAppear() {
+            print("popup status: \(self.landingPopUp)")
+            print("settings popup status: \(self.settings.hidePopUp)")
+            
             settings.allTasks = true
+            
+            if !settings.hidePopUp{
+                landingPopUp = true
+            }
+        }
+    }
+    
+    var endIndex: Bool {
+        if exercise == settings.endIndex {
+            return true
+        } else {
+            return false
         }
     }
 }
@@ -75,13 +97,12 @@ extension RecordView {
                     .background(Color.INPUT_FIELDS)
                     .cornerRadius(10)
             }
-            
             Spacer()
         }
     }
     
     private var landingPopUpSection: some View {
-        VStack(alignment: .leading) {
+        VStack(alignment: .center) {
             HStack {
                 Spacer()
                 Button(action: {
@@ -89,37 +110,59 @@ extension RecordView {
                 }) {
                     Image(svm.exit_button)
                         .resizable()
-                        .frame(width: 17, height: 17)
+                        .frame(width: 15, height: 15)
+                        .padding(5)
                 }
-                
             }
             
-            VStack {
-                Text("Find a quiet place indoors, hold your phone at a comfortable distance away from your face")
-                    .font(._recordingPopUp)
-                    .multilineTextAlignment(.leading)
+            ZStack {
+                Image(svm.background_img)
+                    .resizable()
+                    .frame(width: 250, height: 310)
+                
+                VStack(alignment: .leading) {
+                    HStack {
+                        Text("Find a quiet place\nindoors. Hold your\nphone at a comfortable,\n consistent distance.\nMake sure you can\nstill read the\nscreen.")
+                            .font(._recordingPopUp)
+                            .multilineTextAlignment(.leading)
+                            .padding()
+                        Spacer()
+                    }
+                    Spacer()
+                }
+                .frame(width: 250, height: 310)
             }
-            .padding(5)
-            .background(Color.INPUT_FIELDS)
             .cornerRadius(12)
             .padding(5)
             
+            Button(action: {
+                self.landingPopUp.toggle()
+            }) {
+                SubmissionButton(label: "I'M READY")
+            }
+            
             HStack {
                 Button(action: {
-                    self.landingPopUp.toggle()
+                    if settings.hidePopUp {
+                        self.settings.hidePopUp = false
+                    } else {
+                        self.settings.hidePopUp = true
+                    }
                 }) {
-                    Text("I'M READY")
-                        .font(._BTNCopy)
-                        .foregroundColor(Color.white)
+                    Image(settings.hidePopUp ? svm.selected_do_not_show_img : svm.unselected_do_not_show_img)
+                        .resizable()
+                        .frame(width: 15, height: 15)
+                    Text("Do not show again")
                 }
+                Spacer()
             }
-            .frame(width: svm.content_width * 0.80)
-            .background(Color.DARK_PURPLE)
+            .frame(width: 225)
+            .padding(.vertical, 2.5)
+            .padding(.bottom, 5)
         }
-        .padding(.top)
         .background(Color.white)
-        .shadow(color: Color.gray, radius: 1)
         .frame(width: svm.content_width * 0.80)
+        .shadow(color: Color.gray.opacity(0.8), radius: 1)
     }
     
     private var exercises: some View {
@@ -128,15 +171,43 @@ extension RecordView {
                 .font(._subTitle)
                 .foregroundColor(Color.BODY_COPY)
             
-            Text("\(settings.taskList[exercise].prompt)")
-                .multilineTextAlignment(.center)
-                .font(._title)
+            if exercise < settings.taskList.count {
+                if !landingPopUp {
+                    ScrollView(showsIndicators: true) {
+                        if settings.taskList[exercise].taskNum == 1 {
+                            Text("Say the following for 5 seconds:").foregroundColor(Color.gray)
+                                .multilineTextAlignment(.center)
+                                .font(._title1)
+                            Text("\(settings.taskList[exercise].prompt)")
+                                .multilineTextAlignment(.center)
+                                .font(._title)
+                        } else if settings.taskList[exercise].taskNum == 2 {
+                            Text("Say the following for as long\nas you can:").foregroundColor(Color.gray)
+                                .multilineTextAlignment(.center)
+                                .font(._title1)
+                            Text("\(settings.taskList[exercise].prompt)")
+                                .multilineTextAlignment(.center)
+                                .font(._title)
+                        } else if settings.taskList[exercise].taskNum == 3 {
+                            Text("Say the following:").foregroundColor(Color.gray)
+                                .multilineTextAlignment(.center)
+                                .font(._title1)
+                            Text("\(settings.taskList[exercise].prompt)")
+                                .multilineTextAlignment(.center)
+                                .font(._title)
+                        }
+                    }
+                }
+            }
             
-            if !audioRecorder.recording {
+            if !audioRecorder.recording && !landingPopUp {
                 promptPlaybackButton
-            } else {
+            } else if !landingPopUp {
                 Text("\(time)s")
-                    .padding(.horizontal)
+                    .font(._BTNCopy)
+                    .foregroundColor(Color.white)
+                    .padding(.horizontal, 15)
+                    .padding(.vertical, 5)
                     .background(Color.red.opacity(0.90))
                     .cornerRadius(10)
                     .onReceive(timer) { _ in
@@ -152,7 +223,7 @@ extension RecordView {
                     self.completePopUp.toggle()
                     self.time = 0
                 } else {
-                    audioRecorder.startRecording(taskNum: exercise)
+                    audioRecorder.startRecording(taskNum: exercise + 1)
                 }
             }) {
                 Image(audioRecorder.recording ? svm.stop_img : svm.record_img)
@@ -163,8 +234,8 @@ extension RecordView {
     }
     
     private var arrows: some View {
-        HStack {
-            if (audioRecorder.recording || self.completePopUp) {
+        HStack(spacing: 0) {
+            if (audioRecorder.recording || self.completePopUp) && self.exercise != 0 {
                 GrayArrow()
                     .rotationEffect(Angle(degrees: -180))
                 Text("Back")
@@ -200,6 +271,7 @@ extension RecordView {
                 }
             }
         }
+        .padding(.bottom, 10)
     }
     
     private var promptPlaybackButton: some View {

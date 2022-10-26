@@ -16,17 +16,34 @@ class Settings: ObservableObject {
     /// Showing and hiding on the basis of wether the keyboard is shown or not
     @Published var keyboardShown = false
     
-    /// Stores the goal amount of enteries to be logged per week
-    @Published var perWeek: Int {
-        didSet { defaults.set(perWeek, forKey: "per_week") }
+    /// Stores the goal amount of recordings to be logged per week
+    @Published var recordPerWeek: Int {
+        didSet { defaults.set(recordPerWeek, forKey: "record_per_week") }
     }
+    /// Stores the goal amount of quest to be logged per week
+    @Published var surveysPerWeek: Int {
+        didSet { defaults.set(surveysPerWeek, forKey: "surveys_per_week") }
+    }
+    /// Stores the goal amount of enteries to be logged per week
+    @Published var journalsPerWeek: Int {
+        didSet { defaults.set(journalsPerWeek, forKey: "journals_per_week") }
+    }
+    
     /// Stores the number of weeks the goal is set for
     @Published var numWeeks: Int {
         didSet { defaults.set(numWeeks, forKey: "num_weeks") }
     }
     /// Stores the number of entries entered so far
-    @Published var entered: Int {
-        didSet { defaults.set(entered, forKey: "entered") }
+    @Published var recordEntered: Int {
+        didSet { defaults.set(recordEntered, forKey: "record_entered") }
+    }
+    /// Stores the number of entries entered so far
+    @Published var journalEntered: Int {
+        didSet { defaults.set(journalEntered, forKey: "journal_entered") }
+    }
+    /// Stores the number of entries entered so far
+    @Published var questionnaireEntered: Int {
+        didSet { defaults.set(questionnaireEntered, forKey: "questionnaire_entered") }
     }
     /// Stores the start date for the goal
     @Published var startDate: String {
@@ -101,23 +118,23 @@ class Settings: ObservableObject {
     var taskList: [TaskModel] {
         var list: [TaskModel] = []
         if allTasks || (vowel && maxPT && rainbowS) {
-            list = [TaskModel(prompt: "Say 'ahh' for\n5 seconds", taskNum: 1), TaskModel(prompt: "Say 'ahhh' for\nas long as you can", taskNum: 2), TaskModel(prompt: "Say 'The rainbow is a division of white light into many beautiful colors. These take the shape of a long round arch, with its path high above, and its two ends apparently beyond the horizon'", taskNum: 3)]
+            list = [TaskModel(prompt: "'ahh'", taskNum: 1), TaskModel(prompt: "'ahhh'", taskNum: 2), TaskModel(prompt: "'The rainbow is a division of white light into many beautiful colors. These take the shape of a long round arch, with its path high above, and its two ends apparently beyond the horizon' \n\n 'The rainbow is a division of white light into many beautiful colors. These take the shape of a long round arch, with its path high above, and its two ends apparently beyond the horizon' \n\n 'The rainbow is a division of white light into many beautiful colors. These take the shape of a long round arch, with its path high above, and its two ends apparently beyond the horizon'", taskNum: 3)]
         } else {
             if vowel {
-                list.append(TaskModel(prompt: "Say 'ahhh' for\nas long as you can", taskNum: 2))
+                list.append(TaskModel(prompt: "'ahhh'", taskNum: 2))
             }
             if maxPT {
-                list.append(TaskModel(prompt: "Say 'ahh' for\n5 seconds", taskNum: 1))
+                list.append(TaskModel(prompt: "'ahh'", taskNum: 1))
             }
             if rainbowS {
-                list.append(TaskModel(prompt: "Say 'The rainbow is a division of white light into many beautiful colors. These take the shape of a long round arch, with its path high above, and its two ends apparently beyond the horizon'", taskNum: 3))
+                list.append(TaskModel(prompt: "'The rainbow is a division of white light into many beautiful colors. These take the shape of a long round arch, with its path high above, and its two ends apparently beyond the horizon' \n\n 'The rainbow is a division of white light into many beautiful colors. These take the shape of a long round arch, with its path high above, and its two ends apparently beyond the horizon' \n\n 'The rainbow is a division of white light into many beautiful colors. These take the shape of a long round arch, with its path high above, and its two ends apparently beyond the horizon'", taskNum: 3))
             }
         }
         return list
     }
     
     var endIndex: Int {
-        return taskList.count
+        return taskList.count - 1
     }
     
     @Published var pitch: Bool {
@@ -156,9 +173,17 @@ class Settings: ObservableObject {
             UserDefaults.standard.set(accousticParameters, forKey: "accoustic_parameters")
         }
     }
-    @Published var questionnaires: Int {
+    
+    /// vhi
+    @Published var vhi: Bool {
         didSet {
-            UserDefaults.standard.set(questionnaires, forKey: "questionnaires")
+            UserDefaults.standard.set(vhi, forKey: "vhi")
+        }
+    }
+    /// vocal effort
+    @Published var vocalEffort: Bool {
+        didSet {
+            UserDefaults.standard.set(vocalEffort, forKey: "vocal_effort")
         }
     }
     
@@ -200,6 +225,12 @@ class Settings: ObservableObject {
         }
     }
     
+    @Published var hidePopUp: Bool {
+        didSet {
+            UserDefaults.standard.set(hidePopUp, forKey: "hide_popup")
+        }
+    }
+    
     init() {
         /// Sign Up Questions
         self.acceptedTerms = UserDefaults.standard.object(forKey: "accepts_terms") as? Bool ?? false
@@ -226,7 +257,9 @@ class Settings: ObservableObject {
         self.minPitch = UserDefaults.standard.object(forKey: "min_pitch") as? Bool ?? false
         self.maxPitch = UserDefaults.standard.object(forKey: "max_pitch") as? Bool ?? false
         self.accousticParameters = UserDefaults.standard.object(forKey: "accoustic_parameters") as? Bool ?? false
-        self.questionnaires = UserDefaults.standard.object(forKey: "questionnaires") as? Int ?? 0
+        
+        self.vhi = UserDefaults.standard.object(forKey: "vhi") as? Bool ?? false
+        self.vocalEffort = UserDefaults.standard.object(forKey: "vocal_effort") as? Bool ?? false
         
         /// Settings View Questions
         self.voice_onset = UserDefaults.standard.object(forKey: "voiceOnset") as? Bool ?? false
@@ -239,10 +272,18 @@ class Settings: ObservableObject {
         self.have_asthma = UserDefaults.standard.object(forKey: "haveAsthma") as? Bool ?? false
         
         /// Goal model initialized variables
-        self.perWeek = defaults.object(forKey: "per_week") as? Int ?? 0
+        self.recordPerWeek = defaults.object(forKey: "record_per_week") as? Int ?? 0
+        self.surveysPerWeek = defaults.object(forKey: "surveys_per_week") as? Int ?? 0
+        self.journalsPerWeek = defaults.object(forKey: "journals_per_week") as? Int ?? 0
         self.numWeeks = defaults.object(forKey: "num_weeks") as? Int ?? 0
-        self.entered = defaults.object(forKey: "entered") as? Int ?? 0
+        self.recordEntered = defaults.object(forKey: "record_entered") as? Int ?? 0
+        self.journalEntered = defaults.object(forKey: "journal_entered") as? Int ?? 0
+        self.questionnaireEntered = defaults.object(forKey: "questionnaire_entered") as? Int ?? 0
+        
         self.startDate = defaults.object(forKey: "start_date") as? String ?? ""
+        
+        /// Recording page popup
+        self.hidePopUp = defaults.object(forKey: "hide_popup") as? Bool ?? false
     }
 }
 
@@ -251,7 +292,7 @@ extension Settings {
     func triggers() -> [TriggerModel] {
         var ret: [TriggerModel] = []
         
-        let amountDays = perWeek * numWeeks
+        let amountDays = recordPerWeek * numWeeks
         
         for i in 0..<amountDays {
             ret.append(TriggerModel(date: Date(timeInterval: Double(i) * 86400, since: startDate.toFullDate() ?? .now), identifier: String(i)))
@@ -270,28 +311,58 @@ extension Settings {
         }
     }
 
-    func setGoal(nWeeks: Int, nPerWeek: Int) {
+    func setGoal(nWeeks: Int, records: Int, quests: Int, journs: Int) {
         let newDate: Date = .now
         startDate = newDate.toStringDay()
         numWeeks = nWeeks
-        perWeek = nPerWeek
+        recordPerWeek = records
+        surveysPerWeek = quests
+        journalsPerWeek = journs
     }
 
     func clearGoal() {
         let newDate: Date = .now
         startDate = newDate.toStringDay()
         numWeeks = 0
-        perWeek = 0
+        recordPerWeek = 0
+        self.recordPerWeek = 0
+        self.surveysPerWeek = 0
+        self.journalsPerWeek = 0
     }
 
-    func progress() -> Double {
+    func recordProgress() -> Double {
         /*
          Add goal completion calculations, based on days/wk * # wks set under goals section
          */
         var result: Double = 0
         
-        if perWeek > 0 || numWeeks > 0 {
-            result = Double(Double(entered) / ( Double(perWeek) * Double(numWeeks) + 0.000001))
+        if recordPerWeek > 0 || numWeeks > 0 {
+            result = Double(Double(recordEntered) / ( Double(recordPerWeek) * Double(numWeeks) + 0.000001))
+        }
+        
+        return result
+    }
+    func questProgress() -> Double {
+        /*
+         Add goal completion calculations, based on days/wk * # wks set under goals section
+         */
+        var result: Double = 0
+        
+        if surveysPerWeek > 0 || numWeeks > 0 {
+            result = Double(Double(questionnaireEntered) / ( Double(surveysPerWeek) * Double(numWeeks) + 0.000001))
+        }
+        
+        return result
+    }
+    func journalProgress() -> Double {
+        /*
+         Add goal completion calculations, based on days/wk * # wks set under goals section
+         */
+        var result: Double = 0
+        
+        
+        if journalsPerWeek > 0 || numWeeks > 0 {
+            result = Double(Double(journalEntered) / ( Double(journalsPerWeek) * Double(numWeeks) + 0.000001))
         }
         
         return result

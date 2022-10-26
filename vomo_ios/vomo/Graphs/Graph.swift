@@ -31,7 +31,7 @@ struct Graph: View {
             BarChart(chartData: chartData, style: chartStyle, label: "Recordings")
                 .frame(width: svm.content_width, height: 250)
             
-            HBarChart(chartData: hChartData, style: chartStyle, label: "Progress")
+            HBarChart(chartData: hChartData, style: chartStyle)
                 .frame(width: svm.content_width, height: 250)
             
             Button("Append") {

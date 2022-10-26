@@ -10,39 +10,54 @@ import Foundation
 
 extension Font {
     /// Title, Size 30, Bold
+    static var _large_title: Font {
+        Font.custom("Roboto-Bold", size: 35)
+    }
+    /// Title, Size 30, Bold
     static var _title: Font {
         Font.custom("Roboto-Bold", size: 30)
     }
+    /// Title, Size 30, Bold
+    static var _title1: Font {
+        Font.custom("Roboto-Bold", size: 28)
+    }
     /// Subtitle, Size 17, Regular
     static var _subTitle: Font {
-        Font.custom("Roboto-Regular", size: 17)
+        Font.custom("Roboto-light", size: 19)
+    }
+    /// Subtitle, Size 12, Regular
+    static var _tabTitle: Font {
+        Font.custom("Roboto-Regular", size: 16)
     }
     /// Bar Graph Bar Label
     static var _barLabel: Font {
-        Font.custom("Roboto-Light", size: 15)
+        Font.custom("Roboto-Light", size: 16)
     }
     /// Medium Bar Graph Bar Label
     static var _barLabelBold: Font {
-        Font.custom("Roboto-Medium", size: 15)
+        Font.custom("Roboto-Medium", size: 16)
     }
     /// Tab bar font size 14, medium
     static var _tabBarFont: Font {
-        Font.custom("Roboto-Medium", size: 14)
+        Font.custom("Roboto-Medium", size: 16)
     }
     static var _subHeadline: Font {
         Font.custom("Roboto-Bold", size: 21)
     }
     static var _subsubHeadline: Font {
-        Font.custom("Roboto-Bold", size: 14)
+        Font.custom("Roboto-Bold", size: 16)
     }
     static var _bodyCopy: Font {
-        Font.custom("Roboto-Light", size: 12)
-    }
-    static var _bodyCopyBoldLower: Font {
-        Font.custom("Roboto-Bold", size: 12)
+        Font.custom("Roboto-Light", size: 16)
     }
     static var _bodyCopyBold: Font {
-        Font.custom("Roboto-Bold", size: 14)
+        Font.custom("Roboto-Bold", size: 16)
+    }
+    static var _bodyCopyMedium: Font {
+        Font.custom("Roboto-Medium", size: 16)
+    }
+    static var _bodyCopyBoldLower: Font {
+        Font.custom("Roboto-Bold", size: 16)
     }
     static var _BTNCopy: Font {
         Font.custom("Roboto-Medium", size: 20)
@@ -51,65 +66,65 @@ extension Font {
         Font.custom("Roboto-Light", size: 20)
     }
     static var _recordingPopUp: Font {
-        Font.custom("Roboto-Regular", size: 18)
+        Font.custom("Roboto-Medium", size: 18)
     }
     static var _stats: Font {
-        Font.custom("Roboto-Medium", size: 10)
+        Font.custom("Roboto-Medium", size: 16)
     }
     static var _statsLabel: Font {
-        Font.custom("Roboto-Light", size: 7)
+        Font.custom("Roboto-Light", size: 16)
     }
     static var _CTALink: Font {
-        Font.custom("Roboto-Regular", size: 10)
+        Font.custom("Roboto-Regular", size: 16)
     }
     static var _day: Font {
-        Font.custom("Roboto-Regular", size: 14)
+        Font.custom("Roboto-Regular", size: 16)
     }
     static var _date: Font {
         Font.custom("Roboto-Regular", size: 38)
     }
     static var _lastUsed: Font {
-        Font.custom("Roboto-Regular", size: 12)
+        Font.custom("Roboto-Regular", size: 16)
     }
     static var _question: Font {
-        Font.custom("Roboto-Light", size: 12)
+        Font.custom("Roboto-Light", size: 16)
     }
     static var _scale: Font {
-        Font.custom("Roboto-Medium", size: 12)
+        Font.custom("Roboto-Medium", size: 16)
     }
     static var _scaleCopy: Font {
-        Font.custom("Roboto-Light", size: 7)
+        Font.custom("Roboto-Light", size: 16)
     }
     static var _fieldCopyRegular: Font {
-        Font.custom("Roboto-Light", size: 10)
+        Font.custom("Roboto-Light", size: 14)
     }
     static var _fieldCopyItalic: Font {
-        Font.custom("Roboto-LightItalic", size: 10)
+        Font.custom("Roboto-LightItalic", size: 16)
     }
     static var _fieldLabel: Font {
-        Font.custom("Roboto-Bold", size: 12)
+        Font.custom("Roboto-Bold", size: 19)
     }
     static var _disclaimerLink: Font {
-        Font.custom("Roboto-Bold", size: 10)
+        Font.custom("Roboto-Bold", size: 16)
     }
     static var _disclaimerCopy: Font {
-        Font.custom("Roboto-Regular", size: 10)
+        Font.custom("Roboto-Regular", size: 16)
     }
     static var _buttonFieldCopy: Font {
-        Font.custom("Roboto-Medium", size: 10)
+        Font.custom("Roboto-Medium", size: 16)
     }
     static var _buttonFieldCopyLarger: Font {
-        Font.custom("Roboto-Regular", size: 14)
+        Font.custom("Roboto-Regular", size: 16)
     }
     static var _subCopy: Font {
-        Font.custom("Roboto-Regular", size: 8)
+        Font.custom("Roboto-Regular", size: 16)
     }
     /// Navigation between pages
     static var _pageNavLink: Font {
-        Font.custom("Roboto-Regular", size: 15)
+        Font.custom("Roboto-Regular", size: 21)
     }
     static var questionnaireScale: Font {
-        Font.custom("Roboto-Regular", size: 8)
+        Font.custom("Roboto-Regular", size: 16)
     }
 }
 

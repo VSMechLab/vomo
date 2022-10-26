@@ -7,14 +7,10 @@
 
 import SwiftUI
 
-/// to do fix view
-/// on appear define an integer of a fixed size that the index of each question will be saved at the scale level
-///
-
-
 struct QuestionnaireView: View {
     @EnvironmentObject var viewRouter: ViewRouter
     @EnvironmentObject var entries: Entries
+    @EnvironmentObject var settings: Settings
     //@State private var vm = RecordingViewModel()
     @State private var svm = SharedViewModel()
     @State private var submitAnimation = false
@@ -23,44 +19,15 @@ struct QuestionnaireView: View {
     
     var body: some View {
         ZStack {
-            ScrollView(showsIndicators: false) {
-                VStack(alignment: .leading, spacing: 0) {
-                    Text(svm.questions.first ?? "Choose a questionnaire selection in settings")
-                        .font(._subTitle)
-                        .foregroundColor(Color.BODY_COPY)
-                        .multilineTextAlignment(.leading)
-                        .padding(.leading, 6)
-                    
-                    Text("Questionnaire")
-                        .foregroundColor(.black)
-                        .font(._title)
-                        .padding(.leading, 6)
-                    
-                    Text("These are statements that many people have used to describe their voices and effects of their voices on their lives. Circle the response that indicates how frequently you have the same experience.")
-                        .font(._subTitle)
-                        .foregroundColor(Color.BODY_COPY)
-                        .multilineTextAlignment(.leading)
-                        .padding(.leading, 6)
+            ScrollView(showsIndicators: true) {
+                VStack(alignment: .leading, spacing: 10) {
+                    header
                     
                     ForEach(Array(svm.questions.enumerated()), id: \.element) { index, element in
-                        if index == svm.questions.count - 1 {
-                            EmptyScale(responses: self.$responses, prompt: element, index: index)
-                        } else if index != 0 {
-                            Scale(responses: self.$responses, prompt: element, index: index)
-                        }
+                        Scale(responses: self.$responses, prompt: element, index: index)
                     }
                     
-                    HStack {
-                        Spacer()
-                        Button(action: {
-                            self.entries.questionnaires.append(QuestionnaireModel(createdAt: .now, responses: self.responses))
-                            responses = []
-                            submitAnimation = true
-                        }) {
-                            SubmissionButton(label: "Submit")
-                        }
-                        Spacer()
-                    }
+                    submitButton
                 }
                 .frame(width: svm.content_width)
                 .padding(.bottom, 100)
@@ -93,7 +60,76 @@ struct QuestionnaireView: View {
             }
         }
         .onAppear() {
-            self.responses = Array(repeating: 0, count: svm.questions.count)
+            self.responses = Array(repeating: 0, count: 11)
+        }
+    }
+}
+
+extension QuestionnaireView {
+    private var header: some View {
+        Group {
+            if settings.vhi && settings.vocalEffort {
+                Text("VHI & Vocal Effort Rating")
+                    .font(._subTitle)
+                    .foregroundColor(Color.BODY_COPY)
+                    .multilineTextAlignment(.leading)
+                    .padding(.leading, 6)
+            } else if settings.vhi {
+                Text(svm.questions.first ?? "VHI")
+                    .font(._subTitle)
+                    .foregroundColor(Color.BODY_COPY)
+                    .multilineTextAlignment(.leading)
+                    .padding(.leading, 6)
+            } else {
+                Text("Vocal Effort Rating")
+                    .font(._subTitle)
+                    .foregroundColor(Color.BODY_COPY)
+                    .multilineTextAlignment(.leading)
+                    .padding(.leading, 6)
+            }
+            
+            if settings.vhi && settings.vocalEffort {
+                Text("Vocal Handicap Index (VHI)-10 & Vocal Effort Rating")
+                    .foregroundColor(.black)
+                    .font(._title)
+                    .padding(.leading, 6)
+            } else if settings.vhi {
+                Text("Vocal Handicap Index (VHI)-10")
+                    .foregroundColor(.black)
+                    .font(._title)
+                    .padding(.leading, 6)
+            } else {
+                Text("Vocal Effort Rating")
+                    .foregroundColor(.black)
+                    .font(._title)
+                    .padding(.leading, 6)
+            }
+            
+            Text("These are statements that many people have used to describe their voices and effects of their voices on their lives. Choose the response that indicates how frequently you have the same experience.")
+                .font(._subTitle)
+                .foregroundColor(Color.BODY_COPY)
+                .multilineTextAlignment(.leading)
+                .padding(.leading, 6)
+            
+            Image(svm.start_scale_img)
+                .resizable()
+                .scaledToFit()
+        }
+    }
+    
+    private var submitButton: some View {
+        HStack {
+            Spacer()
+            Button(action: {
+                self.entries.questionnaires.append(QuestionnaireModel(createdAt: .now, responses: self.responses))
+                responses = []
+                submitAnimation = true
+                
+                if settings.isActive() { settings.questionnaireEntered += 1 }
+            }) {
+                SubmissionButton(label: "Submit")
+            }
+            Spacer()
         }
     }
 }

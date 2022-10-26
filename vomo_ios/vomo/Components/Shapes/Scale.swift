@@ -70,36 +70,17 @@ struct Scale: View {
                             Image(position == 4 ? svm.select_img : "").resizable().frame(width: 28, height: 28)
                         }.padding(.trailing, 4)
                     }
-                    .padding(.horizontal, -5)
-                    .frame(width: svm.content_width - 30, alignment: .center)
                     .padding(.bottom, 55)
                     .onChange(of: self.position) { selection in
                         self.responses[index] = selection
                         print(responses)
                     }
                 }
-                
-                VStack {
-                    Spacer()
-                    HStack {
-                        Text("Never")
-                        Spacer()
-                        Text("Almost\nNever")
-                        Spacer()
-                        Text("Sometimes")
-                        Spacer()
-                        Text("Almost\nAlways")
-                        Spacer()
-                        Text("Always")
-                    }
-                    .padding(.horizontal, 20)
-                    .multilineTextAlignment(.center)
-                    .font(.questionnaireScale)
-                    .foregroundColor(Color.BODY_COPY)
-                    .padding(.bottom, 20)
-                }
             }
         }
+        .padding(.leading, 1.5)
+        .frame(width: svm.content_width - 1.5)
+        .shadow(color: Color.gray.opacity(0.5), radius: 1)
     }
 }
 
