@@ -78,7 +78,7 @@ extension Font {
         Font.custom("Roboto-Regular", size: 16)
     }
     static var _day: Font {
-        Font.custom("Roboto-Regular", size: 16)
+        Font.custom("Roboto-Light", size: 12)
     }
     static var _date: Font {
         Font.custom("Roboto-Regular", size: 38)

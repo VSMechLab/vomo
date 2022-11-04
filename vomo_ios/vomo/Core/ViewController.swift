@@ -82,21 +82,21 @@ extension ViewController {
             }) {
                 VStack(spacing: 5) {
                     Image(svm.home_icon)
-                        .resizable()
-                        .frame(width: 27.5, height: 27.5)
+                        .tabImage()
                     
                     Text("HOME")
                         .font(Font._tabTitle)
                         .foregroundColor(Color.gray)
                 }.frame(width: UIScreen.main.bounds.width / 3)
             }
+            
             Button(action: {
                 viewRouter.currentPage = .record
             }) {
                 VStack(spacing: 5) {
                     Image(viewRouter.currentPage == .record ? svm.record_icon : svm.selected_record_icon)
                         .resizable()
-                        .frame(width: 17.5, height: 27.5)
+                        .frame(width: 20.0, height: 27.5)
                     
                     Text("RECORDING")
                         .font(Font._tabTitle)
@@ -109,7 +109,7 @@ extension ViewController {
                 VStack(spacing: 5) {
                     Image(viewRouter.currentPage == .progress ? svm.selected_progress_icon : svm.progress_icon)
                         .resizable()
-                        .frame(width: 37, height: 27.5)
+                        .frame(width: 35, height: 27.5)
                     
                     Text("PROGRESS")
                         .font(Font._tabTitle)

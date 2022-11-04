@@ -40,13 +40,6 @@ struct RecordView: View {
                 Spacer()
                 
                 arrows
-                
-                /*
-                /// Remove later
-                Button("reset popup") {
-                    
-                    settings.hidePopUp = false
-                }*/
             }
             .frame(width: svm.content_width)
             
@@ -63,11 +56,6 @@ struct RecordView: View {
             }
         }
         .onAppear() {
-            print("popup status: \(self.landingPopUp)")
-            print("settings popup status: \(self.settings.hidePopUp)")
-            
-            settings.allTasks = true
-            
             if !settings.hidePopUp{
                 landingPopUp = true
             }
@@ -135,11 +123,9 @@ extension RecordView {
             .cornerRadius(12)
             .padding(5)
             
-            Button(action: {
+            Button("I'M READY") {
                 self.landingPopUp.toggle()
-            }) {
-                SubmissionButton(label: "I'M READY")
-            }
+            }.buttonStyle(SubmitButton())
             
             HStack {
                 Button(action: {
@@ -223,7 +209,7 @@ extension RecordView {
                     self.completePopUp.toggle()
                     self.time = 0
                 } else {
-                    audioRecorder.startRecording(taskNum: exercise + 1)
+                    audioRecorder.startRecording(taskNum: settings.taskList[exercise].taskNum)
                 }
             }) {
                 Image(audioRecorder.recording ? svm.stop_img : svm.record_img)
@@ -234,48 +220,50 @@ extension RecordView {
     }
     
     private var arrows: some View {
-        HStack(spacing: 0) {
-            if (audioRecorder.recording || self.completePopUp) && self.exercise != 0 {
-                GrayArrow()
-                    .rotationEffect(Angle(degrees: -180))
-                Text("Back")
-                    .foregroundColor(Color.BODY_COPY)
-                    .font(._pageNavLink)
-            } else if !audioRecorder.recording && self.exercise != 0 {
-                Button(action: {
-                    self.exercise -= 1
-                }) {
-                    Arrow()
+        ZStack {
+            HStack(spacing: 0) {
+                if (audioRecorder.recording || self.completePopUp) && self.exercise != 0 {
+                    GrayArrow()
                         .rotationEffect(Angle(degrees: -180))
                     Text("Back")
-                        .foregroundColor(Color.DARK_PURPLE)
-                        .font(._pageNavLink)
+                        .foregroundColor(Color.BODY_COPY)
+                } else if !audioRecorder.recording && self.exercise != 0 {
+                    Button("Back") {
+                        self.exercise -= 1
+                    }.buttonStyle(BackButton())
                 }
-            }
-            
-            Spacer()
-            
-            if (audioRecorder.recording || self.completePopUp) && self.exercise != settings.endIndex {
-                Text("Next")
-                    .foregroundColor(Color.BODY_COPY)
-                    .font(._pageNavLink)
-                GrayArrow()
-            } else if !audioRecorder.recording && self.exercise != settings.endIndex {
-                Button(action: {
-                    self.exercise += 1
-                }) {
+                
+                Spacer()
+                
+                if (audioRecorder.recording || self.completePopUp) && self.exercise != settings.endIndex {
                     Text("Next")
-                        .foregroundColor(Color.DARK_PURPLE)
-                        .font(._pageNavLink)
-                    Arrow()
+                        .foregroundColor(Color.BODY_COPY)
+                    GrayArrow()
+                } else if !audioRecorder.recording && self.exercise != settings.endIndex {
+                    Button("Next") {
+                        self.exercise += 1
+                    }.buttonStyle(NextButton())
                 }
             }
+            
+            .font(._pageNavLink)
+            .padding(.bottom, 10)
+            
+            HStack {
+                if settings.endIndex > 0 {
+                    ForEach(0...settings.endIndex, id: \.self) { exer in
+                        Circle()
+                            .foregroundColor(exer == exercise ? Color.DARK_PURPLE : Color.gray)
+                            .frame(width: exer == exercise ? 8.5 : 6, height: exer == exercise ? 8.5 : 6, alignment: .center)
+                    }
+                }
+            }
+            .padding(.bottom, 10)
         }
-        .padding(.bottom, 10)
     }
     
     private var promptPlaybackButton: some View {
-        Button(action: {
+        Button("PLAY EXAMPLE") {
             if self.audioPlayerPrerecordings?.isPlaying == true {
                 self.audioPlayerPrerecordings?.stop()
             } else {
@@ -283,9 +271,7 @@ extension RecordView {
                 audioPlayerPrerecordings = try! AVAudioPlayer(contentsOf: URL(fileURLWithPath: sound!))
                 self.audioPlayerPrerecordings?.play()
             }
-        }) {
-            SubmissionButton(label: "PLAY EXAMPLE")
-        }
+        }.buttonStyle(SubmitButton())
     }
 }
 

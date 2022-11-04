@@ -37,7 +37,6 @@
 		AD81B72028BFCFB2009920FB /* AudioRecorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD81B71F28BFCFB2009920FB /* AudioRecorder.swift */; };
 		AD81B72228BFCFCA009920FB /* AudioPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD81B72128BFCFCA009920FB /* AudioPlayer.swift */; };
 		AD81B72428BFD01E009920FB /* Recording.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD81B72328BFD01E009920FB /* Recording.swift */; };
-		AD81B72628BFD762009920FB /* RecordingModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD81B72528BFD762009920FB /* RecordingModel.swift */; };
 		AD81B72828BFD769009920FB /* QuestionnaireModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD81B72728BFD769009920FB /* QuestionnaireModel.swift */; };
 		AD81B72A28BFD76E009920FB /* JournalModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD81B72928BFD76E009920FB /* JournalModel.swift */; };
 		AD81B72C28BFD774009920FB /* VisitModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD81B72B28BFD774009920FB /* VisitModel.swift */; };
@@ -75,6 +74,7 @@
 		ADA0E0E2282561D700CF05D1 /* LineShapeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADA0E0E1282561D700CF05D1 /* LineShapeView.swift */; };
 		ADA1EC9B2899C6B000EE58E3 /* AVAduioPCMBuffer.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADA1EC9A2899C6B000EE58E3 /* AVAduioPCMBuffer.swift */; };
 		ADA1EC9E2899C99400EE58E3 /* AudioKitUI in Frameworks */ = {isa = PBXBuildFile; productRef = ADA1EC9D2899C99400EE58E3 /* AudioKitUI */; };
+		ADAEE227290DBFF400263EA9 /* RecordingList.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADAEE226290DBFF400263EA9 /* RecordingList.swift */; };
 		ADBAE7F9282996A500A7BD1B /* Roboto-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = ADBAE7F8282996A500A7BD1B /* Roboto-Bold.ttf */; };
 		ADBAE7FC282996DF00A7BD1B /* Roboto-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = ADBAE7FB282996DF00A7BD1B /* Roboto-Medium.ttf */; };
 		ADBAE7FE282996E500A7BD1B /* Roboto-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = ADBAE7FD282996E500A7BD1B /* Roboto-Regular.ttf */; };
@@ -90,13 +90,27 @@
 		ADBDFF9228C26DDA00518354 /* InterventionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADBDFF9128C26DDA00518354 /* InterventionView.swift */; };
 		ADBDFF9428C26DE900518354 /* ProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADBDFF9328C26DE900518354 /* ProgressView.swift */; };
 		ADBDFF9628C2BA5000518354 /* QuestionnaireView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADBDFF9528C2BA5000518354 /* QuestionnaireView.swift */; };
+		ADBF439F290AC03D001CDBF5 /* Filter.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADBF439E290AC03D001CDBF5 /* Filter.swift */; };
+		ADBF43A1290AC074001CDBF5 /* ListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADBF43A0290AC074001CDBF5 /* ListItem.swift */; };
+		ADBF43A3290AC6B1001CDBF5 /* FilterButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADBF43A2290AC6B1001CDBF5 /* FilterButton.swift */; };
+		ADBF43A5290B4A37001CDBF5 /* ResponseList.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADBF43A4290B4A37001CDBF5 /* ResponseList.swift */; };
+		ADBF43A7290B4C4D001CDBF5 /* JournalList.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADBF43A6290B4C4D001CDBF5 /* JournalList.swift */; };
 		ADC484BC28CBB50500160DFA /* RecordAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADC484BB28CBB50500160DFA /* RecordAction.swift */; };
 		ADC5A60628358611000C73DF /* Font.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADC5A60528358611000C73DF /* Font.swift */; };
 		ADC5A60828358616000C73DF /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADC5A60728358616000C73DF /* Color.swift */; };
 		ADC5A60A28358644000C73DF /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADC5A60928358644000C73DF /* Date.swift */; };
 		ADC5A60C283587D9000C73DF /* Array.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADC5A60B283587D9000C73DF /* Array.swift */; };
 		ADE3A01628395A8C00E56527 /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADE3A01528395A8C00E56527 /* String.swift */; };
-		ADEA422928FF595B00C94D07 /* test.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADEA422828FF595B00C94D07 /* test.swift */; };
+		ADE416442911821500133437 /* Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADE416432911821500133437 /* Image.swift */; };
+		ADE416462911874600133437 /* NavButtons.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADE416452911874600133437 /* NavButtons.swift */; };
+		ADE4164929118D0C00133437 /* LandingPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADE4164829118D0C00133437 /* LandingPageView.swift */; };
+		ADE4164B29118D9500133437 /* PersonalQuestionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADE4164A29118D9500133437 /* PersonalQuestionView.swift */; };
+		ADE4164D29118DCB00133437 /* VoiceQuestionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADE4164C29118DCB00133437 /* VoiceQuestionView.swift */; };
+		ADE4164F29118DF100133437 /* TargetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADE4164E29118DF100133437 /* TargetView.swift */; };
+		ADE4165129118E3200133437 /* CustomTargetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADE4165029118E3200133437 /* CustomTargetView.swift */; };
+		ADE4165329118E5C00133437 /* GoalEntryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADE4165229118E5C00133437 /* GoalEntryView.swift */; };
+		ADE4165629118EC000133437 /* ProgressBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADE4165529118EC000133437 /* ProgressBar.swift */; };
+		ADE416592911959900133437 /* SetThreshold.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADE416582911959900133437 /* SetThreshold.swift */; };
 		ADFF4309280E4CA3008F721B /* RecordingSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADFF4308280E4CA3008F721B /* RecordingSection.swift */; };
 		ADFF430B280E4CA8008F721B /* JournalSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADFF430A280E4CA8008F721B /* JournalSection.swift */; };
 		ADFF430D280E4CB5008F721B /* ResultsSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADFF430C280E4CB5008F721B /* ResultsSection.swift */; };
@@ -134,7 +148,6 @@
 		AD81B71F28BFCFB2009920FB /* AudioRecorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AudioRecorder.swift; path = vomo/Service/Recording/AudioRecorder.swift; sourceTree = SOURCE_ROOT; };
 		AD81B72128BFCFCA009920FB /* AudioPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AudioPlayer.swift; path = vomo/Service/Recording/AudioPlayer.swift; sourceTree = SOURCE_ROOT; };
 		AD81B72328BFD01E009920FB /* Recording.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Recording.swift; path = vomo/Service/Recording/Recording.swift; sourceTree = SOURCE_ROOT; };
-		AD81B72528BFD762009920FB /* RecordingModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = RecordingModel.swift; path = vomo/Model/RecordingModel.swift; sourceTree = SOURCE_ROOT; };
 		AD81B72728BFD769009920FB /* QuestionnaireModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = QuestionnaireModel.swift; path = vomo/Model/QuestionnaireModel.swift; sourceTree = SOURCE_ROOT; };
 		AD81B72928BFD76E009920FB /* JournalModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = JournalModel.swift; path = vomo/Model/JournalModel.swift; sourceTree = SOURCE_ROOT; };
 		AD81B72B28BFD774009920FB /* VisitModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = VisitModel.swift; path = vomo/Model/VisitModel.swift; sourceTree = SOURCE_ROOT; };
@@ -171,6 +184,7 @@
 		ADA0E0E1282561D700CF05D1 /* LineShapeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = LineShapeView.swift; path = vomo/Graphs/LineChart/LineShapeView.swift; sourceTree = SOURCE_ROOT; };
 		ADA0E0E52826E42600CF05D1 /* VoMo.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = VoMo.entitlements; sourceTree = "<group>"; };
 		ADA1EC9A2899C6B000EE58E3 /* AVAduioPCMBuffer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AVAduioPCMBuffer.swift; path = vomo/Extensions/AVAduioPCMBuffer.swift; sourceTree = SOURCE_ROOT; };
+		ADAEE226290DBFF400263EA9 /* RecordingList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = RecordingList.swift; path = vomo/Components/RecordingList.swift; sourceTree = SOURCE_ROOT; };
 		ADBAE7F8282996A500A7BD1B /* Roboto-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Roboto-Bold.ttf"; path = "../../Roboto/Roboto-Bold.ttf"; sourceTree = "<group>"; };
 		ADBAE7FB282996DF00A7BD1B /* Roboto-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Roboto-Medium.ttf"; path = "../../Roboto/Roboto-Medium.ttf"; sourceTree = "<group>"; };
 		ADBAE7FD282996E500A7BD1B /* Roboto-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Roboto-Regular.ttf"; path = "../../Roboto/Roboto-Regular.ttf"; sourceTree = "<group>"; };
@@ -186,13 +200,27 @@
 		ADBDFF9128C26DDA00518354 /* InterventionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = InterventionView.swift; path = vomo/Core/InterventionView.swift; sourceTree = SOURCE_ROOT; };
 		ADBDFF9328C26DE900518354 /* ProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ProgressView.swift; path = vomo/Core/ProgressView.swift; sourceTree = SOURCE_ROOT; };
 		ADBDFF9528C2BA5000518354 /* QuestionnaireView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = QuestionnaireView.swift; path = vomo/Core/QuestionnaireView.swift; sourceTree = SOURCE_ROOT; };
+		ADBF439E290AC03D001CDBF5 /* Filter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Filter.swift; path = vomo/Components/Filter.swift; sourceTree = SOURCE_ROOT; };
+		ADBF43A0290AC074001CDBF5 /* ListItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ListItem.swift; path = vomo/Components/ListItem.swift; sourceTree = SOURCE_ROOT; };
+		ADBF43A2290AC6B1001CDBF5 /* FilterButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FilterButton.swift; path = vomo/Components/Buttons/FilterButton.swift; sourceTree = SOURCE_ROOT; };
+		ADBF43A4290B4A37001CDBF5 /* ResponseList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ResponseList.swift; path = vomo/Components/ResponseList.swift; sourceTree = SOURCE_ROOT; };
+		ADBF43A6290B4C4D001CDBF5 /* JournalList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = JournalList.swift; path = vomo/Components/JournalList.swift; sourceTree = SOURCE_ROOT; };
 		ADC484BB28CBB50500160DFA /* RecordAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = RecordAction.swift; path = vomo/Components/Shapes/RecordAction.swift; sourceTree = SOURCE_ROOT; };
 		ADC5A60528358611000C73DF /* Font.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Font.swift; path = vomo/Extensions/Font.swift; sourceTree = SOURCE_ROOT; };
 		ADC5A60728358616000C73DF /* Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Color.swift; path = vomo/Extensions/Color.swift; sourceTree = SOURCE_ROOT; };
 		ADC5A60928358644000C73DF /* Date.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Date.swift; path = vomo/Extensions/Date.swift; sourceTree = SOURCE_ROOT; };
 		ADC5A60B283587D9000C73DF /* Array.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Array.swift; path = vomo/Extensions/Array.swift; sourceTree = SOURCE_ROOT; };
 		ADE3A01528395A8C00E56527 /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = String.swift; path = vomo/Extensions/String.swift; sourceTree = SOURCE_ROOT; };
-		ADEA422828FF595B00C94D07 /* test.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = test.swift; path = vomo/Service/Recording/test.swift; sourceTree = SOURCE_ROOT; };
+		ADE416432911821500133437 /* Image.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Image.swift; path = vomo/Extensions/Image.swift; sourceTree = SOURCE_ROOT; };
+		ADE416452911874600133437 /* NavButtons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = NavButtons.swift; path = vomo/Components/Buttons/NavButtons.swift; sourceTree = SOURCE_ROOT; };
+		ADE4164829118D0C00133437 /* LandingPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = LandingPageView.swift; path = vomo/Components/Onboarding/LandingPageView.swift; sourceTree = SOURCE_ROOT; };
+		ADE4164A29118D9500133437 /* PersonalQuestionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = PersonalQuestionView.swift; path = vomo/Components/Onboarding/PersonalQuestionView.swift; sourceTree = SOURCE_ROOT; };
+		ADE4164C29118DCB00133437 /* VoiceQuestionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = VoiceQuestionView.swift; path = vomo/Components/Onboarding/VoiceQuestionView.swift; sourceTree = SOURCE_ROOT; };
+		ADE4164E29118DF100133437 /* TargetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = TargetView.swift; path = vomo/Components/Onboarding/TargetView.swift; sourceTree = SOURCE_ROOT; };
+		ADE4165029118E3200133437 /* CustomTargetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CustomTargetView.swift; path = vomo/Components/Onboarding/CustomTargetView.swift; sourceTree = SOURCE_ROOT; };
+		ADE4165229118E5C00133437 /* GoalEntryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = GoalEntryView.swift; path = vomo/Components/Onboarding/GoalEntryView.swift; sourceTree = SOURCE_ROOT; };
+		ADE4165529118EC000133437 /* ProgressBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ProgressBar.swift; path = vomo/Components/Home/ProgressBar.swift; sourceTree = SOURCE_ROOT; };
+		ADE416582911959900133437 /* SetThreshold.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SetThreshold.swift; path = vomo/Components/Progress/SetThreshold.swift; sourceTree = SOURCE_ROOT; };
 		ADFF4308280E4CA3008F721B /* RecordingSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingSection.swift; sourceTree = "<group>"; };
 		ADFF430A280E4CA8008F721B /* JournalSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JournalSection.swift; sourceTree = "<group>"; };
 		ADFF430C280E4CB5008F721B /* ResultsSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultsSection.swift; sourceTree = "<group>"; };
@@ -214,7 +242,6 @@
 		AD064FBA27DB680C00D6CA26 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				AD81B72528BFD762009920FB /* RecordingModel.swift */,
 				AD81B72728BFD769009920FB /* QuestionnaireModel.swift */,
 				AD81B72928BFD76E009920FB /* JournalModel.swift */,
 				AD81B72B28BFD774009920FB /* VisitModel.swift */,
@@ -334,7 +361,6 @@
 			children = (
 				AD81B71F28BFCFB2009920FB /* AudioRecorder.swift */,
 				AD72972328CFD736001E7211 /* SignalProcessing.swift */,
-				ADEA422828FF595B00C94D07 /* test.swift */,
 				AD81B72328BFD01E009920FB /* Recording.swift */,
 				AD81B72128BFCFCA009920FB /* AudioPlayer.swift */,
 			);
@@ -446,8 +472,10 @@
 				AD9EC70428050DBF007F0395 /* PlayButton.swift */,
 				AD67CEC128A49646006AF596 /* TabIcons.swift */,
 				AD67CEC328A4965A006AF596 /* SubmissionButton.swift */,
+				ADE416452911874600133437 /* NavButtons.swift */,
 				AD67CEC528A49665006AF596 /* YesButton.swift */,
 				AD67CEC728A49673006AF596 /* NoButton.swift */,
+				ADBF43A2290AC6B1001CDBF5 /* FilterButton.swift */,
 			);
 			path = Buttons;
 			sourceTree = "<group>";
@@ -472,6 +500,14 @@
 		ADC5A60128358500000C73DF /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				ADE4164729118CFA00133437 /* Onboarding */,
+				ADE4165429118EA800133437 /* Home */,
+				ADE416572911958900133437 /* Progress */,
+				ADBF439E290AC03D001CDBF5 /* Filter.swift */,
+				ADBF43A0290AC074001CDBF5 /* ListItem.swift */,
+				ADBF43A4290B4A37001CDBF5 /* ResponseList.swift */,
+				ADAEE226290DBFF400263EA9 /* RecordingList.swift */,
+				ADBF43A6290B4C4D001CDBF5 /* JournalList.swift */,
 				AD67CEBE28A48D63006AF596 /* Shapes */,
 				ADA0E0E928282CC000CF05D1 /* Buttons */,
 			);
@@ -497,9 +533,39 @@
 				ADC5A60928358644000C73DF /* Date.swift */,
 				ADC5A60B283587D9000C73DF /* Array.swift */,
 				ADE3A01528395A8C00E56527 /* String.swift */,
+				ADE416432911821500133437 /* Image.swift */,
 				ADA1EC9A2899C6B000EE58E3 /* AVAduioPCMBuffer.swift */,
 			);
 			path = Extensions;
+			sourceTree = "<group>";
+		};
+		ADE4164729118CFA00133437 /* Onboarding */ = {
+			isa = PBXGroup;
+			children = (
+				ADE4164829118D0C00133437 /* LandingPageView.swift */,
+				ADE4164A29118D9500133437 /* PersonalQuestionView.swift */,
+				ADE4164C29118DCB00133437 /* VoiceQuestionView.swift */,
+				ADE4164E29118DF100133437 /* TargetView.swift */,
+				ADE4165029118E3200133437 /* CustomTargetView.swift */,
+				ADE4165229118E5C00133437 /* GoalEntryView.swift */,
+			);
+			path = Onboarding;
+			sourceTree = "<group>";
+		};
+		ADE4165429118EA800133437 /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				ADE4165529118EC000133437 /* ProgressBar.swift */,
+			);
+			path = Home;
+			sourceTree = "<group>";
+		};
+		ADE416572911958900133437 /* Progress */ = {
+			isa = PBXGroup;
+			children = (
+				ADE416582911959900133437 /* SetThreshold.swift */,
+			);
+			path = Progress;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -610,36 +676,43 @@
 				ADC5A60C283587D9000C73DF /* Array.swift in Sources */,
 				AD75260028C861520017FEC6 /* TextEntryField.swift in Sources */,
 				ADA0E0D02825604E00CF05D1 /* ColorGradient.swift in Sources */,
+				ADAEE227290DBFF400263EA9 /* RecordingList.swift in Sources */,
 				ADA0E0BE28255F3A00CF05D1 /* CGPoint+Extension.swift in Sources */,
 				ADC5A60828358616000C73DF /* Color.swift in Sources */,
 				ADA0E0C628255FA800CF05D1 /* Path+QuadCurve.swift in Sources */,
+				ADBF43A7290B4C4D001CDBF5 /* JournalList.swift in Sources */,
 				ADA0E0DA282561B400CF05D1 /* LineBackgroundShape.swift in Sources */,
 				ADA0E0D8282561A900CF05D1 /* Line.swift in Sources */,
 				ADA1EC9B2899C6B000EE58E3 /* AVAduioPCMBuffer.swift in Sources */,
 				ADA0E0BA28255EDA00CF05D1 /* ChartValue.swift in Sources */,
+				ADE416442911821500133437 /* Image.swift in Sources */,
 				ADFF4309280E4CA3008F721B /* RecordingSection.swift in Sources */,
 				AD67CEC228A49646006AF596 /* TabIcons.swift in Sources */,
 				AD81B73128BFDBF6009920FB /* Settings.swift in Sources */,
 				AD26BA202829F4E600AC1A7B /* BarChartRow.swift in Sources */,
 				ADA0E0CA2825601700CF05D1 /* ChartGrid.swift in Sources */,
 				AD81B71E28BFCF83009920FB /* Notification.swift in Sources */,
+				ADBF43A1290AC074001CDBF5 /* ListItem.swift in Sources */,
 				AD26BA1C2829F4C900AC1A7B /* BarChartCell.swift in Sources */,
+				ADE4165129118E3200133437 /* CustomTargetView.swift in Sources */,
 				AD81B71328BDBA5A009920FB /* BarChart.swift in Sources */,
 				AD57E6442805D02600CDB31B /* BackUps.swift in Sources */,
 				AD81B72428BFD01E009920FB /* Recording.swift in Sources */,
 				ADA0E0B628255ECD00CF05D1 /* ChartBase.swift in Sources */,
+				ADE4164F29118DF100133437 /* TargetView.swift in Sources */,
+				ADE4164D29118DCB00133437 /* VoiceQuestionView.swift in Sources */,
+				ADBF43A3290AC6B1001CDBF5 /* FilterButton.swift in Sources */,
 				AD67CEC428A4965A006AF596 /* SubmissionButton.swift in Sources */,
 				AD915C37280624E200B48A5C /* ProfileButton.swift in Sources */,
-				ADEA422928FF595B00C94D07 /* test.swift in Sources */,
 				AD81B72F28BFDB13009920FB /* Entries.swift in Sources */,
 				ADA0E0C028255F5300CF05D1 /* CGReact+Extension.swift in Sources */,
 				AD67CEC628A49665006AF596 /* YesButton.swift in Sources */,
 				ADA0E0B428255EAF00CF05D1 /* CardView.swift in Sources */,
+				ADE4164929118D0C00133437 /* LandingPageView.swift in Sources */,
 				ADA0E0E0282561CA00CF05D1 /* LineShape.swift in Sources */,
 				AD6B031C27FCB26F0066B77D /* APIPlayground.swift in Sources */,
 				ADA0E0C228255F6A00CF05D1 /* ChartBase+Extension.swift in Sources */,
 				AD75260428C8639A0017FEC6 /* DateEntryField.swift in Sources */,
-				AD81B72628BFD762009920FB /* RecordingModel.swift in Sources */,
 				ADFF430D280E4CB5008F721B /* ResultsSection.swift in Sources */,
 				AD81B72028BFCFB2009920FB /* AudioRecorder.swift in Sources */,
 				AD81B71928BEB0B5009920FB /* HBarChartCellShape.swift in Sources */,
@@ -655,7 +728,10 @@
 				ADC484BC28CBB50500160DFA /* RecordAction.swift in Sources */,
 				AD158E6C279919A500C3119A /* VoMoApp.swift in Sources */,
 				AD9EC70528050DBF007F0395 /* PlayButton.swift in Sources */,
+				ADE4165629118EC000133437 /* ProgressBar.swift in Sources */,
+				ADBF43A5290B4A37001CDBF5 /* ResponseList.swift in Sources */,
 				AD81B73628BFE013009920FB /* SharedViewModel.swift in Sources */,
+				ADBF439F290AC03D001CDBF5 /* Filter.swift in Sources */,
 				AD81B71528BEAE84009920FB /* HBarChart.swift in Sources */,
 				AD67CEC828A49673006AF596 /* NoButton.swift in Sources */,
 				ADBDFF8628C2663000518354 /* ViewController.swift in Sources */,
@@ -667,7 +743,11 @@
 				ADA0E0E2282561D700CF05D1 /* LineShapeView.swift in Sources */,
 				ADE3A01628395A8C00E56527 /* String.swift in Sources */,
 				ADBDFF8828C2669300518354 /* OnboardView.swift in Sources */,
+				ADE4164B29118D9500133437 /* PersonalQuestionView.swift in Sources */,
+				ADE416462911874600133437 /* NavButtons.swift in Sources */,
 				AD81B72228BFCFCA009920FB /* AudioPlayer.swift in Sources */,
+				ADE4165329118E5C00133437 /* GoalEntryView.swift in Sources */,
+				ADE416592911959900133437 /* SetThreshold.swift in Sources */,
 				ADA0E0CE2825604800CF05D1 /* ChartStyle.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -799,7 +879,7 @@
 				CODE_SIGN_ENTITLEMENTS = VoMo/VoMo.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: The University of Cincinnati";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 13;
+				CURRENT_PROJECT_VERSION = 14;
 				DEVELOPMENT_ASSET_PATHS = "\"VoMo/Preview Content\"";
 				DEVELOPMENT_TEAM = E3GYNLB224;
 				ENABLE_PREVIEWS = YES;
@@ -820,7 +900,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.2.3;
+				MARKETING_VERSION = 1.3;
 				PRODUCT_BUNDLE_IDENTIFIER = edu.uc.vomo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = edu.uc.vomo;
@@ -838,7 +918,7 @@
 				CODE_SIGN_ENTITLEMENTS = VoMo/VoMo.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: The University of Cincinnati";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 13;
+				CURRENT_PROJECT_VERSION = 14;
 				DEVELOPMENT_ASSET_PATHS = "\"VoMo/Preview Content\"";
 				DEVELOPMENT_TEAM = E3GYNLB224;
 				ENABLE_PREVIEWS = YES;
@@ -859,7 +939,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.2.3;
+				MARKETING_VERSION = 1.3;
 				PRODUCT_BUNDLE_IDENTIFIER = edu.uc.vomo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = edu.uc.vomo;

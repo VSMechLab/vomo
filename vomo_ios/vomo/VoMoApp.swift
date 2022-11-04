@@ -8,17 +8,6 @@
 import SwiftUI
 import UIKit
 
-/*
- 
- Audit entire code base starting here
- Refactor code base
- Delete unneeded functionality
- Clean and redesign code
- Build out SharedViewModel
- Build components library
- 
- */
-
 @main
 struct VoMoApp: App {
     var body: some Scene {

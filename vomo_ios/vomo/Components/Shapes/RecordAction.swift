@@ -67,10 +67,10 @@ extension CompleteMenu {
             Button(action: {
                 // Move to function under audioRecorder level
                 let processings = audioRecorder.process(fileURL: audioRecorder.recordings.last!.fileURL)
-                self.audioRecorder.processedData.append(ProcessedData(createdAt: audioRecorder.recordings.last!.createdAt, duration: processings.duration, intensity: processings.intensity))
+                self.audioRecorder.processedData.append(ProcessedData(createdAt: audioRecorder.recordings.last!.createdAt, duration: processings.duration, intensity: processings.intensity, pitch_mean: processings.pitch_mean, star: false))
                 
                 //for entry in entries.recordings { print("Entry: \(entry.createdAt)") }
-                for audio in audioRecorder.recordings { print("Audio: \(audio.createdAt)") }
+                for audio in audioRecorder.recordings { print("File: \(audio.fileURL)") }
                 
                 if settings.isActive() { settings.recordEntered += 1 }
                 

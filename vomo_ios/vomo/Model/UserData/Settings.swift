@@ -42,8 +42,8 @@ class Settings: ObservableObject {
         didSet { defaults.set(journalEntered, forKey: "journal_entered") }
     }
     /// Stores the number of entries entered so far
-    @Published var questionnaireEntered: Int {
-        didSet { defaults.set(questionnaireEntered, forKey: "questionnaire_entered") }
+    @Published var surveyEntered: Int {
+        didSet { defaults.set(surveyEntered, forKey: "survey_entered") }
     }
     /// Stores the start date for the goal
     @Published var startDate: String {
@@ -97,38 +97,57 @@ class Settings: ObservableObject {
             UserDefaults.standard.set(vowel, forKey: "vowel")
         }
     }
-    @Published var maxPT: Bool {
+    @Published var mpt: Bool {
         didSet {
-            UserDefaults.standard.set(maxPT, forKey: "max_pt")
+            UserDefaults.standard.set(mpt, forKey: "mpt")
         }
     }
-    @Published var rainbowS: Bool {
+    @Published var rainbow: Bool {
         didSet {
-            UserDefaults.standard.set(rainbowS, forKey: "rainbow_s")
+            UserDefaults.standard.set(rainbow, forKey: "rainbow")
         }
     }
-    @Published var allTasks: Bool {
+    /// thresholds stores an array of fixed size
+    /// [a, b, c] where
+    /// a = threshold setting
+    ///     a=0 no setting
+    ///     a=1 min setting
+    ///     a=2 = mid setting
+    ///     a=3 = max setting
+    ///  b = less than amount
+    ///  c = more than amount
+    ///
+    /// it is initialized on startup
+    /// if array.count !=
+    @Published var pitchThreshold: [Int] {
         didSet {
-            UserDefaults.standard.set(allTasks, forKey: "all_tasks")
+            UserDefaults.standard.set(pitchThreshold, forKey: "pitch_threshold")
         }
     }
+    @Published var durationThreshold: [Int] {
+        didSet {
+            UserDefaults.standard.set(durationThreshold, forKey: "duration_threshold")
+        }
+    }
+    @Published var qualityThreshold: [Int] {
+        didSet {
+            UserDefaults.standard.set(qualityThreshold, forKey: "quality_threshold")
+        }
+    }
+    
     /// Functions/Variables for Record Page. Need the following
     /// var of type array that stores the name of all the tasks
     /// var of type integer that stores the end index
     var taskList: [TaskModel] {
         var list: [TaskModel] = []
-        if allTasks || (vowel && maxPT && rainbowS) {
-            list = [TaskModel(prompt: "'ahh'", taskNum: 1), TaskModel(prompt: "'ahhh'", taskNum: 2), TaskModel(prompt: "'The rainbow is a division of white light into many beautiful colors. These take the shape of a long round arch, with its path high above, and its two ends apparently beyond the horizon' \n\n 'The rainbow is a division of white light into many beautiful colors. These take the shape of a long round arch, with its path high above, and its two ends apparently beyond the horizon' \n\n 'The rainbow is a division of white light into many beautiful colors. These take the shape of a long round arch, with its path high above, and its two ends apparently beyond the horizon'", taskNum: 3)]
-        } else {
-            if vowel {
-                list.append(TaskModel(prompt: "'ahhh'", taskNum: 2))
-            }
-            if maxPT {
-                list.append(TaskModel(prompt: "'ahh'", taskNum: 1))
-            }
-            if rainbowS {
-                list.append(TaskModel(prompt: "'The rainbow is a division of white light into many beautiful colors. These take the shape of a long round arch, with its path high above, and its two ends apparently beyond the horizon' \n\n 'The rainbow is a division of white light into many beautiful colors. These take the shape of a long round arch, with its path high above, and its two ends apparently beyond the horizon' \n\n 'The rainbow is a division of white light into many beautiful colors. These take the shape of a long round arch, with its path high above, and its two ends apparently beyond the horizon'", taskNum: 3))
-            }
+        if availableRecordings.contains("vowel") {
+            list += [TaskModel(prompt: "'ahh'", taskNum: 1)]
+        }
+        if availableRecordings.contains("mpt") {
+            list += [TaskModel(prompt: "'ahhh'", taskNum: 2)]
+        }
+        if availableRecordings.contains("rainbow") {
+            list += [TaskModel(prompt: "'The rainbow is a division of white light into many beautiful colors. These take the shape of a long round arch, with its path high above, and its two ends apparently beyond the horizon'", taskNum: 3)]
         }
         return list
     }
@@ -247,9 +266,8 @@ class Settings: ObservableObject {
         
         /// Custom Track
         self.vowel = UserDefaults.standard.object(forKey: "vowel") as? Bool ?? false
-        self.maxPT = UserDefaults.standard.object(forKey: "max_pt") as? Bool ?? false
-        self.rainbowS = UserDefaults.standard.object(forKey: "rainbow_s") as? Bool ?? false
-        self.allTasks = UserDefaults.standard.object(forKey: "all_tasks") as? Bool ?? false
+        self.mpt = UserDefaults.standard.object(forKey: "mpt") as? Bool ?? false
+        self.rainbow = UserDefaults.standard.object(forKey: "rainbow") as? Bool ?? false
         self.pitch = UserDefaults.standard.object(forKey: "pitch") as? Bool ?? false
         self.CPP = UserDefaults.standard.object(forKey: "cpp") as? Bool ?? false
         self.intensity = UserDefaults.standard.object(forKey: "intensity") as? Bool ?? false
@@ -278,12 +296,84 @@ class Settings: ObservableObject {
         self.numWeeks = defaults.object(forKey: "num_weeks") as? Int ?? 0
         self.recordEntered = defaults.object(forKey: "record_entered") as? Int ?? 0
         self.journalEntered = defaults.object(forKey: "journal_entered") as? Int ?? 0
-        self.questionnaireEntered = defaults.object(forKey: "questionnaire_entered") as? Int ?? 0
+        self.surveyEntered = defaults.object(forKey: "survey_entered") as? Int ?? 0
         
         self.startDate = defaults.object(forKey: "start_date") as? String ?? ""
         
         /// Recording page popup
         self.hidePopUp = defaults.object(forKey: "hide_popup") as? Bool ?? false
+        
+        /// thresholds
+        self.pitchThreshold = defaults.object(forKey: "pitch_threshold") as? [Int] ?? []
+        self.durationThreshold = defaults.object(forKey: "duration_threshold") as? [Int] ?? []
+        self.qualityThreshold = defaults.object(forKey: "quality_threshold") as? [Int] ?? []
+    }
+    
+    var availableRecordings: [String] {
+        var ret: [String] = []
+        switch focusSelection {
+        case 0:
+            if self.vowel {
+                ret += ["vowel"]
+            }
+            if self.mpt {
+                ret += ["mpt"]
+            }
+            if self.rainbow {
+                ret += ["rainbow"]
+            }
+        case 1:
+            ret += ["vowel", "mpt", "rainbow"]
+        case 2:
+            ret += ["vowel", "mpt", "rainbow"]
+        case 3:
+            ret += ["mpt", "rainbow"]
+        case 4:
+            ret += ["vowel", "rainbow"]
+        case 5:
+            ret += ["vowel", "mpt", "rainbow"]
+        case 6:
+            ret += ["vowel", "mpt", "rainbow"]
+        default:
+            if self.vowel {
+                ret += ["vowel"]
+            }
+            if self.mpt {
+                ret += ["mpt"]
+            }
+            if self.rainbow {
+                ret += ["rainbow"]
+            }
+        }
+        return ret
+    }
+    
+    var availableSurveys: [String] {
+        var ret: [String] = []
+        switch focusSelection {
+        case 0:
+            if self.vhi {
+                ret += ["vhi"]
+            }
+            if self.vocalEffort {
+                ret += ["vocal_effort"]
+            }
+        case 1:
+            ret += ["vhi", "ve"]
+        case 2:
+            ret += ["vhi", "ve"]
+        case 3:
+            ret += ["ve"]
+        case 4:
+            ret += ["ve"]
+        case 5:
+            ret += ["vhi", "ve"]
+        case 6:
+            ret += ["vhi", "ve"]
+        default:
+            ret += ["vhi", "vocal_effort"]
+        }
+        return ret
     }
 }
 
@@ -319,7 +409,7 @@ extension Settings {
         surveysPerWeek = quests
         journalsPerWeek = journs
     }
-
+    
     func clearGoal() {
         let newDate: Date = .now
         startDate = newDate.toStringDay()
@@ -328,45 +418,87 @@ extension Settings {
         self.recordPerWeek = 0
         self.surveysPerWeek = 0
         self.journalsPerWeek = 0
+        
+        self.surveyEntered = 0
+        self.journalEntered = 0
+        self.recordEntered = 0
     }
 
-    func recordProgress() -> Double {
-        /*
-         Add goal completion calculations, based on days/wk * # wks set under goals section
-         */
-        var result: Double = 0
-        
-        if recordPerWeek > 0 || numWeeks > 0 {
-            result = Double(Double(recordEntered) / ( Double(recordPerWeek) * Double(numWeeks) + 0.000001))
-        }
-        
-        return result
+    /// Total amount of recordings required to complete the goal
+    var recordGoal: Double {
+        return ( Double(recordPerWeek) * Double(numWeeks) + 0.000001)
     }
-    func questProgress() -> Double {
-        /*
-         Add goal completion calculations, based on days/wk * # wks set under goals section
-         */
-        var result: Double = 0
-        
-        if surveysPerWeek > 0 || numWeeks > 0 {
-            result = Double(Double(questionnaireEntered) / ( Double(surveysPerWeek) * Double(numWeeks) + 0.000001))
+    /// Percentage of completed record goal
+    var recordProgress: Double {
+        let ret = 100.0 * Double(recordEntered) / ( recordGoal + 0.000001)
+        if ret > 100 {
+            return 100
+        } else {
+            return ret
         }
-        
-        return result
     }
-    func journalProgress() -> Double {
-        /*
-         Add goal completion calculations, based on days/wk * # wks set under goals section
-         */
-        var result: Double = 0
-        
-        
-        if journalsPerWeek > 0 || numWeeks > 0 {
-            result = Double(Double(journalEntered) / ( Double(journalsPerWeek) * Double(numWeeks) + 0.000001))
+    /// Total amount of journals required to complete the goal
+    var journalGoal: Double {
+        return ( Double(surveysPerWeek) * Double(numWeeks) + 0.000001)
+    }
+    /// Percentage of completed journals goal
+    var journalProgress: Double {
+        let ret = 100 * Double(journalEntered) / ( journalGoal + 0.000001)
+        if ret > 100 {
+            return 100
+        } else {
+            return ret
         }
-        
-        return result
     }
+    
+    /// Total amount of surveys required to complete the goal
+    var surveyGoal: Double {
+        return ( Double(surveysPerWeek) * Double(numWeeks) + 0.000001)
+    }
+    
+    /// Percentage of completed surveys goal
+    var surveyProgress: Double {
+        let ret = 100.0 * Double(surveyEntered) / ( surveyGoal + 0.000001)
+        if ret > 100 {
+            return 100
+        } else {
+            return ret
+        }
+    }
+    
+    ///  Need the following
+    ///  function that returns the beginning of the next full week
+    ///  function that returns the end of then next full week
+    ///  function that returns an array of a custom data type that contains the start and end date of each consecutive start and end dates contained after a given start date
+    ///
+    ///  for example
+    ///  if the start date were to equal 10/19/2022
+    ///  the next given start of the week would be the following monday, say, 10/20/2022
+    ///  such that the first element of this custom data type would be DataType(start: 10/20/2022, end: 10/26/2022)
+    ///  if this goal runs for a total of 6 weeks this function would return the following...
+    ///
+    ///  [DataType(start: 10/20/2022, end: 10/26/2022),
+    ///   DataType(start: 10/27/2022, end: 10/26/2022), ......]
+    var startWeek: (Date, Date) {
+        let start: Date = Date(timeInterval: 0, since: startDate.toDate() ?? .now)
+        return (start.startOfWeek, start.endOfWeek) as! (Date, Date)
+    }
+    
+    var timelines: [Weeks] {
+        var ret: [Weeks] = []
+        for index in 0..<numWeeks {
+            ret += [Weeks(
+                start: Date(timeInterval: Double(604800 * index), since: startWeek.0),
+                end: Date(timeInterval: Double(604800 * index), since: startWeek.1)
+            )]
+        }
+        return ret
+    }
+}
+
+struct Weeks {
+    let start: Date
+    let end: Date
 }
 
 struct TaskModel {

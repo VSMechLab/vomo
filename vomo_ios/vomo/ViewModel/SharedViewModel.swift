@@ -48,54 +48,36 @@ struct SharedViewModel {
     let navArrowWidth = CGFloat(20)
     let navArrowHeight = CGFloat(25)
     
-    var taskList: [String] {
-        var returnable: [String] = []
-        if settings.allTasks || settings.focusSelection != 0 {
-            return ["vowel", "max_pt", "rainbow_s"]
-        } else {
-            if settings.vowel {
-                returnable.append("vowel")
-            }
-            if settings.maxPT {
-                returnable.append("max_pt")
-            }
-            if settings.rainbowS {
-                returnable.append("rainbow_s")
-            }
-            return returnable
-        }
-    }
-    
-    
     let vhi: [String] = [
-        "VHI",
         "1. My voice makes it difficult for people to hear me.",
-        "2. I run out of air when I talk.",
-        "3. People have difficulty understanding me in a noisy room.",
-        "4. The sound of my voice varies throughout the day.",
-        "5. My family has difficulty hearing me when I call them througout the house.",
-        "6. I use the phone less often than I would like to.",
-        "7. I'm tense when talking to others because of my voice.",
-        "8. I tend to avoid groups of people because of my voice.",
-        "9. People seem irritated with my voice.",
+        "2. People have difficulty understanding me in a noisy room.",
+        "3. My voice difficulties restrict personal and social life.",
+        "4. I feel left out of conversations because of my voice.",
+        "5. My voice problem causes me to lose income.",
+        "6. I feel as though I have to strain to produce voice.",
+        "7. The clarity of my voice is unpredictable.",
+        "8. My voice problem upsets me.",
+        "9. My voice makes me feel handicapped.",
         "10. People ask, \"Whats wrong with your voice?\"",
     ]
     
     let vocal_effort: [String] = [
-        "Vocal Effort",
         "How much effort did it take to make a voice?"
     ]
     
     var questions: [String] {
         var ret: [String] = []
-        
-        if settings.vhi {
+        if settings.availableSurveys.contains("vhi") {
             ret += vhi
         }
-        if settings.vocalEffort {
+        if settings.availableSurveys.contains("ve") {
             ret += vocal_effort
         }
         return ret
+    }
+    
+    var allQuestions: [String] {
+        return vhi + vocal_effort
     }
     
     let record_img = "VM_record-nav-ds-icon"
@@ -134,9 +116,24 @@ struct SharedViewModel {
     let home_settings_img = "VoMo-App-Outline_8_SETTINGS_BTN"
     let home_wave_img = "VM_Waves-Gfx"
     
-    
-    
     /// Progress View
     let filled_img = "VM_Gradient-Btn"
     let empty_img = "VoMo-App-Outline_8_CLEAR_BTN"
+    let trash_can = "VoMo-App-Outline_9_delete_btn"
+    let share_button = "VoMo-App-Outline_9_share_btn"
+    let star_img = "VoMo-App-Outline_9_fav_btn"
+    let star_gray_img = "VoMo-App-Outline_8_FAV_BTN_GREY"
+    
+    /// Intervention items
+    let upcoming = "Upcoming"
+    let past = "Past"
+    
+    /// Threshold popup
+    let min_img = "VoMo-App-Assets_2_8.4_less-than-btn"
+    let gray_min_img = "VoMo-App-Assets_2_8.4_less-than-gry-btn"
+    let mid_img = "VoMo-App-Assets_2_8.4_between-btn"
+    let gray_mid_img = "VoMo-App-Assets_2_8.4_between-gry-btn"
+    let max_img = "VoMo-App-Assets_2_8.4_more-than-btn"
+    let gray_max_img = "VoMo-App-Assets_2_8.4_more-than-gry-btn"
 }
+

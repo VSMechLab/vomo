@@ -1,0 +1,159 @@
+//
+//  PersonalQuestionView.swift
+//  VoMo
+//
+//  Created by Neil McGrogan on 11/1/22.
+//
+
+import SwiftUI
+
+struct PersonalQuestionView: View {
+    @EnvironmentObject var settings: Settings
+    
+    let logo = "VM_0-Loading-Screen-logo"
+    let entry_img = "VM_12-entry-field"
+    let nav_img = "VM_Dropdown-Btn"
+    let fieldWidth =  UIScreen.main.bounds.width - 75
+    let toggleWidth = UIScreen.main.bounds.width / 2 - 40
+    let toggleHeight = CGFloat(35)
+    
+    let img_selected = "VM_Prpl-Square-Btn copy"
+    let img_unselected = "VM_Prpl-Check-Square-Btn"
+    
+    @State private var svm = SharedViewModel()
+    
+    let arrow_img = "VM_Dropdown-Btn"
+    
+    @State private var showCalendar = false
+    
+    @State var goalDate = ""
+    @State var showDatePicker = false
+    @State var textfieldText: String = ""
+    
+    @State var date: Date = .now
+    
+    var body: some View {
+        VStack {
+            Spacer()
+            
+            headerSection
+            
+            VStack(alignment: .leading) {
+                firstNameSection
+                
+                lastNameSection
+                
+                dobSection
+                
+                ZStack {
+                    if showCalendar {
+                        DatePicker("", selection: $date, in: ...Date.now, displayedComponents: .date)
+                            .datePickerStyle(WheelDatePickerStyle())
+                    }
+                }
+                .transition(.slide)
+            }
+            
+            Spacer()
+        }
+        .frame(width: svm.content_width)
+        .onAppear() {
+            date = self.settings.dob.toDateFromDOB() ?? .now
+        }
+    }
+    
+    
+}
+
+extension PersonalQuestionView {
+    private var headerSection: some View {
+        HStack(spacing: 0) {
+            Spacer()
+            Text("Sign ")
+            Text("Up")
+                .foregroundColor(Color.DARK_PURPLE)
+            Text(".")
+                .foregroundColor(Color.TEAL)
+            Spacer()
+        }
+        .font(._title)
+        .padding()
+    }
+    
+    private var firstNameSection: some View {
+        Group {
+            Text("First Name")
+                .font(._fieldLabel)
+            
+            ZStack {
+                Image(entry_img)
+                    .resizable()
+                    .frame(width: svm.content_width, height: toggleHeight)
+                    .cornerRadius(7)
+                
+                HStack {
+                    TextField(self.settings.firstName.isEmpty ? "First Name" : self.settings.firstName, text: $settings.firstName)
+                        .font(self.settings.firstName.isEmpty ? ._fieldCopyItalic : ._fieldCopyRegular)
+                }.padding(.horizontal, 5)
+            }.frame(width: svm.content_width, height: toggleHeight)
+        }
+    }
+    
+    private var lastNameSection: some View {
+        Group {
+            Text("Last Name")
+                .font(._fieldLabel)
+            
+            ZStack {
+                Image(entry_img)
+                    .resizable()
+                    .frame(width: svm.content_width, height: toggleHeight)
+                    .cornerRadius(7)
+                
+                HStack {
+                    TextField(self.settings.lastName.isEmpty ? "Last Name" : self.settings.lastName, text: $settings.lastName)
+                        .font(self.settings.lastName.isEmpty ? ._fieldCopyItalic : ._fieldCopyRegular)
+                }.padding(.horizontal, 5)
+            }.frame(width: svm.content_width, height: toggleHeight)
+        }
+    }
+    
+    private var dobSection: some View {
+        Group {
+            Text("Date of Birth")
+                .font(._fieldLabel)
+            
+            ZStack {
+                Image(entry_img)
+                    .resizable()
+                    .frame(width: svm.content_width, height: toggleHeight)
+                    .cornerRadius(5)
+                
+                Button(action: {
+                    withAnimation() {
+                        self.showCalendar.toggle()
+                    }
+                    self.settings.dob = date.toString(dateFormat: "MM/dd/yyyy")
+                }) {
+                    HStack {
+                        Text(date.toString(dateFormat: "MM/dd/yyyy"))
+                            .font(._bodyCopy)
+                        
+                        Spacer()
+                        Image(arrow_img)
+                            .resizable()
+                            .frame(width: 20, height: 10)
+                            .rotationEffect(Angle(degrees:  showCalendar ? 180 : 0))
+                    }.padding(.horizontal, 7)
+                }
+            }.frame(width: svm.content_width, height: toggleHeight)
+        }
+    }
+}
+
+struct PersonalQuestionView_Previews: PreviewProvider {
+    static var previews: some View {
+        PersonalQuestionView()
+            .environmentObject(Settings())
+    }
+}

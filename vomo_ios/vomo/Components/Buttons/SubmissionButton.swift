@@ -7,18 +7,33 @@
 
 import SwiftUI
 
-struct SubmissionButton: View {
+struct SubmitButton: ButtonStyle {
     let button_img = "VM_Gradient-Btn"
-    let label: String
-    var body: some View {
+    
+    func makeBody(configuration: Configuration) -> some View {
         ZStack {
             Image(button_img)
                 .resizable()
                 .frame(width: 250, height: 46)
             
-            Text(label)
+            configuration.label
                 .font(._BTNCopy)
                 .foregroundColor(Color.white)
         }
+    }
+}
+
+struct SubmitButtonView: View {
+    var body: some View {
+        Button("Press Me") {
+            print("Button pressed!")
+        }
+        .buttonStyle(SubmitButton())
+    }
+}
+
+struct SubmitButtonView_Previews: PreviewProvider {
+    static var previews: some View {
+        SubmitButtonView()
     }
 }

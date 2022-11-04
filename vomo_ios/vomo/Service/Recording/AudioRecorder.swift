@@ -41,10 +41,10 @@ class AudioRecorder: NSObject,ObservableObject {
     }
     
     func returnProcessing(createdAt: Date) -> ProcessedData {
-        var ret = ProcessedData(createdAt: .now, duration: 99.1, intensity: 99.1)
+        var ret = ProcessedData(createdAt: .now, duration: 99.1, intensity: 99.1, pitch_mean: 99.1, star: false)
         for data in processedData {
             if createdAt == data.createdAt {
-                ret = ProcessedData(createdAt: data.createdAt, duration: data.duration, intensity: data.intensity)
+                ret = ProcessedData(createdAt: data.createdAt, duration: data.duration, intensity: data.intensity, pitch_mean: data.pitch_mean, star: false)
             }
         }
         return ret
@@ -101,7 +101,7 @@ class AudioRecorder: NSObject,ObservableObject {
     func process(fileURL: URL) -> Processings {
         let metrics = signalProcess(fileURL: fileURL)
         
-        return Processings(duration: metrics[0], intensity: metrics[1], pitch_mean: 1.0, pitch_min: 1.0, pitch_max: 1.0)
+        return Processings(duration: metrics[0], intensity: metrics[1], pitch_mean: metrics[2], pitch_min: 1.0, pitch_max: 1.0)
     }
     
     func returnCreatedAt(fileURL: URL) -> Date {
@@ -114,6 +114,7 @@ class AudioRecorder: NSObject,ObservableObject {
         return createdAt
     }
     
+    /// fetchRecordings fetches recordings from the files then orders them in the data model: Recording
     func fetchRecordings() {
         let fileManager = FileManager.default
         let documentDirectory = fileManager.urls(for: .documentDirectory, in: .userDomainMask)[0]
@@ -179,6 +180,24 @@ class AudioRecorder: NSObject,ObservableObject {
             }
         }
         return str
+    }
+    
+    func viewableTask(file: URL!) -> String {
+        var str = ""
+        for record in recordings {
+            if record.fileURL == file {
+                str = record.fileURL.lastPathComponent.suffix(5).prefix(1) + ""
+            }
+        }
+        if str == "1" {
+            return "Vowel"
+        } else if str == "2" {
+            return "Duration"
+        } else if str == "3" {
+            return "Rainbow"
+        } else {
+            return "Rainbow"
+        }
     }
     
     func taskNum(file: URL!) -> String {
@@ -283,13 +302,21 @@ extension AudioRecorder {
 
 class ProcessedData: Identifiable, Codable {
     var createdAt: Date
+    /// Value of duration measured in seconds
     var duration: Float
     var intensity: Float
+    /// Mean value of pitch measured in decibles
+    var pitch_mean: Float
+    /// Boolean value of wether or not the entry is started
+    /// to remove this delete the line bellow and debug until working again
+    var star: Bool
     
-    init(createdAt: Date, duration: Float, intensity: Float) {
+    init(createdAt: Date, duration: Float, intensity: Float, pitch_mean: Float, star: Bool) {
         self.createdAt = createdAt
         self.duration = duration
         self.intensity = intensity
+        self.pitch_mean = pitch_mean
+        self.star = star
     }
 }
 

@@ -16,7 +16,7 @@ struct InterventionView: View {
     @State private var date = Date()
     @State private var type = ""
     
-    @State private var newVisit = true
+    @State private var newVisit = false
     @State private var selected = "Upcoming"
     @State private var showCalendar = false
     @State private var showPicker = false
@@ -30,7 +30,7 @@ struct InterventionView: View {
     
     @State private var targetVisit = Date()
     
-    let visitTypes = ["Office Visit", "Therapy Visit", "Office Procedure", "Surgery", "Other"]
+    let visitTypes = ["Vocal cord injection", "Botulinum injection", "Office laser treatment", "Surgery", "Other"]
     
     let toggleHeight: CGFloat = 37 * 0.95
     
@@ -50,27 +50,23 @@ struct InterventionView: View {
                 if self.newVisit {
                     newVisitForm
                 } else {
-                    //visitLogs
+                    visitLogs
                 }
-                Spacer()
             }
             .frame(width: svm.content_width)
-            .background(Color.white)
-            .cornerRadius(2)
             .onAppear() {
                 self.entries.getItems()
+                for entry in entries.interventions {
+                    print("Note: \(entry.note)")
+                }
             }
+            .padding()
+            .background(Color.INPUT_FIELDS)
+            .cornerRadius(15)
+            .padding()
             
             if submitAnimation {
                 animationSection
-            }
-        }
-    }
-    
-    func addNote(date: Date, type: String) {
-        for visit in entries.interventions {
-            if visit.date == targetVisit {
-                print(visit.date)
             }
         }
     }
@@ -101,20 +97,18 @@ extension InterventionView {
                     self.showDate.toggle()
                 }
             }) {
-                ZStack {
-                    Color.white.cornerRadius(20).frame(height: toggleHeight)
-                    
-                    HStack {
-                        Image(date_img)
-                            .resizable()
-                            .scaledToFit()
-                            .frame(height: toggleHeight * 0.8)
-                            .padding(.leading)
-                        Text(date == .now ? "Enter appointment date" : date.toString(dateFormat: "MM/dd/yyyy"))
-                            .font(._fieldCopyRegular)
-                        Spacer()
-                    }
+                HStack {
+                    Image(date_img)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(height: toggleHeight * 0.8)
+                        .padding(.leading)
+                    Text(date == .now ? "Enter appointment date" : date.toString(dateFormat: "MM/dd/yyyy"))
+                        .font(._fieldCopyRegular)
+                    Spacer()
                 }
+                .padding(.vertical).frame(height: toggleHeight)
+                .background(Color.white).cornerRadius(10)
             }
             
             ZStack {
@@ -139,20 +133,18 @@ extension InterventionView {
                     self.showTime.toggle()
                 }
             }) {
-                ZStack {
-                    Color.white.cornerRadius(20).frame(height: toggleHeight)
-                    
-                    HStack {
-                        Image(time_img)
-                            .resizable()
-                            .scaledToFit()
-                            .frame(height: toggleHeight * 0.8)
-                            .padding(.leading)
-                        Text(self.date.toStringHour())
-                            .font(._fieldCopyRegular)
-                        Spacer()
-                    }
+                HStack {
+                    Image(time_img)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(height: toggleHeight * 0.8)
+                        .padding(.leading)
+                    Text(self.date.toStringHour())
+                        .font(._fieldCopyRegular)
+                    Spacer()
                 }
+                .padding(.vertical).frame(height: toggleHeight)
+                .background(Color.white).cornerRadius(10)
             }
             
             ZStack {
@@ -177,44 +169,40 @@ extension InterventionView {
                     self.showTime = false
                 }
             }) {
-                ZStack {
-                    Color.white.cornerRadius(20).frame(height: toggleHeight)
-                    
-                    HStack {
-                        Image(type_img)
-                            .resizable()
-                            .scaledToFit()
-                            .frame(height: toggleHeight * 0.8)
-                            .padding(.leading)
-                        
-                        
-                        Menu {
-                            Picker("Choose One", selection: $type) {
-                                ForEach(visitTypes, id: \.self) { visit in
-                                    Text("\(visit)")
-                                        .font(._fieldCopyRegular)
-                                }
+                HStack {
+                    Image(type_img)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(height: toggleHeight * 0.8)
+                        .padding(.leading)
+                    Menu {
+                        Picker("Choose One", selection: $type) {
+                            ForEach(visitTypes, id: \.self) { visit in
+                                Text("\(visit)")
+                                    .font(._fieldCopyRegular)
                             }
-                            .labelsHidden()
-                            .pickerStyle(InlinePickerStyle())
-
-                        } label: {
-                            Text("\(type == "" ? "Choose Type" : type)")
-                                .font(._fieldCopyRegular)
                         }
-                        
-                        Spacer()
+                        .labelsHidden()
+                        .pickerStyle(InlinePickerStyle())
+
+                    } label: {
+                        Text("\(type == "" ? "Choose Type" : type)")
+                            .font(._fieldCopyRegular)
                     }
+                    Spacer()
                 }
+                .padding(.vertical).frame(height: toggleHeight)
+                .background(Color.white).cornerRadius(10)
             }
+            
+            Spacer()
             
             if !showDate && !showTime && self.type != "" {
                 Button(action: {
                     submitAnimation = true
                     self.entries.interventions.append(InterventionModel(date: self.date, type: self.type, note: ""))
                     self.newVisit.toggle()
-                    
-                    print("\nAppointment Date: \(date)")
+                    print(entries.interventions)
                 }) {
                     ZStack {
                         Image(button_img)
@@ -235,24 +223,15 @@ extension InterventionView {
                     
                     Text("Save")
                         .font(._BTNCopy)
-                        .foregroundColor(Color.gray)
+                        .foregroundColor(Color.INPUT_FIELDS)
                 }
                 .padding(.horizontal)
             }
         }
     }
-    /*
+    
     private var visitLogs: some View {
         VStack {
-            Button(action: {
-                withAnimation() {
-                    self.newVisit.toggle()
-                }
-            }) {
-                SubmissionButton(label: "+ NEW VISIT")
-            }
-            .padding(.top, 5)
-            
             HStack(spacing: 0) {
                 VStack(alignment: .leading) {
                     Text("Upcoming")
@@ -265,8 +244,8 @@ extension InterventionView {
                     }
                 }
                 .onTapGesture {
-                    if selected != vm.upcoming {
-                        self.selected = vm.upcoming
+                    if selected != svm.upcoming {
+                        self.selected = svm.upcoming
                     }
                 }
                 
@@ -281,19 +260,20 @@ extension InterventionView {
                     }
                 }
                 .onTapGesture {
-                    if selected != vm.past {
-                        self.selected = vm.past
+                    if selected != svm.past {
+                        self.selected = svm.past
                     }
                 }
             }
             .font(._fieldLabel)
             
+            
             Group {
                 if selected == svm.upcoming {
                     ScrollView(showsIndicators: false) {
-                        ForEach(entries.visits.reversed()) { visit in
+                        ForEach(entries.interventions.reversed()) { visit in
                             if visit.date > .now {
-                                VisitTypeRow(note: self.$note, targetVisit: self.$targetVisit, visit: visit, img: vm.plus_button)
+                                VisitTypeRow(note: self.$note, targetVisit: self.$targetVisit, visit: visit, img: ""/*svm.plus_button*/)
                             }
                         }
                     }
@@ -301,9 +281,9 @@ extension InterventionView {
                     .frame(maxHeight: 250)
                 } else {
                     ScrollView(showsIndicators: false) {
-                        ForEach(entries.visits.reversed()) { visit in
+                        ForEach(entries.interventions.reversed()) { visit in
                             if visit.date < .now {
-                                VisitTypeRow(note: self.$note, targetVisit: self.$targetVisit, visit: visit, img: vm.plus_button)
+                                VisitTypeRow(note: self.$note, targetVisit: self.$targetVisit, visit: visit, img: ""/*svm.plus_button*/)
                             }
                         }
                     }
@@ -311,9 +291,16 @@ extension InterventionView {
                     .frame(maxHeight: 250)
                 }
             }
+            
+            Spacer()
+            
+            Button("+ NEW VISIT") {
+                withAnimation() { self.newVisit.toggle() }
+            }.buttonStyle(SubmitButton())
+            .padding(.top, 5)
         }
     }
-    */
+    
     private var animationSection: some View {
         ZStack {
             Color.gray
@@ -390,37 +377,19 @@ struct VisitTypeRow: View {
                 // ADD: add dropdown button
                 
                 Button(action: {
-                    self.droppedDown.toggle()
+                    withAnimation() {
+                        self.droppedDown.toggle()
+                    }
                     if !droppedDown {
                         note = ""
                         targetVisit = visit.date
-                        addNote(date: visit.date)
+                        //addNote(date: visit.date)
                     }
                 }) {
                     Arrow()
-                        .rotationEffect(self.droppedDown ? Angle(degrees: 180.0) : Angle(degrees: 0.0))
+                        .rotationEffect(self.droppedDown ? Angle(degrees: 90.0) : Angle(degrees: 0.0))
                         .padding(.horizontal, 5)
-                    /*
-                    Image(svm.arrow_img)
-                        .resizable()
-                        .rotationEffect(self.droppedDown ? Angle(degrees: 180.0) : Angle(degrees: 0.0))
-                        .frame(width: 17.5, height: 10)
-                        .padding(.horizontal, 5)*/
-                }
-                
-                Button(action: {
-                    self.droppedDown.toggle()
-                    if !droppedDown {
-                        note = ""
-                        targetVisit = visit.date
-                        addNote(date: visit.date)
-                    }
-                }) {
-                    Image("_new-visit-icon-wh")
-                        .resizable()
-                        .frame(width: 20, height: 20)
-                        .background(Color.white)
-                        .cornerRadius(3)
+                        .transition(.slide)
                 }
             }
             .padding(.horizontal, 3)
@@ -437,7 +406,7 @@ struct VisitTypeRow: View {
                         Button(action: {
                             visit.note = ""
                         }) {
-                            Text("Tap to edit")
+                            Text("Add a note")
                         }
                     } else {
                         Text("Add a note")
@@ -446,13 +415,23 @@ struct VisitTypeRow: View {
                 }
                 .padding(.horizontal, 3)
                 
+                
+                TextEditor(text: self.$note)
+                    .font(self.note.isEmpty ? ._fieldCopyItalic : ._fieldCopyRegular)
+                    .focused($focused)
+                    .font(._fieldCopyRegular)
+                    .padding(.leading, 5)
+                    .frame(height: 100)
+                    .onChange(of: note) { change in
+                        addNote(date: visit.date, change: change)
+                    }
+                    .onAppear() {
+                        note = visit.note
+                    }
+                
+                /*
                 if visit.note == "" {
-                    TextEditor(text: self.$note)
-                        .font(self.note.isEmpty ? ._fieldCopyItalic : ._fieldCopyRegular)
-                        //.focused($focused)
-                        .font(._fieldCopyRegular)
-                        .padding(.leading, 5)
-                        .frame(height: 100)
+                    
                 } else {
                     HStack {
                         Text(visit.note)
@@ -462,6 +441,10 @@ struct VisitTypeRow: View {
                     }
                     .padding(.leading, 5)
                 }
+                */
+                
+                
+                
             }
         }
         .toolbar {
@@ -475,20 +458,34 @@ struct VisitTypeRow: View {
         }
     }
     
-    func addNote(date: Date) {
+    /// System for adding/editing/removing notes
+    func addNote(date: Date, change: String) {
         var index = 0
         for visit in entries.interventions {
-            if visit.date == targetVisit {
-                entries.interventions[index].note = note
+            if visit.date == date {
+                entries.interventions[index].note = change
             }
             index += 1
         }
-        index = 0
-        for intervention in entries.interventions {
-            if intervention.date == targetVisit {
-                print(entries.interventions[index].note)
-            }
-            index += 1
-        }
+        
+        entries.saveInterventions()
     }
 }
+
+/*
+ Button(action: {
+     withAnimation() {
+         self.droppedDown.toggle()
+     }
+     if !droppedDown {
+         note = ""
+         targetVisit = visit.date
+     }
+ }) {
+     Image("_new-visit-icon-wh")
+         .resizable()
+         .frame(width: 20, height: 20)
+         .background(Color.white)
+         .cornerRadius(3)
+ }
+ */

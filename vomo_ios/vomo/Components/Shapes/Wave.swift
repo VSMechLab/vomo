@@ -7,6 +7,8 @@
 
 import SwiftUI
 
+// Enlarge scaling effect when recording
+// use boolean variable recording
 struct Wave: View {
     let color: Color
     let offset: Float
@@ -19,7 +21,13 @@ struct Wave: View {
         var path = path
         let viewBoundsHeight: CGFloat = UIScreen.main.bounds.width
         let centerY = viewBoundsHeight
-        let amplitude = CGFloat(3) - abs(fmod(CGFloat(elapsed), 3) - 1.5) * 2
+        
+        var amplitudeFactor = 2.0
+        if recording {
+            amplitudeFactor += 5.0
+        }
+        
+        let amplitude = CGFloat(3) - abs(fmod(CGFloat(elapsed), 3) - 1.5) * amplitudeFactor
         
         func f(_ x: Int) -> CGFloat {
             return sin(((CGFloat(Float(x) * offset) / viewBoundsHeight) + CGFloat(Float(elapsed))) * 4 * .pi) * amplitude + centerY
@@ -52,6 +60,9 @@ struct Wave: View {
 
 struct Wave_Previews: PreviewProvider {
     static var previews: some View {
-        Wave(color: Color.DARK_BLUE, offset: 1, recording: .constant(true))
+        Group {
+            Wave(color: Color.DARK_BLUE, offset: 1, recording: .constant(true))
+            Wave(color: Color.DARK_BLUE, offset: 1, recording: .constant(true))
+        }
     }
 }

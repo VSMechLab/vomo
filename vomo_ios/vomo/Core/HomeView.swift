@@ -92,7 +92,7 @@ extension HomeView {
             viewRouter.currentPage = .record
         }) {
             ZStack {
-                ProgressBar(level: 3, color: Color.DARK_PURPLE)
+                ProgressBar(level: settings.recordProgress, color: Color.DARK_PURPLE)
                 
                 Image(svm.home_record_img)
                     .resizable()
@@ -109,7 +109,7 @@ extension HomeView {
                 viewRouter.currentPage = .questionnaire
             }) {
                 ZStack {
-                    ProgressBar(level: 3, color: Color.BLUE)
+                    ProgressBar(level: settings.surveyProgress, color: Color.BLUE)
                     
                     Image(svm.home_question_img)
                         .resizable()
@@ -121,7 +121,7 @@ extension HomeView {
                 viewRouter.currentPage = .journal
             }) {
                 ZStack {
-                    ProgressBar(level: 3, color: Color.TEAL)
+                    ProgressBar(level: settings.journalProgress, color: Color.TEAL)
                     
                     Image(svm.home_journal_img)
                         .resizable()
@@ -170,33 +170,5 @@ struct HomeView_Previews: PreviewProvider {
             .environmentObject(AudioRecorder())
             .environmentObject(Entries())
             .environmentObject(Settings())
-    }
-}
-
-struct ProgressBar: View {
-    var level: Int
-    var color: Color
-    
-    var body: some View {
-        VStack {
-            ZStack {
-                Circle()
-                    .stroke(lineWidth: 10)
-                    .foregroundColor(Color.gray)
-                    .opacity(0.10)
-                
-                Circle()
-                    .trim(from: 0.0, to: CGFloat(min(progress(), 1.0)))
-                    .stroke(style: StrokeStyle(lineWidth: 10, lineCap: .round, lineJoin: .round))
-                    .foregroundColor(color)
-                    .rotationEffect(Angle(degrees: -90))
-                    .animation(.linear, value: 1)
-                    .opacity(0.90)
-            }.frame(width: 110, height: 110, alignment: .center)
-        }
-    }
-    
-    func progress() -> CGFloat {
-        return CGFloat(CGFloat(level) / CGFloat(10))
     }
 }

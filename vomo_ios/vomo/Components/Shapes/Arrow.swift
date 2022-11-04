@@ -7,15 +7,26 @@
 
 import SwiftUI
 
+struct SmallerArrow: View {
+    let arrow_img = "VoMo-App-Assets_2"
+    var body: some View {
+        HStack {
+            Spacer()
+            Image(arrow_img)
+                .resizable()
+                .frame(width: 8, height: 16)
+        }.frame(width: 16, height: 16)
+    }
+}
+
 struct SmallArrow: View {
     let arrow_img = "VoMo-App-Assets_2"
     var body: some View {
         Group {
             Image(arrow_img)
                 .resizable()
-                .frame(width: 9.2, height: 18.4)
-                //.rotationEffect(Angle(degrees: -90))
-        }.frame(width: 23, height: 23)
+                .frame(width: 9, height: 18)
+        }.frame(width: 20, height: 20)
     }
 }
 

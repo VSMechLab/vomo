@@ -8,6 +8,18 @@
 import SwiftUI
 
 extension Date {
+    /// start of day
+    var startOfDay: Date {
+        return Calendar.current.startOfDay(for: self)
+    }
+    /// end of day
+    var endOfDay: Date {
+        var components = DateComponents()
+        components.day = 1
+        components.second = -1
+        return Calendar.current.date(byAdding: components, to: startOfDay)!
+    }
+    
     var startOfWeek: Date? {
         let gregorian = Calendar(identifier: .gregorian)
         guard let sunday = gregorian.date(from: gregorian.dateComponents([.yearForWeekOfYear, .weekOfYear], from: self)) else { return nil }
@@ -61,6 +73,7 @@ extension Date {
         return dateFormatter.string(from: self)
     }
     
+    /// "M/d/yyyy"
     func toDOB() -> String
     {
         let dateFormatter = DateFormatter()
@@ -68,13 +81,15 @@ extension Date {
         return dateFormatter.string(from: self)
     }
     
+    /// "hh:mm a"
     func toStringHour() -> String
     {
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "hh:mm a"
+        dateFormatter.dateFormat = "h:mm a"
         return dateFormatter.string(from: self)
     }
     
+    /// "MMM"
     func toMonth() -> String {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "MMM"
@@ -144,5 +159,15 @@ extension Date {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "EEE"
         return dateFormatter.string(from: self).uppercased()
+    }
+    
+    /// "M/d"
+    func shortDay() -> String
+    {
+        let dateFormatter = DateFormatter()
+        // May need to be changed back. This was changed to prevent leadig zeros on dates
+        //dateFormatter.dateFormat = "MM/dd/yy"
+        dateFormatter.dateFormat = "M/d"
+        return dateFormatter.string(from: self)
     }
 }

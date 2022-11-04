@@ -34,9 +34,12 @@ public struct Line: View {
         GeometryReader { geometry in
             ZStack {
                 if self.didCellAppear && self.showBackground {
+                    // Commented out to hide the background 
+                    /*
                     LineBackgroundShapeView(chartData: chartData,
                                             geometry: geometry,
                                             style: style)
+                     */
                 }
                 LineShapeView(chartData: chartData,
                               geometry: geometry,
@@ -50,10 +53,10 @@ public struct Line: View {
                         .rotation3DEffect(.degrees(180), axis: (x: 0, y: 1, z: 0))
                         
                         .onChange(of: touchLocation.x) { i in
+                            /*
                             print("X location: \(touchLocation.x)")
-                            print(touchLocation.y)
-                            index = Int(14 * (touchLocation.x / CGFloat(360)))
-                            
+                            print(touchLocation.y)*/
+                            index = Int(14 * (touchLocation.x))
                         }
                 }
             }
@@ -93,7 +96,8 @@ extension Line {
         let closest = self.path.point(to: normalisedTouchLocationX)
         var denormClosest = closest.denormalize(with: geometry)
         denormClosest.x = denormClosest.x / CGFloat(chartData.normalisedPoints.count - 1)
-        denormClosest.y = denormClosest.y / CGFloat(chartData.normalisedRange)
+        // changed to fit a relative scale
+        denormClosest.y = denormClosest.y / CGFloat(chartData.customNormalisedRange)
         return denormClosest
     }
 

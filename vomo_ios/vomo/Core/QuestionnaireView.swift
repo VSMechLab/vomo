@@ -17,20 +17,31 @@ struct QuestionnaireView: View {
     @State private var responses: [Int] = []
     let button_img = "VM_Gradient-Btn"
     
+    @State var timeRemaining = 2
+    let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
+        
+    
     var body: some View {
         ZStack {
             ScrollView(showsIndicators: true) {
-                VStack(alignment: .leading, spacing: 10) {
-                    header
-                    
-                    ForEach(Array(svm.questions.enumerated()), id: \.element) { index, element in
-                        Scale(responses: self.$responses, prompt: element, index: index)
+                HStack(spacing: 0) {
+                    VStack(alignment: .leading, spacing: 10) {
+                        header
+                        
+                        questionSection
+                        
+                        submitButton
                     }
+                    .frame(width: svm.content_width * 0.975)
+                    .padding(.bottom, 100)
                     
-                    submitButton
+                    VStack {
+                        Color.clear
+                    }
+                    .padding(.bottom, 100)
+                    .frame(width: svm.content_width * 0.025)
                 }
-                .frame(width: svm.content_width)
-                .padding(.bottom, 100)
+                
             }
             
             if submitAnimation {
@@ -57,10 +68,18 @@ struct QuestionnaireView: View {
                 }
                 .opacity(submitAnimation ? 0.6 : 0.0)
                 .zIndex(1)
+                .onReceive(timer) { _ in
+                    if timeRemaining > 0 {
+                        timeRemaining -= 1
+                    }
+                    if timeRemaining == 0 {
+                        self.viewRouter.currentPage = .home
+                    }
+                }
             }
         }
         .onAppear() {
-            self.responses = Array(repeating: 0, count: 11)
+            self.responses = Array(repeating: -1, count: 11)
         }
     }
 }
@@ -74,32 +93,19 @@ extension QuestionnaireView {
                     .foregroundColor(Color.BODY_COPY)
                     .multilineTextAlignment(.leading)
                     .padding(.leading, 6)
-            } else if settings.vhi {
-                Text(svm.questions.first ?? "VHI")
-                    .font(._subTitle)
-                    .foregroundColor(Color.BODY_COPY)
-                    .multilineTextAlignment(.leading)
-                    .padding(.leading, 6)
-            } else {
-                Text("Vocal Effort Rating")
-                    .font(._subTitle)
-                    .foregroundColor(Color.BODY_COPY)
-                    .multilineTextAlignment(.leading)
-                    .padding(.leading, 6)
-            }
-            
-            if settings.vhi && settings.vocalEffort {
+                
                 Text("Vocal Handicap Index (VHI)-10 & Vocal Effort Rating")
                     .foregroundColor(.black)
                     .font(._title)
                     .padding(.leading, 6)
-            } else if settings.vhi {
-                Text("Vocal Handicap Index (VHI)-10")
-                    .foregroundColor(.black)
-                    .font(._title)
-                    .padding(.leading, 6)
             } else {
-                Text("Vocal Effort Rating")
+                Text(settings.vhi ? "VHI" : "Vocal Effort Rating")
+                    .font(._subTitle)
+                    .foregroundColor(Color.BODY_COPY)
+                    .multilineTextAlignment(.leading)
+                    .padding(.leading, 6)
+                
+                Text(settings.vhi ? "Vocal Handicap Index (VHI)-10" : "Vocal Effort Rating")
                     .foregroundColor(.black)
                     .font(._title)
                     .padding(.leading, 6)
@@ -117,18 +123,26 @@ extension QuestionnaireView {
         }
     }
     
+    private var questionSection: some View {
+        ForEach(Array(svm.questions.enumerated()), id: \.element) { index, element in
+            if element == "How much effort did it take to make a voice?" {
+                BackupScale(responses: self.$responses, prompt: element)
+            } else {
+                Scale(responses: self.$responses, prompt: element, index: index)
+            }
+        }
+    }
+    
     private var submitButton: some View {
         HStack {
             Spacer()
-            Button(action: {
-                self.entries.questionnaires.append(QuestionnaireModel(createdAt: .now, responses: self.responses))
+            Button("Submit") {
+                self.entries.questionnaires.append(QuestionnaireModel(createdAt: .now, responses: self.responses, star: false))
                 responses = []
                 submitAnimation = true
                 
-                if settings.isActive() { settings.questionnaireEntered += 1 }
-            }) {
-                SubmissionButton(label: "Submit")
-            }
+                if settings.isActive() { settings.surveyEntered += 1 }
+            }.buttonStyle(SubmitButton())
             Spacer()
         }
     }

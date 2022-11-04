@@ -31,56 +31,41 @@ struct BarChart: View {
     /// As touched (dragged) the `touchLocation` is updated and the current value is highlighted.
     public var body: some View {
         GeometryReader { geometry in
-            VStack(alignment: .leading) {
-                if label != "" {
-                    Text(label)
-                        .font(._recordingPopUp)
-                        .foregroundColor(Color.white)
-                }
-                
-                
-                HStack(alignment: .bottom,
-                       spacing: geometry.frame(in: .local).width / CGFloat(chartData.data.count * 3)) {
-                    ForEach(0..<chartData.data.count, id: \.self) { index in
-                        VStack {
-                            BarChartCell(value: chartData.normalisedPoints[index],
-                                         index: index,
-                                         gradientColor: self.style.foregroundColor.rotate(for: index),
-                                         touchLocation: self.touchLocation, fullValue: chartData.points[index])
-                                .scaleEffect(self.getScaleSize(touchLocation: self.touchLocation, index: index), anchor: .bottom)
-                                .animation(Animation.easeInOut(duration: 0.2), value: 0.1)
-                            Text("\(chartData.values[index])")
-                                .foregroundColor(Color.white)
-                                .font(Font._day)
-                                .lineLimit(1)
-                        }
+            HStack(alignment: .bottom,
+                   spacing: geometry.frame(in: .local).width / CGFloat(chartData.data.count * 3)) {
+                ForEach(0..<chartData.data.count, id: \.self) { index in
+                    VStack {
+                        BarChartCell(value: chartData.normalisedPoints[index],
+                                     index: index,
+                                     gradientColor: self.style.foregroundColor.rotate(for: index),
+                                     touchLocation: self.touchLocation, fullValue: chartData.points[index])
+                            .scaleEffect(self.getScaleSize(touchLocation: self.touchLocation, index: index), anchor: .bottom)
+                            .animation(Animation.easeInOut(duration: 0.2), value: 0.1)
+                        Text(chartData.values[index])
+                            .foregroundColor(Color.white)
+                            .font(Font._day)
+                            .lineLimit(1)
                     }
                 }
-                .frame(maxHeight: chartData.isInNegativeDomain ? geometry.size.height / 2 : geometry.size.height)
-                .gesture(DragGesture()
-                    .onChanged({ value in
-                        let width = geometry.frame(in: .local).width
-                        self.touchLocation = value.location.x/width
-                        /*if let currentValue = self.getCurrentValue(width: width) {
-                            self.chartValue.currentValue = currentValue
-                            self.chartValue.interactionInProgress = true
-                        }*/
-                    })
-                    .onEnded({ value in
-                        /*
-                        self.chartValue.interactionInProgress = false
-                        self.touchLocation = -1
-                        */
-                    })
-                )
-                
             }
-            .padding(5)
-            .background(Color.BODY_COPY)
-            .cornerRadius(12)
-            
+            .frame(maxHeight: chartData.isInNegativeDomain ? geometry.size.height / 2 : geometry.size.height)
+            .gesture(DragGesture()
+                .onChanged({ value in
+                    let width = geometry.frame(in: .local).width
+                    self.touchLocation = value.location.x/width
+                    /*if let currentValue = self.getCurrentValue(width: width) {
+                        self.chartValue.currentValue = currentValue
+                        self.chartValue.interactionInProgress = true
+                    }*/
+                })
+                .onEnded({ value in
+                    /*
+                    self.chartValue.interactionInProgress = false
+                    self.touchLocation = -1
+                    */
+                })
+            )
         }
-
     }
 
     /// Size to scale the touch indicator
@@ -115,5 +100,6 @@ struct BarChart_Previews: PreviewProvider {
         BarChart(chartData: chartData, style: chartStyle, label: "Weekly entries")
             .padding()
             .frame(width: 325.0, height: 300)
+            .background(Color.BODY_COPY)
     }
 }

@@ -13,304 +13,278 @@ struct ProgressView: View {
     @EnvironmentObject var audioRecorder: AudioRecorder
     @EnvironmentObject var viewRouter: ViewRouter
     @EnvironmentObject var settings: Settings
-    let svm = SharedViewModel()
-    
+    @State private var chartData = ChartData()
+    @State private var hChartData = ChartData([("Recordings", 7.0), ("Surveys", 10.0), ("Journals", 10.0)])
     @State private var filteredList: [Element] = []
-    
-    @State private var showFitler = false
-    
+    @State private var showFilter = false
     @State private var filters: [String] = []
-    
     @State private var toggle = 0
     let backColor = [Color.BLUE, Color.BRIGHT_PURPLE, Color.BLUE, Color.BRIGHT_PURPLE, Color.BLUE]
     let foreColor = [Color.TEAL, Color.DARK_PURPLE, Color.DARK_BLUE, Color.DARK_PURPLE, Color.DARK_BLUE]
     let title = ["Summary", "Pitch", "Duration", "Quality", "Survey"]
+    let svm = SharedViewModel()
     
-    @State private var hChartData = ChartData([
-        ("Recording", 7.0),
-        ("Surveys", 10.0),
-        ("Journals", 10.0)
-    ])
+    static let chartStyle = ChartStyle(backgroundColor: .clear, foregroundColor: [ColorGradient(.TEAL, .DARK_PURPLE)])
     
-    //static let chartData = ChartData([6, 2, 5, 18, 6, 0, 4, 5, 5])
-    static let chartStyle = ChartStyle(backgroundColor: .clear, foregroundColor: [ColorGradient(.TEAL, .BRIGHT_PURPLE), ColorGradient(.DARK_PURPLE, .DARK_PURPLE)])
+    var vhiData = ChartData()
+    var veData = ChartData()
+    static let vhiStyle = ChartStyle(backgroundColor: .clear, foregroundColor: [ColorGradient(.BRIGHT_PURPLE, .BRIGHT_PURPLE), ColorGradient(.clear, .clear)])
+    static let veStyle = ChartStyle(backgroundColor: .clear, foregroundColor: [ColorGradient(.TEAL, .TEAL), ColorGradient(.TEAL, .DARK_PURPLE)])
+    
+    @State private var index1 = 0
+    @State private var index2 = 0
+    
+    @State private var pitchPopUp = false
+    @State private var durationPopUp = false
+    @State private var qualityPopUp = false
+    
+    @State private var reset = false
     
     var body: some View {
-        VStack {
-            graphSection
-            
-            if showFitler {
-                VStack(spacing: 0) {
-                    filterMenu
-                        .frame(height: UIScreen.main.bounds.height * 0.4)
-                    Spacer()
-                }.transition(.slide)
-            } else {
-                bodySection
+        ZStack {
+            VStack {
+                graphSection
+                
+                if showFilter {
+                    VStack(spacing: 0) {
+                        Filter(filters: $filters, showFilter: $showFilter)
+                            .frame(height: UIScreen.main.bounds.height * 0.4)
+                        Spacer()
+                    }.transition(.slide)
+                } else {
+                    bodySection
+                }
+                Spacer()
             }
-            
-            //accessSection
-            
-            Spacer()
+            .frame(width: svm.content_width)
+            .onAppear() {
+                refilter()
+                self.hChartData = ChartData([("Recordings", settings.recordProgress), ("Surveys", settings.surveyProgress), ("Journals", settings.journalProgress)])
+                
+                self.vhiData.data = vhiSurveyScores
+                self.veData.data = veSurveyScores
+                
+                /// test to see if data appears for vhi & ve surveys
+                //print("VHI Data: \(vhiSurveyScores)\nVE Data: \(veSurveyScores)")
+            }
+            .onChange(of: reset) { _ in
+                refilter()
+                self.reset = false
+            }
+            if pitchPopUp && settings.pitchThreshold.count != 0 {
+                SetThreshold(popUp: $pitchPopUp, selection: $settings.pitchThreshold[0], min: $settings.pitchThreshold[1], max: $settings.pitchThreshold[2])
+            } else if durationPopUp && settings.durationThreshold.count != 0 {
+                SetThreshold(popUp: $durationPopUp, selection: $settings.durationThreshold[0], min: $settings.durationThreshold[1], max: $settings.durationThreshold[2])
+            } else if qualityPopUp && settings.qualityThreshold.count != 0 {
+                SetThreshold(popUp: $qualityPopUp, selection: $settings.qualityThreshold[0], min: $settings.qualityThreshold[1], max: $settings.qualityThreshold[2])
+            }
         }
-        .frame(width: svm.content_width)
         .onAppear() {
-            entries.getItems()
-            
-            self.hChartData = ChartData([
-                ("Recording", settings.recordProgress()),
-                ("Surveys", settings.questProgress()),
-                ("Journals", settings.journalProgress())
-            ])
+            if settings.pitchThreshold.count == 0 {
+                settings.pitchThreshold = [0, 0, 0, 0]
+            }
+            if settings.durationThreshold.count == 0 {
+                settings.durationThreshold = [0, 0, 0, 0]
+            }
+            if settings.qualityThreshold.count == 0 {
+                settings.qualityThreshold = [0, 0, 0, 0]
+            }
+        }
+        .onChange(of: showFilter) { _ in
+            refilter()
         }
     }
-    
-    func delete(at offsets: IndexSet) {
-        var urlsToDelete = [URL]()
-        for index in offsets {
-            print(audioRecorder.recordings[index].fileURL)
-            urlsToDelete.append(audioRecorder.recordings[index].fileURL)
+
+    /// Returns surveys recorded in a given time frame
+    /// vhi only
+    var vhiSurveyScores: [(String, Double)] {
+        var ret: [(String, Double)] = []
+        
+        for survey in entries.questionnaires {
+            if survey.score.0 != -1 {
+                ret += [("\(survey.createdAt)", survey.score.0 / 40)]
+            }
         }
-        print("Deleting url here: \(urlsToDelete)")
-        audioRecorder.deleteRecording(urlToDelete: urlsToDelete.last!)
+        return ret
+    }
+    
+    /// Returns surveys recorded in a given time frame
+    /// ve only
+    var veSurveyScores: [(String, Double)] {
+        var ret: [(String, Double)] = []
+        
+        for survey in entries.questionnaires {
+            if survey.score.1 != -1 {
+                ret += [("\(survey.createdAt)", survey.score.1 / 50)]
+            }
+        }
+        return ret
     }
 }
 
+/// Views
 extension ProgressView {
-    func totalEntries() -> Int {
-        var count = 0
-        for _ in audioRecorder.recordings { count += 1 }
-        for _ in entries.journals { count += 1 }
-        for _ in entries.questionnaires { count += 1 }
-        return count
-    }
-    
-    func refilter() {
-        filteredList = []
-        print(filteredList)
-        var usedDates: [String] = []
-        for index in 0..<audioRecorder.recordings.count {
-            usedDates.append(audioRecorder.recordings[index].createdAt.toDay())
-        }
-        for index in 0..<entries.questionnaires.count {
-            usedDates.append(entries.questionnaires[index].createdAt.toDay())
-        }
-        for index in 0..<entries.journals.count {
-            usedDates.append(entries.journals[index].createdAt.toDay())
-        }
-        usedDates = usedDates.uniqued()
-        print(usedDates)
-        
-        
-        for day in usedDates {
-            var strs: [String] = []
-            var date: Date = .now
-            
-            for audio in audioRecorder.recordings {
-                if day == audio.createdAt.toDay() {
-                    if filters.isEmpty || filters.contains(audioRecorder.taskNum(file: audio.fileURL)) {
-                        strs.append(audioRecorder.taskNum(file: audio.fileURL))
-                        date = audio.createdAt
-                    }
-                }
-            }
-            for quest in entries.questionnaires {
-                if day == quest.createdAt.toDay() {
-                    if filters.isEmpty || filters.contains("surveys") {
-                        strs.append("surveys")
-                        date = quest.createdAt
-                    }
-                }
-            }
-            for journ in entries.journals {
-                if day == journ.createdAt.toDay() {
-                    if filters.isEmpty || filters.contains("journal") {
-                        strs.append("journal")
-                        date = journ.createdAt
-                    }
-                }
-            }
-            
-            if strs.count > 0 {
-                filteredList.append(Element(date: date, str: strs))
-            }
-            date = .now
-            strs.removeAll()
-        }
-    }
-    
-    func delete(element: String) {
-        filters = filters.filter({ $0 != element })
-    }
-    
-    private var filterMenu: some View {
-        VStack {
-            Text("Filter")
-                .foregroundColor(Color.BODY_COPY)
-                .font(._CTALink)
-            Text("\(totalEntries()) entries")
-                .foregroundColor(Color.BODY_COPY)
-                .font(._CTALink)
-            
-            Group {
-                Color.INPUT_FIELDS.frame(height: 1)
-                
-                Button(action: {
-                    if filters.contains("vowel") {
-                        delete(element: "vowel")
-                    } else {
-                        self.filters.append("vowel")
-                    }
-                }) {
-                    HStack {
-                        Text("Vowel")
-                        Spacer()
-                        Text("XXX Entries")
-                    }
-                    .foregroundColor(filters.contains("vowel") ? Color.DARK_BLUE : Color.BODY_COPY)
-                }.frame(width: svm.content_width)
-                
-                Color.INPUT_FIELDS.frame(height: 1)
-                
-                Button(action: {
-                    if filters.contains("mpt") {
-                        delete(element: "mpt")
-                    } else {
-                        self.filters.append("mpt")
-                    }
-                }) {
-                    HStack {
-                        Text("MPT")
-                        Spacer()
-                        Text("XXX Entries")
-                    }
-                    .foregroundColor(filters.contains("mpt") ? Color.DARK_BLUE : Color.BODY_COPY)
-                }.frame(width: svm.content_width)
-                
-                Color.INPUT_FIELDS.frame(height: 1)
-                
-                Button(action: {
-                    if filters.contains("rainbow") {
-                        delete(element: "rainbow")
-                    } else {
-                        self.filters.append("rainbow")
-                    }
-                }) {
-                    HStack {
-                        Text("Rainbow")
-                        Spacer()
-                        Text("XXX Entries")
-                    }
-                    .foregroundColor(filters.contains("rainbow") ? Color.DARK_BLUE : Color.BODY_COPY)
-                }.frame(width: svm.content_width)
-                
-                Color.INPUT_FIELDS.frame(height: 1)
-                
-                Button(action: {
-                    if filters.contains("surveys") {
-                        delete(element: "surveys")
-                    } else {
-                        self.filters.append("surveys")
-                    }
-                }) {
-                    HStack {
-                        Text("Quests")
-                        Spacer()
-                        Text("XXX Entries")
-                    }
-                    .foregroundColor(filters.contains("surveys") ? Color.DARK_BLUE : Color.BODY_COPY)
-                }.frame(width: svm.content_width)
-                
-                Color.INPUT_FIELDS.frame(height: 1)
-                
-                Button(action: {
-                    if filters.contains("journals") {
-                        delete(element: "journals")
-                    } else {
-                        self.filters.append("journals")
-                    }
-                }) {
-                    HStack {
-                        Text("Journals")
-                        Spacer()
-                        Text("XXX Entries")
-                    }
-                    .foregroundColor(filters.contains("journals") ? Color.DARK_BLUE : Color.BODY_COPY)
-                }.frame(width: svm.content_width)
-            }
-            
-            VStack(spacing: 0) {
-                Color.BODY_COPY.frame(height: 1)
-                
-                HStack {
-                    Button(action: {
-                        self.filters.removeAll()
-                    }) {
-                        ZStack {
-                            Image(svm.empty_img)
-                                .resizable()
-                                .frame(width: 150, height: 35)
-                            Text("CLEAR")
-                                .foregroundColor(Color.DARK_PURPLE)
-                        }
-                    }
-                    Spacer()
-                    Button(action: {
-                        self.showFitler.toggle()
-                    }) {
-                        ZStack {
-                            Image(svm.filled_img)
-                                .resizable()
-                                .frame(width: 150, height: 35)
-                            Text("DONE")
-                                .foregroundColor(.white)
+    private var graphSection: some View {
+        VStack(alignment: .leading) {
+            HStack {
+                HStack(spacing: 0) {
+                    ForEach(0..<5) { index in
+                        Button(action: {
+                            withAnimation() {
+                                toggle = index
+                            }
+                        }) {
+                            Text(title[index])
+                                .font(Font._tabTitle)
+                                .padding(.vertical, 5)
+                                .padding(.horizontal, 2.5)
+                                .foregroundColor(Color.black)
+                                .background(toggle == index ? Color.white : Color.clear)
+                                .cornerRadius(10)
                         }
                     }
                 }
-                .padding()
                 .background(Color.INPUT_FIELDS)
+                .cornerRadius(10)
+                
+                Spacer()
+                
+                Button(action: {
+                    viewRouter.currentPage = .settings
+                }) {
+                    Image(svm.home_settings_img)
+                        .resizable()
+                        .frame(width: 35, height: 35)
+                }
             }
+            HStack {
+                Text(title[toggle])
+                    .font(Font._title1)
+                    .foregroundColor(foreColor[toggle])
+                
+                if toggle == 0 {
+                    Spacer()
+                    Text("Weekly Goal")
+                        .foregroundColor(Color.white)
+                        .font(._bodyCopyMedium)
+                } else if toggle == 1 {
+                    Spacer()
+                    Button("Set Threshold") {
+                        self.pitchPopUp.toggle()
+                    }
+                    .foregroundColor(Color.white)
+                    .font(._bodyCopyMedium)
+                } else if toggle == 2 {
+                    Spacer()
+                    Button("Set Threshold") {
+                        self.durationPopUp.toggle()
+                    }
+                    .foregroundColor(Color.white)
+                    .font(._bodyCopyMedium)
+                } else if toggle == 3 {
+                    Spacer()
+                    Button("Set Threshold") {
+                        self.qualityPopUp.toggle()
+                    }
+                    .foregroundColor(Color.white)
+                    .font(._bodyCopyMedium)
+                } else if toggle == 4 {
+                    Spacer()
+                    HStack(spacing: 0) {
+                        VStack(alignment: .trailing) {
+                            Text("VHI ").font(._bodyCopy).foregroundColor(Color.BRIGHT_PURPLE)
+                            Text("Vocal Effort ").font(._bodyCopy).foregroundColor(Color.TEAL)
+                        }
+                    }
+                }
+            }
+            
+            
+            if toggle == 0 {
+                HBarChart(chartData: hChartData, style: ProgressView.chartStyle)
+                    .frame(width: svm.content_width, height: 145)
+            }
+            
+            if toggle == 4 && settings.surveyEntered != 0 {
+                HStack(spacing: 0) {
+                    VStack(spacing: 0) {
+                        Text("50")
+                        Spacer()
+                        Text("0")
+                    }
+                    .font(._bodyCopy)
+                    .foregroundColor(Color.white)
+                    .frame(width: svm.content_width * 0.05, height: 155)
+                    VStack(spacing: 0) {
+                        ZStack {
+                            VStack {
+                                Spacer()
+                                /// VHI
+                                LineChart(index: $index1)
+                                    .data(vhiData.data)
+                                    .chartStyle(ProgressView.vhiStyle)
+                            }
+                            VStack {
+                                Spacer()
+                                /// VE
+                                LineChart(index: $index2)
+                                    .data(veData.data)
+                                    .chartStyle(ProgressView.veStyle)
+                            }
+                                
+                        }.frame(width: svm.content_width * 0.95, height: 155)
+                    }
+                }
+            } else if toggle == 4 {
+                Text("Log a goal for surveys and record some to see metrics about surveys you take")
+                    .foregroundColor(Color.white)
+                    .font(._bodyCopy)
+                Spacer()
+            }
+            
+            Spacer()
+            
+            HStack (spacing: 5) {
+                Spacer()
+                ForEach(0..<5) { index in
+                    Button(action: {
+                        withAnimation() {
+                            toggle = index
+                            self.pitchPopUp = false
+                            self.qualityPopUp = false
+                            self.durationPopUp = false
+                        }
+                    }) {
+                        Circle()
+                            .frame(width: 8.5, height: 8.5)
+                            .padding(7.5)
+                            .foregroundColor(toggle == index ?
+                                             foreColor[toggle] : Color.INPUT_FIELDS)
+                            .padding(.bottom, 4)
+                    }
+                }
+                Spacer()
+            }
+            .padding(5)
         }
-        
-        
-        .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height * 0.45)
-        .edgesIgnoringSafeArea(.top)
-        .background(Color.white)
+        .transition(.opacity)
+        .frame(width: svm.content_width)
+        .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height * 0.35)
+        .background(backColor[toggle])
     }
-    
     
     private var bodySection: some View {
-        /*
-         
-         Title Filter button
-         
-         filter display section
-         
-         expandable
-         
-         */
         VStack(alignment: .center) {
             HStack {
                 Text("Last week")
                     .font(._title1)
                 Spacer()
                 Button(action: {
-                    self.showFitler.toggle()
+                    self.showFilter.toggle()
                 }) {
-                    Text("Filter")
-                        .foregroundColor(Color.BODY_COPY)
-                        .font(._CTALink)
-                        .padding(7)
-                        .background(Color.white)
-                        .cornerRadius(5)
-                        .padding(1)
-                        .background(Color.INPUT_FIELDS)
-                        .cornerRadius(5)
+                    FilterButton()
                 }
-                
-                
             }
-            
             
             if filters.count != 0 {
                 HStack {
@@ -321,16 +295,15 @@ extension ProgressView {
                         }) {
                             HStack {
                                 Text(filter)
+                                    .font(._CTALink)
                                 Image(svm.exit_button)
                                     .resizable()
                                     .frame(width: 7.5, height: 7.5)
                                     .padding(.leading, 2)
                             }
-                            .padding(2)
+                            .padding(2.5)
                             .background(Color.INPUT_FIELDS)
                         }
-                        
-                        
                     }
                     
                     Button(action: {
@@ -347,145 +320,191 @@ extension ProgressView {
             }
             
             ScrollView(showsIndicators: false) {
-                if !filteredList.isEmpty {
-                    ForEach(filteredList.reversed(), id: \.self) { item in
-                        ListItem(element: item)
-                        Color.INPUT_FIELDS.frame(height: 1.5)
+                if filters.isEmpty {
+                    if !filteredList.isEmpty {
+                        VStack(spacing: 0) {
+                            ForEach(filteredList.reversed(), id: \.self) { item in
+                                Color.BODY_COPY.frame(height: 1).opacity(0.6)
+                                ListItem(element: item, reset: $reset)
+                            }
+                        }
+                    }
+                } else {
+                    if !filteredList.isEmpty {
+                        VStack(spacing: 0) {
+                            ForEach(filteredList.reversed(), id: \.self) { item in
+                                Color.BODY_COPY.frame(height: 1).opacity(0.6)
+                                ExpandedListItem(element: item, reset: $reset)
+                            }
+                        }
                     }
                 }
             }
         }
         .frame(width: svm.content_width)
-        .onAppear() {
-            refilter()
-        }
     }
+}
+
+/// Functions
+extension ProgressView {
+    /*
+    func startDate() -> Date {
+        let start: Date = Date(timeInterval: 0, since: startDate.toDate() ?? .now)
+        return start as! Date
+    }
+    */
     
-    private var graphSection: some View {
-        VStack {
-            VStack(alignment: .leading) {
-                HStack {
-                    HStack(spacing: 0) {
-                        ForEach(0..<5) { index in
-                            Button(action: {
-                                withAnimation() {
-                                    toggle = index
-                                }
-                            }) {
-                                Text(title[index])
-                                    .font(Font._tabTitle)
-                                    .padding(.vertical, 5)
-                                    .padding(.horizontal, 2.5)
-                                    .foregroundColor(Color.black)
-                                    .background(toggle == index ? Color.white : Color.clear)
-                                    .cornerRadius(10)
-                            }
-                        }
-                    }
-                    .background(Color.INPUT_FIELDS)
-                    .cornerRadius(10)
-                    
-                    Spacer()
-                    
-                    Button(action: {
-                        viewRouter.currentPage = .settings
-                    }) {
-                        Image(svm.home_settings_img)
-                            .resizable()
-                            .frame(width: 35, height: 35)
-                    }
-                }
-                
-                Text(title[toggle])
-                    .font(Font._title1)
-                    .foregroundColor(foreColor[toggle])
-                
-                if toggle == 0 {
-                    HBarChart(chartData: hChartData, style: ProgressView.chartStyle)
-                        .frame(width: svm.content_width, height: 155)
-                        //.background(Color.gray)
-                }
-                
-                Spacer()
-                
-                HStack (spacing: 5) {
-                    Spacer()
-                    ForEach(0..<5) { index in
-                        Button(action: {
-                            withAnimation() {
-                                toggle = index
-                            }
-                        }) {
-                            Circle()
-                                .frame(width: 8.5, height: 8.5)
-                                .padding(7.5)
-                                .foregroundColor(toggle == index ?
-                                                 foreColor[toggle] : Color.INPUT_FIELDS)
-                        }
-                    }
-                    Spacer()
-                }
-                .padding(5)
+    func refilter() {
+        print("Refiltering")
+        entries.getItems()
+        print(filters)
+        
+        if filters.isEmpty {
+            filteredList = []
+            var usedDates: [String] = []
+            for index in 0..<audioRecorder.recordings.count {
+                usedDates.append(audioRecorder.recordings[index].createdAt.toDay())
             }
-            .transition(.opacity)
-            .frame(width: svm.content_width)
-        }
-        .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height * 0.35)
-        .background(backColor[toggle])
-    }
-    
-    
-    
-    private var header: some View {
-        VStack(alignment: .leading) {
-            Text("Progress")
-                .bold()
-                .font(._title)
-            Text("Log some recordings, surveys, journals and interventions and view them bellow. The purpose of this page is to ensure that I am able to pull everything the user saves properly, without items disapearing or getting corrupted.")
-                .font(._subTitle)
-                .foregroundColor(Color.BODY_COPY)
-                .multilineTextAlignment(.leading)
-        }
-    }
-    
-    private var accessSection: some View {
-        Group {
-            Text("Recordings")
-                .bold()
-            List {
-                ForEach(audioRecorder.recordings, id: \.createdAt) { record in
-                    HStack {
-                        VStack(alignment: .leading) {
-                            Text("\(record.createdAt.toStringDay())")
-                                .bold()
-                            Text("Duration: \(audioRecorder.returnProcessing(createdAt: record.createdAt).duration, specifier: "%.2f")s, intensity: \(audioRecorder.returnProcessing(createdAt: record.createdAt).intensity, specifier: "%.1f")hz")
-                        }
-                        Spacer()
-                        PlaybackButton(file: record.fileURL)
-                            .font(.title)
-                    }
-                }.onDelete(perform: delete)
+            for index in 0..<entries.questionnaires.count {
+                usedDates.append(entries.questionnaires[index].createdAt.toDay())
             }
-            .listStyle(PlainListStyle())
-            .padding(.horizontal, -10)
+            for index in 0..<entries.journals.count {
+                usedDates.append(entries.journals[index].createdAt.toDay())
+            }
+            usedDates = usedDates.uniqued()
             
-            Text("Surveys")
-                .bold()
-            List {
-                ForEach(entries.questionnaires) { response in
-                    VStack(alignment: .leading) {
-                        Text("Date: \(response.createdAt.toStringDay())")
-                            .bold()
-                        Text("Question 1: \(response.responses[1])")
-                        Text("Question 2: \(response.responses[2])")
-                        Text("Question 3: \(response.responses[3])")
+            for day in usedDates {
+                var date: Date = .now
+                var strs: [String] = []
+                var preciseDates: [Date] = []
+                
+                for audio in audioRecorder.recordings {
+                    if day == audio.createdAt.toDay() {
+                        if filters.isEmpty || filters.contains(audioRecorder.taskNum(file: audio.fileURL)) {
+                            strs.append(audioRecorder.viewableTask(file: audio.fileURL))
+                            preciseDates.append(audio.createdAt)
+                            date = audio.createdAt
+                        }
                     }
-                }//.onDelete(perform: nil)
+                }
+                for quest in entries.questionnaires {
+                    if day == quest.createdAt.toDay() {
+                        if filters.isEmpty || filters.contains("Survey") {
+                            strs.append("Survey")
+                            preciseDates.append(quest.createdAt)
+                            date = quest.createdAt
+                        }
+                    }
+                }
+                for journ in entries.journals {
+                    if day == journ.createdAt.toDay() {
+                        if filters.isEmpty || filters.contains("Journal") {
+                            strs.append("Journal")
+                            preciseDates.append(journ.createdAt)
+                            date = journ.createdAt
+                        }
+                    }
+                }
+                
+                if strs.count > 0 {
+                    filteredList.append(Element(date: date, preciseDate: preciseDates, str: strs))
+                }
+                date = .now
+                strs.removeAll()
             }
-            .listStyle(PlainListStyle())
-            .padding(.horizontal, -10)
+        } else {
+            print("showing filtered list")
+            filteredList = []
+            var usedDates: [String] = []
+            for index in 0..<audioRecorder.recordings.count {
+                if filters.contains("vowel") && audioRecorder.taskNum(selection: 1, file: audioRecorder.recordings[index].fileURL) {
+                    usedDates.append(audioRecorder.recordings[index].createdAt.toDay())
+                }
+                if filters.contains("mpt") && audioRecorder.taskNum(selection: 2, file: audioRecorder.recordings[index].fileURL) {
+                    usedDates.append(audioRecorder.recordings[index].createdAt.toDay())
+                }
+                if filters.contains("rainbow") && audioRecorder.taskNum(selection: 3, file: audioRecorder.recordings[index].fileURL) {
+                    usedDates.append(audioRecorder.recordings[index].createdAt.toDay())
+                }
+                if filters.contains("Star") {
+                    usedDates.append(audioRecorder.recordings[index].createdAt.toDay())
+                }
+            }
+            for index in 0..<entries.questionnaires.count {
+                usedDates.append(entries.questionnaires[index].createdAt.toDay())
+            }
+            for index in 0..<entries.journals.count {
+                usedDates.append(entries.journals[index].createdAt.toDay())
+            }
+            usedDates = usedDates.uniqued()
+            
+            for day in usedDates {
+                var date: Date = .now
+                var strs: [String] = []
+                var preciseDates: [Date] = []
+                
+                for audio in audioRecorder.recordings {
+                    if day == audio.createdAt.toDay() {
+                        if filters.contains(audioRecorder.taskNum(file: audio.fileURL)) {
+                            strs.append(audioRecorder.viewableTask(file: audio.fileURL))
+                            preciseDates.append(audio.createdAt)
+                            date = audio.createdAt
+                        } else if filters.contains("Star") {
+                            print("level 1")
+                            
+                            for process in audioRecorder.processedData {
+                                print("level 2")
+                                if (process.createdAt == audio.createdAt) && process.star {
+                                    
+                                    print("level 3")
+                                    
+                                    strs.append(audioRecorder.viewableTask(file: audio.fileURL))
+                                    preciseDates.append(audio.createdAt)
+                                    date = audio.createdAt
+                               }
+                            }
+                        }
+                    }
+                }
+                for quest in entries.questionnaires {
+                    if day == quest.createdAt.toDay() {
+                        if filters.contains("Survey") || (filters.contains("Star") && quest.star) {
+                            print(quest.createdAt)
+                            strs.append("Survey")
+                            preciseDates.append(quest.createdAt)
+                            date = quest.createdAt
+                        }
+                    }
+                }
+                for journ in entries.journals {
+                    if day == journ.createdAt.toDay() {
+                        if (filters.contains("Journal") || journ.star ) || (filters.contains("Star") && journ.star) {
+                            print(journ.star)
+                            strs.append("Journal")
+                            preciseDates.append(journ.createdAt)
+                            date = journ.createdAt
+                        }
+                    }
+                }
+                
+                if strs.count > 0 {
+                    filteredList.append(Element(date: date, preciseDate: preciseDates, str: strs))
+                }
+                date = .now
+                strs.removeAll()
+            }
         }
     }
+    
+    func delete(element: String) {
+        filters = filters.filter({ $0 != element })
+    }
+}
+
+struct Element: Hashable {
+    var date: Date
+    var preciseDate: [Date]
+    var str: [String]
 }
 
 struct ProgressView_Previews: PreviewProvider {
@@ -495,47 +514,5 @@ struct ProgressView_Previews: PreviewProvider {
             .environmentObject(Entries())
             .environmentObject(ViewRouter())
             .environmentObject(Settings())
-    }
-}
-
-struct Element: Hashable {
-    var date: Date
-    var str: [String]
-}
-
-struct ListItem: View {
-    @State private var showMore = false
-    let element: Element
-    var body: some View {
-        VStack {
-            Button(action: {
-                withAnimation() {
-                    self.showMore.toggle()
-                }
-            }) {
-                HStack(spacing: 0) {
-                    Text("\(element.date.dayOfWeek())  ")
-                        .font(._bodyCopyBold)
-                    Text(element.date.toDay())
-                        .font(._bodyCopyMedium)
-                    
-                    SmallArrow()
-                        .rotationEffect(Angle(degrees: showMore ? 90 : 0))
-                    
-                    Spacer()
-                }
-            }
-            if showMore {
-                ForEach(0..<element.str.count) { index in
-                    HStack {
-                        Text(element.str[index])
-                        if element.str[index] == "vowel" || element.str[index] == "mpt" || element.str[index] == "rainbow" {
-                            
-                        }
-                    }
-                }
-            }
-        }
-        .foregroundColor(Color.BODY_COPY)
     }
 }

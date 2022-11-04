@@ -21,8 +21,9 @@ struct LineShapeView: View, Animatable {
     var body: some View {
         LineShape(data: chartData.normalisedPoints)
             .trim(from: 0, to: CGFloat(trimTo))
+            // changerd normalised range to be 1 so the two line graphs sync on the bases of their total maximum possible score
             .transform(CGAffineTransform(scaleX: geometry.size.width / CGFloat(chartData.normalisedPoints.count - 1),
-                                         y: geometry.size.height / CGFloat(chartData.normalisedRange)))
+                                         y: geometry.size.height / CGFloat(chartData.customNormalisedRange)))
             .stroke(LinearGradient(gradient: style.foregroundColor.first?.gradient ?? ColorGradient.orangeBright.gradient,
                                    startPoint: .leading,
                                    endPoint: .trailing),

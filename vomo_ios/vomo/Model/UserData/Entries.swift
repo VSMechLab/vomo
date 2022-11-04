@@ -82,20 +82,15 @@ class Entries: ObservableObject {
             UserDefaults.standard.set(encodedData, forKey: questionnairesItemsKey)
         }
     }
-    
     func saveJournalItems() {
         if let encodedData = try? JSONEncoder().encode(journals) {
             UserDefaults.standard.set(encodedData, forKey: journalsItemsKey)
         }
     }
     func saveInterventions() {
-        print("Fix later")
-        //self.saveVisits()
-    }
-    
-    func saveItems() {
-        self.saveJournalItems()
-        self.saveQuestionnaireItems()
+        if let encodedData = try? JSONEncoder().encode(interventions) {
+            UserDefaults.standard.set(encodedData, forKey: interventionItemsKey)
+        }
     }
     
     // Reusable Functions

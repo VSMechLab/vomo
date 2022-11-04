@@ -28,6 +28,9 @@ struct JournalView: View {
         UITextView.appearance().backgroundColor = .clear
     }
     
+    @State var timeRemaining = 2
+    let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
+    
     var body: some View {
         ZStack {
             VStack(spacing: 0) {
@@ -114,6 +117,15 @@ struct JournalView: View {
                 }
                 .opacity(submitAnimation ? 0.6 : 0.0)
                 .zIndex(1)
+                
+                .onReceive(timer) { _ in
+                    if timeRemaining > 0 {
+                        timeRemaining -= 1
+                    }
+                    if timeRemaining == 0 {
+                        self.viewRouter.currentPage = .home
+                    }
+                }
             }
         }
         .onChange(of: focused) { focus in
@@ -160,17 +172,15 @@ extension JournalView {
                 }
                 .padding(.top, 10)
             } else {
-                Button(action: {
-                    self.entries.journals.append(JournalModel(createdAt: .now, noteName:  self.name, note: self.note))
+                Button("ADD NOTE") {
+                    self.entries.journals.append(JournalModel(createdAt: .now, noteName:  self.name, note: self.note, star: false))
                     self.name = ""
                     self.note = ""
                     submitAnimation = true
                     
                     if settings.isActive() { settings.journalEntered += 1 }
-                }) {
-                    SubmissionButton(label: "ADD NOTE")
-                        .padding(.top, 10)
-                }
+                }.buttonStyle(SubmitButton())
+                .padding(.top, 10)
             }
         }
     }
