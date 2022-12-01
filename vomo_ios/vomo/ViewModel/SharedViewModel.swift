@@ -20,6 +20,10 @@ struct SharedViewModel {
     /// Padding for entry fields with text or images overlayed
     let fieldPadding = 7.0
     
+    /// Onboard/selection buttons
+    let select = "VM_Select-Btn"
+    let unselect = "VM_Unselect-Btn"
+    
     /// Tab bar items
     let home_icon = "VM_home-nav-icon"
     let record_icon = "VoMo-App-Outline_8_RECORD_BTN_PRPL"
@@ -62,15 +66,17 @@ struct SharedViewModel {
     ]
     
     let vocal_effort: [String] = [
-        "How much effort did it take to make a voice?"
+        "How much physical effort did it take to make a voice?",
+        "How much mental effort did it take to make a voice?"
     ]
     
     var questions: [String] {
+        settings.setSurveys()
         var ret: [String] = []
-        if settings.availableSurveys.contains("vhi") {
+        if settings.vhi {
             ret += vhi
         }
-        if settings.availableSurveys.contains("ve") {
+        if settings.vocalEffort {
             ret += vocal_effort
         }
         return ret
@@ -86,7 +92,10 @@ struct SharedViewModel {
     /// Complete menu items
     let stop_play_img = "VM_stop_play-btn"
     let approved_img = "VM_appr-btn"
-    let play_img = "VM_play-btn"
+    let start_playback_img = "VoMo-App-Outline_8_PLAY_BTN_PRPL"
+    let stop_playback_img = "VoMo-App-Outline_8_STOP_BTN_PRL"
+    let forward_img = "VoMo-App-Outline_9_ff_btn"
+    let backward_img = "VoMo-App-Outline_9_rewind_btn"
     let retry_img = "VM_retry-btn"
     
     /// Journal items
@@ -121,12 +130,16 @@ struct SharedViewModel {
     let empty_img = "VoMo-App-Outline_8_CLEAR_BTN"
     let trash_can = "VoMo-App-Outline_9_delete_btn"
     let share_button = "VoMo-App-Outline_9_share_btn"
-    let star_img = "VoMo-App-Outline_9_fav_btn"
-    let star_gray_img = "VoMo-App-Outline_8_FAV_BTN_GREY"
+    let heart_img = "VoMo-App-Outline_9_heart_prpl_btn"
+    let heart_gray_img = "VoMo-App-Outline_9_heart_white_btn"
     
     /// Intervention items
     let upcoming = "Upcoming"
     let past = "Past"
+    let time_img = "_time-icon"
+    let date_img = "_date-icon"
+    let type_img = "_visit-type-icon"
+    let arrow_img = "VM_Dropdown-Btn"
     
     /// Threshold popup
     let min_img = "VoMo-App-Assets_2_8.4_less-than-btn"

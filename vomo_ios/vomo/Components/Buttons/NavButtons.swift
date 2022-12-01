@@ -30,6 +30,17 @@ struct NextButton: ButtonStyle {
     }
 }
 
+struct SkipButton: ButtonStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        HStack(spacing: 5) {
+            configuration.label
+                .foregroundColor(Color.BODY_COPY)
+                .font(._pageNavLink)
+            GrayArrow()
+        }
+    }
+}
+
 struct NavButtonView: View {
     var body: some View {
         VStack {

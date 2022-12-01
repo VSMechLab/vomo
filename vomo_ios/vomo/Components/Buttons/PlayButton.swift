@@ -32,84 +32,7 @@ struct PlayButtonByDate: View {
                    "VoMo-App-Outline_8_STOP_BTN_PRL" :
                    "VoMo-App-Outline_8_PLAY_BTN_PRPL")
                 .resizable()
-                .frame(width: 15, height: 17.5)
-        }
-    }
-}
-
-struct DeleteRecording: View {
-    
-    @EnvironmentObject var audioRecorder: AudioRecorder
-    @ObservedObject var audioPlayer = AudioPlayer()
-    
-    var date: Date
-    
-    let svm = SharedViewModel()
-    
-    @Binding var reset: Bool
-    
-    var body: some View {
-        Button(action: {
-            print(date)
-            
-            for recording in audioRecorder.recordings {
-                if recording.createdAt == date {
-                    audioRecorder.deleteRecording(urlToDelete: recording.fileURL)
-                }
-            }
-            var count = -1
-            for index in 0..<audioRecorder.processedData.count {
-                count = index
-            }
-            if count != -1 {
-                audioRecorder.processedData.remove(at: count)
-            }
-            self.reset.toggle()
-        }) {
-            Image(svm.trash_can)
-                .resizable()
-                .frame(width: 17.5, height: 17.5)
-        }
-    }
-}
-
-struct DeleteEntry: View {
-    @EnvironmentObject var entries: Entries
-    @ObservedObject var audioPlayer = AudioPlayer()
-    
-    var date: Date
-    
-    let svm = SharedViewModel()
-    
-    @Binding var reset: Bool
-    
-    var body: some View {
-        Button(action: {
-            print(date)
-            var count = -1
-            
-            for index in 0..<entries.journals.count {
-                if entries.journals[index].createdAt == date {
-                    count = index
-                }
-            }
-            if count != -1 {
-                entries.journals.remove(at: count)
-            }
-            count = -1
-            for index in 0..<entries.questionnaires.count {
-                if entries.questionnaires[index].createdAt == date {
-                    count = index
-                }
-            }
-            if count != -1 {
-                entries.questionnaires.remove(at: count)
-            }
-            self.reset.toggle()
-        }) {
-            Image(svm.trash_can)
-                .resizable()
-                .frame(width: 17.5, height: 17.5)
+                .frame(width: 18, height: 20)
         }
     }
 }
@@ -130,32 +53,32 @@ struct StarButton: View {
             if type == "record" {
                 for index in 0..<audioRecorder.processedData.count {
                     if audioRecorder.processedData[index].createdAt == date {
-                        audioRecorder.processedData[index].star.toggle()
-                        star = audioRecorder.processedData[index].star
+                        audioRecorder.processedData[index].favorite.toggle()
+                        star = audioRecorder.processedData[index].favorite
                         audioRecorder.saveProcessedData()
                     }
                 }
             } else if type == "survey" {
                 for index in 0..<entries.questionnaires.count {
                     if entries.questionnaires[index].createdAt == date {
-                        entries.questionnaires[index].star.toggle()
-                        star = entries.questionnaires[index].star
+                        entries.questionnaires[index].favorite.toggle()
+                        star = entries.questionnaires[index].favorite
                         entries.saveQuestionnaireItems()
                     }
                 }
             } else if type == "journal" {
                 for index in 0..<entries.journals.count {
                     if entries.journals[index].createdAt == date {
-                        entries.journals[index].star.toggle()
-                        star = entries.journals[index].star
+                        entries.journals[index].favorite.toggle()
+                        star = entries.journals[index].favorite
                         entries.saveJournalItems()
                     }
                 }
             }
         }) {
-            Image(star ? svm.star_img : svm.star_gray_img)
+            Image(star ? svm.heart_img : svm.heart_gray_img)
                 .resizable()
-                .frame(width: 17.5, height: 17.5)
+                .frame(width: 20, height: 20)
         }
         .onAppear() {
             reconfig()
@@ -166,19 +89,19 @@ struct StarButton: View {
         if type == "record" {
             for index in 0..<audioRecorder.processedData.count {
                 if audioRecorder.processedData[index].createdAt == date {
-                    star = audioRecorder.processedData[index].star
+                    star = audioRecorder.processedData[index].favorite
                 }
             }
         } else if type == "survey" {
             for index in 0..<entries.questionnaires.count {
                 if entries.questionnaires[index].createdAt == date {
-                    star = entries.questionnaires[index].star
+                    star = entries.questionnaires[index].favorite
                 }
             }
         } else if type == "journal" {
             for index in 0..<entries.journals.count {
                 if entries.journals[index].createdAt == date {
-                    star = entries.journals[index].star
+                    star = entries.journals[index].favorite
                 }
             }
         }
@@ -205,7 +128,7 @@ struct ShareButtonByDate: View {
         }) {
             Image(svm.share_button)
                 .resizable()
-                .frame(width: 15, height: 17.5)
+                .frame(width: 18, height: 20)
         }
     }
 }

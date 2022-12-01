@@ -50,7 +50,7 @@ extension CompleteMenu {
                     self.audioPlayer.stopPlayback()
                 }
             }) {
-                Image(audioPlayer.isPlaying ? svm.stop_play_img : svm.play_img)
+                Image(audioPlayer.isPlaying ? svm.stop_playback_img : svm.start_playback_img)
                     .resizable()
                     .frame(width: 40, height: 40)
             }
@@ -67,12 +67,14 @@ extension CompleteMenu {
             Button(action: {
                 // Move to function under audioRecorder level
                 let processings = audioRecorder.process(fileURL: audioRecorder.recordings.last!.fileURL)
-                self.audioRecorder.processedData.append(ProcessedData(createdAt: audioRecorder.recordings.last!.createdAt, duration: processings.duration, intensity: processings.intensity, pitch_mean: processings.pitch_mean, star: false))
+                self.audioRecorder.processedData.append(ProcessedData(createdAt: audioRecorder.recordings.last!.createdAt, duration: processings.duration, intensity: processings.intensity, pitch_mean: processings.pitch_mean, favorite: false))
                 
                 //for entry in entries.recordings { print("Entry: \(entry.createdAt)") }
                 for audio in audioRecorder.recordings { print("File: \(audio.fileURL)") }
                 
-                if settings.isActive() { settings.recordEntered += 1 }
+                if settings.isActive() && settings.recordPerWeek != 0 {
+                    settings.recordEntered += 1
+                }
                 
                 self.popUp.toggle()
                 if exercise != settings.endIndex {

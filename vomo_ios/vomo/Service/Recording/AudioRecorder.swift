@@ -41,10 +41,10 @@ class AudioRecorder: NSObject,ObservableObject {
     }
     
     func returnProcessing(createdAt: Date) -> ProcessedData {
-        var ret = ProcessedData(createdAt: .now, duration: 99.1, intensity: 99.1, pitch_mean: 99.1, star: false)
+        var ret = ProcessedData(createdAt: .now, duration: 99.1, intensity: 99.1, pitch_mean: 99.1, favorite: false)
         for data in processedData {
             if createdAt == data.createdAt {
-                ret = ProcessedData(createdAt: data.createdAt, duration: data.duration, intensity: data.intensity, pitch_mean: data.pitch_mean, star: false)
+                ret = ProcessedData(createdAt: data.createdAt, duration: data.duration, intensity: data.intensity, pitch_mean: data.pitch_mean, favorite: false)
             }
         }
         return ret
@@ -309,20 +309,26 @@ class ProcessedData: Identifiable, Codable {
     var pitch_mean: Float
     /// Boolean value of wether or not the entry is started
     /// to remove this delete the line bellow and debug until working again
-    var star: Bool
+    var favorite: Bool
     
-    init(createdAt: Date, duration: Float, intensity: Float, pitch_mean: Float, star: Bool) {
+    init(createdAt: Date, duration: Float, intensity: Float, pitch_mean: Float, favorite: Bool) {
         self.createdAt = createdAt
         self.duration = duration
         self.intensity = intensity
         self.pitch_mean = pitch_mean
-        self.star = star
+        self.favorite = favorite
     }
 }
 
 struct Recording {
     let fileURL: URL
     let createdAt: Date
+    
+    var taskNum: Int {
+        var taskNum = 0
+        taskNum = Int(String(fileURL.lastPathComponent).suffix(5).prefix(1))!
+        return taskNum
+    }
 }
 
 struct Processings {

@@ -29,6 +29,10 @@ extension Font {
     static var _tabTitle: Font {
         Font.custom("Roboto-Regular", size: 16)
     }
+    /// Subtitle, Size 12, Regular
+    static var _tabTitleBold: Font {
+        Font.custom("Roboto-Medium", size: 16)
+    }
     /// Bar Graph Bar Label
     static var _barLabel: Font {
         Font.custom("Roboto-Light", size: 16)
@@ -50,6 +54,12 @@ extension Font {
     static var _bodyCopy: Font {
         Font.custom("Roboto-Light", size: 16)
     }
+    static var _bodyCopyLargeBold: Font {
+        Font.custom("Roboto-Bold", size: 18)
+    }
+    static var _bodyCopyLargeMedium: Font {
+        Font.custom("Roboto-Medium", size: 18)
+    }
     static var _bodyCopyBold: Font {
         Font.custom("Roboto-Bold", size: 16)
     }
@@ -58,6 +68,9 @@ extension Font {
     }
     static var _bodyCopyBoldLower: Font {
         Font.custom("Roboto-Bold", size: 16)
+    }
+    static var _bodyCopyUnBold: Font {
+        Font.custom("Roboto-light", size: 16)
     }
     static var _BTNCopy: Font {
         Font.custom("Roboto-Medium", size: 20)
@@ -114,10 +127,10 @@ extension Font {
         Font.custom("Roboto-Medium", size: 16)
     }
     static var _buttonFieldCopyLarger: Font {
-        Font.custom("Roboto-Regular", size: 16)
+        Font.custom("Roboto-Medium", size: 18)
     }
     static var _subCopy: Font {
-        Font.custom("Roboto-Regular", size: 16)
+        Font.custom("Roboto-Regular", size: 15)
     }
     /// Navigation between pages
     static var _pageNavLink: Font {

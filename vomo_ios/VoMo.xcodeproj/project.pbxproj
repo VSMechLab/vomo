@@ -14,7 +14,6 @@
 		AD26BA1C2829F4C900AC1A7B /* BarChartCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD26BA1B2829F4C900AC1A7B /* BarChartCell.swift */; };
 		AD26BA1E2829F4DD00AC1A7B /* BarChartCellShape.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD26BA1D2829F4DD00AC1A7B /* BarChartCellShape.swift */; };
 		AD26BA202829F4E600AC1A7B /* BarChartRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD26BA1F2829F4E600AC1A7B /* BarChartRow.swift */; };
-		AD3F9FF6280E52E2007E6327 /* EntryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD3F9FF5280E52E2007E6327 /* EntryView.swift */; };
 		AD57E6442805D02600CDB31B /* BackUps.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD57E6432805D02600CDB31B /* BackUps.swift */; };
 		AD67CEC028A48DA2006AF596 /* EntryField.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD67CEBF28A48DA2006AF596 /* EntryField.swift */; };
 		AD67CEC228A49646006AF596 /* TabIcons.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD67CEC128A49646006AF596 /* TabIcons.swift */; };
@@ -26,7 +25,7 @@
 		AD7525FE28C85C4B0017FEC6 /* Arrow.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD7525FD28C85C4B0017FEC6 /* Arrow.swift */; };
 		AD75260028C861520017FEC6 /* TextEntryField.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD7525FF28C861520017FEC6 /* TextEntryField.swift */; };
 		AD75260428C8639A0017FEC6 /* DateEntryField.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD75260328C8639A0017FEC6 /* DateEntryField.swift */; };
-		AD75260628C9002E0017FEC6 /* Scale.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD75260528C9002E0017FEC6 /* Scale.swift */; };
+		AD75260628C9002E0017FEC6 /* VHIScale.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD75260528C9002E0017FEC6 /* VHIScale.swift */; };
 		AD75260828C91C150017FEC6 /* Wave.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD75260728C91C150017FEC6 /* Wave.swift */; };
 		AD81B71128BC21F8009920FB /* Graph.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD81B71028BC21F8009920FB /* Graph.swift */; };
 		AD81B71328BDBA5A009920FB /* BarChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD81B71228BDBA5A009920FB /* BarChart.swift */; };
@@ -43,7 +42,7 @@
 		AD81B72F28BFDB13009920FB /* Entries.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD81B72E28BFDB13009920FB /* Entries.swift */; };
 		AD81B73128BFDBF6009920FB /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD81B73028BFDBF6009920FB /* Settings.swift */; };
 		AD81B73628BFE013009920FB /* SharedViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD81B73528BFE013009920FB /* SharedViewModel.swift */; };
-		AD81B73828C00070009920FB /* ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD81B73728C00070009920FB /* ViewModel.swift */; };
+		AD81B73828C00070009920FB /* ViewControllerModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD81B73728C00070009920FB /* ViewControllerModel.swift */; };
 		AD915C37280624E200B48A5C /* ProfileButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD915C36280624E200B48A5C /* ProfileButton.swift */; };
 		AD9BBAB7283419A30081331C /* KR_rainbow_1.wav in Resources */ = {isa = PBXBuildFile; fileRef = AD9BBAB6283419A30081331C /* KR_rainbow_1.wav */; };
 		AD9BBAB9283419A80081331C /* KR_sustained_Ah_1.wav in Resources */ = {isa = PBXBuildFile; fileRef = AD9BBAB8283419A80081331C /* KR_sustained_Ah_1.wav */; };
@@ -74,7 +73,22 @@
 		ADA0E0E2282561D700CF05D1 /* LineShapeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADA0E0E1282561D700CF05D1 /* LineShapeView.swift */; };
 		ADA1EC9B2899C6B000EE58E3 /* AVAduioPCMBuffer.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADA1EC9A2899C6B000EE58E3 /* AVAduioPCMBuffer.swift */; };
 		ADA1EC9E2899C99400EE58E3 /* AudioKitUI in Frameworks */ = {isa = PBXBuildFile; productRef = ADA1EC9D2899C99400EE58E3 /* AudioKitUI */; };
-		ADAEE227290DBFF400263EA9 /* RecordingList.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADAEE226290DBFF400263EA9 /* RecordingList.swift */; };
+		ADB4A81B29369516003D8556 /* AnyTransition.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADB4A81A29369516003D8556 /* AnyTransition.swift */; };
+		ADB4A82229369B75003D8556 /* VisitLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADB4A82129369B75003D8556 /* VisitLog.swift */; };
+		ADB4A82429369C96003D8556 /* NewVisitForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADB4A82329369C96003D8556 /* NewVisitForm.swift */; };
+		ADB4A8262936A199003D8556 /* VisitRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADB4A8252936A199003D8556 /* VisitRow.swift */; };
+		ADB4A8282936BDA1003D8556 /* GraphicTitle.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADB4A8272936BDA1003D8556 /* GraphicTitle.swift */; };
+		ADB4A82A2936BEE2003D8556 /* Graphic.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADB4A8292936BEE2003D8556 /* Graphic.swift */; };
+		ADB4A82C2936C32E003D8556 /* ProgressViewFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADB4A82B2936C32E003D8556 /* ProgressViewFunctions.swift */; };
+		ADB4A82E2936C3E1003D8556 /* ElementModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADB4A82D2936C3E1003D8556 /* ElementModel.swift */; };
+		ADB4A8302936CC10003D8556 /* EntryRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADB4A82F2936CC10003D8556 /* EntryRow.swift */; };
+		ADB4A8332936CCFC003D8556 /* ExpandedSurvey.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADB4A8322936CCFC003D8556 /* ExpandedSurvey.swift */; };
+		ADB4A8352936CD02003D8556 /* ExpandedRecording.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADB4A8342936CD02003D8556 /* ExpandedRecording.swift */; };
+		ADB4A8372936CD08003D8556 /* ExpandedJournal.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADB4A8362936CD08003D8556 /* ExpandedJournal.swift */; };
+		ADB4A8392936CFE2003D8556 /* DeleteButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADB4A8382936CFE2003D8556 /* DeleteButton.swift */; };
+		ADB4A83B293809DB003D8556 /* AudioInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADB4A83A293809DB003D8556 /* AudioInterface.swift */; };
+		ADB4A840293831AF003D8556 /* VEScale.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADB4A83F293831AF003D8556 /* VEScale.swift */; };
+		ADB4A84229385ABF003D8556 /* CustomSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADB4A84129385ABF003D8556 /* CustomSlider.swift */; };
 		ADBAE7F9282996A500A7BD1B /* Roboto-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = ADBAE7F8282996A500A7BD1B /* Roboto-Bold.ttf */; };
 		ADBAE7FC282996DF00A7BD1B /* Roboto-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = ADBAE7FB282996DF00A7BD1B /* Roboto-Medium.ttf */; };
 		ADBAE7FE282996E500A7BD1B /* Roboto-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = ADBAE7FD282996E500A7BD1B /* Roboto-Regular.ttf */; };
@@ -89,17 +103,16 @@
 		ADBDFF9028C26DD100518354 /* JournalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADBDFF8F28C26DD100518354 /* JournalView.swift */; };
 		ADBDFF9228C26DDA00518354 /* InterventionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADBDFF9128C26DDA00518354 /* InterventionView.swift */; };
 		ADBDFF9428C26DE900518354 /* ProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADBDFF9328C26DE900518354 /* ProgressView.swift */; };
-		ADBDFF9628C2BA5000518354 /* QuestionnaireView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADBDFF9528C2BA5000518354 /* QuestionnaireView.swift */; };
+		ADBDFF9628C2BA5000518354 /* SurveyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADBDFF9528C2BA5000518354 /* SurveyView.swift */; };
 		ADBF439F290AC03D001CDBF5 /* Filter.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADBF439E290AC03D001CDBF5 /* Filter.swift */; };
-		ADBF43A1290AC074001CDBF5 /* ListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADBF43A0290AC074001CDBF5 /* ListItem.swift */; };
+		ADBF43A1290AC074001CDBF5 /* DayList.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADBF43A0290AC074001CDBF5 /* DayList.swift */; };
 		ADBF43A3290AC6B1001CDBF5 /* FilterButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADBF43A2290AC6B1001CDBF5 /* FilterButton.swift */; };
-		ADBF43A5290B4A37001CDBF5 /* ResponseList.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADBF43A4290B4A37001CDBF5 /* ResponseList.swift */; };
-		ADBF43A7290B4C4D001CDBF5 /* JournalList.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADBF43A6290B4C4D001CDBF5 /* JournalList.swift */; };
 		ADC484BC28CBB50500160DFA /* RecordAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADC484BB28CBB50500160DFA /* RecordAction.swift */; };
 		ADC5A60628358611000C73DF /* Font.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADC5A60528358611000C73DF /* Font.swift */; };
 		ADC5A60828358616000C73DF /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADC5A60728358616000C73DF /* Color.swift */; };
 		ADC5A60A28358644000C73DF /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADC5A60928358644000C73DF /* Date.swift */; };
 		ADC5A60C283587D9000C73DF /* Array.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADC5A60B283587D9000C73DF /* Array.swift */; };
+		ADE03015293312AC00320A61 /* GraphView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADE03014293312AC00320A61 /* GraphView.swift */; };
 		ADE3A01628395A8C00E56527 /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADE3A01528395A8C00E56527 /* String.swift */; };
 		ADE416442911821500133437 /* Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADE416432911821500133437 /* Image.swift */; };
 		ADE416462911874600133437 /* NavButtons.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADE416452911874600133437 /* NavButtons.swift */; };
@@ -111,9 +124,6 @@
 		ADE4165329118E5C00133437 /* GoalEntryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADE4165229118E5C00133437 /* GoalEntryView.swift */; };
 		ADE4165629118EC000133437 /* ProgressBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADE4165529118EC000133437 /* ProgressBar.swift */; };
 		ADE416592911959900133437 /* SetThreshold.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADE416582911959900133437 /* SetThreshold.swift */; };
-		ADFF4309280E4CA3008F721B /* RecordingSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADFF4308280E4CA3008F721B /* RecordingSection.swift */; };
-		ADFF430B280E4CA8008F721B /* JournalSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADFF430A280E4CA8008F721B /* JournalSection.swift */; };
-		ADFF430D280E4CB5008F721B /* ResultsSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADFF430C280E4CB5008F721B /* ResultsSection.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -125,7 +135,6 @@
 		AD26BA1B2829F4C900AC1A7B /* BarChartCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = BarChartCell.swift; path = vomo/Graphs/BarChart/BarChartCell.swift; sourceTree = SOURCE_ROOT; };
 		AD26BA1D2829F4DD00AC1A7B /* BarChartCellShape.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = BarChartCellShape.swift; path = vomo/Graphs/BarChart/BarChartCellShape.swift; sourceTree = SOURCE_ROOT; };
 		AD26BA1F2829F4E600AC1A7B /* BarChartRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = BarChartRow.swift; path = vomo/Graphs/BarChart/BarChartRow.swift; sourceTree = SOURCE_ROOT; };
-		AD3F9FF5280E52E2007E6327 /* EntryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntryView.swift; sourceTree = "<group>"; };
 		AD57E6432805D02600CDB31B /* BackUps.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackUps.swift; sourceTree = "<group>"; };
 		AD67CEBF28A48DA2006AF596 /* EntryField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = EntryField.swift; path = vomo/Components/Shapes/EntryField.swift; sourceTree = SOURCE_ROOT; };
 		AD67CEC128A49646006AF596 /* TabIcons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = TabIcons.swift; path = vomo/Components/Buttons/TabIcons.swift; sourceTree = SOURCE_ROOT; };
@@ -137,7 +146,7 @@
 		AD7525FD28C85C4B0017FEC6 /* Arrow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Arrow.swift; path = vomo/Components/Shapes/Arrow.swift; sourceTree = SOURCE_ROOT; };
 		AD7525FF28C861520017FEC6 /* TextEntryField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = TextEntryField.swift; path = vomo/Components/Shapes/TextEntryField.swift; sourceTree = SOURCE_ROOT; };
 		AD75260328C8639A0017FEC6 /* DateEntryField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DateEntryField.swift; path = vomo/Components/Shapes/DateEntryField.swift; sourceTree = SOURCE_ROOT; };
-		AD75260528C9002E0017FEC6 /* Scale.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Scale.swift; path = vomo/Components/Shapes/Scale.swift; sourceTree = SOURCE_ROOT; };
+		AD75260528C9002E0017FEC6 /* VHIScale.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = VHIScale.swift; path = VoMo/Core/SurveyView/VHIScale.swift; sourceTree = SOURCE_ROOT; };
 		AD75260728C91C150017FEC6 /* Wave.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Wave.swift; path = vomo/Components/Shapes/Wave.swift; sourceTree = SOURCE_ROOT; };
 		AD81B71028BC21F8009920FB /* Graph.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Graph.swift; path = vomo/Graphs/Graph.swift; sourceTree = SOURCE_ROOT; };
 		AD81B71228BDBA5A009920FB /* BarChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = BarChart.swift; path = vomo/Graphs/BarChart.swift; sourceTree = SOURCE_ROOT; };
@@ -154,7 +163,7 @@
 		AD81B72E28BFDB13009920FB /* Entries.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Entries.swift; path = vomo/Model/UserData/Entries.swift; sourceTree = SOURCE_ROOT; };
 		AD81B73028BFDBF6009920FB /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Settings.swift; path = vomo/Model/UserData/Settings.swift; sourceTree = SOURCE_ROOT; };
 		AD81B73528BFE013009920FB /* SharedViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SharedViewModel.swift; path = vomo/ViewModel/SharedViewModel.swift; sourceTree = SOURCE_ROOT; };
-		AD81B73728C00070009920FB /* ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ViewModel.swift; path = vomo/ViewModel/ViewModel.swift; sourceTree = SOURCE_ROOT; };
+		AD81B73728C00070009920FB /* ViewControllerModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ViewControllerModel.swift; path = VoMo/Core/ViewController/ViewControllerModel.swift; sourceTree = SOURCE_ROOT; };
 		AD915C36280624E200B48A5C /* ProfileButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileButton.swift; sourceTree = "<group>"; };
 		AD9BBAB6283419A30081331C /* KR_rainbow_1.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = KR_rainbow_1.wav; path = vomo/KR_rainbow_1.wav; sourceTree = SOURCE_ROOT; };
 		AD9BBAB8283419A80081331C /* KR_sustained_Ah_1.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = KR_sustained_Ah_1.wav; path = vomo/KR_sustained_Ah_1.wav; sourceTree = SOURCE_ROOT; };
@@ -184,46 +193,57 @@
 		ADA0E0E1282561D700CF05D1 /* LineShapeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = LineShapeView.swift; path = vomo/Graphs/LineChart/LineShapeView.swift; sourceTree = SOURCE_ROOT; };
 		ADA0E0E52826E42600CF05D1 /* VoMo.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = VoMo.entitlements; sourceTree = "<group>"; };
 		ADA1EC9A2899C6B000EE58E3 /* AVAduioPCMBuffer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AVAduioPCMBuffer.swift; path = vomo/Extensions/AVAduioPCMBuffer.swift; sourceTree = SOURCE_ROOT; };
-		ADAEE226290DBFF400263EA9 /* RecordingList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = RecordingList.swift; path = vomo/Components/RecordingList.swift; sourceTree = SOURCE_ROOT; };
+		ADB4A81A29369516003D8556 /* AnyTransition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AnyTransition.swift; path = vomo/Extensions/AnyTransition.swift; sourceTree = SOURCE_ROOT; };
+		ADB4A82129369B75003D8556 /* VisitLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = VisitLog.swift; path = vomo/Core/InterventionView/VisitLog.swift; sourceTree = SOURCE_ROOT; };
+		ADB4A82329369C96003D8556 /* NewVisitForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = NewVisitForm.swift; path = vomo/Core/InterventionView/NewVisitForm.swift; sourceTree = SOURCE_ROOT; };
+		ADB4A8252936A199003D8556 /* VisitRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = VisitRow.swift; path = vomo/Core/InterventionView/VisitRow.swift; sourceTree = SOURCE_ROOT; };
+		ADB4A8272936BDA1003D8556 /* GraphicTitle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = GraphicTitle.swift; path = vomo/Core/ProgressView/GraphicTitle.swift; sourceTree = SOURCE_ROOT; };
+		ADB4A8292936BEE2003D8556 /* Graphic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Graphic.swift; path = vomo/Core/ProgressView/Graphic.swift; sourceTree = SOURCE_ROOT; };
+		ADB4A82B2936C32E003D8556 /* ProgressViewFunctions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ProgressViewFunctions.swift; path = vomo/Core/ProgressView/ProgressViewFunctions.swift; sourceTree = SOURCE_ROOT; };
+		ADB4A82D2936C3E1003D8556 /* ElementModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ElementModel.swift; path = vomo/Model/ElementModel.swift; sourceTree = SOURCE_ROOT; };
+		ADB4A82F2936CC10003D8556 /* EntryRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = EntryRow.swift; path = vomo/Core/ProgressView/EntryRow.swift; sourceTree = SOURCE_ROOT; };
+		ADB4A8322936CCFC003D8556 /* ExpandedSurvey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ExpandedSurvey.swift; path = vomo/Core/ProgressView/ExpandedEntries/ExpandedSurvey.swift; sourceTree = SOURCE_ROOT; };
+		ADB4A8342936CD02003D8556 /* ExpandedRecording.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ExpandedRecording.swift; path = vomo/Core/ProgressView/ExpandedEntries/ExpandedRecording.swift; sourceTree = SOURCE_ROOT; };
+		ADB4A8362936CD08003D8556 /* ExpandedJournal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ExpandedJournal.swift; path = vomo/Core/ProgressView/ExpandedEntries/ExpandedJournal.swift; sourceTree = SOURCE_ROOT; };
+		ADB4A8382936CFE2003D8556 /* DeleteButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DeleteButton.swift; path = vomo/Components/Buttons/DeleteButton.swift; sourceTree = SOURCE_ROOT; };
+		ADB4A83A293809DB003D8556 /* AudioInterface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AudioInterface.swift; path = vomo/Core/ProgressView/AudioInterface.swift; sourceTree = SOURCE_ROOT; };
+		ADB4A83F293831AF003D8556 /* VEScale.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = VEScale.swift; path = vomo/Core/SurveyView/VEScale.swift; sourceTree = SOURCE_ROOT; };
+		ADB4A84129385ABF003D8556 /* CustomSlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CustomSlider.swift; path = vomo/Core/SurveyView/CustomSlider.swift; sourceTree = SOURCE_ROOT; };
 		ADBAE7F8282996A500A7BD1B /* Roboto-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Roboto-Bold.ttf"; path = "../../Roboto/Roboto-Bold.ttf"; sourceTree = "<group>"; };
 		ADBAE7FB282996DF00A7BD1B /* Roboto-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Roboto-Medium.ttf"; path = "../../Roboto/Roboto-Medium.ttf"; sourceTree = "<group>"; };
 		ADBAE7FD282996E500A7BD1B /* Roboto-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Roboto-Regular.ttf"; path = "../../Roboto/Roboto-Regular.ttf"; sourceTree = "<group>"; };
 		ADBAE7FF282996EE00A7BD1B /* Roboto-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Roboto-Light.ttf"; path = "../../Roboto/Roboto-Light.ttf"; sourceTree = "<group>"; };
 		ADBAE801282996FA00A7BD1B /* Roboto-LightItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Roboto-LightItalic.ttf"; path = "../../Roboto/Roboto-LightItalic.ttf"; sourceTree = "<group>"; };
 		ADBAE8052829984F00A7BD1B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = vomo/Assets.xcassets; sourceTree = SOURCE_ROOT; };
-		ADBDFF8528C2663000518354 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ViewController.swift; path = vomo/Core/ViewController.swift; sourceTree = SOURCE_ROOT; };
-		ADBDFF8728C2669300518354 /* OnboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = OnboardView.swift; path = vomo/Core/OnboardView.swift; sourceTree = SOURCE_ROOT; };
-		ADBDFF8928C2682100518354 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = HomeView.swift; path = vomo/Core/HomeView.swift; sourceTree = SOURCE_ROOT; };
+		ADBDFF8528C2663000518354 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ViewController.swift; path = VoMo/Core/ViewController/ViewController.swift; sourceTree = SOURCE_ROOT; };
+		ADBDFF8728C2669300518354 /* OnboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = OnboardView.swift; path = VoMo/Core/OnboardView/OnboardView.swift; sourceTree = SOURCE_ROOT; };
+		ADBDFF8928C2682100518354 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = HomeView.swift; path = VoMo/Core/HomeView/HomeView.swift; sourceTree = SOURCE_ROOT; };
 		ADBDFF8B28C2688D00518354 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SettingsView.swift; path = vomo/Core/SettingsView.swift; sourceTree = SOURCE_ROOT; };
 		ADBDFF8D28C26D5800518354 /* RecordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = RecordView.swift; path = vomo/Core/RecordView.swift; sourceTree = SOURCE_ROOT; };
 		ADBDFF8F28C26DD100518354 /* JournalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = JournalView.swift; path = vomo/Core/JournalView.swift; sourceTree = SOURCE_ROOT; };
-		ADBDFF9128C26DDA00518354 /* InterventionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = InterventionView.swift; path = vomo/Core/InterventionView.swift; sourceTree = SOURCE_ROOT; };
-		ADBDFF9328C26DE900518354 /* ProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ProgressView.swift; path = vomo/Core/ProgressView.swift; sourceTree = SOURCE_ROOT; };
-		ADBDFF9528C2BA5000518354 /* QuestionnaireView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = QuestionnaireView.swift; path = vomo/Core/QuestionnaireView.swift; sourceTree = SOURCE_ROOT; };
-		ADBF439E290AC03D001CDBF5 /* Filter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Filter.swift; path = vomo/Components/Filter.swift; sourceTree = SOURCE_ROOT; };
-		ADBF43A0290AC074001CDBF5 /* ListItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ListItem.swift; path = vomo/Components/ListItem.swift; sourceTree = SOURCE_ROOT; };
+		ADBDFF9128C26DDA00518354 /* InterventionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = InterventionView.swift; path = VoMo/Core/InterventionView/InterventionView.swift; sourceTree = SOURCE_ROOT; };
+		ADBDFF9328C26DE900518354 /* ProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ProgressView.swift; path = VoMo/Core/ProgressView/ProgressView.swift; sourceTree = SOURCE_ROOT; };
+		ADBDFF9528C2BA5000518354 /* SurveyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SurveyView.swift; path = VoMo/Core/SurveyView/SurveyView.swift; sourceTree = SOURCE_ROOT; };
+		ADBF439E290AC03D001CDBF5 /* Filter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Filter.swift; path = VoMo/Core/ProgressView/Filter.swift; sourceTree = SOURCE_ROOT; };
+		ADBF43A0290AC074001CDBF5 /* DayList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DayList.swift; path = VoMo/Core/ProgressView/DayList.swift; sourceTree = SOURCE_ROOT; };
 		ADBF43A2290AC6B1001CDBF5 /* FilterButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FilterButton.swift; path = vomo/Components/Buttons/FilterButton.swift; sourceTree = SOURCE_ROOT; };
-		ADBF43A4290B4A37001CDBF5 /* ResponseList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ResponseList.swift; path = vomo/Components/ResponseList.swift; sourceTree = SOURCE_ROOT; };
-		ADBF43A6290B4C4D001CDBF5 /* JournalList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = JournalList.swift; path = vomo/Components/JournalList.swift; sourceTree = SOURCE_ROOT; };
 		ADC484BB28CBB50500160DFA /* RecordAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = RecordAction.swift; path = vomo/Components/Shapes/RecordAction.swift; sourceTree = SOURCE_ROOT; };
 		ADC5A60528358611000C73DF /* Font.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Font.swift; path = vomo/Extensions/Font.swift; sourceTree = SOURCE_ROOT; };
 		ADC5A60728358616000C73DF /* Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Color.swift; path = vomo/Extensions/Color.swift; sourceTree = SOURCE_ROOT; };
 		ADC5A60928358644000C73DF /* Date.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Date.swift; path = vomo/Extensions/Date.swift; sourceTree = SOURCE_ROOT; };
 		ADC5A60B283587D9000C73DF /* Array.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Array.swift; path = vomo/Extensions/Array.swift; sourceTree = SOURCE_ROOT; };
+		ADE03014293312AC00320A61 /* GraphView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = GraphView.swift; path = vomo/Graphs/GraphView.swift; sourceTree = SOURCE_ROOT; };
 		ADE3A01528395A8C00E56527 /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = String.swift; path = vomo/Extensions/String.swift; sourceTree = SOURCE_ROOT; };
 		ADE416432911821500133437 /* Image.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Image.swift; path = vomo/Extensions/Image.swift; sourceTree = SOURCE_ROOT; };
 		ADE416452911874600133437 /* NavButtons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = NavButtons.swift; path = vomo/Components/Buttons/NavButtons.swift; sourceTree = SOURCE_ROOT; };
-		ADE4164829118D0C00133437 /* LandingPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = LandingPageView.swift; path = vomo/Components/Onboarding/LandingPageView.swift; sourceTree = SOURCE_ROOT; };
-		ADE4164A29118D9500133437 /* PersonalQuestionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = PersonalQuestionView.swift; path = vomo/Components/Onboarding/PersonalQuestionView.swift; sourceTree = SOURCE_ROOT; };
-		ADE4164C29118DCB00133437 /* VoiceQuestionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = VoiceQuestionView.swift; path = vomo/Components/Onboarding/VoiceQuestionView.swift; sourceTree = SOURCE_ROOT; };
-		ADE4164E29118DF100133437 /* TargetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = TargetView.swift; path = vomo/Components/Onboarding/TargetView.swift; sourceTree = SOURCE_ROOT; };
-		ADE4165029118E3200133437 /* CustomTargetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CustomTargetView.swift; path = vomo/Components/Onboarding/CustomTargetView.swift; sourceTree = SOURCE_ROOT; };
-		ADE4165229118E5C00133437 /* GoalEntryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = GoalEntryView.swift; path = vomo/Components/Onboarding/GoalEntryView.swift; sourceTree = SOURCE_ROOT; };
-		ADE4165529118EC000133437 /* ProgressBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ProgressBar.swift; path = vomo/Components/Home/ProgressBar.swift; sourceTree = SOURCE_ROOT; };
-		ADE416582911959900133437 /* SetThreshold.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SetThreshold.swift; path = vomo/Components/Progress/SetThreshold.swift; sourceTree = SOURCE_ROOT; };
-		ADFF4308280E4CA3008F721B /* RecordingSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingSection.swift; sourceTree = "<group>"; };
-		ADFF430A280E4CA8008F721B /* JournalSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JournalSection.swift; sourceTree = "<group>"; };
-		ADFF430C280E4CB5008F721B /* ResultsSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultsSection.swift; sourceTree = "<group>"; };
+		ADE4164829118D0C00133437 /* LandingPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = LandingPageView.swift; path = VoMo/Core/OnboardView/LandingPageView.swift; sourceTree = SOURCE_ROOT; };
+		ADE4164A29118D9500133437 /* PersonalQuestionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = PersonalQuestionView.swift; path = VoMo/Core/OnboardView/PersonalQuestionView.swift; sourceTree = SOURCE_ROOT; };
+		ADE4164C29118DCB00133437 /* VoiceQuestionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = VoiceQuestionView.swift; path = VoMo/Core/OnboardView/VoiceQuestionView.swift; sourceTree = SOURCE_ROOT; };
+		ADE4164E29118DF100133437 /* TargetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = TargetView.swift; path = VoMo/Core/OnboardView/TargetView.swift; sourceTree = SOURCE_ROOT; };
+		ADE4165029118E3200133437 /* CustomTargetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CustomTargetView.swift; path = VoMo/Core/OnboardView/CustomTargetView.swift; sourceTree = SOURCE_ROOT; };
+		ADE4165229118E5C00133437 /* GoalEntryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = GoalEntryView.swift; path = VoMo/Core/OnboardView/GoalEntryView.swift; sourceTree = SOURCE_ROOT; };
+		ADE4165529118EC000133437 /* ProgressBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ProgressBar.swift; path = VoMo/Core/HomeView/ProgressBar.swift; sourceTree = SOURCE_ROOT; };
+		ADE416582911959900133437 /* SetThreshold.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SetThreshold.swift; path = VoMo/Core/ProgressView/SetThreshold.swift; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -245,6 +265,7 @@
 				AD81B72728BFD769009920FB /* QuestionnaireModel.swift */,
 				AD81B72928BFD76E009920FB /* JournalModel.swift */,
 				AD81B72B28BFD774009920FB /* VisitModel.swift */,
+				ADB4A82D2936C3E1003D8556 /* ElementModel.swift */,
 				AD81B72D28BFDB07009920FB /* UserData */,
 			);
 			path = Model;
@@ -318,6 +339,7 @@
 			isa = PBXGroup;
 			children = (
 				AD81B71028BC21F8009920FB /* Graph.swift */,
+				ADE03014293312AC00320A61 /* GraphView.swift */,
 				AD81B71228BDBA5A009920FB /* BarChart.swift */,
 				AD81B71428BEAE84009920FB /* HBarChart.swift */,
 				AD26BA182829F4A200AC1A7B /* BarChart */,
@@ -339,7 +361,6 @@
 				AD7525FF28C861520017FEC6 /* TextEntryField.swift */,
 				AD75260328C8639A0017FEC6 /* DateEntryField.swift */,
 				AD7525FD28C85C4B0017FEC6 /* Arrow.swift */,
-				AD75260528C9002E0017FEC6 /* Scale.swift */,
 				AD75260728C91C150017FEC6 /* Wave.swift */,
 				ADC484BB28CBB50500160DFA /* RecordAction.swift */,
 				AD0422FC28D0F2FF00E7105B /* HomeBackground.swift */,
@@ -388,7 +409,6 @@
 			isa = PBXGroup;
 			children = (
 				AD81B73528BFE013009920FB /* SharedViewModel.swift */,
-				AD81B73728C00070009920FB /* ViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -470,6 +490,7 @@
 			children = (
 				AD915C36280624E200B48A5C /* ProfileButton.swift */,
 				AD9EC70428050DBF007F0395 /* PlayButton.swift */,
+				ADB4A8382936CFE2003D8556 /* DeleteButton.swift */,
 				AD67CEC128A49646006AF596 /* TabIcons.swift */,
 				AD67CEC328A4965A006AF596 /* SubmissionButton.swift */,
 				ADE416452911874600133437 /* NavButtons.swift */,
@@ -480,19 +501,99 @@
 			path = Buttons;
 			sourceTree = "<group>";
 		};
+		ADB4A81C293698DC003D8556 /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+				AD81B73728C00070009920FB /* ViewControllerModel.swift */,
+				ADBDFF8528C2663000518354 /* ViewController.swift */,
+			);
+			path = ViewController;
+			sourceTree = "<group>";
+		};
+		ADB4A81D293698F4003D8556 /* OnboardView */ = {
+			isa = PBXGroup;
+			children = (
+				ADBDFF8728C2669300518354 /* OnboardView.swift */,
+				ADE4164829118D0C00133437 /* LandingPageView.swift */,
+				ADE4164A29118D9500133437 /* PersonalQuestionView.swift */,
+				ADE4164C29118DCB00133437 /* VoiceQuestionView.swift */,
+				ADE4164E29118DF100133437 /* TargetView.swift */,
+				ADE4165029118E3200133437 /* CustomTargetView.swift */,
+				ADE4165229118E5C00133437 /* GoalEntryView.swift */,
+			);
+			path = OnboardView;
+			sourceTree = "<group>";
+		};
+		ADB4A81E29369922003D8556 /* HomeView */ = {
+			isa = PBXGroup;
+			children = (
+				ADBDFF8928C2682100518354 /* HomeView.swift */,
+				ADE4165529118EC000133437 /* ProgressBar.swift */,
+			);
+			path = HomeView;
+			sourceTree = "<group>";
+		};
+		ADB4A81F29369ACB003D8556 /* ProgressView */ = {
+			isa = PBXGroup;
+			children = (
+				ADBDFF9328C26DE900518354 /* ProgressView.swift */,
+				ADB4A82B2936C32E003D8556 /* ProgressViewFunctions.swift */,
+				ADB4A83A293809DB003D8556 /* AudioInterface.swift */,
+				ADB4A8292936BEE2003D8556 /* Graphic.swift */,
+				ADB4A8272936BDA1003D8556 /* GraphicTitle.swift */,
+				ADE416582911959900133437 /* SetThreshold.swift */,
+				ADBF439E290AC03D001CDBF5 /* Filter.swift */,
+				ADBF43A0290AC074001CDBF5 /* DayList.swift */,
+				ADB4A82F2936CC10003D8556 /* EntryRow.swift */,
+				ADB4A8312936CCEF003D8556 /* ExpandedEntries */,
+			);
+			path = ProgressView;
+			sourceTree = "<group>";
+		};
+		ADB4A82029369B54003D8556 /* InterventionView */ = {
+			isa = PBXGroup;
+			children = (
+				ADBDFF9128C26DDA00518354 /* InterventionView.swift */,
+				ADB4A82129369B75003D8556 /* VisitLog.swift */,
+				ADB4A82329369C96003D8556 /* NewVisitForm.swift */,
+				ADB4A8252936A199003D8556 /* VisitRow.swift */,
+			);
+			path = InterventionView;
+			sourceTree = "<group>";
+		};
+		ADB4A8312936CCEF003D8556 /* ExpandedEntries */ = {
+			isa = PBXGroup;
+			children = (
+				ADB4A8322936CCFC003D8556 /* ExpandedSurvey.swift */,
+				ADB4A8342936CD02003D8556 /* ExpandedRecording.swift */,
+				ADB4A8362936CD08003D8556 /* ExpandedJournal.swift */,
+			);
+			path = ExpandedEntries;
+			sourceTree = "<group>";
+		};
+		ADB4A83E293830D0003D8556 /* SurveyView */ = {
+			isa = PBXGroup;
+			children = (
+				ADBDFF9528C2BA5000518354 /* SurveyView.swift */,
+				AD75260528C9002E0017FEC6 /* VHIScale.swift */,
+				ADB4A83F293831AF003D8556 /* VEScale.swift */,
+				ADB4A84129385ABF003D8556 /* CustomSlider.swift */,
+			);
+			path = SurveyView;
+			sourceTree = "<group>";
+		};
 		ADC5A600283584FB000C73DF /* Core */ = {
 			isa = PBXGroup;
 			children = (
-				ADBDFF8528C2663000518354 /* ViewController.swift */,
-				ADBDFF8728C2669300518354 /* OnboardView.swift */,
-				ADBDFF8928C2682100518354 /* HomeView.swift */,
+				ADB4A81C293698DC003D8556 /* ViewController */,
+				ADB4A81D293698F4003D8556 /* OnboardView */,
+				ADB4A81E29369922003D8556 /* HomeView */,
 				ADBDFF8B28C2688D00518354 /* SettingsView.swift */,
 				ADBDFF8D28C26D5800518354 /* RecordView.swift */,
-				ADBDFF9528C2BA5000518354 /* QuestionnaireView.swift */,
+				ADB4A83E293830D0003D8556 /* SurveyView */,
 				ADBDFF8F28C26DD100518354 /* JournalView.swift */,
-				ADBDFF9128C26DDA00518354 /* InterventionView.swift */,
-				ADBDFF9328C26DE900518354 /* ProgressView.swift */,
-				ADCE4C0B2835D98D007EBACE /* Entries */,
+				ADB4A82029369B54003D8556 /* InterventionView */,
+				ADB4A81F29369ACB003D8556 /* ProgressView */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -500,29 +601,10 @@
 		ADC5A60128358500000C73DF /* Components */ = {
 			isa = PBXGroup;
 			children = (
-				ADE4164729118CFA00133437 /* Onboarding */,
-				ADE4165429118EA800133437 /* Home */,
-				ADE416572911958900133437 /* Progress */,
-				ADBF439E290AC03D001CDBF5 /* Filter.swift */,
-				ADBF43A0290AC074001CDBF5 /* ListItem.swift */,
-				ADBF43A4290B4A37001CDBF5 /* ResponseList.swift */,
-				ADAEE226290DBFF400263EA9 /* RecordingList.swift */,
-				ADBF43A6290B4C4D001CDBF5 /* JournalList.swift */,
 				AD67CEBE28A48D63006AF596 /* Shapes */,
 				ADA0E0E928282CC000CF05D1 /* Buttons */,
 			);
 			path = Components;
-			sourceTree = "<group>";
-		};
-		ADCE4C0B2835D98D007EBACE /* Entries */ = {
-			isa = PBXGroup;
-			children = (
-				AD3F9FF5280E52E2007E6327 /* EntryView.swift */,
-				ADFF4308280E4CA3008F721B /* RecordingSection.swift */,
-				ADFF430C280E4CB5008F721B /* ResultsSection.swift */,
-				ADFF430A280E4CA8008F721B /* JournalSection.swift */,
-			);
-			path = Entries;
 			sourceTree = "<group>";
 		};
 		ADD6846A27D8325C00FF23D2 /* Extensions */ = {
@@ -535,37 +617,9 @@
 				ADE3A01528395A8C00E56527 /* String.swift */,
 				ADE416432911821500133437 /* Image.swift */,
 				ADA1EC9A2899C6B000EE58E3 /* AVAduioPCMBuffer.swift */,
+				ADB4A81A29369516003D8556 /* AnyTransition.swift */,
 			);
 			path = Extensions;
-			sourceTree = "<group>";
-		};
-		ADE4164729118CFA00133437 /* Onboarding */ = {
-			isa = PBXGroup;
-			children = (
-				ADE4164829118D0C00133437 /* LandingPageView.swift */,
-				ADE4164A29118D9500133437 /* PersonalQuestionView.swift */,
-				ADE4164C29118DCB00133437 /* VoiceQuestionView.swift */,
-				ADE4164E29118DF100133437 /* TargetView.swift */,
-				ADE4165029118E3200133437 /* CustomTargetView.swift */,
-				ADE4165229118E5C00133437 /* GoalEntryView.swift */,
-			);
-			path = Onboarding;
-			sourceTree = "<group>";
-		};
-		ADE4165429118EA800133437 /* Home */ = {
-			isa = PBXGroup;
-			children = (
-				ADE4165529118EC000133437 /* ProgressBar.swift */,
-			);
-			path = Home;
-			sourceTree = "<group>";
-		};
-		ADE416572911958900133437 /* Progress */ = {
-			isa = PBXGroup;
-			children = (
-				ADE416582911959900133437 /* SetThreshold.swift */,
-			);
-			path = Progress;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -654,18 +708,20 @@
 			buildActionMask = 2147483647;
 			files = (
 				ADBDFF8C28C2688D00518354 /* SettingsView.swift in Sources */,
+				ADB4A8302936CC10003D8556 /* EntryRow.swift in Sources */,
 				ADA0E0D22825605300CF05D1 /* Colors.swift in Sources */,
 				ADA0E0BC28255F1900CF05D1 /* Array+Extension.swift in Sources */,
-				AD81B73828C00070009920FB /* ViewModel.swift in Sources */,
+				AD81B73828C00070009920FB /* ViewControllerModel.swift in Sources */,
 				ADA0E0D6282561A600CF05D1 /* IndicatorPoint.swift in Sources */,
 				AD7525FE28C85C4B0017FEC6 /* Arrow.swift in Sources */,
 				AD81B72A28BFD76E009920FB /* JournalModel.swift in Sources */,
 				ADBDFF8E28C26D5800518354 /* RecordView.swift in Sources */,
 				AD81B71128BC21F8009920FB /* Graph.swift in Sources */,
 				AD81B72828BFD769009920FB /* QuestionnaireModel.swift in Sources */,
+				ADB4A8372936CD08003D8556 /* ExpandedJournal.swift in Sources */,
 				ADA0E0B828255ED200CF05D1 /* ChartData.swift in Sources */,
-				ADBDFF9628C2BA5000518354 /* QuestionnaireView.swift in Sources */,
-				AD75260628C9002E0017FEC6 /* Scale.swift in Sources */,
+				ADBDFF9628C2BA5000518354 /* SurveyView.swift in Sources */,
+				AD75260628C9002E0017FEC6 /* VHIScale.swift in Sources */,
 				AD67CEC028A48DA2006AF596 /* EntryField.swift in Sources */,
 				ADA0E0C428255F7B00CF05D1 /* Color+Extension.swift in Sources */,
 				ADBDFF9228C26DDA00518354 /* InterventionView.swift in Sources */,
@@ -676,52 +732,57 @@
 				ADC5A60C283587D9000C73DF /* Array.swift in Sources */,
 				AD75260028C861520017FEC6 /* TextEntryField.swift in Sources */,
 				ADA0E0D02825604E00CF05D1 /* ColorGradient.swift in Sources */,
-				ADAEE227290DBFF400263EA9 /* RecordingList.swift in Sources */,
 				ADA0E0BE28255F3A00CF05D1 /* CGPoint+Extension.swift in Sources */,
+				ADB4A840293831AF003D8556 /* VEScale.swift in Sources */,
 				ADC5A60828358616000C73DF /* Color.swift in Sources */,
 				ADA0E0C628255FA800CF05D1 /* Path+QuadCurve.swift in Sources */,
-				ADBF43A7290B4C4D001CDBF5 /* JournalList.swift in Sources */,
 				ADA0E0DA282561B400CF05D1 /* LineBackgroundShape.swift in Sources */,
 				ADA0E0D8282561A900CF05D1 /* Line.swift in Sources */,
 				ADA1EC9B2899C6B000EE58E3 /* AVAduioPCMBuffer.swift in Sources */,
+				ADB4A8332936CCFC003D8556 /* ExpandedSurvey.swift in Sources */,
 				ADA0E0BA28255EDA00CF05D1 /* ChartValue.swift in Sources */,
 				ADE416442911821500133437 /* Image.swift in Sources */,
-				ADFF4309280E4CA3008F721B /* RecordingSection.swift in Sources */,
 				AD67CEC228A49646006AF596 /* TabIcons.swift in Sources */,
 				AD81B73128BFDBF6009920FB /* Settings.swift in Sources */,
+				ADB4A82E2936C3E1003D8556 /* ElementModel.swift in Sources */,
 				AD26BA202829F4E600AC1A7B /* BarChartRow.swift in Sources */,
 				ADA0E0CA2825601700CF05D1 /* ChartGrid.swift in Sources */,
 				AD81B71E28BFCF83009920FB /* Notification.swift in Sources */,
-				ADBF43A1290AC074001CDBF5 /* ListItem.swift in Sources */,
+				ADBF43A1290AC074001CDBF5 /* DayList.swift in Sources */,
 				AD26BA1C2829F4C900AC1A7B /* BarChartCell.swift in Sources */,
 				ADE4165129118E3200133437 /* CustomTargetView.swift in Sources */,
 				AD81B71328BDBA5A009920FB /* BarChart.swift in Sources */,
+				ADB4A81B29369516003D8556 /* AnyTransition.swift in Sources */,
+				ADB4A83B293809DB003D8556 /* AudioInterface.swift in Sources */,
 				AD57E6442805D02600CDB31B /* BackUps.swift in Sources */,
 				AD81B72428BFD01E009920FB /* Recording.swift in Sources */,
 				ADA0E0B628255ECD00CF05D1 /* ChartBase.swift in Sources */,
 				ADE4164F29118DF100133437 /* TargetView.swift in Sources */,
 				ADE4164D29118DCB00133437 /* VoiceQuestionView.swift in Sources */,
+				ADB4A82229369B75003D8556 /* VisitLog.swift in Sources */,
 				ADBF43A3290AC6B1001CDBF5 /* FilterButton.swift in Sources */,
 				AD67CEC428A4965A006AF596 /* SubmissionButton.swift in Sources */,
 				AD915C37280624E200B48A5C /* ProfileButton.swift in Sources */,
 				AD81B72F28BFDB13009920FB /* Entries.swift in Sources */,
 				ADA0E0C028255F5300CF05D1 /* CGReact+Extension.swift in Sources */,
 				AD67CEC628A49665006AF596 /* YesButton.swift in Sources */,
+				ADE03015293312AC00320A61 /* GraphView.swift in Sources */,
 				ADA0E0B428255EAF00CF05D1 /* CardView.swift in Sources */,
 				ADE4164929118D0C00133437 /* LandingPageView.swift in Sources */,
 				ADA0E0E0282561CA00CF05D1 /* LineShape.swift in Sources */,
 				AD6B031C27FCB26F0066B77D /* APIPlayground.swift in Sources */,
 				ADA0E0C228255F6A00CF05D1 /* ChartBase+Extension.swift in Sources */,
 				AD75260428C8639A0017FEC6 /* DateEntryField.swift in Sources */,
-				ADFF430D280E4CB5008F721B /* ResultsSection.swift in Sources */,
+				ADB4A8262936A199003D8556 /* VisitRow.swift in Sources */,
+				ADB4A8282936BDA1003D8556 /* GraphicTitle.swift in Sources */,
 				AD81B72028BFCFB2009920FB /* AudioRecorder.swift in Sources */,
 				AD81B71928BEB0B5009920FB /* HBarChartCellShape.swift in Sources */,
+				ADB4A82429369C96003D8556 /* NewVisitForm.swift in Sources */,
 				ADA0E0CC2825602A00CF05D1 /* ChartLabel.swift in Sources */,
 				AD72972428CFD736001E7211 /* SignalProcessing.swift in Sources */,
 				ADA0E0C828255FD900CF05D1 /* View+Extension.swift in Sources */,
 				AD75260828C91C150017FEC6 /* Wave.swift in Sources */,
 				AD81B72C28BFD774009920FB /* VisitModel.swift in Sources */,
-				AD3F9FF6280E52E2007E6327 /* EntryView.swift in Sources */,
 				ADBDFF8A28C2682100518354 /* HomeView.swift in Sources */,
 				ADA0E0DE282561C400CF05D1 /* LineChart.swift in Sources */,
 				ADBDFF9028C26DD100518354 /* JournalView.swift in Sources */,
@@ -729,22 +790,25 @@
 				AD158E6C279919A500C3119A /* VoMoApp.swift in Sources */,
 				AD9EC70528050DBF007F0395 /* PlayButton.swift in Sources */,
 				ADE4165629118EC000133437 /* ProgressBar.swift in Sources */,
-				ADBF43A5290B4A37001CDBF5 /* ResponseList.swift in Sources */,
 				AD81B73628BFE013009920FB /* SharedViewModel.swift in Sources */,
 				ADBF439F290AC03D001CDBF5 /* Filter.swift in Sources */,
+				ADB4A8352936CD02003D8556 /* ExpandedRecording.swift in Sources */,
 				AD81B71528BEAE84009920FB /* HBarChart.swift in Sources */,
 				AD67CEC828A49673006AF596 /* NoButton.swift in Sources */,
 				ADBDFF8628C2663000518354 /* ViewController.swift in Sources */,
-				ADFF430B280E4CA8008F721B /* JournalSection.swift in Sources */,
 				AD26BA1E2829F4DD00AC1A7B /* BarChartCellShape.swift in Sources */,
 				ADBDFF9428C26DE900518354 /* ProgressView.swift in Sources */,
+				ADB4A84229385ABF003D8556 /* CustomSlider.swift in Sources */,
+				ADB4A8392936CFE2003D8556 /* DeleteButton.swift in Sources */,
 				AD26BA1A2829F4C000AC1A7B /* BarChart1.swift in Sources */,
 				AD81B71728BEB011009920FB /* HBarChartCell.swift in Sources */,
 				ADA0E0E2282561D700CF05D1 /* LineShapeView.swift in Sources */,
 				ADE3A01628395A8C00E56527 /* String.swift in Sources */,
+				ADB4A82C2936C32E003D8556 /* ProgressViewFunctions.swift in Sources */,
 				ADBDFF8828C2669300518354 /* OnboardView.swift in Sources */,
 				ADE4164B29118D9500133437 /* PersonalQuestionView.swift in Sources */,
 				ADE416462911874600133437 /* NavButtons.swift in Sources */,
+				ADB4A82A2936BEE2003D8556 /* Graphic.swift in Sources */,
 				AD81B72228BFCFCA009920FB /* AudioPlayer.swift in Sources */,
 				ADE4165329118E5C00133437 /* GoalEntryView.swift in Sources */,
 				ADE416592911959900133437 /* SetThreshold.swift in Sources */,
@@ -879,7 +943,7 @@
 				CODE_SIGN_ENTITLEMENTS = VoMo/VoMo.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: The University of Cincinnati";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 14;
+				CURRENT_PROJECT_VERSION = 15;
 				DEVELOPMENT_ASSET_PATHS = "\"VoMo/Preview Content\"";
 				DEVELOPMENT_TEAM = E3GYNLB224;
 				ENABLE_PREVIEWS = YES;
@@ -900,7 +964,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.3;
+				MARKETING_VERSION = 1.4;
 				PRODUCT_BUNDLE_IDENTIFIER = edu.uc.vomo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = edu.uc.vomo;
@@ -918,7 +982,7 @@
 				CODE_SIGN_ENTITLEMENTS = VoMo/VoMo.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: The University of Cincinnati";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 14;
+				CURRENT_PROJECT_VERSION = 15;
 				DEVELOPMENT_ASSET_PATHS = "\"VoMo/Preview Content\"";
 				DEVELOPMENT_TEAM = E3GYNLB224;
 				ENABLE_PREVIEWS = YES;
@@ -939,7 +1003,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.3;
+				MARKETING_VERSION = 1.4;
 				PRODUCT_BUNDLE_IDENTIFIER = edu.uc.vomo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = edu.uc.vomo;

@@ -37,7 +37,7 @@ struct HBarChart: View {
                                      index: index,
                                      gradientColor: self.style.foregroundColor.rotate(for: index),
                                       touchLocation: self.touchLocation, fullValue: chartData.points[index], label: chartData.values[index])
-                            .scaleEffect(self.getScaleSize(touchLocation: self.touchLocation, index: index), anchor: .bottom)
+                            //.scaleEffect(self.getScaleSize(touchLocation: self.touchLocation, index: index), anchor: .bottom)
                             .animation(Animation.easeInOut(duration: 0.2), value: 0.1)
                         /*
                         Text("\(chartData.values[index])")

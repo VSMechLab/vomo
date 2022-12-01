@@ -20,7 +20,6 @@ struct RecordingsList: View {
         }
     }
     
-    
     func delete(at offsets: IndexSet) {
             
         var urlsToDelete = [URL]()

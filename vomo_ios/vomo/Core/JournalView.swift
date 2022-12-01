@@ -127,6 +127,27 @@ struct JournalView: View {
                     }
                 }
             }
+            
+            VStack {
+                Spacer()
+                if focused {
+                    Button(action: {
+                        focused = false
+                    }) {
+                        HStack {
+                            Text("DONE")
+                                .font(._bodyCopyBold)
+                                .foregroundColor(Color.DARK_PURPLE)
+                                .padding()
+                                .background(Color.INPUT_FIELDS)
+                                .cornerRadius(10)
+                                .shadow(color: Color.black.opacity(0.5), radius: 1)
+                                .padding()
+                            Spacer()
+                        }
+                    }
+                }
+            }
         }
         .onChange(of: focused) { focus in
             settings.keyboardShown = focus
@@ -173,12 +194,14 @@ extension JournalView {
                 .padding(.top, 10)
             } else {
                 Button("ADD NOTE") {
-                    self.entries.journals.append(JournalModel(createdAt: .now, noteName:  self.name, note: self.note, star: false))
+                    self.entries.journals.append(JournalModel(createdAt: .now, noteName:  self.name, note: self.note, favorite: false))
                     self.name = ""
                     self.note = ""
                     submitAnimation = true
                     
-                    if settings.isActive() { settings.journalEntered += 1 }
+                    if settings.isActive() && settings.journalsPerWeek != 0 {
+                        settings.journalEntered += 1
+                    }
                 }.buttonStyle(SubmitButton())
                 .padding(.top, 10)
             }

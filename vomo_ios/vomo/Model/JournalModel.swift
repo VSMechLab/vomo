@@ -11,12 +11,12 @@ class JournalModel: Identifiable, Codable {
     var createdAt: Date
     var noteName: String
     var note: String
-    var star: Bool
+    var favorite: Bool
     
-    init(createdAt: Date, noteName: String, note: String, star: Bool) {
+    init(createdAt: Date, noteName: String, note: String, favorite: Bool) {
         self.createdAt = createdAt
         self.noteName = noteName
         self.note = note
-        self.star = star
+        self.favorite = favorite
     }
 }

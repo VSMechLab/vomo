@@ -55,6 +55,14 @@ class Notification: ObservableObject {
         }
     }
     
+    /// Gets status to ask you to turn on notifications again
+    func getStatus() -> Bool {
+        guard let settings = UIApplication.shared.currentUserNotificationSettings else {
+            return false
+        }
+        return settings.types.intersection([.alert, .badge, .sound]).isEmpty != true
+    }
+    
     /// Requests permission
     func requestPermission() {
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { success, error in

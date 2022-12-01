@@ -23,6 +23,21 @@ struct SubmitButton: ButtonStyle {
     }
 }
 
+struct GraySubmitButton: ButtonStyle {
+    let button_img = "VM_Gradient-Btn"
+    func makeBody(configuration: Configuration) -> some View {
+        ZStack {
+            Image(button_img)
+                .resizable()
+                .frame(width: 250, height: 46)
+            
+            configuration.label
+                .font(._BTNCopyUnbold)
+                .foregroundColor(Color.INPUT_FIELDS)
+        }
+    }
+}
+
 struct SubmitButtonView: View {
     var body: some View {
         Button("Press Me") {

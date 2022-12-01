@@ -50,15 +50,15 @@ struct Graph: View {
     /// Returns surveys recorded in a given time frame
     /// only accounts for vhi for now, vocal effort later
     func surveysEntered(start: Date, end: Date) -> Double {
-        var ret = 0.0
+        //var ret = 0.0
         let fakeData: [QuestionnaireModel] = [
-            QuestionnaireModel(createdAt: .now, responses: [0, 1, 2, 3, 4, 5, 6, 7,  8, 9, 10, 22], star: false),
-            QuestionnaireModel(createdAt: .now, responses: [0, 1, 2, 3, 4, 5, 6, 7,  8, 9, 10, 22], star: false),
-            QuestionnaireModel(createdAt: .now, responses: [0, 1, 2, 3, 4, 5, 6, 7,  8, 9, 10, 22], star: false),
-            QuestionnaireModel(createdAt: .now, responses: [0, 1, 2, 3, 4, 5, 6, 7,  8, 9, 10, 22], star: false)
+            QuestionnaireModel(createdAt: .now, responses: [0, 1, 2, 3, 4, 5, 6, 7,  8, 9, 10, 22], favorite: false),
+            QuestionnaireModel(createdAt: .now, responses: [0, 1, 2, 3, 4, 5, 6, 7,  8, 9, 10, 22], favorite: false),
+            QuestionnaireModel(createdAt: .now, responses: [0, 1, 2, 3, 4, 5, 6, 7,  8, 9, 10, 22], favorite: false),
+            QuestionnaireModel(createdAt: .now, responses: [0, 1, 2, 3, 4, 5, 6, 7,  8, 9, 10, 22], favorite: false)
         ]
         
-        for data in fakeData {
+        for _ in fakeData {
             print("worth")
         }
         

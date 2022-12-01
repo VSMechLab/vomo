@@ -322,6 +322,9 @@ class Settings: ObservableObject {
             if self.rainbow {
                 ret += ["rainbow"]
             }
+            if ret.isEmpty {
+                ret += ["vowel", "mpt", "rainbow"]
+            }
         case 1:
             ret += ["vowel", "mpt", "rainbow"]
         case 2:
@@ -348,32 +351,46 @@ class Settings: ObservableObject {
         return ret
     }
     
-    var availableSurveys: [String] {
-        var ret: [String] = []
+    func setSurveys() {
+        //var ret: [String] = []
         switch focusSelection {
         case 0:
             if self.vhi {
-                ret += ["vhi"]
+                //ret += ["vhi"]
             }
             if self.vocalEffort {
-                ret += ["vocal_effort"]
+                //ret += ["ve"]
             }
         case 1:
-            ret += ["vhi", "ve"]
+            //ret += ["vhi", "ve"]
+            self.vhi = true
+            self.vocalEffort = true
         case 2:
-            ret += ["vhi", "ve"]
+            //ret += ["vhi", "ve"]
+            self.vhi = true
+            self.vocalEffort = true
         case 3:
-            ret += ["ve"]
+            //ret += ["ve"]
+            self.vhi = false
+            self.vocalEffort = true
         case 4:
-            ret += ["ve"]
+            //ret += ["ve"]
+            self.vhi = false
+            self.vocalEffort = true
         case 5:
-            ret += ["vhi", "ve"]
+            //ret += ["vhi", "ve"]
+            self.vhi = true
+            self.vocalEffort = true
         case 6:
-            ret += ["vhi", "ve"]
+            //ret += ["vhi", "ve"]
+            self.vhi = true
+            self.vocalEffort = true
         default:
-            ret += ["vhi", "vocal_effort"]
+            //ret += ["vhi", "ve"]
+            self.vhi = true
+            self.vocalEffort = true
         }
-        return ret
+        //return ret
     }
 }
 

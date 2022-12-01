@@ -263,7 +263,7 @@ extension RecordView {
     }
     
     private var promptPlaybackButton: some View {
-        Button("PLAY EXAMPLE") {
+        Button("Hear an example") {
             if self.audioPlayerPrerecordings?.isPlaying == true {
                 self.audioPlayerPrerecordings?.stop()
             } else {
