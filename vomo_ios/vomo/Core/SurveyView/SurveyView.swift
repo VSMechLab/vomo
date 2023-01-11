@@ -20,6 +20,8 @@ struct SurveyView: View {
     @State var timeRemaining = 2
     let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
         
+    @State private var showMissing = false
+    @State private var remainingQuestions: [String] = []
     
     var body: some View {
         ZStack {
@@ -118,12 +120,12 @@ extension SurveyView {
     
     private var vhiSection: some View {
         Group {
-            Text("VHI")
+            /*Text("VHI")
                 .font(._subTitle)
                 .foregroundColor(Color.BODY_COPY)
                 .multilineTextAlignment(.leading)
                 .padding(.top)
-            
+            */
             Text("Vocal Handicap Index (VHI)-10")
                 .foregroundColor(.black)
                 .font(._title)
@@ -139,12 +141,12 @@ extension SurveyView {
     
     private var veSection: some View {
         Group {
-            Text("Vocal Effort Rating")
+            /*Text("Vocal Effort Rating")
                 .font(._subTitle)
                 .foregroundColor(Color.BODY_COPY)
                 .multilineTextAlignment(.leading)
                 .padding(.top)
-            
+            */
             Text("Vocal Effort Rating")
                 .foregroundColor(.black)
                 .font(._title)
@@ -153,27 +155,107 @@ extension SurveyView {
                 if element == "How much physical effort did it take to make a voice?" || element == "How much mental effort did it take to make a voice?" {
                     VEScale(responses: self.$responses, prompt: element, index: index)
                         .frame(width: svm.content_width * 0.975)
-                        .onAppear() {
-                            print("responses: \(responses), prompt: \(element)")
-                        }
                 }
             }
         }
     }
     
     private var submitButton: some View {
-        HStack {
-            Spacer()
-            Button("Submit") {
-                self.entries.questionnaires.append(QuestionnaireModel(createdAt: .now, responses: self.responses, favorite: false))
-                responses = []
-                submitAnimation = true
-                
-                if settings.isActive() && settings.surveysPerWeek != 0 {
-                    settings.surveyEntered += 1
+        VStack {
+            if showMissing {
+                HStack {
+                    Text("Please answer the following...")
+                        .font(._CTALink)
+                        .foregroundColor(Color.red)
+                    Spacer()
                 }
-            }.buttonStyle(SubmitButton())
-            Spacer()
+                
+                VStack {
+                    ForEach(remainingQuestions, id: \.self) { text in
+                        HStack {
+                            Text(text)
+                                .font(._CTALink)
+                            Spacer()
+                        }
+                    }
+                }
+            }
+            
+            HStack {
+                Spacer()
+                
+                if submitable() || settings.allowIncompleteSurvey {
+                    Button("Submit") {
+                        self.showMissing = false
+                        self.entries.questionnaires.append(QuestionnaireModel(createdAt: .now, responses: self.responses, favorite: false))
+                        responses = []
+                        submitAnimation = true
+                        
+                        if settings.isActive() && settings.surveysPerWeek != 0 {
+                            settings.surveyEntered += 1
+                        }
+                    }.buttonStyle(SubmitButton())
+                } else {
+                    Button("Submit") {
+                        self.showMissing = true
+                        findRemaining()
+                    }.buttonStyle(GraySubmitButton())
+                }
+                Spacer()
+            }
+        }
+    }
+    
+    func submitable() -> Bool {
+        var ret = true
+        
+        if settings.vhi && settings.vocalEffort {
+            for resp in responses {
+                if resp == -1 {
+                    ret = false
+                }
+            }
+        } else if settings.vhi && !settings.vocalEffort {
+            for index in 0..<10 {
+                if responses[index] == -1 {
+                    ret = false
+                }
+            }
+        } else if !settings.vhi && settings.vocalEffort {
+            if responses.count == 12 {
+                print(responses.count)
+                if responses[10] == -1 || responses[11] == -1 {
+                    ret = false
+                }
+            }
+        }
+        
+        return ret
+    }
+    
+    func findRemaining() {
+        self.remainingQuestions.removeAll()
+        
+        if settings.vhi && settings.vocalEffort {
+            for index in 0..<responses.count {
+                if responses[index] == -1 {
+                    remainingQuestions.append(svm.questions[index])
+                }
+            }
+        } else if settings.vhi && !settings.vocalEffort {
+            for index in 0..<10 {
+                if responses[index] == -1 {
+                    remainingQuestions.append(svm.questions[index])
+                }
+            }
+        } else if !settings.vhi && settings.vocalEffort {
+            if responses.count == 12 {
+                for index in 10...11 {
+                    if responses[index] == -1 {
+                        remainingQuestions.append(svm.questions[index])
+                    }
+                }
+            }
         }
     }
 }

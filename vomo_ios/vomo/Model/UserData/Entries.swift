@@ -25,6 +25,32 @@ class Entries: ObservableObject {
     @Published var focusDayExercise: Int = 0
     @Published var preciseRecord: Date = .now
     
+    var journalsThisWeek: Int {
+        var ret = 0
+        
+        let startOfWeek = Date.now.startOfWeek ?? .now
+        
+        for journal in journals {
+            if journal.createdAt < startOfWeek {
+                ret += 1
+            }
+        }
+        return ret
+    }
+    
+    var surveysThisWeek: Int {
+        var ret = 0
+        
+        let startOfWeek = Date.now.startOfWeek ?? .now
+        
+        for survey in questionnaires {
+            if survey.createdAt < startOfWeek {
+                ret += 1
+            }
+        }
+        return ret
+    }
+    
     func totalDays(recordings: [Recording], journals: [JournalModel], questionnaires: [QuestionnaireModel]) -> [Date] {
         
         var returnable: [Date] = []

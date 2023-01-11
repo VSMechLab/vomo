@@ -69,13 +69,19 @@ extension ProgressView {
             filteredList = []
             var usedDates: [String] = []
             for index in 0..<audioRecorder.recordings.count {
-                if filters.contains("vowel") && audioRecorder.taskNum(selection: 1, file: audioRecorder.recordings[index].fileURL) {
+                
+                if filters.contains("Vowel") &&
+                    audioRecorder.taskNum(selection: 1, file: audioRecorder.recordings[index].fileURL)
+                {
+                    
+                    
+                    
                     usedDates.append(audioRecorder.recordings[index].createdAt.toDay())
                 }
-                if filters.contains("mpt") && audioRecorder.taskNum(selection: 2, file: audioRecorder.recordings[index].fileURL) {
+                if filters.contains("Duration") && audioRecorder.taskNum(selection: 2, file: audioRecorder.recordings[index].fileURL) {
                     usedDates.append(audioRecorder.recordings[index].createdAt.toDay())
                 }
-                if filters.contains("rainbow") && audioRecorder.taskNum(selection: 3, file: audioRecorder.recordings[index].fileURL) {
+                if filters.contains("Rainbow") && audioRecorder.taskNum(selection: 3, file: audioRecorder.recordings[index].fileURL) {
                     usedDates.append(audioRecorder.recordings[index].createdAt.toDay())
                 }
                 if filters.contains("Favorite") {
@@ -212,10 +218,13 @@ extension ProgressView {
         
         if count != -1 {
             if type == "record" {
+                print("From recording lvl: \(audioRecorder.recordings[count].createdAt)\nFrom processings lvl: \(audioRecorder.processedData[count].createdAt)")
+                //print(audioRecorder.recordings)
+                //print(audioRecorder.processedData)
                 if audioRecorder.recordings[count].createdAt == createdAt && audioRecorder.processedData[count].createdAt == createdAt {
                     
+                    audioRecorder.deleteRecording(urlToDelete: audioRecorder.recordings[count].fileURL)
                     audioRecorder.processedData.remove(at: count)
-                    audioRecorder.recordings.remove(at: count)
                     
                     print("deleting record")
                     self.reset.toggle()
@@ -224,7 +233,6 @@ extension ProgressView {
                 if entries.questionnaires[count].createdAt == createdAt {
                     
                     entries.questionnaires.remove(at: count)
-                    entries.questionnaires.remove(at: count)
                     
                     print("deleting survey")
                     self.reset.toggle()
@@ -232,7 +240,6 @@ extension ProgressView {
             } else if type == "journal" {
                 if entries.journals[count].createdAt == createdAt {
                     
-                    entries.journals.remove(at: count)
                     entries.journals.remove(at: count)
                     
                     print("deleting journal")

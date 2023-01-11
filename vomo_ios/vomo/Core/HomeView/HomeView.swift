@@ -13,8 +13,13 @@ import SwiftUI
 /// Fix goal section spacing
 
 struct HomeView: View {
+    @EnvironmentObject var entries: Entries
     @EnvironmentObject var viewRouter: ViewRouter
     @EnvironmentObject var settings: Settings
+    @EnvironmentObject var audioRecorder: AudioRecorder
+    
+    @State private var totalProgress = true
+    
     let svm = SharedViewModel()
     var body: some View {
         quickLinks
@@ -77,8 +82,10 @@ extension HomeView {
         HStack(spacing: 0) {
             Spacer()
             Text("Progress ")
-                .foregroundColor(Color.DARK_PURPLE)
-            Text("for this week")
+            Button(totalProgress ? "towards goal" : "for this week") {
+                self.totalProgress.toggle()
+            }
+            .foregroundColor(Color.DARK_PURPLE)
             Text(".")
                 .foregroundColor(Color.TEAL)
             Spacer()
@@ -94,9 +101,15 @@ extension HomeView {
             ZStack {
                 ProgressBar(level: settings.recordProgress, color: Color.DARK_PURPLE)
                 
-                Image(svm.home_record_img)
-                    .resizable()
-                    .frame(width: 90, height: 90, alignment: .center)
+                if totalProgress {
+                    Image(svm.home_record_img)
+                        .resizable()
+                        .frame(width: 90, height: 90, alignment: .center)
+                } else {
+                    Text("\(audioRecorder.recordingsThisWeek())/\(settings.recordPerWeek)\nentered")
+                        .font(._subHeadline)
+                        .frame(width: 90, height: 90, alignment: .center)
+                }
             }
         }
         .frame(width: svm.content_width)
@@ -111,9 +124,15 @@ extension HomeView {
                 ZStack {
                     ProgressBar(level: settings.surveyProgress, color: Color.BLUE)
                     
-                    Image(svm.home_question_img)
-                        .resizable()
-                        .frame(width: 90, height: 90, alignment: .center)
+                    if totalProgress {
+                        Image(svm.home_question_img)
+                            .resizable()
+                            .frame(width: 90, height: 90, alignment: .center)
+                    } else {
+                        Text("\(entries.surveysThisWeek)/\(settings.surveysPerWeek)\nentered")
+                            .font(._subHeadline)
+                            .frame(width: 90, height: 90, alignment: .center)
+                    }
                 }
             }
             Spacer()
@@ -123,9 +142,15 @@ extension HomeView {
                 ZStack {
                     ProgressBar(level: settings.journalProgress, color: Color.TEAL)
                     
-                    Image(svm.home_journal_img)
-                        .resizable()
-                        .frame(width: 90, height: 90, alignment: .center)
+                    if totalProgress {
+                        Image(svm.home_journal_img)
+                            .resizable()
+                            .frame(width: 90, height: 90, alignment: .center)
+                    } else {
+                        Text("\(entries.journalsThisWeek)/\(settings.journalsPerWeek)\nentered")
+                            .font(._subHeadline)
+                            .frame(width: 90, height: 90, alignment: .center)
+                    }
                 }
             }
             Spacer()

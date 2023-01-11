@@ -11,7 +11,7 @@ import Foundation
 extension String {
     func toFullDate() -> Date? {
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "dd/MM/yyyy HH:mm"
+        dateFormatter.dateFormat = "MM/dd/yyyy HH:mm"
         dateFormatter.timeZone = TimeZone.current
         dateFormatter.locale = Locale.current
         return dateFormatter.date(from: self) // replace Date String

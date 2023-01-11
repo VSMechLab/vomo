@@ -52,6 +52,9 @@ struct StarButton: View {
         Button(action: {
             if type == "record" {
                 for index in 0..<audioRecorder.processedData.count {
+                    print("got here")
+                    print("Date \(date), \(audioRecorder.processedData[index].createdAt)")
+                    
                     if audioRecorder.processedData[index].createdAt == date {
                         audioRecorder.processedData[index].favorite.toggle()
                         star = audioRecorder.processedData[index].favorite
@@ -79,6 +82,8 @@ struct StarButton: View {
             Image(star ? svm.heart_img : svm.heart_gray_img)
                 .resizable()
                 .frame(width: 20, height: 20)
+                .shadow(color: star ? Color.white : Color.clear, radius: 1)
+                .opacity(star ? 1.0 : 0.7)
         }
         .onAppear() {
             reconfig()

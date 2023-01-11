@@ -15,11 +15,14 @@ import UIKit
  */
 
 struct ViewController: View {
+    @EnvironmentObject var audioRecorder: AudioRecorder
     @EnvironmentObject var viewRouter: ViewRouter
     @EnvironmentObject var notification: Notification
     @EnvironmentObject var settings: Settings
     @State private var variablePadding: CGFloat = 0
     let svm = SharedViewModel()
+    
+    @FocusState private var focused: Bool
     
     var body: some View {
         VStack(spacing: 0) {
@@ -27,7 +30,7 @@ struct ViewController: View {
             
             Spacer()
             
-            if !settings.keyboardShown && viewRouter.currentPage != .onboard && viewRouter.currentPage != .home {
+            if !settings.keyboardShown && viewRouter.currentPage != .onboard && viewRouter.currentPage != .home && !focused {
                 tabBar
                     .padding(.bottom, self.variablePadding)
             }
@@ -47,6 +50,10 @@ struct ViewController: View {
             }
             notification.requestPermission()
             notification.updateNotifications(triggers: settings.triggers())
+        }
+        
+        .onChange(of: audioRecorder.recording) { _ in
+            print(audioRecorder.recording)
         }
     }
 }
@@ -83,9 +90,7 @@ extension ViewController {
     */
     private var tabBar: some View {
         HStack {
-            Button(action: {
-                viewRouter.currentPage = .home
-            }) {
+            if audioRecorder.recording {
                 VStack(spacing: 5) {
                     Image(svm.home_icon)
                         .tabImage()
@@ -94,11 +99,7 @@ extension ViewController {
                         .font(Font._tabTitle)
                         .foregroundColor(Color.gray)
                 }.frame(width: UIScreen.main.bounds.width / 3)
-            }
-            
-            Button(action: {
-                viewRouter.currentPage = .record
-            }) {
+                
                 VStack(spacing: 5) {
                     Image(viewRouter.currentPage == .record ? svm.record_icon : svm.selected_record_icon)
                         .resizable()
@@ -108,10 +109,7 @@ extension ViewController {
                         .font(Font._tabTitle)
                         .foregroundColor(viewRouter.currentPage == .record ? Color.DARK_PURPLE : Color.gray)
                 }.frame(width: UIScreen.main.bounds.width / 3)
-            }
-            Button(action: {
-                viewRouter.currentPage = .progress
-            }) {
+                
                 VStack(spacing: 5) {
                     Image(viewRouter.currentPage == .progress ? svm.selected_progress_icon : svm.progress_icon)
                         .resizable()
@@ -121,7 +119,48 @@ extension ViewController {
                         .font(Font._tabTitle)
                         .foregroundColor(viewRouter.currentPage == .progress ? Color.DARK_PURPLE : Color.gray)
                 }.frame(width: UIScreen.main.bounds.width / 3)
+            } else {
+                Button(action: {
+                    viewRouter.currentPage = .home
+                }) {
+                    VStack(spacing: 5) {
+                        Image(svm.home_icon)
+                            .tabImage()
+                        
+                        Text("HOME")
+                            .font(Font._tabTitle)
+                            .foregroundColor(Color.gray)
+                    }.frame(width: UIScreen.main.bounds.width / 3)
+                }
+                
+                Button(action: {
+                    viewRouter.currentPage = .record
+                }) {
+                    VStack(spacing: 5) {
+                        Image(viewRouter.currentPage == .record ? svm.record_icon : svm.selected_record_icon)
+                            .resizable()
+                            .frame(width: 20.0, height: 27.5)
+                        
+                        Text("RECORDING")
+                            .font(Font._tabTitle)
+                            .foregroundColor(viewRouter.currentPage == .record ? Color.DARK_PURPLE : Color.gray)
+                    }.frame(width: UIScreen.main.bounds.width / 3)
+                }
+                Button(action: {
+                    viewRouter.currentPage = .progress
+                }) {
+                    VStack(spacing: 5) {
+                        Image(viewRouter.currentPage == .progress ? svm.selected_progress_icon : svm.progress_icon)
+                            .resizable()
+                            .frame(width: 35, height: 27.5)
+                        
+                        Text("PROGRESS")
+                            .font(Font._tabTitle)
+                            .foregroundColor(viewRouter.currentPage == .progress ? Color.DARK_PURPLE : Color.gray)
+                    }.frame(width: UIScreen.main.bounds.width / 3)
+                }
             }
+            
         }
         .font(._tabBarFont)
         .frame(width: UIScreen.main.bounds.width)

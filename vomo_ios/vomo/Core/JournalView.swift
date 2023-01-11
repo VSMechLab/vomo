@@ -60,6 +60,7 @@ struct JournalView: View {
                                     .resizable()
                                     .frame(width: svm.content_width, height: 175)
                                 
+                                
                                 HStack(spacing: 0) {
                                     VStack(spacing: 0) {
                                         Text(self.note.isEmpty ? "Write your note..." : "")
@@ -72,11 +73,24 @@ struct JournalView: View {
                                     Spacer()
                                 }
                                 
-                                TextEditor(text: self.$note)
-                                    .font(self.note.isEmpty ? ._fieldCopyItalic : ._fieldCopyRegular)
-                                    .focused($focused)
-                                    .font(._fieldCopyRegular)
-                                    .padding(.leading, 5)
+                                
+                                if #available(iOS 16.0, *) {
+                                    TextEditor(text: self.$note)
+                                        .font(self.note.isEmpty ? ._fieldCopyItalic : ._fieldCopyRegular)
+                                        .focused($focused)
+                                        .font(._fieldCopyRegular)
+                                        .padding(.leading, 5)
+                                        .scrollContentBackground(.hidden)
+                                        .background(Color.INPUT_FIELDS)
+                                } else {
+                                    // Fallback on earlier versions
+                                    TextEditor(text: self.$note)
+                                        .font(self.note.isEmpty ? ._fieldCopyItalic : ._fieldCopyRegular)
+                                        .focused($focused)
+                                        .font(._fieldCopyRegular)
+                                        .padding(.leading, 5)
+                                        .background(Color.INPUT_FIELDS)
+                                }
                             }
                             .frame(height: 175)
                             .padding(.top, 5)
@@ -128,22 +142,23 @@ struct JournalView: View {
                 }
             }
             
-            VStack {
+            VStack(spacing: 0) {
                 Spacer()
                 if focused {
                     Button(action: {
                         focused = false
                     }) {
                         HStack {
+                            Spacer()
                             Text("DONE")
                                 .font(._bodyCopyBold)
                                 .foregroundColor(Color.DARK_PURPLE)
-                                .padding()
+                                .padding(5)
                                 .background(Color.INPUT_FIELDS)
                                 .cornerRadius(10)
-                                .shadow(color: Color.black.opacity(0.5), radius: 1)
-                                .padding()
-                            Spacer()
+                                .shadow(color: Color.black.opacity(0.5), radius: 2)
+                                .padding(2)
+                                .padding(.bottom, -10)
                         }
                     }
                 }
@@ -153,15 +168,6 @@ struct JournalView: View {
             settings.keyboardShown = focus
         }
         .focused($focused)
-        .toolbar {
-            ToolbarItemGroup(placement: .keyboard) {
-                Button("Done") {
-                    focused = false
-                }
-                .font(._subHeadline)
-                .foregroundColor(Color.DARK_PURPLE)
-            }
-        }
     }
 }
 

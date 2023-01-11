@@ -34,7 +34,9 @@ struct OnboardView: View {
                     CustomTargetView()
                 }
             case 4:
+                Spacer()
                 GoalEntryView()
+                Spacer()
             default:
                 Text("error state")
             }

@@ -14,25 +14,29 @@ import Accelerate // CHANGED: imported for vector math
 import AudioKit // CHANGED: also a package dependency
 import AVFAudio
 
-class AudioRecorder: NSObject,ObservableObject {
-    var processings = Processings()
+struct Processings {
+    var duration = Float(0) // Seconds
+    var intensity = Float(0) // Decibels
+    var pitch_mean = Float(0) // Hertz
+    var pitch_min = Float(0) // Hertz
+    var pitch_max = Float(0) // Hertz
+}
+
+class AudioRecorder: NSObject, ObservableObject {
     
-    @Published var processedData: [ProcessedData] = [] {
+    // Attributes
+    let processedDataKey: String = "saved_data"
+    let objectWillChange = PassthroughSubject<AudioRecorder, Never>()
+    var audioRecorder: AVAudioRecorder!
+    var recordings = [Recording]()
+    var recording = false {
+        didSet { objectWillChange.send(self) }
+    }
+    var processedData: [ProcessedData] = [] {
         didSet { saveProcessedData() }
     }
-    let processedDataKey: String = "saved_data"
-    func getProcessedData() {
-        guard
-            let data = UserDefaults.standard.data(forKey: processedDataKey),
-            let savedItems = try? JSONDecoder().decode([ProcessedData].self, from: data)
-        else { return }
-        self.processedData = savedItems
-    }
-    func saveProcessedData() {
-        if let encodedData = try? JSONEncoder().encode(processedData) {
-            UserDefaults.standard.set(encodedData, forKey: processedDataKey)
-        }
-    }
+    // Q: What is this used for?
+    var processings = Processings()
     
     override init() {
         super.init()
@@ -40,26 +44,38 @@ class AudioRecorder: NSObject,ObservableObject {
         getProcessedData()
     }
     
+    func setProcessedData(recording: Recording, metrics: [Float]) {
+        self.processedData.append(ProcessedData(createdAt: recording.createdAt,
+                                                duration: metrics[0],
+                                                intensity: metrics[1],
+                                                pitch_mean: metrics[2],
+                                                pitch_min: metrics[3],
+                                                pitch_max: metrics[4],
+                                                favorite: false))
+    }
+    
+    func getProcessedData() {
+        guard
+            let data = UserDefaults.standard.data(forKey: processedDataKey),
+            let savedItems = try? JSONDecoder().decode([ProcessedData].self, from: data)
+        else { return }
+        self.processedData = savedItems
+    }
+    
+    func saveProcessedData() {
+        if let encodedData = try? JSONEncoder().encode(processedData) {
+            UserDefaults.standard.set(encodedData, forKey: processedDataKey)
+        }
+    }
+    
     func returnProcessing(createdAt: Date) -> ProcessedData {
-        var ret = ProcessedData(createdAt: .now, duration: 99.1, intensity: 99.1, pitch_mean: 99.1, favorite: false)
+        var ret = ProcessedData(createdAt: .now, duration: -1.0, intensity: -1.0, pitch_mean: -1.0, pitch_min: -1.0, pitch_max: -1.0, favorite: false)
         for data in processedData {
             if createdAt == data.createdAt {
-                ret = ProcessedData(createdAt: data.createdAt, duration: data.duration, intensity: data.intensity, pitch_mean: data.pitch_mean, favorite: false)
+                ret = ProcessedData(createdAt: data.createdAt, duration: data.duration, intensity: data.intensity, pitch_mean: data.pitch_mean, pitch_min: data.pitch_min, pitch_max: data.pitch_max, favorite: false)
             }
         }
         return ret
-    }
-    
-    let objectWillChange = PassthroughSubject<AudioRecorder, Never>()
-    
-    var audioRecorder: AVAudioRecorder!
-    
-    var recordings = [Recording]()
-    
-    var recording = false {
-        didSet {
-            objectWillChange.send(self)
-        }
     }
     
     func startRecording(taskNum: Int) {
@@ -98,10 +114,22 @@ class AudioRecorder: NSObject,ObservableObject {
         fetchRecordings()
     }
     
-    func process(fileURL: URL) -> Processings {
-        let metrics = signalProcess(fileURL: fileURL)
+    func process(recording rec: Recording) {
+        let group = DispatchGroup()
+        let labelGroup = String("test")
         
-        return Processings(duration: metrics[0], intensity: metrics[1], pitch_mean: metrics[2], pitch_min: 1.0, pitch_max: 1.0)
+        group.enter()
+        
+        let dispatchQueue = DispatchQueue(label: labelGroup, qos: .background)
+        dispatchQueue.async(group: group, execute: {
+            let metrics = self.signalProcess(fileURL: rec.fileURL)
+            self.setProcessedData(recording: rec, metrics: metrics)
+        })
+        
+        group.leave()
+        group.notify(queue: DispatchQueue.main, execute: {
+            print("Task completed!")
+        })
     }
     
     func returnCreatedAt(fileURL: URL) -> Date {
@@ -218,6 +246,19 @@ class AudioRecorder: NSObject,ObservableObject {
         }
     }
     
+    func recordingsThisWeek() -> Int {
+        var ret = 0
+        
+        let startOfWeek: Date = .now.startOfWeek ?? .now
+        for record in recordings {
+            if record.createdAt > startOfWeek {
+                ret += 1
+            }
+        }
+        
+        return ret
+    }
+    
     func saveFile(file: URL!) -> Void {
          do {
              let data = try Data.init(contentsOf: file!)
@@ -236,6 +277,43 @@ class AudioRecorder: NSObject,ObservableObject {
         
         // UIApplication.shared.windows.first?.rootViewController?.present(av, animated: true, completion: nil)
      }
+    
+    func syncEntries() {
+        // Determine if the same amount, if not will further process
+        if recordings.count != processedData.count {
+            print("Mismatch in data\n\n\n\n\n")
+            
+            // On the condition that there are more recordings
+            if recordings.count > processedData.count {
+                
+                
+                
+                // Loop through recordings
+                for record in recordings {
+                    /// 0 if no matches, 1 if a match
+                    var count = 0
+                    
+                    for process in processedData {
+                        
+                        // if there is a match change var to 1
+                        if record.createdAt == process.createdAt {
+                            
+                            count += 1
+                            print("match")
+                        }
+                    }
+                    
+                    // if there was a match on none of these then reprocess this file and add to proccessedData
+                    if count == 0 {
+                        print("Performed a reproccessing on this file: \(record.createdAt)")
+                        
+                        let processings = process(recording: record)
+                        saveProcessedData()
+                    }
+                }
+            }
+        }
+    }
 }
 
 func getCreationDate(for file: URL) -> Date {
@@ -299,82 +377,3 @@ extension AudioRecorder {
     func filterRecordingsDay(focus: Date) -> [Recording] { return [] }
     func filterRecordingsDayExercise(focus: Date, taskNum: Int) -> [Recording] { return [] }
 }
-
-class ProcessedData: Identifiable, Codable {
-    var createdAt: Date
-    /// Value of duration measured in seconds
-    var duration: Float
-    var intensity: Float
-    /// Mean value of pitch measured in decibles
-    var pitch_mean: Float
-    /// Boolean value of wether or not the entry is started
-    /// to remove this delete the line bellow and debug until working again
-    var favorite: Bool
-    
-    init(createdAt: Date, duration: Float, intensity: Float, pitch_mean: Float, favorite: Bool) {
-        self.createdAt = createdAt
-        self.duration = duration
-        self.intensity = intensity
-        self.pitch_mean = pitch_mean
-        self.favorite = favorite
-    }
-}
-
-struct Recording {
-    let fileURL: URL
-    let createdAt: Date
-    
-    var taskNum: Int {
-        var taskNum = 0
-        taskNum = Int(String(fileURL.lastPathComponent).suffix(5).prefix(1))!
-        return taskNum
-    }
-}
-
-struct Processings {
-    var duration = Float(0) // Seconds
-    var intensity = Float(0) // Decibels
-    var pitch_mean = Float(0) // Hertz
-    var pitch_min = Float(0) // Hertz
-    var pitch_max = Float(0) // Hertz
-}
-
-
-/*
- 
- class RecordingModel: Identifiable, Codable {
-     var createdAt: Date
-     var duration: Float
-     var intensity: Float
-     
-     init(createdAt: Date, duration: Float, intensity: Float) {
-         self.createdAt = createdAt
-         self.duration = duration
-         self.intensity = intensity
-     }
- }
- 
- func filterRecordingsDay(focus: Date) -> [Recording] {
-     var filtered: [Recording] = []
-     for day in recordings {
-         if day.createdAt.toDay() == focus.toDay() {
-             filtered.append(day)
-         }
-     }
-     return filtered
- }
- 
- func filterRecordingsDayExercise(focus: Date, taskNum: Int) -> [Recording] {
-     var filtered: [Recording] = []
-     let standardRight: String = String(taskNum) + ".m4a"
-     var standardLeft: String = ""
-     for day in recordings {
-         standardLeft = String(day.fileURL.lastPathComponent)
-         if day.createdAt.toDay() == focus.toDay() && standardLeft.suffix(5) == standardRight {
-             filtered.append(day)
-         }
-     }
-     return filtered
- }
- */
-

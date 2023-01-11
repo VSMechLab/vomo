@@ -100,7 +100,7 @@ extension Font {
         Font.custom("Roboto-Regular", size: 16)
     }
     static var _question: Font {
-        Font.custom("Roboto-Light", size: 16)
+        Font.custom("Roboto-Light", size: 19)
     }
     static var _scale: Font {
         Font.custom("Roboto-Medium", size: 16)
@@ -138,6 +138,9 @@ extension Font {
     }
     static var questionnaireScale: Font {
         Font.custom("Roboto-Regular", size: 16)
+    }
+    static var _BTNCopyLarge: Font {
+        Font.custom("Roboto-Regular", size: 22)
     }
 }
 

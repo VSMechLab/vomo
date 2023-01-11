@@ -22,17 +22,15 @@ struct VisitRow: View {
     let img: String
     let svm = SharedViewModel()
     
+    @State var deletionTarget: (Date, String) = (.now, "")
+    
     var body: some View {
         ZStack {
             VStack(spacing: 0) {
                 HStack(spacing: 0) {
                     // CHANGED: add date to VStack to hold date and time
-                    VStack(alignment: .leading) {
-                        Text("\(visit.date.toString(dateFormat: "MM/dd/yyyy"))")
-                        
-                        Text("\(visit.date.toString(dateFormat: "hh:mm a"))")
-                    }
-                    .padding(.trailing, 15)
+                    Text("\(visit.date.toString(dateFormat: "MM/dd/yyyy"))")
+                        .padding(.trailing, 15)
 
                     Text("\(visit.type)")
                     
@@ -63,6 +61,12 @@ struct VisitRow: View {
                         .padding(.horizontal, 3)
                     
                     HStack {
+                        Text("\(visit.date.toString(dateFormat: "hh:mm a"))")
+                        Spacer()
+                        AltDeleteButton(deletionTarget: $deletionTarget, type: "intervention", date: targetVisit)
+                    }
+                    
+                    HStack {
                         if visit.note == "" {
                             Button(action: {
                                 visit.note = ""
@@ -90,35 +94,31 @@ struct VisitRow: View {
                         }
                 }
             }
-            .toolbar {
-                ToolbarItemGroup(placement: .keyboard) {
-                    Button("Done") {
-                        focused = false
-                    }
-                    .font(._subHeadline)
-                    .foregroundColor(Color.DARK_PURPLE)
-                }
-            }
             
-            VStack {
+            VStack(spacing: 0) {
                 Spacer()
                 if focused {
                     Button(action: {
                         focused = false
                     }) {
                         HStack {
+                            Spacer()
                             Text("DONE")
                                 .font(._bodyCopyBold)
                                 .foregroundColor(Color.DARK_PURPLE)
-                                .padding()
+                                .padding(5)
                                 .background(Color.INPUT_FIELDS)
                                 .cornerRadius(10)
-                                .shadow(color: Color.black.opacity(0.5), radius: 1)
-                                .padding()
-                            Spacer()
+                                .shadow(color: Color.black.opacity(0.5), radius: 2)
+                                .padding(2)
+                                .padding(.bottom, -10)
                         }
                     }
                 }
+            }
+            
+            if deletionTarget.1 != "" {
+                deletePopUpSection
             }
         }
     }
@@ -134,6 +134,81 @@ struct VisitRow: View {
         }
         
         entries.saveInterventions()
+    }
+    
+    /// Sensitive delete function, once performed cannot be recovered
+    /// Seaches through interventions for the proper one to delete matching by date
+    func deleteAtDate(createdAt: Date) {
+        print("delete at \(deletionTarget.0), \(deletionTarget.1)")
+        
+        var type = ""
+        var count = -1
+        
+        if type == "" && count == -1 {
+            for index in 0..<entries.interventions.count {
+                if createdAt == entries.interventions[index].date {
+                    type = "survey"
+                    count = index
+                }
+            }
+        }
+        
+        if count != -1 {
+            if type == "intervention" {
+                if entries.interventions[count].date == createdAt {
+                    
+                    entries.interventions.remove(at: count)
+                    print("deleting intervention")
+                }
+            } else {
+                print("There was a mismatch in data. In order to prevent erroneous deletion of data we have disabled the functionality of deleting this specific entry.")
+            }
+        }
+    }
+}
+
+extension VisitRow {
+    private var deletePopUpSection: some View {
+        ZStack {
+            Color.white
+                .frame(width: svm.content_width * 0.7, height: 200)
+                .shadow(color: Color.gray, radius: 1)
+            
+            VStack(alignment: .leading) {
+                Text("Confim you would like to delete this entry")
+                    .font(._bodyCopyLargeMedium)
+                    .multilineTextAlignment(.leading)
+                Text("\(deletionTarget.1) at: \(deletionTarget.0.toStringDay())")
+                    .font(._bodyCopy)
+                    .multilineTextAlignment(.leading)
+                Spacer()
+                HStack {
+                    Spacer()
+                    Button(action: {
+                        deletionTarget.0 = .now
+                        deletionTarget.1 = ""
+                    }) {
+                        Text("Cancel")
+                            .foregroundColor(Color.red)
+                            .font(._bodyCopyMedium)
+                    }
+                    Spacer()
+                    Button(action: {
+                        deleteAtDate(createdAt: deletionTarget.0)
+                        deletionTarget.0 = .now
+                        deletionTarget.1 = ""
+                    }) {
+                        Text("Yes")
+                            .foregroundColor(Color.green)
+                            .font(._bodyCopyMedium)
+                    }
+                    Spacer()
+                }
+                .padding()
+            }.padding(5)
+            
+                .frame(width: svm.content_width * 0.7, height: 200)
+        }
     }
 }
 

@@ -10,9 +10,13 @@ import SwiftUI
 struct GraphView: View {
     @EnvironmentObject var entries: Entries
     @EnvironmentObject var settings: Settings
+    
+    @Binding var showVHI: Bool
+    @Binding var showVE: Bool
+    
     @State private var hChartData = ChartData([("Recordings", 7.0), ("Surveys", 10.0), ("Journals", 10.0)])
-    var vhiData = ChartData()
-    var veData = ChartData()
+    @State private var vhiData = ChartData()
+    @State private var veData = ChartData()
     static let vhiStyle = ChartStyle(backgroundColor: .clear, foregroundColor: [ColorGradient(.BRIGHT_PURPLE, .BRIGHT_PURPLE), ColorGradient(.clear, .clear)])
     static let veStyle = ChartStyle(backgroundColor: .clear, foregroundColor: [ColorGradient(.TEAL, .TEAL), ColorGradient(.TEAL, .DARK_PURPLE)])
     static let chartStyle = ChartStyle(backgroundColor: .clear, foregroundColor: [ColorGradient(.TEAL, .DARK_PURPLE)])
@@ -40,22 +44,36 @@ struct GraphView: View {
                     .frame(width: svm.content_width * 0.05, height: 155)
                     VStack(spacing: 0) {
                         ZStack {
-                            VStack {
-                                Spacer()
-                                /// VHI
-                                LineChart(index: $index1)
-                                    .data(vhiData.data)
-                                    .chartStyle(GraphView.vhiStyle)
+                            if self.showVHI {
+                                VStack {
+                                    Spacer()
+                                    /// VHI
+                                    LineChart(index: $index1)
+                                        .data(vhiData.data)
+                                        .chartStyle(GraphView.vhiStyle)
+                                        .onAppear() {
+                                            print("VHI: \(vhiData.data)")
+                                        }
+                                }
                             }
-                            VStack {
-                                Spacer()
-                                /// VE
-                                LineChart(index: $index2)
-                                    .data(veData.data)
-                                    .chartStyle(GraphView.veStyle)
+                            if self.showVE {
+                                VStack {
+                                    Spacer()
+                                    /// VE
+                                    LineChart(index: $index2)
+                                        .data(veData.data)
+                                        .chartStyle(GraphView.veStyle)
+                                        .onAppear() {
+                                            print("VE: \(veData.data)")
+                                        }
+                                }
                             }
-                                
-                        }.frame(width: svm.content_width * 0.95, height: 155)
+                        }
+                        .onAppear() {
+                            print("vhi: \(showVHI)")
+                            print("ve: \(showVE)")
+                        }
+                        .frame(width: svm.content_width * 0.95, height: 155)
                     }
                 }
                } else if index == 4 {

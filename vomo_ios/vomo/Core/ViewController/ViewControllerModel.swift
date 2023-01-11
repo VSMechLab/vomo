@@ -19,7 +19,7 @@ class ViewRouter: ObservableObject {
             //currentPage = .home
             
             // Test mode
-            currentPage = .questionnaire
+            currentPage = .onboard
         }
     }
 }

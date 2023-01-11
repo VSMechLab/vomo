@@ -46,7 +46,7 @@ extension InterventionView {
     private var header: some View {
         VStack(spacing: 0) {
             HStack {
-                Text(newVisit ? "Add new visit" : "Visit Log")
+                Text(newVisit ? "Add new intervention" : "Intervention Log")
                     .font(._subHeadline)
                 Spacer()
             }.padding(5)

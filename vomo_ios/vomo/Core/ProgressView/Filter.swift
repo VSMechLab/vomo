@@ -13,6 +13,9 @@ struct Filter: View {
     @Binding var filters: [String]
     @Binding var showFilter: Bool
     let svm = SharedViewModel()
+    
+    //@State private var countOfSelected: Int = 0
+    
     var body: some View {
         VStack {
             header
@@ -22,10 +25,10 @@ struct Filter: View {
                     Color.INPUT_FIELDS.frame(height: 1)
                     
                     Button(action: {
-                        if filters.contains("vowel") {
-                            delete(element: "vowel")
+                        if filters.contains("Vowel") {
+                            delete(element: "Vowel")
                         } else {
-                            self.filters.append("vowel")
+                            self.filters.append("Vowel")
                         }
                     }) {
                         HStack {
@@ -33,36 +36,36 @@ struct Filter: View {
                             Spacer()
                             Text("\(numOfRecords().0) Entries")
                         }
-                        .font(filters.contains("vowel") ? ._bodyCopyBold : ._bodyCopy)
-                        .foregroundColor(filters.contains("vowel") ? Color.DARK_BLUE : Color.BODY_COPY)
+                        .font(filters.contains("Vowel") ? ._bodyCopyBold : ._bodyCopy)
+                        .foregroundColor(filters.contains("Vowel") ? Color.DARK_BLUE : Color.BODY_COPY)
                     }.frame(width: svm.content_width)
                     
                     Color.INPUT_FIELDS.frame(height: 1)
                 }
                 
                 Button(action: {
-                    if filters.contains("mpt") {
-                        delete(element: "mpt")
+                    if filters.contains("Duration") {
+                        delete(element: "Duration")
                     } else {
-                        self.filters.append("mpt")
+                        self.filters.append("Duration")
                     }
                 }) {
                     HStack {
-                        Text("MPT")
+                        Text("Duration")
                         Spacer()
                         Text("\(numOfRecords().1) Entries")
                     }
-                    .font(filters.contains("mpt") ? ._bodyCopyBold : ._bodyCopy)
-                    .foregroundColor(filters.contains("mpt") ? Color.DARK_BLUE : Color.BODY_COPY)
+                    .font(filters.contains("Duration") ? ._bodyCopyBold : ._bodyCopy)
+                    .foregroundColor(filters.contains("Duration") ? Color.DARK_BLUE : Color.BODY_COPY)
                 }.frame(width: svm.content_width)
                 
                 Color.INPUT_FIELDS.frame(height: 1)
                 
                 Button(action: {
-                    if filters.contains("rainbow") {
-                        delete(element: "rainbow")
+                    if filters.contains("Rainbow") {
+                        delete(element: "Rainbow")
                     } else {
-                        self.filters.append("rainbow")
+                        self.filters.append("Rainbow")
                     }
                 }) {
                     HStack {
@@ -70,8 +73,8 @@ struct Filter: View {
                         Spacer()
                         Text("\(numOfRecords().2) Entries")
                     }
-                    .font(filters.contains("rainbow") ? ._bodyCopyBold : ._bodyCopy)
-                    .foregroundColor(filters.contains("rainbow") ? Color.DARK_BLUE : Color.BODY_COPY)
+                    .font(filters.contains("Rainbow") ? ._bodyCopyBold : ._bodyCopy)
+                    .foregroundColor(filters.contains("Rainbow") ? Color.DARK_BLUE : Color.BODY_COPY)
                 }.frame(width: svm.content_width)
                 
                 Color.INPUT_FIELDS.frame(height: 1)
@@ -223,6 +226,13 @@ extension Filter {
         for _ in entries.journals { count += 1 }
         return count
     }
+    /*func countSelected() {
+        countOfSelected = 0
+        
+        if filters.contains("Vowel") {
+            countOfSelected += 1
+        }
+    }*/
     func numOfFavorites() -> Int {
         var count = 0
         for record in audioRecorder.processedData {

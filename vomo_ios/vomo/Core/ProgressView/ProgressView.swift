@@ -21,6 +21,7 @@ struct ProgressView: View {
     @State private var showFilter = false
     @State private var expandAll = false
     @State private var deletePopUp = false
+    @State private var showFavorites = false
     @State var reset = false
     
     let svm = SharedViewModel()
@@ -46,6 +47,26 @@ struct ProgressView: View {
             
             popUpSection
         }
+        
+        
+        /*
+        // do something on deletion of data
+        .onChange(of: audioRecorder.processedData) { _ in
+            print("data has changed")
+        }*/
+        // do something on the appearance of the use of this data
+        .onAppear() {
+            // Show the different createdAt
+            for recording in audioRecorder.recordings {
+                print("Recording: \(recording.createdAt.toStringDay())")
+            }
+            for processing in audioRecorder.processedData {
+                print("Processing: \(processing.createdAt.toStringDay()), \(processing.duration)")
+            }
+            // SYNC data
+            audioRecorder.syncEntries()
+        }
+        
         .onAppear() {
             refilter()
             initializeThresholds()
@@ -60,6 +81,8 @@ struct ProgressView: View {
         .onChange(of: expandAll) { _ in
             refilter()
         }
+        
+        
     }
 }
 
@@ -125,7 +148,7 @@ extension ProgressView {
         ScrollView(showsIndicators: false) {
             VStack(spacing: 0) {
                 ForEach(filteredList.reversed(), id: \.self) { item in
-                    Color.BODY_COPY.frame(height: 1).opacity(0.6)
+                    Color.DARK_PURPLE.frame(height: 5).opacity(0.6)
                     if expandAll || !filters.isEmpty {
                         DayList(element: item, isExpandedList: true, deletionTarget: $deletionTarget)
                     } else if filters.isEmpty {
@@ -169,10 +192,11 @@ extension ProgressView {
     
     private var bodyTitle: some View {
         HStack {
-            Text("Last week")
+            Text("Entries")
                 .font(._title1)
             Spacer()
-            ExpandAllButton(expandAll: $expandAll, reset: $reset)
+            ShowFavoritesButton(filters: $filters, showFavorites: self.$showFavorites, expandAll: $expandAll, reset: self.$reset)
+            ExpandAllButton(filters: $filters, expandAll: $expandAll, showFavorites: $showFavorites, reset: $reset)
             Button(action: {
                 withAnimation() {
                     self.showFilter.toggle()

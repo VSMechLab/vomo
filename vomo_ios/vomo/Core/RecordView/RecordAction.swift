@@ -27,15 +27,19 @@ struct CompleteMenu: View {
                 .font(._recordingPopUp)
                 .padding(.vertical)
             
+            AudioInterface(date: audioRecorder.recordings.last!.createdAt)
+                .padding()
+                .background(Color.BRIGHT_PURPLE)
+            
             HStack {
-                play
+                //play
                 
                 approved
                 
                 tryAgain
             }.padding(.vertical)
         }
-        .frame(width: content_width, height: 150).opacity(0.95)
+        .frame(width: content_width, height: 250).opacity(0.95)
         .background(Color.white.shadow(color: Color.black.opacity(0.2), radius: 5))
     }
 }
@@ -50,7 +54,7 @@ extension CompleteMenu {
                     self.audioPlayer.stopPlayback()
                 }
             }) {
-                Image(audioPlayer.isPlaying ? svm.stop_playback_img : svm.start_playback_img)
+                Image(audioPlayer.isPlaying ? svm.stop : svm.play)
                     .resizable()
                     .frame(width: 40, height: 40)
             }
@@ -65,12 +69,8 @@ extension CompleteMenu {
     private var approved: some View {
         VStack {
             Button(action: {
-                // Move to function under audioRecorder level
-                let processings = audioRecorder.process(fileURL: audioRecorder.recordings.last!.fileURL)
-                self.audioRecorder.processedData.append(ProcessedData(createdAt: audioRecorder.recordings.last!.createdAt, duration: processings.duration, intensity: processings.intensity, pitch_mean: processings.pitch_mean, favorite: false))
-                
-                //for entry in entries.recordings { print("Entry: \(entry.createdAt)") }
-                for audio in audioRecorder.recordings { print("File: \(audio.fileURL)") }
+                // Appending processed data to
+                self.audioRecorder.process(recording: audioRecorder.recordings.last!)
                 
                 if settings.isActive() && settings.recordPerWeek != 0 {
                     settings.recordEntered += 1
@@ -90,7 +90,7 @@ extension CompleteMenu {
                 .font(._bodyCopy)
                 .foregroundColor(Color.BODY_COPY)
         }
-        .frame(width: content_width / 3)
+        .frame(width: content_width / 2)
     }
     
     private var tryAgain: some View {
@@ -108,7 +108,7 @@ extension CompleteMenu {
                 .font(._bodyCopy)
                 .foregroundColor(Color.BODY_COPY)
         }
-        .frame(width: content_width / 3)
+        .frame(width: content_width / 2)
     }
     
     func retreiveLastRecording() -> URL {

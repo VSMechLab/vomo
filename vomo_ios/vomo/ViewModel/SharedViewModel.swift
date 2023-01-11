@@ -35,7 +35,7 @@ struct SharedViewModel {
     let profile_img = "VM_7-avatar-photo-placeholder-gfx"
     
     /// For Profile
-    let genders = ["Male", "Female", "Non-binary", "Genderqueer", "Other"]
+    let genders = ["Other", "Genderqueer", "Non-binary", "Female", "Male"]
     var sexes = ["Male", "Female", "Other"]
     let vocalIssues = ["a custom", "the Spasmodic Dysphonia", "the Recurrent Pappiloma", "the Parkinson's Disease", "the Gender-Affirming Care", "the Vocal Fold/Paresis", "the default"]
     
@@ -72,14 +72,16 @@ struct SharedViewModel {
     
     var questions: [String] {
         settings.setSurveys()
+        
+        /*
         var ret: [String] = []
         if settings.vhi {
             ret += vhi
         }
         if settings.vocalEffort {
             ret += vocal_effort
-        }
-        return ret
+        }*/
+        return vhi + vocal_effort
     }
     
     var allQuestions: [String] {
@@ -90,6 +92,8 @@ struct SharedViewModel {
     let stop_img = "VM_stop-nav-ds-icon"
     
     /// Complete menu items
+    let play = "VM_play-btn"
+    let stop = "VM_stop_play-btn"
     let stop_play_img = "VM_stop_play-btn"
     let approved_img = "VM_appr-btn"
     let start_playback_img = "VoMo-App-Outline_8_PLAY_BTN_PRPL"
@@ -129,6 +133,7 @@ struct SharedViewModel {
     let filled_img = "VM_Gradient-Btn"
     let empty_img = "VoMo-App-Outline_8_CLEAR_BTN"
     let trash_can = "VoMo-App-Outline_9_delete_btn"
+    let alt_can = "VoMo-App-Outline_8_DELETE_BTN_PRPL"
     let share_button = "VoMo-App-Outline_9_share_btn"
     let heart_img = "VoMo-App-Outline_9_heart_prpl_btn"
     let heart_gray_img = "VoMo-App-Outline_9_heart_white_btn"

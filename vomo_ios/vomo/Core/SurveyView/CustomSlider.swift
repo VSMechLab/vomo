@@ -26,7 +26,6 @@ struct CustomSlider: View {
     let svm = SharedViewModel()
     
     func interval(width: CGFloat, increment: Int) -> CGFloat {
-        print("Screen Width: \(width)")
         let result = width * CGFloat(increment) / CGFloat(step)
         return result
     }
@@ -112,7 +111,6 @@ struct CustomSlider: View {
             //Text("Slider: \(slider)")
                 .onChange(of: slider) { _ in
                     position = Int((slider / 271) * 10)
-                    print(position)
                 }
         } // End of VStack
         .padding()

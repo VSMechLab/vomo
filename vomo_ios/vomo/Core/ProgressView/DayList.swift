@@ -36,18 +36,19 @@ struct DayList: View {
                         .padding(.trailing, 5.5)
                 }
             }
-            .padding(.bottom, 4)
+            .foregroundColor(Color.white)
+            .padding(.vertical, 4)
+            .background(Color.DARK_PURPLE)
             
             if showMore {
                 VStack(spacing: 0) {
-                    ForEach(0..<element.str.count) { index in
-                        Color.BODY_COPY.frame(height: 1).opacity(0.6)
-                        EntryRow(expand: expand, index: index, element: element, isExpandedList: isExpandedList, deletionTarget: $deletionTarget)
+                    ForEach(0..<element.str.count, id: \.self) { index in
+                        EntryRow(expand: expand, index: (element.str.count-1-index), element: element, isExpandedList: isExpandedList, deletionTarget: $deletionTarget)
+                        Color.BRIGHT_PURPLE.frame(height: 2.5).opacity(0.6)
                     }
                 }
             }
         }
-        .padding(.vertical, 8)
         .foregroundColor(Color.BODY_COPY)
         .background(showMore ? Color.INPUT_FIELDS : Color.white)
         .onAppear() {

@@ -58,6 +58,9 @@ struct VEScale: View {
             }
         }
         .padding(2.5)
+        .onChange(of: position) { _ in
+            self.responses[index] = position
+        }
     }
 }
 

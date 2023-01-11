@@ -16,14 +16,14 @@ struct GraphicTitle: View {
             ForEach(0..<5) { cur in
                 Text(titles[cur])
                     .font(cur == index ? Font._tabTitleBold : Font._tabTitle)
-                    .padding(.vertical, 5)
-                    .padding(.horizontal, 3.75)
+                    .padding(.vertical, 2.25)
+                    .padding(.horizontal, 5.75)
                     .foregroundColor(Color.black)
                     .background(cur == index ? Color.white : Color.clear)
                     .cornerRadius(10)
             }
         }
-        .background(Color.INPUT_FIELDS)
+        .background(Color.INPUT_FIELDS.opacity(0.9))
         .cornerRadius(10)
     }
 }

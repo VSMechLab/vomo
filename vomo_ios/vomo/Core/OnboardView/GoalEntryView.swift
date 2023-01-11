@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct GoalEntryView: View {
+    @Environment(\.openURL) var openURL
+    
     @EnvironmentObject var notification: Notification
     @EnvironmentObject var settings: Settings
     
@@ -22,8 +24,6 @@ struct GoalEntryView: View {
     
     var body: some View {
         VStack(alignment: .leading) {
-            Spacer()
-            
             header
             
             if settings.isActive() {
@@ -31,8 +31,6 @@ struct GoalEntryView: View {
             } else {
                 settingSection
             }
-            
-            Spacer()
         }
         .frame(width: svm.content_width)
     }
@@ -228,6 +226,26 @@ extension GoalEntryView {
                         .font(._bodyCopy)
                         .foregroundColor(Color.BODY_COPY)
                         .padding(.bottom)
+                    
+                    if !notification.getStatus() {
+                        Button(action: {
+                            if #available(iOS 16, *) {
+                                openURL(URL(string: UIApplication.openNotificationSettingsURLString)!)
+                            }
+                            if #available(iOS 15.4, *) {
+                                openURL(URL(string: UIApplicationOpenNotificationSettingsURLString)!)
+                            }
+                            if #available(iOS 8.0, *) {
+                                // just opens settings
+                                openURL(URL(string: UIApplication.openSettingsURLString)!)
+                            }
+                        }) {
+                            Text("Go to settings")
+                                .font(._bodyCopyBold)
+                                .foregroundColor(Color.DARK_PURPLE)
+                                .padding(.bottom)
+                        }
+                    }
                     
                     HStack {
                         Spacer()

@@ -22,7 +22,7 @@ struct ExpandedRecording: View {
             }
             
             if !audioRecorder.recordings.isEmpty {
-                AudioInterface(date: audioRecorder.recordings.last?.createdAt ?? .now)
+                AudioInterface(date: createdAt)
             }
             
             HStack {
@@ -53,21 +53,21 @@ extension ExpandedRecording {
                     Text("Duration:")
                         .font(._bodyCopy)
                     Spacer()
-                    Text("\(result.duration, specifier: "%.2f")")
+                    Text(result.duration == -1 ? "N/A" : "\(result.duration, specifier: "%.2f")")
                         .font(._bodyCopyBold)
                 }
                 HStack {
                     Text("Intensity:")
                         .font(._bodyCopy)
                     Spacer()
-                    Text("\(result.intensity, specifier: "%.2f")")
+                    Text(result.intensity == -1 ? "N/A" : "\(result.intensity, specifier: "%.2f")")
                         .font(._bodyCopyBold)
                 }
                 HStack {
                     Text("Mean Pitch:")
                         .font(._bodyCopy)
                     Spacer()
-                    Text("\(result.pitch_mean, specifier: "%.2f")")
+                    Text(result.pitch_mean == -1 ? "N/A" : "\(result.pitch_mean, specifier: "%.2f")")
                         .font(._bodyCopyBold)
                 }
             }

@@ -83,7 +83,7 @@ extension VisitLog {
     
     /// Button switches you to the new visit form
     private var newVisitButton: some View {
-        Button("+ NEW VISIT") {
+        Button("+ NEW INTERVENTION") {
             withAnimation() { self.newVisit.toggle() }
         }
         .buttonStyle(SubmitButton())

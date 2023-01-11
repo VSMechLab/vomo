@@ -147,7 +147,7 @@ class Settings: ObservableObject {
             list += [TaskModel(prompt: "'ahhh'", taskNum: 2)]
         }
         if availableRecordings.contains("rainbow") {
-            list += [TaskModel(prompt: "'The rainbow is a division of white light into many beautiful colors. These take the shape of a long round arch, with its path high above, and its two ends apparently beyond the horizon'", taskNum: 3)]
+            list += [TaskModel(prompt: "'The rainbow is a division of white light into many beautiful colors. These take the shape of a long round arch, with its path high above, and its two ends apparently beyond the horizon.'", taskNum: 3)]
         }
         return list
     }
@@ -205,7 +205,12 @@ class Settings: ObservableObject {
             UserDefaults.standard.set(vocalEffort, forKey: "vocal_effort")
         }
     }
-    
+    /// Settings questions
+    @Published var allowIncompleteSurvey: Bool {
+        didSet {
+            UserDefaults.standard.set(allowIncompleteSurvey, forKey: "allow_incomplete_survey")
+        }
+    }
     /// Profile Questions
     @Published var voice_onset: Bool {
         didSet {
@@ -307,6 +312,8 @@ class Settings: ObservableObject {
         self.pitchThreshold = defaults.object(forKey: "pitch_threshold") as? [Int] ?? []
         self.durationThreshold = defaults.object(forKey: "duration_threshold") as? [Int] ?? []
         self.qualityThreshold = defaults.object(forKey: "quality_threshold") as? [Int] ?? []
+        
+        self.allowIncompleteSurvey = defaults.object(forKey: "allow_incomplete_survey") as? Bool ?? false
     }
     
     var availableRecordings: [String] {
@@ -407,7 +414,21 @@ extension Settings {
         
         return ret
     }
-
+    
+    /// Sent to notification service to schedule notifications calculated in real time based on goal considerations
+    func editedTrigger(frequency: Int) -> [TriggerModel] {
+        var ret: [TriggerModel] = []
+        
+        let amountDays = recordPerWeek * numWeeks
+        
+        for i in 0..<amountDays {
+            print("start date: \(startDate.toFullDate())")
+            ret.append(TriggerModel(date: Date(timeInterval: Double(frequency) * (Double(i) * 86400), since: startDate.toFullDate() ?? .now), identifier: String(i)))
+        }
+        
+        return ret
+    }
+    
     /// Checks if goal is active on the basis of the start date + nWeeks > .now
     func isActive() -> Bool {
         let weeksElapsed = (-1 * Double(startDate.toDate()?.timeIntervalSinceNow ?? 0.0) / 604800.0)

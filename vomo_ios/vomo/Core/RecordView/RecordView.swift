@@ -33,7 +33,7 @@ struct RecordView: View {
             }.frame(height: UIScreen.main.bounds.height / 2)
             
             VStack {
-                grayButton
+                //grayButton
                 
                 exercises
                 
@@ -189,8 +189,8 @@ extension RecordView {
             if !audioRecorder.recording && !landingPopUp {
                 promptPlaybackButton
             } else if !landingPopUp {
-                Text("\(time)s")
-                    .font(._BTNCopy)
+                Text("\(time) seconds")
+                    .font(._BTNCopyLarge)
                     .foregroundColor(Color.white)
                     .padding(.horizontal, 15)
                     .padding(.vertical, 5)
