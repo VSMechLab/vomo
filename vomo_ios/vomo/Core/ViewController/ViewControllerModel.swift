@@ -19,11 +19,11 @@ class ViewRouter: ObservableObject {
             //currentPage = .home
             
             // Test mode
-            currentPage = .onboard
+            currentPage = .progress
         }
     }
 }
 
 enum Page {
-    case onboard, home, settings, record, questionnaire, journal, intervention, progress
+    case onboard, home, settings, record, questionnaire, journal, treatment, progress
 }

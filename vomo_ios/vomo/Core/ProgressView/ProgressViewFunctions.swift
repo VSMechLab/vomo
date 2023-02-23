@@ -12,6 +12,7 @@ import Foundation
 extension ProgressView {
     func refilter() {
         entries.getItems()
+        
         if filters.isEmpty {
             filteredList = []
             var usedDates: [String] = []
@@ -152,6 +153,36 @@ extension ProgressView {
                 strs.removeAll()
             }
         }
+        
+        
+        for record in audioRecorder.recordings {
+            if tappedRecording == record.createdAt {
+                filteredList = []
+                
+                let num = audioRecorder.fileTask(file: record.fileURL)
+                
+                switch num {
+                case "1":
+                    
+                    print("Num was \(num)")
+                    filteredList.append(Element(date: tappedRecording, preciseDate: [tappedRecording], str: ["Record"]) )
+                    break
+                case "2":
+                    
+                    print("Num was \(num)")
+                    filteredList.append(Element(date: tappedRecording, preciseDate: [tappedRecording], str: ["Duration"]) )
+                    break
+                case "3":
+                    
+                    print("Num was \(num)")
+                    filteredList.append(Element(date: tappedRecording, preciseDate: [tappedRecording], str: ["Rainbow"]) )
+                    break
+                default:
+                    break
+                }
+                
+            }
+        }
     }
     
     func delete(element: String) {
@@ -184,17 +215,19 @@ extension ProgressView {
         // looks for a match on both before otherwise canceling the process
         for index in 0..<audioRecorder.recordings.count {
             if createdAt == audioRecorder.recordings[index].createdAt {
+                print("found file to delete: \(audioRecorder.recordings[index].createdAt)")
                 type = "record"
                 count = index
             }
         }
         for index in 0..<audioRecorder.processedData.count {
-            if createdAt == audioRecorder.recordings[index].createdAt {
+            if createdAt == audioRecorder.processedData[index].createdAt {
                 if type == "record" && count == index {
-                    print("success")
+                    print("found process to delete: \(audioRecorder.processedData[index].createdAt), \(type)")
                 } else {
+                    print("code was ran")
                     type = ""
-                    count = -1
+                    //count = -1
                 }
             }
         }

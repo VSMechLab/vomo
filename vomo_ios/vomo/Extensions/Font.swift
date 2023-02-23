@@ -111,6 +111,9 @@ extension Font {
     static var _fieldCopyRegular: Font {
         Font.custom("Roboto-Light", size: 14)
     }
+    static var _fieldCopyBold: Font {
+        Font.custom("Roboto-Bold", size: 14)
+    }
     static var _fieldCopyItalic: Font {
         Font.custom("Roboto-LightItalic", size: 16)
     }

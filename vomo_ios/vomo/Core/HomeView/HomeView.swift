@@ -179,7 +179,7 @@ extension HomeView {
     
     private var interventionSection: some View {
         Button(action: {
-            viewRouter.currentPage = .intervention
+            viewRouter.currentPage = .treatment
         }) {
             Image(svm.home_intervention_img)
                 .resizable()

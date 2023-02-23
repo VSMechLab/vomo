@@ -7,152 +7,212 @@
 
 import SwiftUI
 
+
+/*
+ Consider lowering the 2x the top of the target
+ 
+ 1.5 would safice
+ 
+ */
 struct PitchGraph: View {
     @EnvironmentObject var audioRecorder: AudioRecorder
     @EnvironmentObject var settings: Settings
+    @EnvironmentObject var entries: Entries
+    
+    @Binding var tappedRecording: Date
+    
+    let height = 300.0
+    let bottom = 0.0
+    
     var body: some View {
-        VStack {
-            HStack(spacing: 0) {
-                VStack {
-                    Text("Higher ")
-                    Spacer()
-                    Text("(Hertz) ").rotationEffect(Angle(degrees: -90))
-                    Spacer()
-                    Text("Lower ")
+        
+        /// This hstack will contain three things
+        /// Y axis with labels
+        /// Body of the graph
+        HStack(spacing: 0) {
+            
+            /// Contains the label for the y axis and the y axis
+            /// Will have a fixed range height of 300 hz
+            /// Will have a fixed range bottom of 0 hz
+            yAxis
+            
+            ScrollView(.horizontal, showsIndicators: false) {
+                ZStack {
+                    treatmentSection
+                    
+                    targetBar
+                    
+                    nodes
                 }
-                Color.white.frame(width: 2)
-                ScrollView(.horizontal, showsIndicators: false) {
-                    VStack(spacing: 0) {
-                        HStack(spacing: 0) {
-                            graphNodes
-                        }
-                        Color.white.frame(height: 2)
-                    }
-                }
-                Text(settings.focusSelection == 4 ? "Target Range" : "Normal Range")
-                    .rotationEffect(Angle(degrees: 90))
-                    .padding(.trailing, -30)
             }
             
-            HStack {
-                Text("Less recent")
-                Spacer()
-                Text("More recent")
-            }
+            Spacer()
         }
-        .foregroundColor(.white)
-    }
-    
-    /// Area one is green (above the threshold)
-    /// Area two is yellow (low but in threshold)
-    /// Area three is red (bellow threshold)
-    func safeZoneArea(pitch: Float) -> Int {
-        return 1
-    }
-    
-    /// This is the maxomum value that the graph will display
-    /// This has 15% added to it to add a buffer for displaying numbers correcty
-    var maxHeight: Float {
-        var max: Float = 0.0
-        for index in 0..<audioRecorder.processedData.count {
-            if max < audioRecorder.processedData[index].pitch_mean {
-                max = audioRecorder.processedData[index].pitch_mean
-            }
-        }
-        // Add 15%
-        return max * 1.15
-    }
-    
-    /// This returns the heights of the individual bars on the graph
-    func heights(pitch: Float) -> (Float, Float) {
-        // audioRecorder.processedData[index].pitch_mean is the pitch
-        
-        /*
-         
-         In this calculation,
-         
-         the top section is equal to the % difference between the maxHeight and the mean
-         the middle section is equal to %10 no matter what
-         the last section is equal to the % difference between the mean and zero
-         
-         to find the top...
-         take the max-current
-         
-         */
-        
-        let top: Float = (1 - (pitch / maxHeight)) * 0.80
-        let bot: Float = (pitch / maxHeight) * 0.80
-        
-        print("the values calculated are as follows: \(top), \(bot)")
-        
-        
-        return (top, bot)
     }
 }
 
 extension PitchGraph {
-    private var graphNodes: some View {
-        ForEach(0..<audioRecorder.processedData.count, id: \.self) { index in
-            // fill should be proportional to the height / max height for a given point
-            GeometryReader { geo in
-                // The height here is equal to the maximum height of the view
-                VStack(spacing: 0) {
-                    // Minimum will always be zero
-                    // max pitch value will always be such
-                    // max that the graph will display will be %10 higher than the max pitch
-                    ZStack {
-                        Color.clear
-                        VStack(spacing: 0) {
-                            Spacer()
-                            Text("\(audioRecorder.processedData[index].pitch_mean, specifier: "%.0f")")
-                        }
-                    }
-                    .frame(height: geo.size.height * CGFloat(heights(pitch: audioRecorder.processedData[index].pitch_mean).0))
-                    
-                    VStack(spacing: 0) {
-                        Color.white
-                            .frame(width: 2, height: geo.size.height * 0.12)
-                        
-                        switch safeZoneArea(pitch: audioRecorder.processedData[index].pitch_mean) {
-                        case 1:
-                            Circle()
-                                .strokeBorder(.white, lineWidth: 2)
-                                .background(Circle().fill(.green))
-                                .frame(width: geo.size.height * 0.16, height: geo.size.height * 0.16)
-                        case 2:
-                            Circle()
-                                .strokeBorder(.white, lineWidth: 2)
-                                .background(Circle().fill(.yellow))
-                                .frame(width: geo.size.height * 0.16, height: geo.size.height * 0.16)
-                        case 3:
-                            Circle()
-                                .strokeBorder(.white, lineWidth: 2)
-                                .background(Circle().fill(.red))
-                                .frame(width: geo.size.height * 0.16, height: geo.size.height * 0.16)
-                        default:
-                            Color.white
-                                .frame(width: geo.size.height * 0.16, height: geo.size.height * 0.16)
-                                .cornerRadius(12)
-                        }
-                        
-                        Color.white
-                            .frame(width: 2, height: geo.size.height * 0.12)
-                    }
-                    .frame(height: geo.size.height * 0.40)
-                    
-                    VStack {
-                        Color.clear
-                    }
-                    .frame(height: geo.size.height * CGFloat(heights(pitch: audioRecorder.processedData[index].pitch_mean).1))
+    func treatments() -> [(Bool, Date)] {
+        
+        /// Loop through treatments and processedData
+        /// For a given treatment find the closest entry or one on the same day
+        /// return a loop with the same length as the processedData
+        
+        let ret: [(Bool, Date)] = []
+        
+        for record in audioRecorder.recordings {
+            
+            
+            for treatment in entries.treatments {
+                if record.taskNum == 10 && treatment.type == "" {
+                    print("")//("\(record), \(treatment)")
                 }
             }
-            .frame(width: 50)
         }
+        
+        return ret
+    }
+    
+    private var treatmentSection: some View {
+        HStack(spacing: 0) {
+            ForEach(0..<treatments().count, id: \.self) { index in
+                VStack(spacing: 0) {
+                    
+                    // if the intervention is close to a day
+                    
+                    if treatments()[index].0 {
+                        
+                        /// Overlay the interventions, should be tappable
+                        Color.blue
+                    }
+                    
+                    
+                    // end loop
+                    
+                    /// bottom of axis & date=
+                    Color.clear
+                        .font(._fieldCopyRegular)
+                        .frame(width: 50, height: 17)
+                }
+            }
+        }
+    }
+    
+    private var yAxis: some View {
+        Group {
+            VStack(spacing: 0) {
+                Text("\(height, specifier: "%.0f")")
+                
+                Spacer()
+                
+                Text(settings.focusSelection == 4 ? "Target Range hz" : "Normal Range hz")
+                    .rotationEffect(Angle(degrees: -90))
+                    .frame(width: 100, height: 100)
+                
+                Spacer()
+                
+                Text("\(bottom, specifier: "%.0f")")
+                
+                Color.clear.frame(width: 1, height: 17)
+            }
+            .font(._fieldCopyRegular)
+            .frame(width: 25)
+            
+            Color.white.frame(width: 2)
+        }
+    }
+    
+    private var nodes: some View {
+        HStack(spacing: 0) {
+            ForEach(0..<audioRecorder.processedData.count, id: \.self) { index in
+                VStack(spacing: 0) {
+                    GeometryReader { geo in
+                        VStack(spacing: 0) {
+                            /// Spacing above, the circle and spacing bellow the axis
+                            Color.clear.frame(height: geo.size.height * nodes(pitch: audioRecorder.processedData[index]).3)
+                            
+                            Button(action: {
+                                //print(audioRecorder.processedData[index])
+                                self.tappedRecording = audioRecorder.processedData[index].createdAt
+                            }) {
+                                Circle()
+                                    .strokeBorder(.white, lineWidth: 2)
+                                    .background(Circle().fill(nodes(pitch: audioRecorder.processedData[index]).0))
+                                    .frame(width: geo.size.height * 0.10, height: geo.size.height * nodes(pitch: audioRecorder.processedData[index]).2)
+                            }
+
+                            Color.clear.frame(height: geo.size.height * nodes(pitch: audioRecorder.processedData[index]).1)
+                        }
+                    }
+                    
+                    /// bottom of axis & date
+                    Color.white.frame(height: 2)
+                    Text("\(audioRecorder.processedData[index].createdAt.shortDay())")
+                        .font(._fieldCopyRegular)
+                        .frame(width: 50, height: 15)
+                }
+            }
+        }
+    }
+    
+    private var targetBar: some View {
+        VStack(spacing: 0) {
+            GeometryReader { geo in
+                VStack(spacing: 0) {
+                    Color.clear.frame(height: geo.size.height * spaceAroundTarget.2)
+                    
+                    Color.indigo.opacity(0.5).frame(height: geo.size.height * spaceAroundTarget.1)
+                    
+                    Color.clear.frame(height: geo.size.height * spaceAroundTarget.0)
+                }
+                .frame(height: geo.size.height)
+            }
+            
+            Color.clear.frame(height: 17)
+        }
+    }
+    
+    /// Will output nodes to be graphed on the pitch graph
+    /// They are as follows
+    /// .3 is the spot above the node
+    /// .2 is the spot of the node
+    /// .1 is the spot bellow the node
+    /// . 0 is color
+    func nodes(pitch: ProcessedData) -> (Color, CGFloat, CGFloat, CGFloat) {
+        var values: (Color, CGFloat, CGFloat, CGFloat) = (Color.brown, 0.45, 0.1, 0.45)
+
+        // .3 top:     0.9 * ((height - CGFloat(pitch.pitch_mean)) / height)
+        // .2 mid:     0.10 // Locked to %10 of the view
+        // .1 bottom:  0.9 * ((CGFloat(pitch.pitch_min) - bottom) / height)
+        
+        values.3 = 0.9 * ((height - CGFloat(pitch.pitch_mean)) / height)
+        values.2 = 0.10 // Locked to %10 of the view
+        values.1 = 0.9 * ((CGFloat(pitch.pitch_mean) - bottom) / height)
+
+        if CGFloat(pitch.pitch_mean) > settings.pitchRange().0 && CGFloat(pitch.pitch_mean) < settings.pitchRange().1 {
+            values.0 = .green
+        } else if CGFloat(pitch.pitch_mean) > (0.85 * settings.pitchRange().0) && CGFloat(pitch.pitch_mean) < (1.15 * settings.pitchRange().1)  {
+             values.0 = .yellow
+        } else {
+             values.0 = .red
+        }
+        
+        
+        return values
+    }
+    
+    /// This is the area (in percentage bellow, in and on top of the target range
+    var spaceAroundTarget: (CGFloat, CGFloat, CGFloat) {
+        let bottom = settings.pitchRange().0 / height
+        let middle = (settings.pitchRange().1 - settings.pitchRange().0) / height
+        let top = (height - settings.pitchRange().1) / height
+
+        return (bottom, middle, top)
     }
 }
 
 struct PitchGraph_Previews: PreviewProvider {
     static var previews: some View {
-        PitchGraph()
+        PitchGraph(tappedRecording: .constant(Date.now))
     }
 }

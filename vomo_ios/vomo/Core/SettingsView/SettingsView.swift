@@ -68,6 +68,11 @@ struct SettingsView: View {
             
             popUpSection
         }
+        .onAppear() {
+            // Initialize values
+            sex = self.settings.sexAtBirth
+            gender = self.settings.gender
+        }
     }
 }
 
@@ -85,7 +90,7 @@ extension SettingsView {
         Group {
             Text("First Name")
             
-            TextEntryField(topic: $settings.firstName)
+            TextEntryField(topic: $settings.firstName, label: "First Name")
         }
     }
     
@@ -93,7 +98,7 @@ extension SettingsView {
         Group {
             Text("Last Name")
             
-            TextEntryField(topic: $settings.lastName)
+            TextEntryField(topic: $settings.lastName, label: "Last Name")
         }
     }
     
@@ -115,6 +120,7 @@ extension SettingsView {
                 self.settings.dob = self.date.toDOB()
             }
         }
+        .padding(.bottom, 5)
     }
     
     private var sexAtBirth: some View {
@@ -289,7 +295,7 @@ extension SettingsView {
             Button(action: {
                 self.showDeleteWarning = true
             }) {
-                Text("Reset All Data.")
+                Text("Delete All Collected Data.")
                     .font(._bodyCopyLargeMedium)
                     .underline()
                     .foregroundColor(Color.red)
@@ -327,12 +333,6 @@ extension SettingsView {
                     }
                     
                     ReminderPopUp(showNotifications: $showNotifications)
-                        .padding()
-                        .background(Color.white)
-                        .cornerRadius(15)
-                        .shadow(color: Color.gray, radius: 1)
-                        .padding(.vertical)
-                        .padding(.vertical)
                 }
             }
             
@@ -380,7 +380,7 @@ extension SettingsView {
     }
     
     func deleteAllData() {
-        entries.interventions.removeAll()
+        entries.treatments.removeAll()
         entries.journals.removeAll()
         entries.questionnaires.removeAll()
         audioRecorder.recordings.removeAll()

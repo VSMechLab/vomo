@@ -205,6 +205,12 @@ class Settings: ObservableObject {
             UserDefaults.standard.set(vocalEffort, forKey: "vocal_effort")
         }
     }
+    /// Botulinum Injection
+    @Published var botulinumInjection : Bool {
+        didSet {
+            UserDefaults.standard.set(botulinumInjection, forKey: "botulinum_injection")
+        }
+    }
     /// Settings questions
     @Published var allowIncompleteSurvey: Bool {
         didSet {
@@ -222,6 +228,10 @@ class Settings: ObservableObject {
             UserDefaults.standard.set(sexAtBirth, forKey: "sex_at_birth")
         }
     }
+    ///Saved as follows
+    ///0 = "Other"
+    ///
+    ///["Other", "Genderqueer", "Non-binary", "Female", "Male"]
     @Published var gender: String {
         didSet {
             UserDefaults.standard.set(gender, forKey: "gender")
@@ -267,6 +277,15 @@ class Settings: ObservableObject {
         self.edited_before = UserDefaults.standard.object(forKey: "edited_before") as? Bool ?? false
         
         /// Focus treatment plan
+        /// 0: Custom track
+        /// 1: Laryngeal dystonia
+        /// 2: RRP
+        /// 3: Parkinson's
+        /// 4: Gender
+        /// 5: Vocal Fold Paralysis
+        /// 6. One
+        /// 7. Two
+        /// 8: None of the above
         self.focusSelection = UserDefaults.standard.object(forKey: "focus_selection") as? Int ?? 0
         
         /// Custom Track
@@ -281,8 +300,10 @@ class Settings: ObservableObject {
         self.maxPitch = UserDefaults.standard.object(forKey: "max_pitch") as? Bool ?? false
         self.accousticParameters = UserDefaults.standard.object(forKey: "accoustic_parameters") as? Bool ?? false
         
+        // surveys
         self.vhi = UserDefaults.standard.object(forKey: "vhi") as? Bool ?? false
         self.vocalEffort = UserDefaults.standard.object(forKey: "vocal_effort") as? Bool ?? false
+        self.botulinumInjection = UserDefaults.standard.object(forKey: "botulinum_injection") as? Bool ?? false
         
         /// Settings View Questions
         self.voice_onset = UserDefaults.standard.object(forKey: "voiceOnset") as? Bool ?? false
@@ -332,17 +353,21 @@ class Settings: ObservableObject {
             if ret.isEmpty {
                 ret += ["vowel", "mpt", "rainbow"]
             }
-        case 1:
+        case 1: // Laryngeal Dystonia
             ret += ["vowel", "mpt", "rainbow"]
-        case 2:
+        case 2: // RRP
             ret += ["vowel", "mpt", "rainbow"]
-        case 3:
+        case 3: // Parkinson's
             ret += ["mpt", "rainbow"]
-        case 4:
+        case 4: // Gender-Affirming Voice Care
             ret += ["vowel", "rainbow"]
-        case 5:
+        case 5: // Vocal Fold Paralysis
             ret += ["vowel", "mpt", "rainbow"]
-        case 6:
+        case 6: // Vocal Tremor
+            ret += ["vowel", "mpt", "rainbow"]
+        case 7: // Laryngeal Dystonia and Vocal Tremor
+            ret += ["vowel", "mpt", "rainbow"]
+        case 8: // None of the above
             ret += ["vowel", "mpt", "rainbow"]
         default:
             if self.vowel {
@@ -361,47 +386,115 @@ class Settings: ObservableObject {
     func setSurveys() {
         //var ret: [String] = []
         switch focusSelection {
-        case 0:
+        case 0: // Custom track
             if self.vhi {
                 //ret += ["vhi"]
             }
             if self.vocalEffort {
                 //ret += ["ve"]
             }
-        case 1:
+            if self.botulinumInjection {
+                //ret += ["bi"]
+            }
+        case 1: // Laryngeal Dystonia
+            //ret += ["vhi", "ve"] //Laryngeal Dystonia
+            self.vhi = false
+            self.vocalEffort = false
+            self.botulinumInjection = true
+        case 2: // RRP
             //ret += ["vhi", "ve"]
             self.vhi = true
             self.vocalEffort = true
-        case 2:
-            //ret += ["vhi", "ve"]
-            self.vhi = true
-            self.vocalEffort = true
-        case 3:
+            self.botulinumInjection = false
+        case 3: // Parkinson's
             //ret += ["ve"]
             self.vhi = false
             self.vocalEffort = true
-        case 4:
+            self.botulinumInjection = false
+        case 4: // Gender-Affirming Voice Care
             //ret += ["ve"]
             self.vhi = false
             self.vocalEffort = true
-        case 5:
+            self.botulinumInjection = false
+        case 5: // Vocal Fold Paralysis
             //ret += ["vhi", "ve"]
             self.vhi = true
             self.vocalEffort = true
-        case 6:
+            self.botulinumInjection = false
+        case 6: // Vocal Tremor
+            self.vhi = false
+            self.vocalEffort = false
+            self.botulinumInjection = true
+        case 7: // Laryngeal Dystonia and Vocal Tremor
+            self.vhi = false
+            self.vocalEffort = false
+            self.botulinumInjection = true
+        case 8: // None of the above
             //ret += ["vhi", "ve"]
             self.vhi = true
             self.vocalEffort = true
+            self.botulinumInjection = false
         default:
             //ret += ["vhi", "ve"]
             self.vhi = true
             self.vocalEffort = true
+            self.botulinumInjection = true
         }
         //return ret
     }
 }
 
 extension Settings {
+    /// Range of target for pitch
+    func pitchRange() -> (CGFloat, CGFloat) {
+        if focusSelection == 4 {
+            if gender == "Male" {
+                return (100, 150)
+            } else if gender == "Female" {
+                return (180, 250)
+            } else if gender == "Non-binary" {
+                return (150, 180)
+            } else {
+                return (150, 180)
+            }
+        } else {
+            if gender == "Male" {
+                return (100, 150)
+            } else if gender == "Female" {
+                return (180, 250)
+            } else if gender == "Non-binary" {
+                return (150, 180)
+            } else {
+                return (150, 180)
+            }
+        }
+    }
+    
+    /// This stores the title for the target pitch label on the graph
+    func pitchLabel() -> String {
+        if focusSelection == 4 {
+            if gender == "Male" {
+                return "Target Range"
+            } else if gender == "Female" {
+                return "Target Range"
+            } else if gender == "Non-binary" {
+                return "Target Range"
+            } else {
+                return "Select Gender"
+            }
+        } else {
+            if gender == "Male" {
+                return "Normal Range"
+            } else if gender == "Female" {
+                return "Normal Range"
+            } else if gender == "Non-binary" {
+                return "Normal Range"
+            } else {
+                return "Select Gender"
+            }
+        }
+    }
+    
     /// Sent to notification service to schedule notifications calculated in real time based on goal considerations
     func triggers() -> [TriggerModel] {
         var ret: [TriggerModel] = []

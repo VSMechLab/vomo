@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import UIKit
 
 struct VHIScale: View {
     @Binding var responses: [Int]
@@ -14,7 +15,9 @@ struct VHIScale: View {
     
     let svm = SharedViewModel()
     
-    @State private var position: Int = -1
+    @State private var position: Double = -1.0
+    
+    let dotSize = 35.0
     
     var body: some View {
         ZStack {
@@ -25,55 +28,65 @@ struct VHIScale: View {
                 VStack(spacing: 0) {
                     Spacer()
                     
-                    HStack(spacing: 0) {
-                        // 0. Never
-                        Button(action: {
-                            self.position = 0
-                        }) {
-                            Image(position == 0 ? svm.select_img : "").resizable().frame(width: 28, height: 28)
+                    if position == -1 {
+                        HStack(spacing: 0) {
+                            // 0. Never
+                            Button(action: {
+                                self.position = 0
+                            }) {
+                                Image(position == 0 ? svm.select_img : "").resizable().frame(width: dotSize, height: dotSize)
+                            }
+                            
+                            Spacer()
+                            
+                            // 1. Almost Never
+                            Button(action: {
+                                self.position = 1
+                            }) {
+                                Image(position == 1 ? svm.select_img : "").resizable().frame(width: dotSize, height: dotSize)
+                            }
+                            
+                            Spacer()
+                            
+                            // 2. Sometimes
+                            Button(action: {
+                                self.position = 2
+                            }) {
+                                Image(position == 2 ? svm.select_img : "").resizable().frame(width: dotSize, height: dotSize)
+                            }
+                            
+                            Spacer()
+                            
+                            // 3. Almost Always
+                            Button(action: {
+                                self.position = 3
+                            }) {
+                                Image(position == 3 ? svm.select_img : "").resizable().frame(width: dotSize, height: dotSize)
+                            }
+                            
+                            Spacer()
+                            
+                            // 4. Always
+                            Button(action: {
+                                self.position = 4
+                            }) {
+                                Image(position == 4 ? svm.select_img : "").resizable().frame(width: dotSize, height: dotSize)
+                            }
                         }
-                        
-                        Spacer()
-                        
-                        // 1. Almost Never
-                        Button(action: {
-                            self.position = 1
-                        }) {
-                            Image(position == 1 ? svm.select_img : "").resizable().frame(width: 28, height: 28)
+                        .padding(.bottom, 42.5)
+                        .onChange(of: self.position) { selection in
+                            if responses.count > 0 {
+                                self.responses[index] = Int(selection)
+                            }
                         }
-                        
-                        Spacer()
-                        
-                        // 2. Sometimes
-                        Button(action: {
-                            self.position = 2
-                        }) {
-                            Image(position == 2 ? svm.select_img : "").resizable().frame(width: 28, height: 28)
-                        }
-                        
-                        Spacer()
-                        
-                        // 3. Almost Always
-                        Button(action: {
-                            self.position = 3
-                        }) {
-                            Image(position == 3 ? svm.select_img : "").resizable().frame(width: 28, height: 28)
-                        }
-                        
-                        Spacer()
-                        
-                        // 4. Always
-                        Button(action: {
-                            self.position = 4
-                        }) {
-                            Image(position == 4 ? svm.select_img : "").resizable().frame(width: 28, height: 28)
-                        }
-                    }
-                    .padding(.bottom, 42.5)
-                    .onChange(of: self.position) { selection in
-                        if responses.count > 0 {
-                            self.responses[index] = selection
-                        }
+                    } else {
+                        UISliderView(value: $position, minValue: 0.0, maxValue: 4.0, thumbColor: .purple, minTrackColor: .clear, maxTrackColor: .clear)
+                            .padding(.bottom, 42.5)
+                            .onChange(of: self.position) { selection in
+                                if responses.count > 0 {
+                                    self.responses[index] = Int(selection)
+                                }
+                            }
                     }
                 }
             }
@@ -109,5 +122,66 @@ extension VHIScale {
 struct VHIScale_Previews: PreviewProvider {
     static var previews: some View {
         VHIScale(responses: .constant([1]), prompt: "test", index: 0)
+    }
+}
+
+struct UISliderView: UIViewRepresentable {
+     @Binding var value: Double
+ 
+     var minValue = 0.0
+     var maxValue = 4.0
+     var thumbColor: UIColor = .white
+     var minTrackColor: UIColor = .blue
+     var maxTrackColor: UIColor = .lightGray
+ 
+    class Coordinator: NSObject {
+        var value: Binding<Double>
+
+        init(value: Binding<Double>) {
+            self.value = value
+        }
+
+        @objc func valueChanged(_ sender: UISlider) {
+            let roundedValue = round(sender.value / 1) * 1
+            sender.value = roundedValue
+            
+            self.value.wrappedValue = Double(sender.value)//Double(Int(sender.value))
+        }
+    }
+
+    func makeCoordinator() -> UISliderView.Coordinator {
+        Coordinator(value: $value)
+    }
+
+    func makeUIView(context: Context) -> UISlider {
+        let slider = UISlider(frame: .zero)
+        slider.thumbTintColor = thumbColor
+        slider.minimumTrackTintColor = minTrackColor
+        slider.maximumTrackTintColor = maxTrackColor
+        slider.minimumValue = Float(minValue)
+        slider.maximumValue = Float(maxValue)
+        slider.value = Float(value)
+        slider.setThumbImage(UIImage(named: "VM_11-select-btn-ds")?.resized(to: CGSize(width: 35, height: 35)), for: .normal)
+        slider.setThumbImage(UIImage(named: "VM_11-select-btn-ds")?.resized(to: CGSize(width: 35, height: 35)), for: .highlighted)
+
+        slider.addTarget(
+            context.coordinator,
+            action: #selector(Coordinator.valueChanged(_:)),
+            for: .valueChanged
+        )
+        
+        return slider
+    }
+
+    func updateUIView(_ uiView: UISlider, context: Context) {
+        uiView.value = Float(value)
+    }
+}
+
+extension UIImage {
+    func resized(to size: CGSize) -> UIImage {
+        return UIGraphicsImageRenderer(size: size).image { _ in
+            draw(in: CGRect(origin: .zero, size: size))
+        }
     }
 }

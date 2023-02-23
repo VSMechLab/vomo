@@ -40,7 +40,7 @@
 		AD81B72228BFCFCA009920FB /* AudioPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD81B72128BFCFCA009920FB /* AudioPlayer.swift */; };
 		AD81B72828BFD769009920FB /* QuestionnaireModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD81B72728BFD769009920FB /* QuestionnaireModel.swift */; };
 		AD81B72A28BFD76E009920FB /* JournalModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD81B72928BFD76E009920FB /* JournalModel.swift */; };
-		AD81B72C28BFD774009920FB /* VisitModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD81B72B28BFD774009920FB /* VisitModel.swift */; };
+		AD81B72C28BFD774009920FB /* TreatmentModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD81B72B28BFD774009920FB /* TreatmentModel.swift */; };
 		AD81B72F28BFDB13009920FB /* Entries.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD81B72E28BFDB13009920FB /* Entries.swift */; };
 		AD81B73128BFDBF6009920FB /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD81B73028BFDBF6009920FB /* Settings.swift */; };
 		AD81B73628BFE013009920FB /* SharedViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD81B73528BFE013009920FB /* SharedViewModel.swift */; };
@@ -76,9 +76,9 @@
 		ADA1EC9B2899C6B000EE58E3 /* AVAduioPCMBuffer.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADA1EC9A2899C6B000EE58E3 /* AVAduioPCMBuffer.swift */; };
 		ADA1EC9E2899C99400EE58E3 /* AudioKitUI in Frameworks */ = {isa = PBXBuildFile; productRef = ADA1EC9D2899C99400EE58E3 /* AudioKitUI */; };
 		ADB4A81B29369516003D8556 /* AnyTransition.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADB4A81A29369516003D8556 /* AnyTransition.swift */; };
-		ADB4A82229369B75003D8556 /* VisitLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADB4A82129369B75003D8556 /* VisitLog.swift */; };
-		ADB4A82429369C96003D8556 /* NewVisitForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADB4A82329369C96003D8556 /* NewVisitForm.swift */; };
-		ADB4A8262936A199003D8556 /* VisitRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADB4A8252936A199003D8556 /* VisitRow.swift */; };
+		ADB4A82229369B75003D8556 /* TreatmentLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADB4A82129369B75003D8556 /* TreatmentLog.swift */; };
+		ADB4A82429369C96003D8556 /* NewTreatmentForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADB4A82329369C96003D8556 /* NewTreatmentForm.swift */; };
+		ADB4A8262936A199003D8556 /* TreatmentRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADB4A8252936A199003D8556 /* TreatmentRow.swift */; };
 		ADB4A8282936BDA1003D8556 /* GraphicTitle.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADB4A8272936BDA1003D8556 /* GraphicTitle.swift */; };
 		ADB4A82A2936BEE2003D8556 /* Graphic.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADB4A8292936BEE2003D8556 /* Graphic.swift */; };
 		ADB4A82C2936C32E003D8556 /* ProgressViewFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADB4A82B2936C32E003D8556 /* ProgressViewFunctions.swift */; };
@@ -103,7 +103,7 @@
 		ADBDFF8C28C2688D00518354 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADBDFF8B28C2688D00518354 /* SettingsView.swift */; };
 		ADBDFF8E28C26D5800518354 /* RecordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADBDFF8D28C26D5800518354 /* RecordView.swift */; };
 		ADBDFF9028C26DD100518354 /* JournalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADBDFF8F28C26DD100518354 /* JournalView.swift */; };
-		ADBDFF9228C26DDA00518354 /* InterventionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADBDFF9128C26DDA00518354 /* InterventionView.swift */; };
+		ADBDFF9228C26DDA00518354 /* TreatmentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADBDFF9128C26DDA00518354 /* TreatmentView.swift */; };
 		ADBDFF9428C26DE900518354 /* ProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADBDFF9328C26DE900518354 /* ProgressView.swift */; };
 		ADBDFF9628C2BA5000518354 /* SurveyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADBDFF9528C2BA5000518354 /* SurveyView.swift */; };
 		ADBF439F290AC03D001CDBF5 /* Filter.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADBF439E290AC03D001CDBF5 /* Filter.swift */; };
@@ -165,7 +165,7 @@
 		AD81B72128BFCFCA009920FB /* AudioPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AudioPlayer.swift; path = vomo/Service/Recording/AudioPlayer.swift; sourceTree = SOURCE_ROOT; };
 		AD81B72728BFD769009920FB /* QuestionnaireModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = QuestionnaireModel.swift; path = vomo/Model/QuestionnaireModel.swift; sourceTree = SOURCE_ROOT; };
 		AD81B72928BFD76E009920FB /* JournalModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = JournalModel.swift; path = vomo/Model/JournalModel.swift; sourceTree = SOURCE_ROOT; };
-		AD81B72B28BFD774009920FB /* VisitModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = VisitModel.swift; path = vomo/Model/VisitModel.swift; sourceTree = SOURCE_ROOT; };
+		AD81B72B28BFD774009920FB /* TreatmentModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = TreatmentModel.swift; path = vomo/Model/TreatmentModel.swift; sourceTree = SOURCE_ROOT; };
 		AD81B72E28BFDB13009920FB /* Entries.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Entries.swift; path = vomo/Model/UserData/Entries.swift; sourceTree = SOURCE_ROOT; };
 		AD81B73028BFDBF6009920FB /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Settings.swift; path = vomo/Model/UserData/Settings.swift; sourceTree = SOURCE_ROOT; };
 		AD81B73528BFE013009920FB /* SharedViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SharedViewModel.swift; path = vomo/ViewModel/SharedViewModel.swift; sourceTree = SOURCE_ROOT; };
@@ -200,9 +200,9 @@
 		ADA0E0E52826E42600CF05D1 /* VoMo.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = VoMo.entitlements; sourceTree = "<group>"; };
 		ADA1EC9A2899C6B000EE58E3 /* AVAduioPCMBuffer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AVAduioPCMBuffer.swift; path = vomo/Extensions/AVAduioPCMBuffer.swift; sourceTree = SOURCE_ROOT; };
 		ADB4A81A29369516003D8556 /* AnyTransition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AnyTransition.swift; path = vomo/Extensions/AnyTransition.swift; sourceTree = SOURCE_ROOT; };
-		ADB4A82129369B75003D8556 /* VisitLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = VisitLog.swift; path = vomo/Core/InterventionView/VisitLog.swift; sourceTree = SOURCE_ROOT; };
-		ADB4A82329369C96003D8556 /* NewVisitForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = NewVisitForm.swift; path = vomo/Core/InterventionView/NewVisitForm.swift; sourceTree = SOURCE_ROOT; };
-		ADB4A8252936A199003D8556 /* VisitRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = VisitRow.swift; path = vomo/Core/InterventionView/VisitRow.swift; sourceTree = SOURCE_ROOT; };
+		ADB4A82129369B75003D8556 /* TreatmentLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = TreatmentLog.swift; path = VoMo/Core/TreatmentView/TreatmentLog.swift; sourceTree = SOURCE_ROOT; };
+		ADB4A82329369C96003D8556 /* NewTreatmentForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = NewTreatmentForm.swift; path = VoMo/Core/TreatmentView/NewTreatmentForm.swift; sourceTree = SOURCE_ROOT; };
+		ADB4A8252936A199003D8556 /* TreatmentRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = TreatmentRow.swift; path = VoMo/Core/TreatmentView/TreatmentRow.swift; sourceTree = SOURCE_ROOT; };
 		ADB4A8272936BDA1003D8556 /* GraphicTitle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = GraphicTitle.swift; path = vomo/Core/ProgressView/GraphicTitle.swift; sourceTree = SOURCE_ROOT; };
 		ADB4A8292936BEE2003D8556 /* Graphic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Graphic.swift; path = vomo/Core/ProgressView/Graphic.swift; sourceTree = SOURCE_ROOT; };
 		ADB4A82B2936C32E003D8556 /* ProgressViewFunctions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ProgressViewFunctions.swift; path = vomo/Core/ProgressView/ProgressViewFunctions.swift; sourceTree = SOURCE_ROOT; };
@@ -227,7 +227,7 @@
 		ADBDFF8B28C2688D00518354 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SettingsView.swift; path = VoMo/Core/SettingsView/SettingsView.swift; sourceTree = SOURCE_ROOT; };
 		ADBDFF8D28C26D5800518354 /* RecordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = RecordView.swift; path = VoMo/Core/RecordView/RecordView.swift; sourceTree = SOURCE_ROOT; };
 		ADBDFF8F28C26DD100518354 /* JournalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = JournalView.swift; path = vomo/Core/JournalView.swift; sourceTree = SOURCE_ROOT; };
-		ADBDFF9128C26DDA00518354 /* InterventionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = InterventionView.swift; path = VoMo/Core/InterventionView/InterventionView.swift; sourceTree = SOURCE_ROOT; };
+		ADBDFF9128C26DDA00518354 /* TreatmentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = TreatmentView.swift; path = VoMo/Core/TreatmentView/TreatmentView.swift; sourceTree = SOURCE_ROOT; };
 		ADBDFF9328C26DE900518354 /* ProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ProgressView.swift; path = VoMo/Core/ProgressView/ProgressView.swift; sourceTree = SOURCE_ROOT; };
 		ADBDFF9528C2BA5000518354 /* SurveyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SurveyView.swift; path = VoMo/Core/SurveyView/SurveyView.swift; sourceTree = SOURCE_ROOT; };
 		ADBF439E290AC03D001CDBF5 /* Filter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Filter.swift; path = VoMo/Core/ProgressView/Filter.swift; sourceTree = SOURCE_ROOT; };
@@ -274,7 +274,7 @@
 				AD59E6FB293A92CB00F5BCF7 /* RecordingModel.swift */,
 				AD81B72928BFD76E009920FB /* JournalModel.swift */,
 				AD59E6FD293A92FC00F5BCF7 /* ProcessedData.swift */,
-				AD81B72B28BFD774009920FB /* VisitModel.swift */,
+				AD81B72B28BFD774009920FB /* TreatmentModel.swift */,
 				ADB4A82D2936C3E1003D8556 /* ElementModel.swift */,
 				AD81B72D28BFDB07009920FB /* UserData */,
 			);
@@ -343,6 +343,17 @@
 				AD26BA1F2829F4E600AC1A7B /* BarChartRow.swift */,
 			);
 			path = BarChart;
+			sourceTree = "<group>";
+		};
+		AD2A7A8A29A6B14100EA92E8 /* TreatmentView */ = {
+			isa = PBXGroup;
+			children = (
+				ADBDFF9128C26DDA00518354 /* TreatmentView.swift */,
+				ADB4A82129369B75003D8556 /* TreatmentLog.swift */,
+				ADB4A8252936A199003D8556 /* TreatmentRow.swift */,
+				ADB4A82329369C96003D8556 /* NewTreatmentForm.swift */,
+			);
+			path = TreatmentView;
 			sourceTree = "<group>";
 		};
 		AD3FA000280F16F5007E6327 /* Graphs */ = {
@@ -568,17 +579,6 @@
 			path = ProgressView;
 			sourceTree = "<group>";
 		};
-		ADB4A82029369B54003D8556 /* InterventionView */ = {
-			isa = PBXGroup;
-			children = (
-				ADBDFF9128C26DDA00518354 /* InterventionView.swift */,
-				ADB4A82129369B75003D8556 /* VisitLog.swift */,
-				ADB4A82329369C96003D8556 /* NewVisitForm.swift */,
-				ADB4A8252936A199003D8556 /* VisitRow.swift */,
-			);
-			path = InterventionView;
-			sourceTree = "<group>";
-		};
 		ADB4A8312936CCEF003D8556 /* ExpandedEntries */ = {
 			isa = PBXGroup;
 			children = (
@@ -619,7 +619,7 @@
 				ADB4A84329386E78003D8556 /* RecordView */,
 				ADB4A83E293830D0003D8556 /* SurveyView */,
 				ADBDFF8F28C26DD100518354 /* JournalView.swift */,
-				ADB4A82029369B54003D8556 /* InterventionView */,
+				AD2A7A8A29A6B14100EA92E8 /* TreatmentView */,
 				ADB4A81F29369ACB003D8556 /* ProgressView */,
 			);
 			path = Core;
@@ -753,7 +753,7 @@
 				AD75260628C9002E0017FEC6 /* VHIScale.swift in Sources */,
 				AD67CEC028A48DA2006AF596 /* EntryField.swift in Sources */,
 				ADA0E0C428255F7B00CF05D1 /* Color+Extension.swift in Sources */,
-				ADBDFF9228C26DDA00518354 /* InterventionView.swift in Sources */,
+				ADBDFF9228C26DDA00518354 /* TreatmentView.swift in Sources */,
 				ADC5A60628358611000C73DF /* Font.swift in Sources */,
 				ADC5A60A28358644000C73DF /* Date.swift in Sources */,
 				ADA0E0DC282561BF00CF05D1 /* LineBackgroundShapeView.swift in Sources */,
@@ -788,7 +788,7 @@
 				ADA0E0B628255ECD00CF05D1 /* ChartBase.swift in Sources */,
 				ADE4164F29118DF100133437 /* TargetView.swift in Sources */,
 				ADE4164D29118DCB00133437 /* VoiceQuestionView.swift in Sources */,
-				ADB4A82229369B75003D8556 /* VisitLog.swift in Sources */,
+				ADB4A82229369B75003D8556 /* TreatmentLog.swift in Sources */,
 				ADBF43A3290AC6B1001CDBF5 /* FilterButton.swift in Sources */,
 				AD67CEC428A4965A006AF596 /* SubmissionButton.swift in Sources */,
 				AD915C37280624E200B48A5C /* ProfileButton.swift in Sources */,
@@ -804,16 +804,16 @@
 				AD6B031C27FCB26F0066B77D /* APIPlayground.swift in Sources */,
 				ADA0E0C228255F6A00CF05D1 /* ChartBase+Extension.swift in Sources */,
 				AD75260428C8639A0017FEC6 /* DateEntryField.swift in Sources */,
-				ADB4A8262936A199003D8556 /* VisitRow.swift in Sources */,
+				ADB4A8262936A199003D8556 /* TreatmentRow.swift in Sources */,
 				ADB4A8282936BDA1003D8556 /* GraphicTitle.swift in Sources */,
 				AD81B72028BFCFB2009920FB /* AudioRecorder.swift in Sources */,
 				AD81B71928BEB0B5009920FB /* HBarChartCellShape.swift in Sources */,
-				ADB4A82429369C96003D8556 /* NewVisitForm.swift in Sources */,
+				ADB4A82429369C96003D8556 /* NewTreatmentForm.swift in Sources */,
 				ADA0E0CC2825602A00CF05D1 /* ChartLabel.swift in Sources */,
 				AD72972428CFD736001E7211 /* SignalProcessing.swift in Sources */,
 				ADA0E0C828255FD900CF05D1 /* View+Extension.swift in Sources */,
 				AD75260828C91C150017FEC6 /* Wave.swift in Sources */,
-				AD81B72C28BFD774009920FB /* VisitModel.swift in Sources */,
+				AD81B72C28BFD774009920FB /* TreatmentModel.swift in Sources */,
 				ADBDFF8A28C2682100518354 /* HomeView.swift in Sources */,
 				ADA0E0DE282561C400CF05D1 /* LineChart.swift in Sources */,
 				ADBDFF9028C26DD100518354 /* JournalView.swift in Sources */,
@@ -973,15 +973,16 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = VoMo/VoMo.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: The University of Cincinnati";
-				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 15;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 18;
 				DEVELOPMENT_ASSET_PATHS = "\"VoMo/Preview Content\"";
-				DEVELOPMENT_TEAM = E3GYNLB224;
+				DEVELOPMENT_TEAM = HA6YWKP834;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = VoMo/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Vomo;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.medical";
 				INFOPLIST_KEY_NSCameraUsageDescription = "We use this to import a profile picture";
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "We need access to your microphone";
 				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "Our application needs permission to write photos...";
@@ -996,11 +997,12 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.4;
+				MARKETING_VERSION = 1.6;
 				PRODUCT_BUNDLE_IDENTIFIER = edu.uc.vomo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = edu.uc.vomo;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -1012,15 +1014,16 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = VoMo/VoMo.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: The University of Cincinnati";
-				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 15;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 18;
 				DEVELOPMENT_ASSET_PATHS = "\"VoMo/Preview Content\"";
-				DEVELOPMENT_TEAM = E3GYNLB224;
+				DEVELOPMENT_TEAM = HA6YWKP834;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = VoMo/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Vomo;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.medical";
 				INFOPLIST_KEY_NSCameraUsageDescription = "We use this to import a profile picture";
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "We need access to your microphone";
 				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "Our application needs permission to write photos...";
@@ -1035,10 +1038,10 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.4;
+				MARKETING_VERSION = 1.6;
 				PRODUCT_BUNDLE_IDENTIFIER = edu.uc.vomo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = edu.uc.vomo;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";

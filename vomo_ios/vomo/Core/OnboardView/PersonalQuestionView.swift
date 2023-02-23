@@ -30,6 +30,9 @@ struct PersonalQuestionView: View {
     @State var showDatePicker = false
     @State var textfieldText: String = ""
     
+    @State private var sex = ""
+    @State private var gender = ""
+    
     @State var date: Date = .now
     
     var body: some View {
@@ -42,6 +45,10 @@ struct PersonalQuestionView: View {
                 firstNameSection
                 
                 lastNameSection
+                
+                sexAtBirth
+                
+                genderOption
                 
                 dobSection
                 
@@ -60,12 +67,84 @@ struct PersonalQuestionView: View {
         .onAppear() {
             date = self.settings.dob.toDateFromDOB() ?? .now
         }
+        .onAppear() {
+            // Initialize values
+            sex = self.settings.sexAtBirth
+            gender = self.settings.gender
+        }
     }
     
     
 }
 
 extension PersonalQuestionView {
+    private var sexAtBirth: some View {
+        Group {
+            Text("Sex (assigned at birth)")
+            
+            Menu {
+                Picker("choose", selection: $sex) {
+                    ForEach(svm.sexes, id: \.self) { sex in
+                        Text("\(sex)")
+                            .font(._fieldCopyRegular)
+                    }
+                }
+                .labelsHidden()
+                .pickerStyle(InlinePickerStyle())
+                .onChange(of: self.sex) { newSex in
+                    self.settings.sexAtBirth = sex
+                }
+
+            } label: {
+                ZStack {
+                    EntryField()
+                    
+                    HStack {
+                        Text("\(sex == "" ? "Select Sex" : sex)")
+                            .font(._fieldCopyRegular)
+                        
+                        Spacer()
+                    }
+                    .padding(.horizontal, svm.fieldPadding)
+                }
+                .transition(.slide)
+            }
+        }
+    }
+    
+    private var genderOption: some View {
+        Group {
+            Text("Gender")
+            
+            Menu {
+                Picker("choose", selection: $gender) {
+                    ForEach(svm.genders, id: \.self) { gender in
+                        Text("\(gender)")
+                            .font(._fieldCopyRegular)
+                    }
+                }
+                .labelsHidden()
+                .pickerStyle(InlinePickerStyle())
+                .onChange(of: self.gender) { newGender in
+                    self.settings.gender = gender
+                }
+            } label: {
+                ZStack {
+                    EntryField()
+                    
+                    HStack {
+                        Text("\(gender == "" ? "Select Gender" : gender)")
+                            .font(._fieldCopyRegular)
+                        
+                        Spacer()
+                    }
+                    .padding(.horizontal, svm.fieldPadding)
+                }
+                .transition(.slide)
+            }
+        }
+    }
+    
     private var headerSection: some View {
         HStack(spacing: 0) {
             Spacer()

@@ -1,5 +1,5 @@
 //
-//  InterventionView.swift
+//  TreatmentView.swift
 //  VoMo
 //
 //  Created by Neil McGrogan on 9/2/22.
@@ -7,10 +7,10 @@
 
 import SwiftUI
 
-struct InterventionView: View {
+struct TreatmentView: View {
     @EnvironmentObject var entries: Entries
     
-    @State var newVisit = false
+    @State var newTreatment = false
     @State private var submitAnimation = false
     
     let svm = SharedViewModel()
@@ -20,10 +20,10 @@ struct InterventionView: View {
             VStack {
                 header
                 
-                if self.newVisit {
-                    NewVisitForm(submitAnimation: $submitAnimation, newVisit: $newVisit)
+                if self.newTreatment {
+                    NewTreatmentForm(submitAnimation: $submitAnimation, newTreatment: $newTreatment)
                 } else {
-                    VisitLog(newVisit: $newVisit)
+                    TreatmentLog(newTreatment: $newTreatment)
                 }
             }
             .frame(width: svm.content_width)
@@ -42,11 +42,11 @@ struct InterventionView: View {
     }
 }
 
-extension InterventionView {
+extension TreatmentView {
     private var header: some View {
         VStack(spacing: 0) {
             HStack {
-                Text(newVisit ? "Add new intervention" : "Intervention Log")
+                Text(newTreatment ? "Add new treatment" : "Treatments")
                     .font(._subHeadline)
                 Spacer()
             }.padding(5)
@@ -54,22 +54,18 @@ extension InterventionView {
     }
     
     private var animationSection: some View {
-        ZStack {
-            Color.gray
-                .frame(width: 125, height: 125)
-                .cornerRadius(10)
-            
-            VStack {
-                Image(systemName: "checkmark")
-                    .font(.largeTitle)
-                    .foregroundColor(Color.white)
-                    .padding(.vertical)
-                Text("Visit Added!")
-                    .foregroundColor(Color.white)
-                    .font(._BTNCopy)
-                    .padding(.bottom)
-            }
+        VStack {
+            Image(systemName: "checkmark")
+                .font(.largeTitle)
+                .foregroundColor(Color.white)
+                .padding(.vertical)
+            Text("Treatment Added!")
+                .foregroundColor(Color.white)
+                .font(._BTNCopy)
+                .padding(.bottom)
         }
+        .padding(25)
+        .background( Color.gray.cornerRadius(10) )
         .onAppear() {
             withAnimation(.easeOut(duration: 2.5)) {
                 submitAnimation.toggle()
@@ -78,17 +74,11 @@ extension InterventionView {
         .opacity(submitAnimation ? 0.6 : 0.0)
         .zIndex(1)
     }
-    
-    private var visitRow: some View {
-        VStack {
-            Text("teset")
-        }
-    }
 }
 
-struct InterventionView_Previews: PreviewProvider {
+struct TreatmentView_Previews: PreviewProvider {
     static var previews: some View {
-        InterventionView()
+        TreatmentView()
             .environmentObject(Entries())
     }
 }

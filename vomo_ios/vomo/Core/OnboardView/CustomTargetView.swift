@@ -371,6 +371,49 @@ extension CustomTargetView {
                 }
             }.frame(width: svm.content_width)
             
+            VStack {
+                /// vocal effort
+                Button(action: {
+                    settings.botulinumInjection.toggle()
+                }) {
+                    ZStack(alignment: .leading) {
+                        ZStack {
+                            if settings.botulinumInjection {
+                                Color.MEDIUM_PURPLE
+                                    .frame(width: svm.content_width - 2, height: 60)
+                            } else {
+                                Color.white
+                                    .frame(width: svm.content_width - 2, height: 60)
+                            }
+                            
+                            HStack {
+                                Image(settings.botulinumInjection ? svm.select : svm.unselect)
+                                    .resizable()
+                                    .frame(width: 27.5, height: 27.5)
+                                    .padding(.leading, 15)
+                                Spacer()
+                            }
+                        }
+                        .cornerRadius(10)
+                        .shadow(color: Color.gray, radius: 1)
+                        .padding(1)
+                        
+                        VStack(alignment: .leading) {
+                            Text("Botulinum Injection Survey")
+                                .foregroundColor(settings.botulinumInjection ? Color.white : Color.gray)
+                                .font(._buttonFieldCopyLarger)
+                                .multilineTextAlignment(.leading)
+                            
+                            Text("Laryngeal Dystonia and Vocal Tremor")
+                                .foregroundColor(settings.botulinumInjection ? Color.white : Color.DARK_PURPLE)
+                                .font(._subCopy)
+                                .multilineTextAlignment(.leading)
+                                .padding(.trailing, 2)
+                        }.padding(.leading, svm.content_width / 7)
+                    }
+                }
+            }.frame(width: svm.content_width)
+            
             Spacer()
         }
         .padding(.top, 10)

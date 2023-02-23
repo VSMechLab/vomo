@@ -5,10 +5,16 @@
 //  Created by Neil McGrogan on 11/30/22.
 //
 
+
 import SwiftUI
-import AVKit
+//import AVKit
+import Foundation
+import SwiftUI
+import Combine
+import AVFoundation
 
 struct AudioInterface: View {
+    
     @EnvironmentObject var audioRecorder: AudioRecorder
     
     @State var audioPlayer: AVAudioPlayer!
@@ -19,30 +25,28 @@ struct AudioInterface: View {
     @State var formattedProgress: String = "00:00"
     
     let date: Date
-    
     let svm = SharedViewModel()
     
     var body: some View {
         VStack {
             // Header
             HStack {
-                    Text(formattedProgress)
-                        .font(.caption.monospacedDigit())
-
-                    // this is a dynamic length progress bar
-                    GeometryReader { gr in
-                        Capsule()
-                            .stroke(Color.DARK_PURPLE, lineWidth: 1)
-                            .background(
-                                Capsule()
-                                    .foregroundColor(Color.DARK_PURPLE)
-                                    .frame(width: gr.size.width * progress,
-                                              height: 6), alignment: .leading)
-                    }
-                    .frame( height: 6)
-
-                    Text(formattedDuration)
-                        .font(.caption.monospacedDigit())
+                Text(formattedProgress)
+                    .font(.caption.monospacedDigit())
+                
+                // this is a dynamic length progress bar
+                GeometryReader { gr in
+                    Capsule()
+                        .stroke(Color.DARK_PURPLE, lineWidth: 1)
+                        .background(
+                            Capsule()
+                                .foregroundColor(Color.DARK_PURPLE)
+                                .frame(width: gr.size.width * progress, height: 6), alignment: .leading)
+                }
+                .frame( height: 6)
+                
+                Text(formattedDuration)
+                    .font(.caption.monospacedDigit())
             }
             .padding(5)
             .frame(height: 30, alignment: .center)
@@ -52,11 +56,11 @@ struct AudioInterface: View {
                 Spacer()
 
                 Button(action: {
-                    let decrease = self.audioPlayer.currentTime - 15
+                    let decrease = self.audioPlayer.currentTime - 5
                     if decrease < 0.0 {
                         self.audioPlayer.currentTime = 0.0
                     } else {
-                        self.audioPlayer.currentTime -= 15
+                        self.audioPlayer.currentTime -= 5
                     }
                 }) {
                     Image(svm.backward_img)
@@ -69,8 +73,15 @@ struct AudioInterface: View {
                         playing = false
                         self.audioPlayer.pause()
                     } else if !audioPlayer.isPlaying {
-                        playing = true
-                        self.audioPlayer.play()
+                        do {
+                            //audioPlayer.delegate = self
+                            audioPlayer.play()
+                            playing = true
+                            self.audioPlayer.play()
+                        } catch {
+                            print("error")
+                        }
+                        
                     }
                 }) {
                     Image(playing ? svm.stop_playback_img : svm.start_playback_img)
@@ -80,7 +91,7 @@ struct AudioInterface: View {
                 }
                 
                 Button(action: {
-                    let increase = self.audioPlayer.currentTime + 15
+                    let increase = self.audioPlayer.currentTime + 5
                     if increase < self.audioPlayer.duration {
                         self.audioPlayer.currentTime = increase
                     } else {
@@ -96,7 +107,10 @@ struct AudioInterface: View {
             }
         }
         .onAppear {
-                initialiseAudioPlayer()
+            initialiseAudioPlayer()
+        }
+        .onDisappear() {
+            audioPlayer.stop()
         }
     }
     
@@ -106,29 +120,50 @@ struct AudioInterface: View {
         formatter.unitsStyle = .positional
         formatter.zeroFormattingBehavior = [ .pad ]
 
-    
-        // init audioPlayer - I use force unwrapping here for brevity and because I know that it cannot fail since I just added the file to the app.
-        // their version
         /*
-         let path = Bundle.main.path(forResource: "audioTest", ofType: ".wav")!
-         self.audioPlayer = try! AVAudioPlayer(contentsOf: URL(fileURLWithPath: path))
-         self.audioPlayer.prepareToPlay()
-         */
-        
-        /*
-         for target in audioRecorder.recordings {
-             if date == target.createdAt {
-                 self.audioPlayer.startPlayback(audio: target.fileURL)
+         func startPlayback (audio: URL) {
+             
+             let playbackSession = AVAudioSession.sharedInstance()
+             
+             do {
+                 try playbackSession.setCategory(.playAndRecord, mode: .default)
+                 try playbackSession.overrideOutputAudioPort(AVAudioSession.PortOverride.speaker)
+             } catch {
+                 print("Playing over the device's speakers failed")
+             }
+             
+             do {
+                 audioPlayer = try AVAudioPlayer(contentsOf: audio)
+                 audioPlayer.delegate = self
+                 audioPlayer.play()
+                 isPlaying = true
+             } catch {
+                 print("Playback failed.")
              }
          }
          */
-        //let path = Bundle.main.path(forResource: "audioTest", ofType: ".wav")!
-        
         
         for target in audioRecorder.recordings {
             if date == target.createdAt {
-                self.audioPlayer = try! AVAudioPlayer(contentsOf: target.fileURL)
-                self.audioPlayer.prepareToPlay()
+                /*self.audioPlayer = try! AVAudioPlayer(contentsOf: target.fileURL)
+                self.audioPlayer.prepareToPlay()*/
+                
+                
+                //let sound = Bundle.main.path(forResource: svm.audio[exercise], ofType: "wav")
+                //audioPlayer.startPlayback(audio: URL(fileURLWithPath: sound!))
+                
+                let playbackSession = AVAudioSession.sharedInstance()
+                do {
+                    try playbackSession.setCategory(.playback, mode: .default)
+                    try playbackSession.overrideOutputAudioPort(AVAudioSession.PortOverride.speaker)
+                } catch {
+                    print("Playing over the device's speakers failed")
+                }
+                do {
+                    audioPlayer = try AVAudioPlayer(contentsOf: target.fileURL)
+                } catch {
+                    print("Playback failed.")
+                }
             }
         }
         
@@ -140,11 +175,8 @@ struct AudioInterface: View {
            if !audioPlayer.isPlaying {
                playing = false
            }
-           progress = CGFloat(audioPlayer.currentTime /
-                                             audioPlayer.duration)
-           formattedProgress = formatter
-                     .string(from:
-                            TimeInterval(self.audioPlayer.currentTime))!
+           progress = CGFloat(audioPlayer.currentTime / audioPlayer.duration)
+           formattedProgress = formatter.string(from: TimeInterval(self.audioPlayer.currentTime))!
         }
     }
 }
@@ -152,14 +184,14 @@ struct AudioInterface: View {
 struct AudioInterface_Previews: PreviewProvider {
     static var previews: some View {
         AudioInterface(date: .now)
-            .previewLayout(
-                   PreviewLayout.fixed(width: 400, height: 300))
+            .previewLayout(PreviewLayout.fixed(width: 400, height: 300))
             .previewDisplayName("Default preview")
             .environmentObject(AudioRecorder())
         AudioInterface(date: .now)
-            .previewLayout(
-                    PreviewLayout.fixed(width: 400, height: 300))
+            .previewLayout(PreviewLayout.fixed(width: 400, height: 300))
             .environment(\.sizeCategory, .accessibilityExtraLarge)
             .environmentObject(AudioRecorder())
     }
 }
+
+

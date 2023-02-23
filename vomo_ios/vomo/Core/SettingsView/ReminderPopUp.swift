@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct ReminderPopUp: View {
+    @Environment(\.openURL) var openURL
+    
     @EnvironmentObject var notifications: Notification
     @EnvironmentObject var settings: Settings
     @Binding var showNotifications: Bool
@@ -29,26 +31,15 @@ struct ReminderPopUp: View {
                 timeOfDay
             }
         }
+        .padding(.vertical)
+        .padding()
         .frame(width: svm.content_width)
+        .background(Color.white)
+        .cornerRadius(15)
+        .shadow(color: Color.gray, radius: 5)
+        .padding(.vertical)
+        .padding(.vertical)
         .onAppear() {
-            self.notifications.notificationsOn = self.notifications.getStatus()
-            
-            /*
-             var dateComponents = DateComponents()
-             
-             
-             
-             for trig in triggers {
-                 print("\(Date.now) and \(trig.date)")
-                 
-                 if trig.date > .now {
-                     dateComponents.year = trig.date.splitYear
-                     dateComponents.month = trig.date.splitMonth
-                     dateComponents.day = trig.date.splitDay
-                     dateComponents.hour = preferedHour
-                     dateComponents.minute = preferedMinute
-             */
-            
             var dateComponents = DateComponents()
             dateComponents.hour = notifications.preferedHour
             dateComponents.minute = notifications.preferedMinute
@@ -77,6 +68,32 @@ extension ReminderPopUp {
                         self.notifications.notificationsOn = false
                     }
                 }.buttonStyle(NoButton(selected: notifications.notificationsOn))
+            }
+            
+            if !self.notifications.getStatus() {
+                Text("You must enable notifications in settings")
+                    .multilineTextAlignment(.leading)
+                    .foregroundColor(.red)
+                    .font(._bodyCopy)
+                
+                Button(action: {
+                    if #available(iOS 16, *) {
+                        openURL(URL(string: UIApplication.openNotificationSettingsURLString)!)
+                    }
+                    if #available(iOS 15.4, *) {
+                        openURL(URL(string: UIApplicationOpenNotificationSettingsURLString)!)
+                    }
+                    if #available(iOS 8.0, *) {
+                        // just opens settings
+                        openURL(URL(string: UIApplication.openSettingsURLString)!)
+                    }
+                }) {
+                    Text("Go to settings")
+                        .font(._bodyCopyBold)
+                        .foregroundColor(Color.DARK_PURPLE)
+                        .padding(.bottom)
+                }
+                .padding(.bottom, 5)
             }
         }
     }

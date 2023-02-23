@@ -12,6 +12,7 @@ var tabs = ["Summary", "Pitch", "Duration", "Quality", "Survey"]
 
 struct Graphic: View {
     @Binding var thresholdPopUps: (Bool, Bool, Bool)
+    @Binding var tappedRecording: Date
     
     @State var selectedTab = "Summary"
     @State var edge = UIApplication.shared.windows.first?.safeAreaInsets
@@ -44,7 +45,7 @@ struct Graphic: View {
                 SummaryTab(showTitle: $showTitle)
                     .tag("Summary")
                 
-                PitchTab(showTitle: $showTitle, thresholdPopUps: $thresholdPopUps)
+                PitchTab(showTitle: $showTitle, thresholdPopUps: $thresholdPopUps, tappedRecording: $tappedRecording)
                     .tag("Pitch")
                 
                 DurationTab(showTitle: $showTitle, thresholdPopUps: $thresholdPopUps)
@@ -90,11 +91,8 @@ struct Graphic: View {
                             self.time = 0
                         }
                     }) {
-                        Color.INPUT_FIELDS
+                        Color.INPUT_FIELDS.opacity(0.00001)
                             .frame(height: 10)
-                            .cornerRadius(2)
-                            .shadow(color: Color.black.opacity(0.15), radius: 5, x: 5, y: 5)
-                            .shadow(color: Color.black.opacity(0.15), radius: 5, x: -5, y: -5)
                             .padding(.horizontal)
                     }.transition(.slideUp)
                 }
@@ -109,12 +107,12 @@ struct Graphic: View {
                         .frame(width: tabs[step] == selectedTab ? 8.5 : 6, height: tabs[step] == selectedTab ? 8.5 : 6, alignment: .center)
                 }
             }
-            .padding(.bottom, 7.5)
+            .padding(.bottom, 5.5)
         }
         .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height * 0.35)
         .onReceive(timer) { _ in
             time += 1
-            if time >= 4 {
+            if time > 1 {
                 withAnimation() {
                     self.showTitle = false
                 }
@@ -162,16 +160,20 @@ struct SummaryTab: View {
             Spacer()
         }
         .padding()
-        .frame(width: UIScreen.main.bounds.width, height: showTitle ? UIScreen.main.bounds.height * 0.325 : UIScreen.main.bounds.height * 0.335)
+        .frame(width: UIScreen.main.bounds.width, height: showTitle ? UIScreen.main.bounds.height * 0.325 : UIScreen.main.bounds.height * 0.345)
         .foregroundColor(.TEAL)
         .edgesIgnoringSafeArea(.all)
     }
 }
 
 struct PitchTab: View {
+    @EnvironmentObject var settings: Settings
+    
     @Binding var showTitle: Bool
     
     @Binding var thresholdPopUps: (Bool, Bool, Bool)
+    
+    @Binding var tappedRecording: Date
     
     var body: some View {
         VStack {
@@ -184,19 +186,37 @@ struct PitchTab: View {
             
             HStack {
                 Spacer()
-                Button("Set Threshold") {
-                    self.thresholdPopUps.0.toggle()
+                
+                if settings.focusSelection == 4 {
+                    switch settings.gender {
+                    case "Male":
+                        Button("Set to Male") {
+                            self.settings.gender = "Female"
+                        }
+                    case "Female":
+                        Button("Set to Female") {
+                            self.settings.gender = "Non-binary"
+                        }
+                    case "Non-binary":
+                        Button("Set to Non-Binary") {
+                            self.settings.gender = "Male"
+                        }
+                    default:
+                        Button("No threshold set") {
+                            self.settings.gender = "Male"
+                        }
+                    }
                 }
             }
             .foregroundColor(Color.white)
             .font(._bodyCopyMedium)
             
-            PitchGraph()
+            PitchGraph(tappedRecording: $tappedRecording)
             
             Spacer()
         }
         .padding()
-        .frame(width: UIScreen.main.bounds.width, height: showTitle ? UIScreen.main.bounds.height * 0.325 : UIScreen.main.bounds.height * 0.335)
+        .frame(width: UIScreen.main.bounds.width, height: showTitle ? UIScreen.main.bounds.height * 0.325 : UIScreen.main.bounds.height * 0.345)
         .foregroundColor(.BRIGHT_PURPLE)
         .edgesIgnoringSafeArea(.all)
     }
@@ -230,7 +250,7 @@ struct DurationTab: View {
             Spacer()
         }
         .padding()
-        .frame(width: UIScreen.main.bounds.width, height: showTitle ? UIScreen.main.bounds.height * 0.325 : UIScreen.main.bounds.height * 0.335)
+        .frame(width: UIScreen.main.bounds.width, height: showTitle ? UIScreen.main.bounds.height * 0.325 : UIScreen.main.bounds.height * 0.345)
         .foregroundColor(.DARK_PURPLE)
         .edgesIgnoringSafeArea(.all)
     }
@@ -264,7 +284,7 @@ struct QualityTab: View {
             Spacer()
         }
         .padding()
-        .frame(width: UIScreen.main.bounds.width, height: showTitle ? UIScreen.main.bounds.height * 0.325 : UIScreen.main.bounds.height * 0.335)
+        .frame(width: UIScreen.main.bounds.width, height: showTitle ? UIScreen.main.bounds.height * 0.325 : UIScreen.main.bounds.height * 0.345)
         .foregroundColor(.BRIGHT_PURPLE)
         .edgesIgnoringSafeArea(.all)
     }
@@ -272,23 +292,30 @@ struct QualityTab: View {
 
 struct SurveyTab: View {
     @Binding var showTitle: Bool
+    @State private var showVHI = true
     var body: some View {
         VStack {
             HStack {
                 Text("Survey")
                     .font(Font._title1)
                 Spacer()
+                Button(action: {
+                    self.showVHI.toggle()
+                }) {
+                    Text(showVHI ? "Show Vocal Effort" : "Show VHI")
+                        .font(._bodyCopy)
+                }
             }
             .padding(.top, showTitle ? 15 : 0)
             
             Spacer()
             
-            SurveyGraph()
+            SurveyGraph(showVHI: $showVHI)
             
             Spacer()
         }
         .padding()
-        .frame(width: UIScreen.main.bounds.width, height: showTitle ? UIScreen.main.bounds.height * 0.325 : UIScreen.main.bounds.height * 0.335)
+        .frame(width: UIScreen.main.bounds.width, height: showTitle ? UIScreen.main.bounds.height * 0.325 : UIScreen.main.bounds.height * 0.345)
         .foregroundColor(.TEAL)
         .edgesIgnoringSafeArea(.all)
     }
@@ -310,6 +337,6 @@ struct TabButton: View {
 
 struct Graphic_Previews: PreviewProvider {
     static var previews: some View {
-        Graphic(thresholdPopUps: .constant((false, false, false)))
+        Graphic(thresholdPopUps: .constant((false, false, false)), tappedRecording: .constant(.now))
     }
 }

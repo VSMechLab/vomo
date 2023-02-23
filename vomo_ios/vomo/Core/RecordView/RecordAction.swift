@@ -70,7 +70,7 @@ extension CompleteMenu {
         VStack {
             Button(action: {
                 // Appending processed data to
-                self.audioRecorder.process(recording: audioRecorder.recordings.last!)
+                self.audioRecorder.process(recording: audioRecorder.recordings.last!, gender: self.settings.gender)
                 
                 if settings.isActive() && settings.recordPerWeek != 0 {
                     settings.recordEntered += 1

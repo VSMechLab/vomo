@@ -37,7 +37,7 @@ struct SharedViewModel {
     /// For Profile
     let genders = ["Other", "Genderqueer", "Non-binary", "Female", "Male"]
     var sexes = ["Male", "Female", "Other"]
-    let vocalIssues = ["a custom", "the Spasmodic Dysphonia", "the Recurrent Pappiloma", "the Parkinson's Disease", "the Gender-Affirming Care", "the Vocal Fold/Paresis", "the default"]
+    let vocalIssues = ["a custom", "the Laryngeal Dystonia", "the Recurrent Pappiloma", "the Parkinson's Disease", "the Gender-Affirming Care", "the Vocal Fold/Paresis", "Vocal Tremor", "Laryngeal Dystonia and Vocal Tremor", "the default"]
     
     /// Items for recording
     let selected_do_not_show_img = "VM_Prpl-Check-Square-Btn"
@@ -51,6 +51,8 @@ struct SharedViewModel {
     
     let navArrowWidth = CGFloat(20)
     let navArrowHeight = CGFloat(25)
+    
+    let blank_btn = "VM_Stroke-Btn"
     
     let vhi: [String] = [
         "1. My voice makes it difficult for people to hear me.",
@@ -70,6 +72,13 @@ struct SharedViewModel {
         "How much mental effort did it take to make a voice?"
     ]
     
+    let bi: [String] = [
+        "How close to normal function is your voice right now?",
+        "How breathy / whisper-like is your voice now?",
+        "How much difficulty swallowing do you have right now?",
+        "How much difficulty breathing do you have right now?"
+    ]
+    
     var questions: [String] {
         settings.setSurveys()
         
@@ -81,11 +90,7 @@ struct SharedViewModel {
         if settings.vocalEffort {
             ret += vocal_effort
         }*/
-        return vhi + vocal_effort
-    }
-    
-    var allQuestions: [String] {
-        return vhi + vocal_effort
+        return vhi + vocal_effort + bi
     }
     
     let record_img = "VM_record-nav-ds-icon"

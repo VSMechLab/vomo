@@ -20,6 +20,8 @@ struct SubmitButton: ButtonStyle {
                 .font(._BTNCopy)
                 .foregroundColor(Color.white)
         }
+        .scaleEffect(configuration.isPressed ? 0.95 : 1.0)
+        .animation(.easeInOut, value: configuration.isPressed)
     }
 }
 

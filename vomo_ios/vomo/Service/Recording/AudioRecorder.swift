@@ -24,6 +24,8 @@ struct Processings {
 
 class AudioRecorder: NSObject, ObservableObject {
     
+    @EnvironmentObject var settings: Settings
+    
     // Attributes
     let processedDataKey: String = "saved_data"
     let objectWillChange = PassthroughSubject<AudioRecorder, Never>()
@@ -44,13 +46,14 @@ class AudioRecorder: NSObject, ObservableObject {
         getProcessedData()
     }
     
-    func setProcessedData(recording: Recording, metrics: [Float]) {
+    func setProcessedData(recording: Recording, metrics: [Double]) {
         self.processedData.append(ProcessedData(createdAt: recording.createdAt,
                                                 duration: metrics[0],
                                                 intensity: metrics[1],
                                                 pitch_mean: metrics[2],
                                                 pitch_min: metrics[3],
                                                 pitch_max: metrics[4],
+                                                cppMean: metrics[5],
                                                 favorite: false))
     }
     
@@ -69,12 +72,20 @@ class AudioRecorder: NSObject, ObservableObject {
     }
     
     func returnProcessing(createdAt: Date) -> ProcessedData {
-        var ret = ProcessedData(createdAt: .now, duration: -1.0, intensity: -1.0, pitch_mean: -1.0, pitch_min: -1.0, pitch_max: -1.0, favorite: false)
+        var ret = ProcessedData(createdAt: .now, duration: -1.0, intensity: -1.0, pitch_mean: -1.0, pitch_min: -1.0, pitch_max: -1.0, cppMean: -1.0, favorite: false)
         for data in processedData {
             if createdAt == data.createdAt {
-                ret = ProcessedData(createdAt: data.createdAt, duration: data.duration, intensity: data.intensity, pitch_mean: data.pitch_mean, pitch_min: data.pitch_min, pitch_max: data.pitch_max, favorite: false)
+                ret = ProcessedData(createdAt: data.createdAt, duration: data.duration, intensity: data.intensity, pitch_mean: data.pitch_mean, pitch_min: data.pitch_min, pitch_max: data.pitch_max, cppMean: data.cppMean, favorite: false)
             }
         }
+        return ret
+    }
+    
+    func baseLine() -> ProcessedData {
+        var ret = ProcessedData(createdAt: .now, duration: -1.0, intensity: -1.0, pitch_mean: -1.0, pitch_min: -1.0, pitch_max: -1.0, cppMean: -1.0, favorite: false)
+        
+        ret = processedData.first ?? ProcessedData(createdAt: .now, duration: -1.0, intensity: -1.0, pitch_mean: -1.0, pitch_min: -1.0, pitch_max: -1.0, cppMean: -1.0, favorite: false)
+        
         return ret
     }
     
@@ -114,7 +125,7 @@ class AudioRecorder: NSObject, ObservableObject {
         fetchRecordings()
     }
     
-    func process(recording rec: Recording) {
+    func process(recording rec: Recording, gender: String) {
         let group = DispatchGroup()
         let labelGroup = String("test")
         
@@ -122,7 +133,7 @@ class AudioRecorder: NSObject, ObservableObject {
         
         let dispatchQueue = DispatchQueue(label: labelGroup, qos: .background)
         dispatchQueue.async(group: group, execute: {
-            let metrics = self.signalProcess(fileURL: rec.fileURL)
+            let metrics = self.signalProcess(fileURL: rec.fileURL, gender: gender)
             self.setProcessedData(recording: rec, metrics: metrics)
         })
         
@@ -278,15 +289,13 @@ class AudioRecorder: NSObject, ObservableObject {
         // UIApplication.shared.windows.first?.rootViewController?.present(av, animated: true, completion: nil)
      }
     
-    func syncEntries() {
+    func syncEntries(gender: String) {
         // Determine if the same amount, if not will further process
         if recordings.count != processedData.count {
             print("Mismatch in data\n\n\n\n\n")
             
             // On the condition that there are more recordings
             if recordings.count > processedData.count {
-                
-                
                 
                 // Loop through recordings
                 for record in recordings {
@@ -307,12 +316,24 @@ class AudioRecorder: NSObject, ObservableObject {
                     if count == 0 {
                         print("Performed a reproccessing on this file: \(record.createdAt)")
                         
-                        let processings = process(recording: record)
+                        
+                        let processings = process(recording: record, gender: gender)
                         saveProcessedData()
                     }
                 }
             }
         }
+        
+        // Check if all present
+        /*
+         pitch
+         cpp
+         etc
+         
+         */
+        
+        
+        
     }
 }
 

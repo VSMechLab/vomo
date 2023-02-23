@@ -15,7 +15,8 @@ struct RecordView: View {
     @EnvironmentObject var settings: Settings
     @EnvironmentObject var audioRecorder: AudioRecorder
     
-    @State private var audioPlayerPrerecordings: AVAudioPlayer?
+    @StateObject private var audioPlayer = AudioPlayer()
+    
     @State private var exercise = 0
     @State private var completePopUp = false
     @State private var landingPopUp = false
@@ -211,6 +212,14 @@ extension RecordView {
                 } else {
                     audioRecorder.startRecording(taskNum: settings.taskList[exercise].taskNum)
                 }
+                
+                /*if self.audioPlayer?.isPlaying == true {
+                    self.audioPlayer?.stopPlayback()
+                }*/
+                
+                if self.audioPlayer.isPlaying {
+                    self.audioPlayer.stopPlayback()
+                }
             }) {
                 Image(audioRecorder.recording ? svm.stop_img : svm.record_img)
                     .resizable()
@@ -264,14 +273,15 @@ extension RecordView {
     
     private var promptPlaybackButton: some View {
         Button("Hear an example") {
-            if self.audioPlayerPrerecordings?.isPlaying == true {
-                self.audioPlayerPrerecordings?.stop()
-            } else {
-                let sound = Bundle.main.path(forResource: svm.audio[exercise], ofType: "wav")
-                audioPlayerPrerecordings = try! AVAudioPlayer(contentsOf: URL(fileURLWithPath: sound!))
-                self.audioPlayerPrerecordings?.play()
+            let sound = Bundle.main.path(forResource: svm.audio[exercise], ofType: "wav")
+            audioPlayer.startPlayback(audio: URL(fileURLWithPath: sound!))
+        }
+        .buttonStyle(SubmitButton())
+        .onChange(of: exercise) { _ in
+            if self.audioPlayer.isPlaying == true {
+                self.audioPlayer.stopPlayback()
             }
-        }.buttonStyle(SubmitButton())
+        }
     }
 }
 

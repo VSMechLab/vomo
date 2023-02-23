@@ -17,7 +17,7 @@ struct ExpandedSurvey: View {
     @Binding var deletionTarget: (Date, String)
     var body: some View {
         VStack(alignment: .leading) {
-            if available == "vhi" {
+            if available.contains("vhi") {
                 HStack(spacing: 0) {
                     Text("VHI-10: ")
                         .font(._bodyCopyMedium)
@@ -28,22 +28,13 @@ struct ExpandedSurvey: View {
                         .padding(.horizontal, 7.5)
                     DeleteButton(deletionTarget: $deletionTarget, type: "Survey response", date: createdAt)
                 }
-            } else if available == "ve" {
+                Color.white.frame(height: 1)
+            }
+            if available.contains("ve") {
                 HStack(spacing: 0) {
                     Text("Vocal Effort: ")
                         .font(._bodyCopyMedium)
                     Text("\(score.1, specifier: "%.0f")")
-                        .font(._bodyCopyBold)
-                    Spacer()
-                    StarButton(type: "survey", date: createdAt)
-                        .padding(.trailing)
-                    DeleteButton(deletionTarget: $deletionTarget, type: "Survey response", date: createdAt)
-                }
-            } else if available == "both" {
-                HStack(spacing: 0) {
-                    Text("VHI-10: ")
-                        .font(._bodyCopyMedium)
-                    Text("\(score.0, specifier: "%.0f")")
                         .font(._bodyCopyBold)
                     Spacer()
                     StarButton(type: "survey", date: createdAt)
@@ -51,24 +42,27 @@ struct ExpandedSurvey: View {
                     DeleteButton(deletionTarget: $deletionTarget, type: "Survey response", date: createdAt)
                 }
                 Color.white.frame(height: 1)
+            }
+            if available.contains("bi") {
                 HStack(spacing: 0) {
-                    Text("Vocal Effort: ")
+                    Text("Botulinum Injection: ")
                         .font(._bodyCopyMedium)
-                    Text("\(score.1, specifier: "%.0f")")
+                    Text("\(score.2, specifier: "%.0f")")
                         .font(._bodyCopyBold)
                     Spacer()
                     StarButton(type: "survey", date: createdAt)
                         .padding(.trailing)
                     DeleteButton(deletionTarget: $deletionTarget, type: "Survey response", date: createdAt)
                 }
+                Color.white.frame(height: 1)
             }
         }
         .foregroundColor(Color.white)
         .padding(4)
     }
     
-    var available: String {
-        var ret = ""
+    var available: [String] {
+        var ret: [String] = []
         for survey in entries.questionnaires {
             // Check if survey time matches target time
             if survey.createdAt == createdAt && survey.responses.count != 0 {
@@ -79,16 +73,30 @@ struct ExpandedSurvey: View {
                         count += 1
                     }
                 }
+                var count1 = 0
+                for index in 11...12 {
+                    if survey.responses[index] == -1 {
+                        count1 += 1
+                    }
+                }
+                var count2 = 0
+                for index in 13..<16 {
+                    if survey.responses[index] == -1 {
+                        count2 += 1
+                    }
+                }
                 
                 // if first consecutive 10 are unanswered. else if last is unanswered. Else if some combination of answers on both
-                if count == 10 {
-                    ret = "ve"
-                } else if survey.responses.last == -1 {
+                if count != 10 {
+                    ret += ["vhi"]
+                }
+                if count1 != 2 {
                     // Iterate through 11 different questions
-                    ret = "vhi"
-                } else {
+                    ret += ["ve"]
+                }
+                if count2 != 4 {
                     // Iterate through 11 different questions
-                    ret = "both"
+                    ret += ["bi"]
                 }
             }
         }
@@ -96,8 +104,8 @@ struct ExpandedSurvey: View {
         return ret
     }
     
-    var score: (Double, Double) {
-        var ret: (Double, Double) = (-1.0, -1.0)
+    var score: (Double, Double, Double) {
+        var ret: (Double, Double, Double) = (-1.0, -1.0, -1.0)
         for survey in entries.questionnaires {
             // Check if survey time matches target time
             if survey.createdAt == createdAt {

@@ -11,8 +11,8 @@ import AVFoundation
 import SwiftUI
 
 class Entries: ObservableObject {
-    @Published var interventions: [InterventionModel] = [] {
-        didSet { saveInterventions() }
+    @Published var treatments: [TreatmentModel] = [] {
+        didSet { saveTreatments() }
     }
     @Published var questionnaires: [QuestionnaireModel] = [] {
         didSet { saveQuestionnaireItems() }
@@ -67,12 +67,12 @@ class Entries: ObservableObject {
         return returnable
     }
     
-    let questionnairesItemsKey: String = "saved_questionnaires", questionnairesEffortItemsKey: String = "saved_questionnaires_effort", journalsItemsKey: String = "saved_journals", interventionItemsKey: String = "saved_intervention"
+    let questionnairesItemsKey: String = "saved_questionnaires", questionnairesEffortItemsKey: String = "saved_questionnaires_effort", journalsItemsKey: String = "saved_journals", treatmentsItemsKey: String = "saved_treatments"
     
     func getItems() {
         self.getQuestionnaires()
         self.getJournals()
-        self.getInterventions()
+        self.getTreatments()
     }
     
     
@@ -94,13 +94,13 @@ class Entries: ObservableObject {
         self.journals = savedItems
     }
     
-    func getInterventions() {
+    func getTreatments() {
         guard
-            let data = UserDefaults.standard.data(forKey: interventionItemsKey),
-            let savedItems = try? JSONDecoder().decode([InterventionModel].self, from: data)
+            let data = UserDefaults.standard.data(forKey: treatmentsItemsKey),
+            let savedItems = try? JSONDecoder().decode([TreatmentModel].self, from: data)
         else { return }
         
-        self.interventions = savedItems
+        self.treatments = savedItems
     }
     
     func saveQuestionnaireItems() {
@@ -113,9 +113,9 @@ class Entries: ObservableObject {
             UserDefaults.standard.set(encodedData, forKey: journalsItemsKey)
         }
     }
-    func saveInterventions() {
-        if let encodedData = try? JSONEncoder().encode(interventions) {
-            UserDefaults.standard.set(encodedData, forKey: interventionItemsKey)
+    func saveTreatments() {
+        if let encodedData = try? JSONEncoder().encode(treatments) {
+            UserDefaults.standard.set(encodedData, forKey: treatmentsItemsKey)
         }
     }
     

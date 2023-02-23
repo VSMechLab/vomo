@@ -24,12 +24,14 @@ struct ProgressView: View {
     @State private var showFavorites = false
     @State var reset = false
     
+    @State var tappedRecording: Date = .now
+    
     let svm = SharedViewModel()
     
     var body: some View {
         ZStack {
             VStack {
-                Graphic(thresholdPopUps: $thresholdPopUps)
+                Graphic(thresholdPopUps: $thresholdPopUps, tappedRecording: $tappedRecording)
                 
                 if showFilter {
                     VStack(spacing: 0) {
@@ -54,18 +56,6 @@ struct ProgressView: View {
         .onChange(of: audioRecorder.processedData) { _ in
             print("data has changed")
         }*/
-        // do something on the appearance of the use of this data
-        .onAppear() {
-            // Show the different createdAt
-            for recording in audioRecorder.recordings {
-                print("Recording: \(recording.createdAt.toStringDay())")
-            }
-            for processing in audioRecorder.processedData {
-                print("Processing: \(processing.createdAt.toStringDay()), \(processing.duration)")
-            }
-            // SYNC data
-            audioRecorder.syncEntries()
-        }
         
         .onAppear() {
             refilter()
@@ -81,7 +71,9 @@ struct ProgressView: View {
         .onChange(of: expandAll) { _ in
             refilter()
         }
-        
+        .onChange(of: tappedRecording) { _ in
+            refilter()
+        }
         
     }
 }

@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Foundation
 import UIKit
 
 /*
@@ -50,6 +51,20 @@ struct ViewController: View {
             }
             notification.requestPermission()
             notification.updateNotifications(triggers: settings.triggers())
+            
+            let group = DispatchGroup()
+            let labelGroup = String("test")
+            group.enter()
+            
+            let dispatchQueue = DispatchQueue(label: labelGroup, qos: .background)
+            dispatchQueue.async(group: group, execute: {
+                audioRecorder.syncEntries(gender: settings.gender)
+            })
+            
+            group.leave()
+            group.notify(queue: DispatchQueue.main, execute: {
+                print("Synced all recordings!")
+            })
         }
         
         .onChange(of: audioRecorder.recording) { _ in
@@ -74,8 +89,8 @@ extension ViewController {
                 SurveyView()
             case .journal:
                 JournalView()
-            case .intervention:
-                InterventionView()
+            case .treatment:
+                TreatmentView()
             case .progress:
                 ProgressView()
             }

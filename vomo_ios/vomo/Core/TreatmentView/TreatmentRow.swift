@@ -1,5 +1,5 @@
 //
-//  VisitRow.swift
+//  TreatmentRow.swift
 //  VoMo
 //
 //  Created by Neil McGrogan on 11/29/22.
@@ -7,18 +7,18 @@
 
 import SwiftUI
 
-/// Contains a row of a visit
-/// Displays basic information and allows editiing of visit/intervention
-struct VisitRow: View {
+/// Contains a row of a treatment
+/// Displays basic information and allows editiing of treatments
+struct TreatmentRow: View {
     @EnvironmentObject var entries: Entries
     @State private var droppedDown = false
     
     @FocusState private var focused: Bool
     
     @Binding var note: String
-    @Binding var targetVisit: Date
+    @Binding var targetTreatment: Date
     
-    let visit: InterventionModel
+    let treatment: TreatmentModel
     let img: String
     let svm = SharedViewModel()
     
@@ -27,33 +27,44 @@ struct VisitRow: View {
     var body: some View {
         ZStack {
             VStack(spacing: 0) {
-                HStack(spacing: 0) {
-                    // CHANGED: add date to VStack to hold date and time
-                    Text("\(visit.date.toString(dateFormat: "MM/dd/yyyy"))")
-                        .padding(.trailing, 15)
+                Button(action: {
+                    withAnimation() {
+                        self.droppedDown.toggle()
+                    }
+                    if !droppedDown {
+                        note = ""
+                        targetTreatment = treatment.date
+                    }
+                }) {
+                    HStack(spacing: 0) {
+                        VStack {
+                            HStack {
+                                Text("\(treatment.date.dayOfWeek())")
+                                Spacer()
+                            }
+                            .font(._fieldCopyBold)
+                            HStack {
+                                Text("\(treatment.date.toDOB())")
+                                Spacer()
+                            }
+                            .font(._fieldCopyRegular)
+                        }
+                        .padding(.trailing, 12)
+                        .frame(maxWidth: 95)
 
-                    Text("\(visit.type)")
-                    
-                    Spacer()
-                    
-                    Button(action: {
-                        withAnimation() {
-                            self.droppedDown.toggle()
-                        }
-                        if !droppedDown {
-                            note = ""
-                            targetVisit = visit.date
-                        }
-                    }) {
+                        Text("\(treatment.type)")
+                        
+                        Spacer()
+                        
                         Arrow()
                             .rotationEffect(self.droppedDown ? Angle(degrees: 90.0) : Angle(degrees: 0.0))
                             .padding(.horizontal, 5)
                             .transition(.slide)
                     }
+                    .padding(.horizontal, 3)
+                    .foregroundColor(Color.gray)
+                    .cornerRadius(5)
                 }
-                .padding(.horizontal, 3)
-                .foregroundColor(Color.gray)
-                .cornerRadius(5)
                 
                 if droppedDown {
                     Color.gray.frame(height: 1)
@@ -61,15 +72,15 @@ struct VisitRow: View {
                         .padding(.horizontal, 3)
                     
                     HStack {
-                        Text("\(visit.date.toString(dateFormat: "hh:mm a"))")
+                        Text("\(treatment.date.toString(dateFormat: "hh:mm a"))")
                         Spacer()
-                        AltDeleteButton(deletionTarget: $deletionTarget, type: "intervention", date: targetVisit)
+                        AltDeleteButton(deletionTarget: $deletionTarget, type: "treatment", date: targetTreatment)
                     }
                     
                     HStack {
-                        if visit.note == "" {
+                        if treatment.note == "" {
                             Button(action: {
-                                visit.note = ""
+                                treatment.note = ""
                             }) {
                                 Text("Add a note")
                             }
@@ -87,10 +98,10 @@ struct VisitRow: View {
                         .padding(.leading, 5)
                         .frame(height: 100)
                         .onChange(of: note) { change in
-                            addNote(date: visit.date, change: change)
+                            addNote(date: treatment.date, change: change)
                         }
                         .onAppear() {
-                            note = visit.note
+                            note = treatment.note
                         }
                 }
             }
@@ -126,18 +137,18 @@ struct VisitRow: View {
     /// System for adding/editing/removing notes
     func addNote(date: Date, change: String) {
         var index = 0
-        for visit in entries.interventions {
-            if visit.date == date {
-                entries.interventions[index].note = change
+        for treatment in entries.treatments {
+            if treatment.date == date {
+                entries.treatments[index].note = change
             }
             index += 1
         }
         
-        entries.saveInterventions()
+        entries.saveTreatments()
     }
     
     /// Sensitive delete function, once performed cannot be recovered
-    /// Seaches through interventions for the proper one to delete matching by date
+    /// Seaches through treatments for the proper one to delete matching by date
     func deleteAtDate(createdAt: Date) {
         print("delete at \(deletionTarget.0), \(deletionTarget.1)")
         
@@ -145,8 +156,8 @@ struct VisitRow: View {
         var count = -1
         
         if type == "" && count == -1 {
-            for index in 0..<entries.interventions.count {
-                if createdAt == entries.interventions[index].date {
+            for index in 0..<entries.treatments.count {
+                if createdAt == entries.treatments[index].date {
                     type = "survey"
                     count = index
                 }
@@ -154,11 +165,11 @@ struct VisitRow: View {
         }
         
         if count != -1 {
-            if type == "intervention" {
-                if entries.interventions[count].date == createdAt {
+            if type == "treatment" {
+                if entries.treatments[count].date == createdAt {
                     
-                    entries.interventions.remove(at: count)
-                    print("deleting intervention")
+                    entries.treatments.remove(at: count)
+                    print("deleting treatment")
                 }
             } else {
                 print("There was a mismatch in data. In order to prevent erroneous deletion of data we have disabled the functionality of deleting this specific entry.")
@@ -167,7 +178,7 @@ struct VisitRow: View {
     }
 }
 
-extension VisitRow {
+extension TreatmentRow {
     private var deletePopUpSection: some View {
         ZStack {
             Color.white
@@ -212,8 +223,8 @@ extension VisitRow {
     }
 }
 
-struct VisitRow_Previews: PreviewProvider {
+struct TreatmentRow_Previews: PreviewProvider {
     static var previews: some View {
-        VisitRow(note: .constant(""), targetVisit: .constant(.now), visit: InterventionModel(date: .now, type: "", note: ""), img: "")
+        TreatmentRow(note: .constant(""), targetTreatment: .constant(.now), treatment: TreatmentModel(date: .now, type: "", note: ""), img: "")
     }
 }

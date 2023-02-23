@@ -17,7 +17,7 @@ struct SurveyView: View {
     @State private var responses: [Int] = []
     let button_img = "VM_Gradient-Btn"
     
-    @State var timeRemaining = 2
+    @State var timeRemaining = 1
     let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
         
     @State private var showMissing = false
@@ -30,12 +30,15 @@ struct SurveyView: View {
                 
                 ScrollView(showsIndicators: true) {
                     VStack(alignment: .leading) {
-                        if settings.vhi || settings.vocalEffort {
+                        if settings.vhi || settings.vocalEffort || settings.botulinumInjection {
                             if settings.vhi {
                                 vhiSection
                             }
                             if settings.vocalEffort {
                                 veSection
+                            }
+                            if settings.botulinumInjection {
+                                biSection
                             }
                             
                             submitButton
@@ -101,7 +104,7 @@ struct SurveyView: View {
         }
         .onAppear() {
             self.settings.setSurveys()
-            self.responses = Array(repeating: -1, count: 12)
+            self.responses = Array(repeating: -1, count: 16)
         }
     }
 }
@@ -131,7 +134,7 @@ extension SurveyView {
                 .font(._title)
             
             ForEach(Array(svm.questions.enumerated()), id: \.element) { index, element in
-                if element != "How much physical effort did it take to make a voice?" && element != "How much mental effort did it take to make a voice?" {
+                if index <= 9 {
                     VHIScale(responses: self.$responses, prompt: element, index: index)
                         .frame(width: svm.content_width * 0.975)
                 }
@@ -153,6 +156,24 @@ extension SurveyView {
             
             ForEach(Array(svm.questions.enumerated()), id: \.element) { index, element in
                 if element == "How much physical effort did it take to make a voice?" || element == "How much mental effort did it take to make a voice?" {
+                    VEScale(responses: self.$responses, prompt: element, index: index)
+                        .frame(width: svm.content_width * 0.975)
+                }
+            }
+        }
+    }
+    
+    private var biSection: some View {
+        Group {
+            Text("Botulinum Injection")
+                .foregroundColor(.black)
+                .font(._title)
+            
+            ForEach(Array(svm.questions.enumerated()), id: \.element) { index, element in
+                if index > 12 {
+                    VHIScale(responses: self.$responses, prompt: element, index: index)
+                        .frame(width: svm.content_width * 0.975)
+                } else if index == 12 {
                     VEScale(responses: self.$responses, prompt: element, index: index)
                         .frame(width: svm.content_width * 0.975)
                 }
@@ -186,8 +207,53 @@ extension SurveyView {
                 
                 if submitable() || settings.allowIncompleteSurvey {
                     Button("Submit") {
+                        // editing this to separate the two different surveys to save independently
+                        
                         self.showMissing = false
-                        self.entries.questionnaires.append(QuestionnaireModel(createdAt: .now, responses: self.responses, favorite: false))
+                        
+                        
+                        /// Separate into three separate sections
+                        
+                        if settings.vhi {
+                            /// newResults just holds what is going to be appended
+                            var newResults: [Int] = []
+                            // two separate files to submit
+                            
+                            // first with just the first 10 resp
+                            for index in 0..<responses.count {
+                                if index == 10 || index == 11 {
+                                    newResults.append(-1)
+                                } else {
+                                    newResults.append(responses[index])
+                                }
+                            }
+                            self.entries.questionnaires.append(QuestionnaireModel(createdAt: .now, responses: newResults, favorite: false))
+                        } else if settings.vocalEffort {
+                            var newResults: [Int] = []
+                            // next with just the last two resp
+                            newResults = []
+                            for index in 0..<responses.count {
+                                if index == 10 || index == 11 {
+                                    newResults.append(responses[index])
+                                } else {
+                                    newResults.append(-1)
+                                }
+                            }
+                            self.entries.questionnaires.append(QuestionnaireModel(createdAt: .now + 5, responses: newResults, favorite: false))
+                        } else if settings.botulinumInjection {
+                            var newResults: [Int] = []
+                            // next with just the last two resp
+                            newResults = []
+                            for index in 0..<responses.count {
+                                if index >= 13 {
+                                    newResults.append(responses[index])
+                                } else {
+                                    newResults.append(-1)
+                                }
+                            }
+                            self.entries.questionnaires.append(QuestionnaireModel(createdAt: .now + 10, responses: newResults, favorite: false))
+                        }
+                        
                         responses = []
                         submitAnimation = true
                         
@@ -208,24 +274,26 @@ extension SurveyView {
     
     func submitable() -> Bool {
         var ret = true
-        
-        if settings.vhi && settings.vocalEffort {
-            for resp in responses {
-                if resp == -1 {
-                    ret = false
+        print(responses)
+        if responses.isNotEmpty {
+            if settings.vhi && settings.vocalEffort {
+                for resp in responses {
+                    if resp == -1 {
+                        ret = false
+                    }
                 }
-            }
-        } else if settings.vhi && !settings.vocalEffort {
-            for index in 0..<10 {
-                if responses[index] == -1 {
-                    ret = false
+            } else if settings.vhi && !settings.vocalEffort {
+                for index in 0..<10 {
+                    if responses[index] == -1 {
+                        ret = false
+                    }
                 }
-            }
-        } else if !settings.vhi && settings.vocalEffort {
-            if responses.count == 12 {
-                print(responses.count)
-                if responses[10] == -1 || responses[11] == -1 {
-                    ret = false
+            } else if !settings.vhi && settings.vocalEffort {
+                if responses.count == 12 {
+                    print(responses.count)
+                    if responses[10] == -1 || responses[11] == -1 {
+                        ret = false
+                    }
                 }
             }
         }

@@ -11,12 +11,13 @@ struct TextEntryField: View {
     @Binding var topic: String
     @EnvironmentObject var settings: Settings
     @FocusState private var focused: Bool
+    let label: String
     let svm = SharedViewModel()
     var body: some View {
         ZStack {
             EntryField()
             
-            TextField(self.topic.isEmpty ? "First Name" : self.topic, text: $topic)
+            TextField(self.topic.isEmpty ? label : self.topic, text: $topic)
                 .font(self.topic.isEmpty ? ._fieldCopyItalic : ._fieldCopyRegular)
                 .padding(.horizontal, svm.fieldPadding)
                 .focused($focused)

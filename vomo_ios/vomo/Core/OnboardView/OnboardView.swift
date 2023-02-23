@@ -71,9 +71,55 @@ extension OnboardView {
                         }
                         Spacer()
                         if stepSwitch != 4 {
-                            Button("Next") {
-                                stepSwitch += 1
-                            }.buttonStyle(NextButton())
+                            if stepSwitch == 2 {
+                                // For Let's Get Started.
+                                if settings.voice_plan == 1 || settings.voice_plan == 2 {
+                                    Button("Next") {
+                                        stepSwitch += 1
+                                    }.buttonStyle(NextButton())
+                                } else {
+                                    HStack(spacing: 5) {
+                                        Text("Next")
+                                            .foregroundColor(Color.gray)
+                                            .font(._pageNavLink)
+                                        GrayArrow()
+                                    }
+                                }
+                            } else if stepSwitch == 3 && self.settings.voice_plan == 1 {
+                                // Voice treatment target
+                                if settings.focusSelection != 0 {
+                                    Button("Next") {
+                                        stepSwitch += 1
+                                    }.buttonStyle(NextButton())
+                                } else {
+                                    HStack(spacing: 5) {
+                                        Text("Next")
+                                            .foregroundColor(Color.gray)
+                                            .font(._pageNavLink)
+                                        GrayArrow()
+                                    }
+                                }
+                            } else if stepSwitch == 3 && self.settings.voice_plan == 2 {
+                                // Custom target
+                                if (!self.settings.vowel && !self.settings.mpt && !self.settings.rainbow) ||
+                                    (!self.settings.pitch && !self.settings.CPP && !self.settings.intensity && !self.settings.duration && !self.settings.minPitch && !self.settings.maxPitch) ||
+                                    (!self.settings.vhi && !self.settings.vocalEffort && !self.settings.botulinumInjection) {
+                                    HStack(spacing: 5) {
+                                        Text("Next")
+                                            .foregroundColor(Color.gray)
+                                            .font(._pageNavLink)
+                                        GrayArrow()
+                                    }
+                                } else {
+                                    Button("Next") {
+                                        stepSwitch += 1
+                                    }.buttonStyle(NextButton())
+                                }
+                            } else {
+                                Button("Next") {
+                                    stepSwitch += 1
+                                }.buttonStyle(NextButton())
+                            }
                         } else if stepSwitch == 4 {
                             if settings.numWeeks != 0 {
                                 Button("Done") {

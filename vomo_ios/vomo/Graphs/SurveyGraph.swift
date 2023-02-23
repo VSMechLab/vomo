@@ -10,104 +10,166 @@ import SwiftUI
 struct SurveyGraph: View {
     @EnvironmentObject var entries: Entries
     @EnvironmentObject var settings: Settings
-    
+    @Binding var showVHI: Bool
     var body: some View {
         VStack(spacing: 0) {
             HStack(spacing: 0) {
-                VStack {
-                    Text("Worse\nVoice")
-                    Spacer()
-                    Text("Better\nVoice")
-                }
-                .frame(width: 50)
+                voiceQualitySection
+                
+                yLabel
+                
                 Color.white.frame(width: 2)
-                ScrollView(.horizontal, showsIndicators: false) {
-                    VStack(spacing: 0) {
-                        HStack(spacing: 0) {
-                            graphNodes
+                
+                // split into two areas:
+                // the graph (scrollable) to the left, abnormal key on the right
+                // the line at the bottom of the graph
+                VStack(spacing: 0) {
+                    ZStack {
+                        if showVHI {
+                            targetLine
                         }
-                        .padding(.horizontal)
                         
-                        Color.white.frame(height: 2)
+                        HStack(spacing: 10) {
+                            ScrollView(.horizontal, showsIndicators: false) {
+                                HStack(spacing: 20) {
+                                    graphNodes
+                                }
+                            }
+                            
+                            if showVHI {
+                                abnormalKey
+                            }
+                        }
                     }
+                    
+                    Color.white.frame(height: 2)
                 }
-                Text("Normal Range")
-                    .rotationEffect(Angle(degrees: 90))
-                    .padding(.trailing, -30)
-            }
-            
-            HStack {
-                Text("Less recent")
-                Spacer()
-                Text("More recent")
             }
         }
         .foregroundColor(.white)
     }
-    
-    /// Area one is green (above the threshold)
-    /// Area two is yellow (low but in threshold)
-    /// Area three is red (bellow threshold)
-    func safeZoneArea(pitch: Float) -> Int {
-        return 1
-    }
-    
-    /// This is the maxomum value that the graph will display
-    /// This has 15% added to it to add a buffer for displaying numbers correcty
-    var maxHeight: Float {
-        var max: Float = 0.0
-        /*
-        for index in 0..<entries.questionnaires.count {
-            if max < entries.questionnaires[index].pitch_mean {
-                max = entries.questionnaires[index].pitch_mean
-            }
-        }*/
-        // Add 15%
-        return max * 1.15 + 50
-    }
-    
-    /// This returns the heights of the individual bars on the graph
-    func heights(pitch: Float) -> (Float, Float) {
-        // audioRecorder.processedData[index].pitch_mean is the pitch
-        
-        /*
-         
-         In this calculation,
-         
-         the top section is equal to the % difference between the maxHeight and the mean
-         the middle section is equal to %10 no matter what
-         the last section is equal to the % difference between the mean and zero
-         
-         to find the top...
-         take the max-current
-         
-         */
-        
-        let top: Float = (1 - (pitch / maxHeight)) * 0.80
-        let bot: Float = (pitch / maxHeight) * 0.80
-        
-        print("the values calculated are as follows: \(top), \(bot)")
-        
-        
-        return (top, bot)
-    }
 }
 
 extension SurveyGraph {
-    private var graphNodes: some View {
-        ForEach(0..<entries.questionnaires.count, id: \.self) { index in
-            VStack {
-                Spacer()
-                Rectangle()
-                    .frame(width: 50)
-                    .padding(.horizontal)
+    private var voiceQualitySection: some View {
+        VStack {
+            Text("Better\nVoice")
+            Spacer()
+            Text("Worse\nVoice")
+        }
+        .font(._bodyCopy)
+        .frame(width: 47.5)
+    }
+    
+    private var yLabel: some View {
+        VStack(alignment: .trailing, spacing: 0) {
+            Text(showVHI ? "40" : "50")
+            Spacer()
+            Text(showVHI ? "VHI-10" : "Vocal-Effort")
+                .padding(.horizontal, -10)
+                .rotationEffect(Angle(degrees: -90))
+            Spacer()
+            Text("0")
+        }
+        .font(._bodyCopy)
+        .frame(width: 30)
+    }
+    
+    private var targetLine: some View {
+        GeometryReader { geo in
+            VStack(spacing: 0) {
+                Color.clear.frame(height: geo.size.height * ((maxHeight() - 12) / maxHeight()))
+                
+                Color.white.frame(height: 2)
+                
+                Color.clear.frame(height: geo.size.height * ((12) / maxHeight()))
             }
+            .frame(height: geo.size.height)
+        }
+    }
+    
+    private var abnormalKey: some View {
+        GeometryReader { geo in
+            VStack(alignment: .leading, spacing: 0) {
+                VStack {
+                    Spacer()
+                    Text("Abnormal")
+                        .padding(.bottom, 5)
+                }
+                .frame(height: geo.size.height * ((maxHeight() - 12) / maxHeight()))
+                
+                VStack {
+                    Text("Normal")
+                        .padding(.top, 5)
+                    Spacer()
+                }
+                .frame(height: geo.size.height * ((12) / maxHeight()))
+            }
+            .font(._bodyCopy)
+            //.padding(.trailing, -30)
+            .frame(height: geo.size.height)
+        }
+        .padding(.trailing, 5.0)
+        .frame(width: 70)
+        .padding(.leading, 5.0)
+    }
+    
+    private var graphNodes: some View {
+        ForEach(0..<nodes().count, id: \.self) { index in
+            GeometryReader { geo in
+                VStack(spacing: 0) {
+                    Color.clear.frame(height: geo.size.height * nodes()[index].1)
+                    
+                    Rectangle()
+                        .foregroundColor(Color.TEAL)
+                        .border(Color.white, width: 2.5)
+                        .frame(width: 27.5, height: geo.size.height * nodes()[index].0)
+                }
+                .frame(height: geo.size.height)
+            }
+            .padding(.horizontal, 5)
+        }
+    }
+    
+    func nodes() -> [(CGFloat, CGFloat)] {
+        var ret: [(CGFloat, CGFloat)] = []
+        
+        
+        if showVHI {
+            for index in 0..<entries.questionnaires.count {
+                if entries.questionnaires[index].score.0 != -1 {
+                    let topArea = ((maxHeight() -  CGFloat(entries.questionnaires[index].score.0)) / maxHeight())
+                    let bottomArea = (CGFloat(entries.questionnaires[index].score.0) / maxHeight())
+                    
+                    ret.append( (bottomArea , topArea) )
+                }
+            }
+        } else {
+            for index in 0..<entries.questionnaires.count {
+                if entries.questionnaires[index].score.1 != -1 {
+                    let topArea = ((maxHeight() -  CGFloat(entries.questionnaires[index].score.1)) / maxHeight())
+                    let bottomArea = (CGFloat(entries.questionnaires[index].score.1) / maxHeight())
+                    
+                    ret.append( (bottomArea , topArea) )
+                }
+            }
+        }
+        
+        return ret
+    }
+    
+    /// The max hieght the graph will be out of
+    func maxHeight() -> CGFloat {
+        if showVHI {
+            return 45
+        } else {
+            return 55
         }
     }
 }
 
 struct SurveyGraph_Previews: PreviewProvider {
     static var previews: some View {
-        SurveyGraph()
+        SurveyGraph(showVHI: .constant(false))
     }
 }

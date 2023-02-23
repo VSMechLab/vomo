@@ -12,6 +12,8 @@ import AVFoundation
 
 class AudioPlayer: NSObject, ObservableObject, AVAudioPlayerDelegate {
     
+    var audioPlayer: AVAudioPlayer!
+    
     let objectWillChange = PassthroughSubject<AudioPlayer, Never>()
     
     var isPlaying = false {
@@ -20,13 +22,12 @@ class AudioPlayer: NSObject, ObservableObject, AVAudioPlayerDelegate {
         }
     }
     
-    var audioPlayer: AVAudioPlayer!
-    
     func startPlayback (audio: URL) {
         
         let playbackSession = AVAudioSession.sharedInstance()
         
         do {
+            try playbackSession.setCategory(.playback, mode: .default)
             try playbackSession.overrideOutputAudioPort(AVAudioSession.PortOverride.speaker)
         } catch {
             print("Playing over the device's speakers failed")
@@ -43,7 +44,7 @@ class AudioPlayer: NSObject, ObservableObject, AVAudioPlayerDelegate {
     }
     
     func stopPlayback() {
-        audioPlayer.stop()
+        audioPlayer?.stop()
         isPlaying = false
     }
     
@@ -52,5 +53,4 @@ class AudioPlayer: NSObject, ObservableObject, AVAudioPlayerDelegate {
             isPlaying = false
         }
     }
-    
 }
