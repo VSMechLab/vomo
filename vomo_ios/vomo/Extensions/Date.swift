@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+
 extension Date {
     /// start of day
     var startOfDay: Date {
@@ -52,6 +53,10 @@ extension Date {
         return (strippedLhs.timeIntervalSinceReferenceDate - strippedRhs.timeIntervalSinceReferenceDate) / (24 * 60 * 60)
     }
     
+    static func / (lhs: Date, rhs: Date) -> TimeInterval {
+        return lhs.timeIntervalSinceReferenceDate - rhs.timeIntervalSinceReferenceDate
+    }
+    
     static func + (lhs: Date, rhs: Date) -> TimeInterval {
         let strippedLhs = lhs.removeTimeStamp!
         let strippedRhs = rhs.removeTimeStamp!
@@ -70,6 +75,14 @@ extension Date {
     {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "MM/dd/yyyy HH:mm"
+        return dateFormatter.string(from: self)
+    }
+    
+    /// "h:m:s"
+    func toDebug() -> String
+    {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "hh:mm:ss"
         return dateFormatter.string(from: self)
     }
     
@@ -144,7 +157,17 @@ extension Date {
         return dateFormatter.string(from: self)
     }
     
-    /// "dd/MM/yyyy"
+    /// "dd/MM/yy"
+    func toFullDate() -> String
+    {
+        let dateFormatter = DateFormatter()
+        // May need to be changed back. This was changed to prevent leadig zeros on dates
+        //dateFormatter.dateFormat = "MM/dd/yy"
+        dateFormatter.dateFormat = "M/d/yy"
+        return dateFormatter.string(from: self)
+    }
+    
+    /// "dd/MM/yy"
     func toDay() -> String
     {
         let dateFormatter = DateFormatter()
@@ -158,6 +181,13 @@ extension Date {
     {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "EEE"
+        return dateFormatter.string(from: self).uppercased()
+    }
+    
+    func weekAndDay() -> String
+    {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "(EEE M/d/yy)"
         return dateFormatter.string(from: self).uppercased()
     }
     

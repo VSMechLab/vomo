@@ -7,169 +7,158 @@
 
 import SwiftUI
 
+class SurveyNodeModel: Identifiable, Codable {
+    var data: Double
+    var secondPoint: Double
+    var dataDate: Date
+    var hasTreatment: Bool
+    var afterDate: Bool
+    var treatmentDate: Date
+    var treatmentType: String
+    
+    init(data: Double, secondPoint: Double, dataDate: Date, hasTreatment: Bool, afterDate: Bool, treatmentDate: Date, treatmentType: String) {
+        self.data = data
+        self.secondPoint = secondPoint
+        self.dataDate = dataDate
+        self.hasTreatment = hasTreatment
+        self.afterDate = afterDate
+        self.treatmentDate = treatmentDate
+        self.treatmentType = treatmentType
+    }
+}
+
 struct SurveyGraph: View {
     @EnvironmentObject var entries: Entries
     @EnvironmentObject var settings: Settings
-    @Binding var showVHI: Bool
+    @Binding var surveySelection: Int
+    @Binding var tappedRecording: Date
+    @Binding var deletionTarget: (Date, String)
+    
+    let svm = SharedViewModel()
+    
+    @State var showMoreTreatmentInfo = false
+    @State var firstPoint: SurveyNodeModel = SurveyNodeModel(data: -1.0, secondPoint: -1.0, dataDate: .now, hasTreatment: false, afterDate: false, treatmentDate: .now, treatmentType: "")
+    @State var points: [SurveyNodeModel] = []
+    @State var currTreatment: Date = .now
+    
+    @State var height = 100.0
+    @State var bottom = 0.0
+    
     var body: some View {
-        VStack(spacing: 0) {
+        ZStack {
+            /// This hstack will contain three things
+            /// Y axis with labels
+            /// Body of the graph
             HStack(spacing: 0) {
-                voiceQualitySection
+                if surveySelection == 0 || surveySelection == 3 {
+                    voiceQualitySection
+                }
                 
                 yLabel
-                
                 Color.white.frame(width: 2)
                 
-                // split into two areas:
-                // the graph (scrollable) to the left, abnormal key on the right
-                // the line at the bottom of the graph
-                VStack(spacing: 0) {
-                    ZStack {
-                        if showVHI {
-                            targetLine
+                ZStack {
+                    if surveySelection == 0 {
+                        abnormalKey
+                    }
+                    
+                    HStack(spacing: 0 ) {
+                        if firstPoint.data != -1 || firstPoint.secondPoint != -1 {
+                            baseline
                         }
                         
-                        HStack(spacing: 10) {
-                            ScrollView(.horizontal, showsIndicators: false) {
-                                HStack(spacing: 20) {
-                                    graphNodes
-                                }
-                            }
-                            
-                            if showVHI {
-                                abnormalKey
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            HStack (spacing: 0 ) {
+                                graphNodes
                             }
                         }
                     }
-                    
-                    Color.white.frame(height: 2)
+                }
+                
+                Spacer()
+            }
+            .onAppear() {
+                findPoints()
+                if surveySelection == 0 {
+                    height = 40
                 }
             }
+            .onChange(of: surveySelection) { _ in
+                findPoints()
+                if surveySelection == 0 {
+                    height = 40
+                } else {
+                    height = 100
+                }
+            }
+            
+            if showMoreTreatmentInfo && currTreatment != .now {
+                Button(action: {
+                    self.showMoreTreatmentInfo = false
+                }) {
+                    VStack {
+                        Spacer()
+                        Text(currTreatment.toDOB())
+                            .font(._bodyCopyBold)
+                        Text(findType())
+                            .font(._bodyCopy)
+                        
+                        Spacer()
+                        
+                        DeleteButton(deletionTarget: $deletionTarget, type: "treatment", date: currTreatment)
+                    }
+                    .foregroundColor(Color.black)
+                    .padding(20)
+                    .background(Color.BRIGHT_PURPLE)
+                    .cornerRadius(5)
+                    .shadow(radius: 5)
+                    .padding(.vertical, 50)
+                }
+            }
+            
+            // Graph pyhsical/mental label
+            if surveySelection == 1 {
+                
+                HStack(spacing: 0) {
+                    Spacer()
+                    
+                    VStack(spacing: 0) {
+                        Text("Physical")
+                            .font(._fieldCopyBold).foregroundColor(Color.white)
+                            .padding(.horizontal, 3).background(Color.TEAL.frame(width: 100))
+                            .cornerRadius(10).padding(1).background(Color.white).cornerRadius(10)
+                            .padding(0.5)
+                        
+                        Text(" Mental ")
+                            .font(._fieldCopyBold).foregroundColor(Color.white)
+                            .padding(.horizontal, 3).background(Color.DARK_PURPLE.frame(width: 100))
+                            .cornerRadius(10).padding(1).background(Color.white).cornerRadius(10)
+                            .padding(0.5)
+                        
+                        Spacer()
+                    }
+                }
+                
+            }
+            
         }
         .foregroundColor(.white)
+        .onChange(of: deletionTarget.0) { _ in
+            findPoints()
+        }
+        .onChange(of: entries.treatments.count) { _ in
+            findPoints()
+            showMoreTreatmentInfo = false
+        }
+        .onChange(of: entries.questionnaires.count) { _ in
+            findPoints()
+        }
     }
 }
 
-extension SurveyGraph {
-    private var voiceQualitySection: some View {
-        VStack {
-            Text("Better\nVoice")
-            Spacer()
-            Text("Worse\nVoice")
-        }
-        .font(._bodyCopy)
-        .frame(width: 47.5)
-    }
-    
-    private var yLabel: some View {
-        VStack(alignment: .trailing, spacing: 0) {
-            Text(showVHI ? "40" : "50")
-            Spacer()
-            Text(showVHI ? "VHI-10" : "Vocal-Effort")
-                .padding(.horizontal, -10)
-                .rotationEffect(Angle(degrees: -90))
-            Spacer()
-            Text("0")
-        }
-        .font(._bodyCopy)
-        .frame(width: 30)
-    }
-    
-    private var targetLine: some View {
-        GeometryReader { geo in
-            VStack(spacing: 0) {
-                Color.clear.frame(height: geo.size.height * ((maxHeight() - 12) / maxHeight()))
-                
-                Color.white.frame(height: 2)
-                
-                Color.clear.frame(height: geo.size.height * ((12) / maxHeight()))
-            }
-            .frame(height: geo.size.height)
-        }
-    }
-    
-    private var abnormalKey: some View {
-        GeometryReader { geo in
-            VStack(alignment: .leading, spacing: 0) {
-                VStack {
-                    Spacer()
-                    Text("Abnormal")
-                        .padding(.bottom, 5)
-                }
-                .frame(height: geo.size.height * ((maxHeight() - 12) / maxHeight()))
-                
-                VStack {
-                    Text("Normal")
-                        .padding(.top, 5)
-                    Spacer()
-                }
-                .frame(height: geo.size.height * ((12) / maxHeight()))
-            }
-            .font(._bodyCopy)
-            //.padding(.trailing, -30)
-            .frame(height: geo.size.height)
-        }
-        .padding(.trailing, 5.0)
-        .frame(width: 70)
-        .padding(.leading, 5.0)
-    }
-    
-    private var graphNodes: some View {
-        ForEach(0..<nodes().count, id: \.self) { index in
-            GeometryReader { geo in
-                VStack(spacing: 0) {
-                    Color.clear.frame(height: geo.size.height * nodes()[index].1)
-                    
-                    Rectangle()
-                        .foregroundColor(Color.TEAL)
-                        .border(Color.white, width: 2.5)
-                        .frame(width: 27.5, height: geo.size.height * nodes()[index].0)
-                }
-                .frame(height: geo.size.height)
-            }
-            .padding(.horizontal, 5)
-        }
-    }
-    
-    func nodes() -> [(CGFloat, CGFloat)] {
-        var ret: [(CGFloat, CGFloat)] = []
-        
-        
-        if showVHI {
-            for index in 0..<entries.questionnaires.count {
-                if entries.questionnaires[index].score.0 != -1 {
-                    let topArea = ((maxHeight() -  CGFloat(entries.questionnaires[index].score.0)) / maxHeight())
-                    let bottomArea = (CGFloat(entries.questionnaires[index].score.0) / maxHeight())
-                    
-                    ret.append( (bottomArea , topArea) )
-                }
-            }
-        } else {
-            for index in 0..<entries.questionnaires.count {
-                if entries.questionnaires[index].score.1 != -1 {
-                    let topArea = ((maxHeight() -  CGFloat(entries.questionnaires[index].score.1)) / maxHeight())
-                    let bottomArea = (CGFloat(entries.questionnaires[index].score.1) / maxHeight())
-                    
-                    ret.append( (bottomArea , topArea) )
-                }
-            }
-        }
-        
-        return ret
-    }
-    
-    /// The max hieght the graph will be out of
-    func maxHeight() -> CGFloat {
-        if showVHI {
-            return 45
-        } else {
-            return 55
-        }
-    }
-}
 
 struct SurveyGraph_Previews: PreviewProvider {
     static var previews: some View {
-        SurveyGraph(showVHI: .constant(false))
+        SurveyGraph(surveySelection: .constant(1), tappedRecording: .constant(.now), deletionTarget: .constant((Date.now, "")))
     }
 }

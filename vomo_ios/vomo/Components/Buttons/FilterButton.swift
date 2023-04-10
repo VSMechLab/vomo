@@ -55,12 +55,17 @@ struct ExpandAllButton: View {
     @Binding var expandAll: Bool
     @Binding var showFavorites: Bool
     @Binding var reset: Bool
+    @Binding var showRecordDetails: Bool
     var body: some View {
         Button(action: {
-            self.filters.removeAll()
             self.expandAll.toggle()
             self.showFavorites = false
             self.reset.toggle()
+            if expandAll {
+                self.showRecordDetails = true
+            } else {
+                self.showRecordDetails = false
+            }
         }) {
             Text("Expand All")
                 .foregroundColor(expandAll ? Color.white : Color.BODY_COPY)

@@ -27,7 +27,7 @@ extension String {
     
     func toDateFromDOB() -> Date? {
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "dd/MM/yyyy"
+        dateFormatter.dateFormat = "M/d/yy"
         dateFormatter.timeZone = TimeZone.current
         dateFormatter.locale = Locale.current
         return dateFormatter.date(from: self) // replace Date String

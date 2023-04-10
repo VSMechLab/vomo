@@ -14,6 +14,8 @@ extension ProgressView {
         entries.getItems()
         
         if filters.isEmpty {
+            
+            tappedRecording = .now
             filteredList = []
             var usedDates: [String] = []
             for index in 0..<audioRecorder.recordings.count {
@@ -25,58 +27,84 @@ extension ProgressView {
             for index in 0..<entries.journals.count {
                 usedDates.append(entries.journals[index].createdAt.toDay())
             }
+            
             usedDates = usedDates.uniqued()
+            
+            var usableDates: [Date] = []
+            
+            for str in usedDates {
+                usableDates.append(str.toDateFromDOB() ?? .now)
+            }
+            
+            usableDates = usableDates.sorted(by: { $0.compare($1) == .orderedAscending })
+            
+            usedDates.removeAll()
+            
+            for dateFin in usableDates {
+                usedDates.append(dateFin.toDay())
+            }
             
             for day in usedDates {
                 var date: Date = .now
                 var strs: [String] = []
                 var preciseDates: [Date] = []
                 
+                /// Stores date and string of each selected entry, uses it to identify the right string to match with precise date
+                var selectedEntries: [(Date, String)] = []
+                
                 for audio in audioRecorder.recordings {
                     if day == audio.createdAt.toDay() {
                         if filters.isEmpty || filters.contains(audioRecorder.taskNum(file: audio.fileURL)) {
-                            strs.append(audioRecorder.viewableTask(file: audio.fileURL))
                             preciseDates.append(audio.createdAt)
                             date = audio.createdAt
+                            selectedEntries.append((date, audioRecorder.viewableTask(file: audio.fileURL)))
                         }
                     }
                 }
                 for quest in entries.questionnaires {
                     if day == quest.createdAt.toDay() {
                         if filters.isEmpty || filters.contains("Survey") {
-                            strs.append("Survey")
                             preciseDates.append(quest.createdAt)
                             date = quest.createdAt
+                            selectedEntries.append((date, "Survey"))
                         }
                     }
                 }
                 for journ in entries.journals {
                     if day == journ.createdAt.toDay() {
                         if filters.isEmpty || filters.contains("Journal") {
-                            strs.append("Journal")
                             preciseDates.append(journ.createdAt)
                             date = journ.createdAt
+                            selectedEntries.append((date, "Journal"))
                         }
                     }
                 }
                 
-                if strs.count > 0 {
-                    filteredList.append(Element(date: date, preciseDate: preciseDates, str: strs))
+                preciseDates = preciseDates.sorted(by: { $0.compare($1) == .orderedAscending })
+                
+                for sortedDate in preciseDates {
+                    print(sortedDate)
+                    
+                    for matchedDate in selectedEntries {
+                        if sortedDate == matchedDate.0 {
+                            strs.append(matchedDate.1)
+                        }
+                    }
                 }
-                date = .now
-                strs.removeAll()
+                
+                if strs.isNotEmpty {
+                    filteredList.append(Element(date: date, preciseDate: preciseDates, str: strs, expandShowMore: false))
+                }
             }
         } else {
+            self.showRecordDetails = true
+            
             filteredList = []
             var usedDates: [String] = []
+            
             for index in 0..<audioRecorder.recordings.count {
-                
                 if filters.contains("Vowel") &&
-                    audioRecorder.taskNum(selection: 1, file: audioRecorder.recordings[index].fileURL)
-                {
-                    
-                    
-                    
+                    audioRecorder.taskNum(selection: 1, file: audioRecorder.recordings[index].fileURL) {
                     usedDates.append(audioRecorder.recordings[index].createdAt.toDay())
                 }
                 if filters.contains("Duration") && audioRecorder.taskNum(selection: 2, file: audioRecorder.recordings[index].fileURL) {
@@ -95,31 +123,43 @@ extension ProgressView {
             for index in 0..<entries.journals.count {
                 usedDates.append(entries.journals[index].createdAt.toDay())
             }
+            
             usedDates = usedDates.uniqued()
+            
+            var usableDates: [Date] = []
+            
+            for str in usedDates {
+                usableDates.append(str.toDateFromDOB() ?? .now)
+            }
+            
+            usableDates = usableDates.sorted(by: { $0.compare($1) == .orderedAscending })
+            
+            usedDates.removeAll()
+            
+            for dateFin in usableDates {
+                usedDates.append(dateFin.toDay())
+            }
             
             for day in usedDates {
                 var date: Date = .now
                 var strs: [String] = []
                 var preciseDates: [Date] = []
                 
+                var selectedEntries: [(Date, String)] = []
+                
                 for audio in audioRecorder.recordings {
                     if day == audio.createdAt.toDay() {
+                        
                         if filters.contains(audioRecorder.taskNum(file: audio.fileURL)) {
-                            strs.append(audioRecorder.viewableTask(file: audio.fileURL))
                             preciseDates.append(audio.createdAt)
                             date = audio.createdAt
+                            selectedEntries.append((date, audioRecorder.viewableTask(file: audio.fileURL)))
                         } else if filters.contains("Favorite") {
-                            print("level 1")
-                            
                             for process in audioRecorder.processedData {
-                                print("level 2")
                                 if (process.createdAt == audio.createdAt) && process.favorite {
-                                    
-                                    print("level 3")
-                                    
-                                    strs.append(audioRecorder.viewableTask(file: audio.fileURL))
                                     preciseDates.append(audio.createdAt)
                                     date = audio.createdAt
+                                    selectedEntries.append((date, audioRecorder.viewableTask(file: audio.fileURL)))
                                }
                             }
                         }
@@ -128,33 +168,49 @@ extension ProgressView {
                 for quest in entries.questionnaires {
                     if day == quest.createdAt.toDay() {
                         if filters.contains("Survey") || (filters.contains("Favorite") && quest.favorite) {
-                            print(quest.createdAt)
-                            strs.append("Survey")
                             preciseDates.append(quest.createdAt)
                             date = quest.createdAt
+                            selectedEntries.append((date, "Survey"))
                         }
                     }
                 }
                 for journ in entries.journals {
                     if day == journ.createdAt.toDay() {
                         if (filters.contains("Journal") || journ.favorite ) || (filters.contains("Favorite") && journ.favorite) {
-                            print(journ.favorite)
-                            strs.append("Journal")
                             preciseDates.append(journ.createdAt)
                             date = journ.createdAt
+                            selectedEntries.append((date, "Journal"))
+                        }
+                    }
+                }
+                
+                preciseDates = preciseDates.sorted(by: { $0.compare($1) == .orderedAscending })
+                
+                for sortedDate in preciseDates {
+                    print(sortedDate)
+                    
+                    for matchedDate in selectedEntries {
+                        if sortedDate == matchedDate.0 {
+                            strs.append(matchedDate.1)
                         }
                     }
                 }
                 
                 if strs.count > 0 {
-                    filteredList.append(Element(date: date, preciseDate: preciseDates, str: strs))
+                    filteredList.append(Element(date: date, preciseDate: preciseDates, str: strs, expandShowMore: false))
                 }
-                date = .now
-                strs.removeAll()
             }
         }
-        
-        
+    }
+    
+    func targetItem() {
+        filteredList.removeAll()
+        for quest in entries.questionnaires {
+            if tappedRecording == quest.createdAt {
+                filteredList.append(Element(date: tappedRecording, preciseDate: [tappedRecording], str: ["Survey"], expandShowMore: true) )
+                break
+            }
+        }
         for record in audioRecorder.recordings {
             if tappedRecording == record.createdAt {
                 filteredList = []
@@ -163,25 +219,24 @@ extension ProgressView {
                 
                 switch num {
                 case "1":
-                    
-                    print("Num was \(num)")
-                    filteredList.append(Element(date: tappedRecording, preciseDate: [tappedRecording], str: ["Record"]) )
+                    filteredList.append(Element(date: tappedRecording, preciseDate: [tappedRecording], str: ["Vowel"], expandShowMore: true) )
                     break
                 case "2":
                     
-                    print("Num was \(num)")
-                    filteredList.append(Element(date: tappedRecording, preciseDate: [tappedRecording], str: ["Duration"]) )
+                    filteredList.append(Element(date: tappedRecording, preciseDate: [tappedRecording], str: ["Duration"], expandShowMore: true) )
                     break
                 case "3":
                     
-                    print("Num was \(num)")
-                    filteredList.append(Element(date: tappedRecording, preciseDate: [tappedRecording], str: ["Rainbow"]) )
+                    filteredList.append(Element(date: tappedRecording, preciseDate: [tappedRecording], str: ["Rainbow"], expandShowMore: true) )
                     break
                 default:
                     break
                 }
                 
             }
+        }
+        if filteredList.isEmpty {
+            refilter()
         }
     }
     
@@ -206,7 +261,7 @@ extension ProgressView {
     /// If theres a match a target called deleteIndex gets assigned and type is assigned
     /// deleteIndex, if set will delete at that index of the proper type
     func deleteAtDate(createdAt: Date) {
-        print("delete at \(deletionTarget.0), \(deletionTarget.1)")
+        print("\n\n\nstarting sequence for deletion at \(deletionTarget.0), \(deletionTarget.1)")
         
         var type = ""
         var count = -1
@@ -215,20 +270,9 @@ extension ProgressView {
         // looks for a match on both before otherwise canceling the process
         for index in 0..<audioRecorder.recordings.count {
             if createdAt == audioRecorder.recordings[index].createdAt {
-                print("found file to delete: \(audioRecorder.recordings[index].createdAt)")
+                print("found file to delete: \(audioRecorder.recordings[index].createdAt.toStringDay())")
                 type = "record"
                 count = index
-            }
-        }
-        for index in 0..<audioRecorder.processedData.count {
-            if createdAt == audioRecorder.processedData[index].createdAt {
-                if type == "record" && count == index {
-                    print("found process to delete: \(audioRecorder.processedData[index].createdAt), \(type)")
-                } else {
-                    print("code was ran")
-                    type = ""
-                    //count = -1
-                }
             }
         }
         
@@ -248,19 +292,29 @@ extension ProgressView {
                 }
             }
         }
-        
+        if type == "" && count == -1 {
+            for index in 0..<entries.treatments.count {
+                if createdAt == entries.treatments[index].date {
+                    type = "treatment"
+                    count = index
+                }
+            }
+        }
         if count != -1 {
             if type == "record" {
-                print("From recording lvl: \(audioRecorder.recordings[count].createdAt)\nFrom processings lvl: \(audioRecorder.processedData[count].createdAt)")
-                //print(audioRecorder.recordings)
-                //print(audioRecorder.processedData)
-                if audioRecorder.recordings[count].createdAt == createdAt && audioRecorder.processedData[count].createdAt == createdAt {
+                print("able to delete recording")
+                
+                if audioRecorder.recordings.count == audioRecorder.processedData.count {
                     
                     audioRecorder.deleteRecording(urlToDelete: audioRecorder.recordings[count].fileURL)
                     audioRecorder.processedData.remove(at: count)
                     
+                    audioRecorder.syncEntries(gender: settings.gender)
+                    
                     print("deleting record")
                     self.reset.toggle()
+                } else {
+                    audioRecorder.syncEntries(gender: settings.gender)
                 }
             } else if type == "survey" {
                 if entries.questionnaires[count].createdAt == createdAt {
@@ -276,6 +330,14 @@ extension ProgressView {
                     entries.journals.remove(at: count)
                     
                     print("deleting journal")
+                    self.reset.toggle()
+                }
+            } else if type == "treatment" {
+                if entries.treatments[count].date == createdAt {
+                    
+                    entries.treatments.remove(at: count)
+                    
+                    print("deleting treatment")
                     self.reset.toggle()
                 }
             } else {

@@ -13,6 +13,7 @@ import UserNotifications
 struct OnboardView: View {
     @EnvironmentObject var viewRouter: ViewRouter
     @EnvironmentObject var settings: Settings
+    @EnvironmentObject var audioRecorder: AudioRecorder
     
     @State private var svm = SharedViewModel()
     @State private var stepSwitch = 0
@@ -101,9 +102,7 @@ extension OnboardView {
                                 }
                             } else if stepSwitch == 3 && self.settings.voice_plan == 2 {
                                 // Custom target
-                                if (!self.settings.vowel && !self.settings.mpt && !self.settings.rainbow) ||
-                                    (!self.settings.pitch && !self.settings.CPP && !self.settings.intensity && !self.settings.duration && !self.settings.minPitch && !self.settings.maxPitch) ||
-                                    (!self.settings.vhi && !self.settings.vocalEffort && !self.settings.botulinumInjection) {
+                                if (!self.settings.vowel && !self.settings.mpt && !self.settings.rainbow && !self.settings.vhi && !self.settings.vocalEffort && !self.settings.botulinumInjection) {
                                     HStack(spacing: 5) {
                                         Text("Next")
                                             .foregroundColor(Color.gray)
@@ -114,6 +113,20 @@ extension OnboardView {
                                     Button("Next") {
                                         stepSwitch += 1
                                     }.buttonStyle(NextButton())
+                                }
+                            } else if stepSwitch == 1 {
+                                // Sign up page
+                                if settings.firstName != "" && settings.lastName != "" && settings.sexAtBirth != "" && settings.gender != "" {
+                                    Button("Next") {
+                                        stepSwitch += 1
+                                    }.buttonStyle(NextButton())
+                                } else {
+                                    HStack(spacing: 5) {
+                                        Text("Next")
+                                            .foregroundColor(Color.gray)
+                                            .font(._pageNavLink)
+                                        GrayArrow()
+                                    }
                                 }
                             } else {
                                 Button("Next") {
@@ -147,6 +160,8 @@ extension OnboardView {
                 
             } else {
                 Button("GET STARTED") {
+                    print("Recording permission status \(audioRecorder.grantedPermission())")
+                    
                     stepSwitch += 1
                 }.buttonStyle(SubmitButton())
             }

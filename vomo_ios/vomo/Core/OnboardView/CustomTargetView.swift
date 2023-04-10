@@ -26,7 +26,7 @@ struct CustomTargetView: View {
     @State private var showNote = false
     @State private var noteSelection = 0
     
-    let vocalTasks = ["Vowel", "Maximum Phonation Time (MPT)", "Rainbow Sequence"]
+    let vocalTasks = ["Vowel", "Maximum Phonation Time (MPT)", "Rainbow Sentences"]
     
     let title = ["Pitch", "CPP", "Intensity", "Duration", "Minimum Pitch", "Maximum Pitch"]
     let body_text = ["Mean fundemental frequency", "Cepstral peak prominence: indicative of dysphonia severity", "Measured in sound pressure level (dB)", "Time (seconds) someone can sustain", "Lowest fundemental frequency taken during connnected speech", "Highest fundemental frequency taken during connnected speech"]
@@ -41,7 +41,7 @@ struct CustomTargetView: View {
                 ScrollView(showsIndicators: false) {
                     vocalTaskSection
                     
-                    acousticParametersSection
+                    //acousticParametersSection
                     
                     surveysSection
                     
@@ -92,7 +92,7 @@ extension CustomTargetView {
                 .font(._title)
                 .padding(.bottom, 5)
             
-            Text("Decide your tasks and voice measurements.")
+            Text("Choose your vocal tasks and surveys.")
                 .font(._bodyCopy)
                 .foregroundColor(Color.BODY_COPY)
                 .multilineTextAlignment(.center)
@@ -113,7 +113,7 @@ extension CustomTargetView {
                             self.settings.vowel.toggle()
                         } else if task == "Maximum Phonation Time (MPT)" {
                             self.settings.mpt.toggle()
-                        } else if task == "Rainbow Sequence" {
+                        } else if task == "Rainbow Sentences" {
                             self.settings.rainbow.toggle()
                         }
                     }) {
@@ -155,7 +155,7 @@ extension CustomTargetView {
                                         Spacer()
                                     }
                                 }
-                                if task == "Rainbow Sequence" {
+                                if task == "Rainbow Sentences" {
                                     if settings.rainbow {
                                         Color.MEDIUM_PURPLE
                                             .frame(width: svm.content_width - 2, height: 60)
@@ -189,28 +189,28 @@ extension CustomTargetView {
                                         .foregroundColor(settings.mpt ? Color.white : Color.gray)
                                         .font(._buttonFieldCopyLarger)
                                 }
-                                if task == "Rainbow Sequence" {
+                                if task == "Rainbow Sentences" {
                                     Text(task)
                                         .foregroundColor(settings.rainbow ? Color.white : Color.gray)
                                         .font(._buttonFieldCopyLarger)
                                 }
                                 
                                 if task == "Vowel" {
-                                    Text("Say ahh for 5 seconds")
+                                    Text("Say \"ahh\" for 5 seconds")
                                         .foregroundColor(settings.vowel ? Color.white : Color.DARK_PURPLE)
                                         .font(._subCopy)
                                         .multilineTextAlignment(.leading)
                                         .padding(.trailing, 2)
                                 }
                                 if task == "Maximum Phonation Time (MPT)" {
-                                    Text("Say ahh for as long as you can")
+                                    Text("Say \"ahh\" for as long as you can")
                                         .foregroundColor(settings.mpt ? Color.white : Color.DARK_PURPLE)
                                         .font(._subCopy)
                                         .multilineTextAlignment(.leading)
                                         .padding(.trailing, 2)
                                 }
-                                if task == "Rainbow Sequence" {
-                                    Text("The rainbow is a division of white light into many beautiful colors...")
+                                if task == "Rainbow Sentences" {
+                                    Text("Say two standardized sentences")
                                         .foregroundColor(settings.rainbow ? Color.white : Color.DARK_PURPLE)
                                         .font(._subCopy)
                                         .multilineTextAlignment(.leading)
@@ -313,12 +313,12 @@ extension CustomTargetView {
                         .padding(1)
                         
                         VStack(alignment: .leading) {
-                            Text("VHI")
+                            Text("Voice Handicap Index - 10 (VHI-10)")
                                 .foregroundColor(settings.vhi ? Color.white : Color.gray)
                                 .font(._buttonFieldCopyLarger)
                                 .multilineTextAlignment(.leading)
                             
-                            Text("Vocal Handicap Index (VHI)-10")
+                            Text("Standardized instrument for measuring vocal function")
                                 .foregroundColor(settings.vhi ? Color.white : Color.DARK_PURPLE)
                                 .font(._subCopy)
                                 .multilineTextAlignment(.leading)
@@ -399,12 +399,12 @@ extension CustomTargetView {
                         .padding(1)
                         
                         VStack(alignment: .leading) {
-                            Text("Botulinum Injection Survey")
+                            Text("Current Percent of Vocal Function")
                                 .foregroundColor(settings.botulinumInjection ? Color.white : Color.gray)
                                 .font(._buttonFieldCopyLarger)
                                 .multilineTextAlignment(.leading)
                             
-                            Text("Laryngeal Dystonia and Vocal Tremor")
+                            Text("For Laryngeal Dystonia and Vocal Tremor diagnoses")
                                 .foregroundColor(settings.botulinumInjection ? Color.white : Color.DARK_PURPLE)
                                 .font(._subCopy)
                                 .multilineTextAlignment(.leading)
@@ -433,7 +433,6 @@ struct SelectionImage: View {
     
     @Binding var showNote: Bool
     @Binding var noteSelection: Int
-    
     
     var body: some View {
         ZStack(alignment: .leading) {
@@ -467,18 +466,20 @@ struct SelectionImage: View {
                 
                 Spacer()
                 
-                Button(action: {
-                    self.showNote.toggle()
-                    self.noteSelection = count
-                }) {
-                    VStack {
-                        Image(info_img)
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 15, height: 15)
-                            .padding(.trailing, 5)
-                            .padding(.top, 5)
-                        Spacer()
+                if noteSelection != -1 {
+                    Button(action: {
+                        self.showNote.toggle()
+                        self.noteSelection = count
+                    }) {
+                        VStack {
+                            Image(info_img)
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 15, height: 15)
+                                .padding(.trailing, 5)
+                                .padding(.top, 5)
+                            Spacer()
+                        }
                     }
                 }
             }

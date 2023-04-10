@@ -12,4 +12,5 @@ struct Element: Hashable {
     var date: Date
     var preciseDate: [Date]
     var str: [String]
+    var expandShowMore: Bool
 }

@@ -204,27 +204,41 @@ extension RecordView {
             
             Spacer()
             
-            Button(action: {
-                if audioRecorder.recording {
-                    audioRecorder.stopRecording()
-                    self.completePopUp.toggle()
-                    self.time = 0
-                } else {
-                    audioRecorder.startRecording(taskNum: settings.taskList[exercise].taskNum)
+            if audioRecorder.grantedPermission() {
+                Button(action: {
+                    if audioRecorder.recording {
+                        audioRecorder.stopRecording()
+                        self.completePopUp.toggle()
+                        self.time = 0
+                    } else {
+                        audioRecorder.startRecording(taskNum: settings.taskList[exercise].taskNum)
+                    }
+                    
+                    /*if self.audioPlayer?.isPlaying == true {
+                        self.audioPlayer?.stopPlayback()
+                    }*/
+                    
+                    if self.audioPlayer.isPlaying {
+                        self.audioPlayer.stopPlayback()
+                    }
+                }) {
+                    Image(audioRecorder.recording ? svm.stop_img : svm.record_img)
+                        .resizable()
+                        .frame(width: 200, height: 200)
                 }
-                
-                /*if self.audioPlayer?.isPlaying == true {
-                    self.audioPlayer?.stopPlayback()
-                }*/
-                
-                if self.audioPlayer.isPlaying {
-                    self.audioPlayer.stopPlayback()
+            } else {
+                Button(action: {
+                    guard let settingsUrl = URL(string: UIApplication.openSettingsURLString) else { return }
+                    UIApplication.shared.open(settingsUrl)
+                }) {
+                    Text("Change microphone preferences to allow recordings")
+                        .underline()
+                        .font(._fieldLabel)
+                        .foregroundColor(.DARK_PURPLE)
+                        .padding(.bottom)
                 }
-            }) {
-                Image(audioRecorder.recording ? svm.stop_img : svm.record_img)
-                    .resizable()
-                    .frame(width: 200, height: 200)
             }
+            
         }
     }
     

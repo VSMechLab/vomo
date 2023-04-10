@@ -9,7 +9,7 @@ import SwiftUI
 import UIKit
 
 struct VHIScale: View {
-    @Binding var responses: [Int]
+    @Binding var responses: [Double]
     let prompt: String
     let index: Int
     
@@ -35,6 +35,7 @@ struct VHIScale: View {
                                 self.position = 0
                             }) {
                                 Image(position == 0 ? svm.select_img : "").resizable().frame(width: dotSize, height: dotSize)
+                                    .shadow(color: .gray, radius: 5)
                             }
                             
                             Spacer()
@@ -44,6 +45,7 @@ struct VHIScale: View {
                                 self.position = 1
                             }) {
                                 Image(position == 1 ? svm.select_img : "").resizable().frame(width: dotSize, height: dotSize)
+                                    .shadow(color: .gray, radius: 5)
                             }
                             
                             Spacer()
@@ -53,6 +55,7 @@ struct VHIScale: View {
                                 self.position = 2
                             }) {
                                 Image(position == 2 ? svm.select_img : "").resizable().frame(width: dotSize, height: dotSize)
+                                    .shadow(color: .gray, radius: 5)
                             }
                             
                             Spacer()
@@ -62,6 +65,7 @@ struct VHIScale: View {
                                 self.position = 3
                             }) {
                                 Image(position == 3 ? svm.select_img : "").resizable().frame(width: dotSize, height: dotSize)
+                                    .shadow(color: .gray, radius: 5)
                             }
                             
                             Spacer()
@@ -71,27 +75,29 @@ struct VHIScale: View {
                                 self.position = 4
                             }) {
                                 Image(position == 4 ? svm.select_img : "").resizable().frame(width: dotSize, height: dotSize)
+                                    .shadow(color: .gray, radius: 5)
                             }
                         }
                         .padding(.bottom, 42.5)
                         .onChange(of: self.position) { selection in
                             if responses.count > 0 {
-                                self.responses[index] = Int(selection)
+                                self.responses[index] = selection
                             }
                         }
                     } else {
                         UISliderView(value: $position, minValue: 0.0, maxValue: 4.0, thumbColor: .purple, minTrackColor: .clear, maxTrackColor: .clear)
+                            .shadow(color: .gray, radius: 5)
                             .padding(.bottom, 42.5)
-                            .onChange(of: self.position) { selection in
-                                if responses.count > 0 {
-                                    self.responses[index] = Int(selection)
-                                }
-                            }
                     }
                 }
             }
         }
         .padding(2.5)
+        .onChange(of: self.position) { selection in
+            if responses.count > 0 {
+                self.responses[index] = selection
+            }
+        }
     }
 }
 

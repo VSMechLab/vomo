@@ -9,7 +9,9 @@ import SwiftUI
 import UIKit
 
 struct VEScale: View {
-    @Binding var responses: [Int]
+    @EnvironmentObject var entries: Entries
+    
+    @Binding var responses: [Double]
     let prompt: String
     let index: Int
     
@@ -30,17 +32,18 @@ struct VEScale: View {
                     Spacer()
                     
                     if position != -1 {
-                        UISliderView(value: $position, minValue: 0.0, maxValue: 10.0, thumbColor: .purple, minTrackColor: .clear, maxTrackColor: .clear)
+                        UISliderView(value: $position, minValue: 0.0, maxValue: 20.0, thumbColor: .purple, minTrackColor: .clear, maxTrackColor: .clear)
+                            .shadow(color: .gray, radius: 5)
                             .padding(.horizontal)
-                            .padding(.bottom, 38.5)
+                            .padding(.bottom, index == 12 ? 73.5 : 38.5)
                             .onChange(of: self.position) { selection in
                                 if responses.count > 0 {
-                                    self.responses[index] = Int(selection)
+                                    self.responses[index] = selection / 2
                                 }
                             }
                     } else {
                         HStack(spacing: 0) {
-                            ForEach(0..<11) { index in
+                            ForEach(0...20, id: \.self) { index in
                                 // 4. Always
                                 Button(action: {
                                     self.position = Double(index)
@@ -48,11 +51,12 @@ struct VEScale: View {
                                     Image(position == Double(index) ? svm.select_img : "")
                                         .resizable()
                                         .frame(width: dotSize, height: dotSize)
+                                        .shadow(color: .gray, radius: 5)
                                 }
                                 .frame(height: dotSize)
                             }
                         }
-                        .padding(.bottom, 38.5)
+                        .padding(.bottom, index == 12 ? 73.5 : 38.5)
                     }
                 }
                 
@@ -60,28 +64,52 @@ struct VEScale: View {
                     Spacer()
                     
                     HStack {
+                        if index == 12 {
+                            Text("0%")
+                        }
                         Spacer()
-                        Text(position >= 0 ? "\(position * 10, specifier: "%.0f")%" : "")
-                            .font(._bodyCopyBold)
-                            .foregroundColor(Color.DARK_PURPLE)
+                        if index == 12 {
+                            Text(" 50%")
+                        } else {
+                            Text(position >= 0 ? "\(position * 5, specifier: "%.0f")%" : "")
+                        }
                         Spacer()
+                        if index == 12 {
+                            Text("100%")
+                        }
                     }
+                    .padding(.horizontal, 20)
+                    .frame(width: svm.content_width)
+                    .font(._bodyCopyBold)
+                    .foregroundColor(Color.DARK_PURPLE)
                     .padding(.bottom, 5)
+                    .padding(.bottom, index == 12 ? 50 : 0)
                 }
+            }
+            
+            if index == 12 {
+                Text(position > 0 ? "\(position * 5, specifier: "%.0f")% " : " ")
+                    .font(._bodyCopyBold)
+                    .foregroundColor(Color.DARK_PURPLE)
+                    .padding(.bottom, 5)
+                    .padding(.bottom, index == 12 ? 50 : 0)
             }
         }
         .padding(2.5)
         .onChange(of: position) { selection in
             if responses.count > 0 {
-                self.responses[index] = Int(selection)
+                self.responses[index] = selection / 2
             }
+        }
+        .onAppear() {
+            self.entries.getItems()
         }
     }
 }
 
 extension VEScale {
     private var background: some View {
-        Image(svm.empty_scale_img)
+        Image(index == 12 ? svm.bi_survey_key : svm.empty_scale_img)
             .resizable()
             .scaledToFit()
             .shadow(color: Color.gray.opacity(0.9), radius: 1)
@@ -92,7 +120,7 @@ extension VEScale {
             VStack {
                 HStack {
                     Spacer()
-                    Text(prompt)
+                    Text(.init(prompt))
                         .font(._question)
                         .foregroundColor(Color.BODY_COPY)
                         .multilineTextAlignment(.leading)

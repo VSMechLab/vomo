@@ -34,10 +34,49 @@ struct SharedViewModel {
     let button_img = "VM_Gradient-Btn"
     let profile_img = "VM_7-avatar-photo-placeholder-gfx"
     
+    let rx_sign = "rx_sign"
+    
     /// For Profile
     let genders = ["Other", "Genderqueer", "Non-binary", "Female", "Male"]
-    var sexes = ["Male", "Female", "Other"]
-    let vocalIssues = ["a custom", "the Laryngeal Dystonia", "the Recurrent Pappiloma", "the Parkinson's Disease", "the Gender-Affirming Care", "the Vocal Fold/Paresis", "Vocal Tremor", "Laryngeal Dystonia and Vocal Tremor", "the default"]
+    var sexes = ["Male", "Female"]
+    /// Focus Selection
+    /// 0. Custom
+    /// 1. Gender-Affirming Voice Care
+    ///
+    /// Laryngeal Dystonia / Vocal Tremor
+    ///     2. Abductor Laryngeal Dystonia
+    ///     3. Adductor Laryngeal Dystonia
+    ///     4. Adductor Laryngeal Dystonia & Vocal Tremor
+    ///     5. Mixed Laryngeal Dystonia
+    ///     6. Vocal Tremor
+    /// 7. Recurrent Respiratory Papillomatosis (RRP)
+    /// 8. Parkinson’s Disease
+    ///
+    /// Vocal Fold Paralysis / Paresis
+    ///     9. Unilateral vocal fold paralysis
+    ///     10. Unilateral vocal fold paralysis
+    ///     11. Unilateral vocal fold paresis without motion impairment
+    let vocalIssues = [
+        "Custom",
+        
+        "Gender-Affirming Voice Care",
+        
+        "Abductor Laryngeal Dystonia",
+        "Adductor Laryngeal Dystonia",
+        "Adductor Laryngeal Dystonia & Vocal Tremor",
+        "Mixed Laryngeal Dystonia",
+        "Vocal Tremor",
+        
+        "Recurrent Respiratory Papillomatosis (RRP)",
+        "Parkinson’s Disease",
+        
+        "Unilateral vocal fold paralysis",
+        "Unilateral vocal fold paresis with motion impairment",
+        "Unilateral vocal fold paresis without motion impairment",
+        
+        
+        "default"
+    ]
     
     /// Items for recording
     let selected_do_not_show_img = "VM_Prpl-Check-Square-Btn"
@@ -68,15 +107,12 @@ struct SharedViewModel {
     ]
     
     let vocal_effort: [String] = [
-        "How much physical effort did it take to make a voice?",
-        "How much mental effort did it take to make a voice?"
+        "How much **physical effort** did it take to make a voice?",
+        "How much **mental effort** did it take to make a voice?"
     ]
     
     let bi: [String] = [
-        "How close to normal function is your voice right now?",
-        "How breathy / whisper-like is your voice now?",
-        "How much difficulty swallowing do you have right now?",
-        "How much difficulty breathing do you have right now?"
+        "How close to normal function is your voice right now?"
     ]
     
     var questions: [String] {
@@ -158,5 +194,8 @@ struct SharedViewModel {
     let gray_mid_img = "VoMo-App-Assets_2_8.4_between-gry-btn"
     let max_img = "VoMo-App-Assets_2_8.4_more-than-btn"
     let gray_max_img = "VoMo-App-Assets_2_8.4_more-than-gry-btn"
+    
+    /// Survey Items
+    let bi_survey_key = "bi_survey_key"
 }
 

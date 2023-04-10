@@ -1,0 +1,152 @@
+2023-03-27 19:30:37 +0000  Initial pipeline context: <IDEDistributionProcessingPipelineContext: 0x2fc1cd010; archive(resolved)="<IDEArchive: 0x600019b02d00>", distributionTask(resolved)="2", distributionDestination(resolved)="1", distributionMethod(resolved)="<IDEDistributionMethodiOSEnterprise: 0x60002fd06b40>", team(resolved)="<IDEProvisioningDisambiguatableBasicTeam: 0x60000232fdc0; teamID='E3GYNLB224', teamName='The University of Cincinnati', teamType='Enterprise', username='mcgrogan.neil@gmail.com', isFreeProvisioningTeam='0'>">
+	Chain (14, self inclusive):
+	<IDEDistributionProcessingPipelineContext: 0x2fc1cd010; archive = "<IDEArchive: 0x600019b02d00>", distributionMethod="<IDEDistributionMethodiOSEnterprise: 0x60002fd06b40>", team="<IDEProvisioningDisambiguatableBasicTeam: 0x60000232fdc0; teamID='E3GYNLB224', teamName='The University of Cincinnati', teamType='Enterprise', username='mcgrogan.neil@gmail.com', isFreeProvisioningTeam='0'>">
+	<IDEDistributionProcessingPipelineContext: 0x2e3d33a80; archive = "<IDEArchive: 0x600019b02d00>", distributionMethod="<IDEDistributionMethodiOSEnterprise: 0x60002fd06b40>", team="<IDEProvisioningDisambiguatableBasicTeam: 0x60000232fdc0; teamID='E3GYNLB224', teamName='The University of Cincinnati', teamType='Enterprise', username='mcgrogan.neil@gmail.com', isFreeProvisioningTeam='0'>">
+	<IDEDistributionContext: 0x2e06c9ed0; archive = "<IDEArchive: 0x600019b02d00>", distributionMethod="<IDEDistributionMethodiOSEnterprise: 0x60002fd06b40>", team="<IDEProvisioningDisambiguatableBasicTeam: 0x60000232fdc0; teamID='E3GYNLB224', teamName='The University of Cincinnati', teamType='Enterprise', username='mcgrogan.neil@gmail.com', isFreeProvisioningTeam='0'>">
+	<IDEDistributionContext: 0x2fe572690; archive = "<IDEArchive: 0x600019b02d00>", distributionMethod="<IDEDistributionMethodiOSEnterprise: 0x60002fd06b40>", team="<IDEProvisioningDisambiguatableBasicTeam: 0x60000232fdc0; teamID='E3GYNLB224', teamName='The University of Cincinnati', teamType='Enterprise', username='mcgrogan.neil@gmail.com', isFreeProvisioningTeam='0'>">
+	<IDEDistributionContext: 0x2e06ec070; archive = "<IDEArchive: 0x600019b02d00>", distributionMethod="<IDEDistributionMethodiOSEnterprise: 0x60002fd06b40>", team="<IDEProvisioningDisambiguatableBasicTeam: 0x60000232fdc0; teamID='E3GYNLB224', teamName='The University of Cincinnati', teamType='Enterprise', username='mcgrogan.neil@gmail.com', isFreeProvisioningTeam='0'>">
+	<IDEDistributionContext: 0x2e0632780; archive = "<IDEArchive: 0x600019b02d00>", distributionMethod="<IDEDistributionMethodiOSEnterprise: 0x60002fd06b40>", team="<IDEProvisioningDisambiguatableBasicTeam: 0x60000232fdc0; teamID='E3GYNLB224', teamName='The University of Cincinnati', teamType='Enterprise', username='mcgrogan.neil@gmail.com', isFreeProvisioningTeam='0'>">
+	<IDEDistributionContext: 0x2c4832000; archive = "<IDEArchive: 0x600019b02d00>", distributionMethod="<IDEDistributionMethodiOSEnterprise: 0x60002fd06b40>", team="<IDEProvisioningDisambiguatableBasicTeam: 0x60000232fdc0; teamID='E3GYNLB224', teamName='The University of Cincinnati', teamType='Enterprise', username='mcgrogan.neil@gmail.com', isFreeProvisioningTeam='0'>">
+	<IDEDistributionContext: 0x2c48ef350; archive = "<IDEArchive: 0x600019b02d00>", distributionMethod="<IDEDistributionMethodiOSEnterprise: 0x60002fd06b40>", team="<IDEProvisioningDisambiguatableBasicTeam: 0x60000232fdc0; teamID='E3GYNLB224', teamName='The University of Cincinnati', teamType='Enterprise', username='mcgrogan.neil@gmail.com', isFreeProvisioningTeam='0'>">
+	<IDEDistributionContext: 0x2e06e6b20; archive = "<IDEArchive: 0x600019b02d00>", distributionMethod="<IDEDistributionMethodiOSEnterprise: 0x60002fd06b40>", team="<IDEProvisioningDisambiguatableBasicTeam: 0x60000232fdc0; teamID='E3GYNLB224', teamName='The University of Cincinnati', teamType='Enterprise', username='mcgrogan.neil@gmail.com', isFreeProvisioningTeam='0'>">
+	<IDEDistributionContext: 0x2c2fc5bc0; archive = "<IDEArchive: 0x600019b02d00>", distributionMethod="<IDEDistributionMethodiOSEnterprise: 0x60002fd06b40>", team="(null)">
+	<IDEDistributionContext: 0x2c2f22240; archive = "<IDEArchive: 0x600019b02d00>", distributionMethod="<IDEDistributionMethodiOSEnterprise: 0x60002fd06b40>", team="(null)">
+	<IDEDistributionContext: 0x2e06ee020; archive = "<IDEArchive: 0x600019b02d00>", distributionMethod="<IDEDistributionMethodiOSEnterprise: 0x60002fd06b40>", team="(null)">
+	<IDEDistributionContext: 0x2e06e2be0; archive = "<IDEArchive: 0x600019b02d00>", distributionMethod="<IDEDistributionMethodiOSEnterprise: 0x60002fd06b40>", team="(null)">
+	<IDEDistributionContext: 0x2fe3f6340; archive = "<IDEArchive: 0x600019b02d00>", distributionMethod="(null)", team="(null)">
+</IDEDistributionProcessingPipelineContext: 0x2fc1cd010>
+2023-03-27 19:30:37 +0000  Processing step: IDEDistributionCreateDestRootStep
+2023-03-27 19:30:37 +0000  Processing step: IDEDistributionCopyItemStep
+2023-03-27 19:30:37 +0000  Running /usr/bin/ditto '-V' '/Users/neilmcgrogan/Library/Developer/Xcode/Archives/2023-03-27/VoMo 3-27-23, 3.30 PM.xcarchive/Products/Applications/VoMo.app' '/var/folders/3k/dpytxv2571d6nvcyyhz42zzr0000gn/T/XcodeDistPipeline.~~~Q9yv40/Root/Payload/VoMo.app'
+2023-03-27 19:30:37 +0000  >>> Copying /Users/neilmcgrogan/Library/Developer/Xcode/Archives/2023-03-27/VoMo 3-27-23, 3.30 PM.xcarchive/Products/Applications/VoMo.app 
+2023-03-27 19:30:37 +0000  copying file ./_CodeSignature/CodeResources ... 
+2023-03-27 19:30:37 +0000  4327 bytes for ./_CodeSignature/CodeResources
+2023-03-27 19:30:37 +0000  copying file ./KR_rainbow_1.wav ... 
+2023-03-27 19:30:37 +0000  1047838 bytes for ./KR_rainbow_1.wav
+2023-03-27 19:30:37 +0000  copying file ./Roboto-Medium.ttf ... 
+2023-03-27 19:30:37 +0000  168644 bytes for ./Roboto-Medium.ttf
+2023-03-27 19:30:37 +0000  copying file ./Roboto-Light.ttf ... 
+2023-03-27 19:30:37 +0000  167000 bytes for ./Roboto-Light.ttf
+2023-03-27 19:30:37 +0000  copying file ./Roboto-Regular.ttf ... 
+2023-03-27 19:30:37 +0000  168260 bytes for ./Roboto-Regular.ttf
+2023-03-27 19:30:37 +0000  copying file ./AppIcon60x60@2x.png ... 
+2023-03-27 19:30:37 +0000  9419 bytes for ./AppIcon60x60@2x.png
+2023-03-27 19:30:37 +0000  copying file ./VoMo ... 
+2023-03-27 19:30:37 +0000  4435408 bytes for ./VoMo
+2023-03-27 19:30:37 +0000  copying file ./Assets.car ... 
+2023-03-27 19:30:37 +0000  5232336 bytes for ./Assets.car
+2023-03-27 19:30:37 +0000  copying file ./AppIcon76x76@2x~ipad.png ... 
+13457 bytes for ./AppIcon76x76@2x~ipad.png
+copying file ./KR_sustained_Ah_1.wav ... 
+2023-03-27 19:30:37 +0000  567198 bytes for ./KR_sustained_Ah_1.wav
+2023-03-27 19:30:37 +0000  copying file ./Roboto-LightItalic.ttf ... 
+2023-03-27 19:30:37 +0000  173172 bytes for ./Roboto-LightItalic.ttf
+2023-03-27 19:30:37 +0000  copying file ./embedded.mobileprovision ... 
+2023-03-27 19:30:37 +0000  18461 bytes for ./embedded.mobileprovision
+2023-03-27 19:30:37 +0000  copying file ./Roboto-Bold.ttf ... 
+2023-03-27 19:30:37 +0000  167336 bytes for ./Roboto-Bold.ttf
+2023-03-27 19:30:37 +0000  copying file ./Info.plist ... 
+2023-03-27 19:30:37 +0000  1826 bytes for ./Info.plist
+2023-03-27 19:30:37 +0000  copying file ./PkgInfo ... 
+2023-03-27 19:30:37 +0000  8 bytes for ./PkgInfo
+2023-03-27 19:30:37 +0000  /usr/bin/ditto exited with 0
+2023-03-27 19:30:37 +0000  Processing step: IDEDistributionEmbedProfileStep
+2023-03-27 19:30:37 +0000  Processing step: IDEDistributionInfoPlistStep
+2023-03-27 19:30:37 +0000  Skipping step: IDEDistributionInfoPlistStep because it said so
+2023-03-27 19:30:37 +0000  Processing step: IDEDistributionAppThinningPlistStep
+2023-03-27 19:30:37 +0000  Skipping step: IDEDistributionAppThinningPlistStep because it said so
+2023-03-27 19:30:37 +0000  Processing step: IDEDistributionCompileBitcodeStep
+2023-03-27 19:30:37 +0000  Skipping step: IDEDistributionCompileBitcodeStep because it said so
+2023-03-27 19:30:37 +0000  Processing step: IDEDistributionCodeSlimmingStep
+2023-03-27 19:30:37 +0000  Processing step: IDEDistributionCopyBCSymbolMapsStep
+2023-03-27 19:30:37 +0000  Skipping step: IDEDistributionCopyBCSymbolMapsStep because it said so
+2023-03-27 19:30:37 +0000  Processing step: IDEDistributionSymbolsStep
+2023-03-27 19:30:37 +0000  Skipping step: IDEDistributionSymbolsStep because it said so
+2023-03-27 19:30:37 +0000  Processing step: IDEDistributionAppThinningStep
+2023-03-27 19:30:37 +0000  Skipping step: IDEDistributionAppThinningStep because it said so
+2023-03-27 19:30:37 +0000  Processing step: IDEDistributionArchThinningStep
+2023-03-27 19:30:37 +0000  Running /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/lipo '/var/folders/3k/dpytxv2571d6nvcyyhz42zzr0000gn/T/XcodeDistPipeline.~~~Q9yv40/Root/Payload/VoMo.app/VoMo' '-verify_arch' 'arm64e'
+2023-03-27 19:30:37 +0000  /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/lipo exited with 1
+2023-03-27 19:30:37 +0000  Skipping architecture thinning for item "VoMo" because arch "arm64e" wasn't found
+2023-03-27 19:30:37 +0000  Processing step: IDEDistributionODRStep
+2023-03-27 19:30:37 +0000  Processing step: IDEDistributionStripXattrsStep
+2023-03-27 19:30:37 +0000  Running /usr/bin/xattr '-crs' '/var/folders/3k/dpytxv2571d6nvcyyhz42zzr0000gn/T/XcodeDistPipeline.~~~Q9yv40/Root/Payload/VoMo.app'
+2023-03-27 19:30:38 +0000  /usr/bin/xattr exited with 0
+2023-03-27 19:30:38 +0000  Processing step: IDEDistributionCodesignStep
+2023-03-27 19:30:38 +0000  Entitlements for <IDEDistributionItem: 0x60001db33900; bundleID='edu.uc.vomo', path='<DVTFilePath:0x60003d69bf70:'/Users/neilmcgrogan/Library/Developer/Xcode/Archives/2023-03-27/VoMo 3-27-23, 3.30 PM.xcarchive/Products/Applications/VoMo.app'>', codeSigningInfo='<_DVTCodeSigningInformation_Path: 0x600031cefe80; isSigned='1', isAdHocSigned='0', signingCertificate='<DVTSigningCertificate: 0x6000088e5600; name='Apple Development: Neil McGrogan (SJDQJ93M26)', hash='F3F85505AF88F07BBA749D26363ED0C1509FE277', serialNumber='3F315E175B8C05999E113C07A25F05E7', certificateKinds='(
+    "1.2.840.113635.100.6.1.12",
+    "1.2.840.113635.100.6.1.2"
+), issueDate='2022-05-26 17:27:33 +0000''>', entitlements='{
+    "application-identifier" = "E3GYNLB224.edu.uc.vomo";
+    "com.apple.developer.team-identifier" = E3GYNLB224;
+    "get-task-allow" = 1;
+}', teamID='E3GYNLB224', identifier='edu.uc.vomo', executablePath='<DVTFilePath:0x60001db31ec0:'/Users/neilmcgrogan/Library/Developer/Xcode/Archives/2023-03-27/VoMo 3-27-23, 3.30 PM.xcarchive/Products/Applications/VoMo.app/VoMo'>', hardenedRuntime='0'>'>: {
+    "application-identifier" = "E3GYNLB224.edu.uc.vomo";
+    "com.apple.developer.team-identifier" = E3GYNLB224;
+    "get-task-allow" = 0;
+}
+2023-03-27 19:30:38 +0000  Entitlements for <IDEDistributionItem: 0x60001db33900; bundleID='edu.uc.vomo', path='<DVTFilePath:0x60003d69bf70:'/Users/neilmcgrogan/Library/Developer/Xcode/Archives/2023-03-27/VoMo 3-27-23, 3.30 PM.xcarchive/Products/Applications/VoMo.app'>', codeSigningInfo='<_DVTCodeSigningInformation_Path: 0x600031cefe80; isSigned='1', isAdHocSigned='0', signingCertificate='<DVTSigningCertificate: 0x6000088e5290; name='Apple Development: Neil McGrogan (SJDQJ93M26)', hash='F3F85505AF88F07BBA749D26363ED0C1509FE277', serialNumber='3F315E175B8C05999E113C07A25F05E7', certificateKinds='(
+    "1.2.840.113635.100.6.1.12",
+    "1.2.840.113635.100.6.1.2"
+), issueDate='2022-05-26 17:27:33 +0000''>', entitlements='{
+    "application-identifier" = "E3GYNLB224.edu.uc.vomo";
+    "com.apple.developer.team-identifier" = E3GYNLB224;
+    "get-task-allow" = 1;
+}', teamID='E3GYNLB224', identifier='edu.uc.vomo', executablePath='<DVTFilePath:0x60001db31ec0:'/Users/neilmcgrogan/Library/Developer/Xcode/Archives/2023-03-27/VoMo 3-27-23, 3.30 PM.xcarchive/Products/Applications/VoMo.app/VoMo'>', hardenedRuntime='0'>'> are: {
+    "application-identifier" = "E3GYNLB224.edu.uc.vomo";
+    "com.apple.developer.team-identifier" = E3GYNLB224;
+    "get-task-allow" = 0;
+}
+2023-03-27 19:30:38 +0000  Writing entitlements for <IDEDistributionItem: 0x60001db33900; bundleID='edu.uc.vomo', path='<DVTFilePath:0x60003d69bf70:'/Users/neilmcgrogan/Library/Developer/Xcode/Archives/2023-03-27/VoMo 3-27-23, 3.30 PM.xcarchive/Products/Applications/VoMo.app'>', codeSigningInfo='<_DVTCodeSigningInformation_Path: 0x600031cefe80; isSigned='1', isAdHocSigned='0', signingCertificate='<DVTSigningCertificate: 0x6000088e1fa0; name='Apple Development: Neil McGrogan (SJDQJ93M26)', hash='F3F85505AF88F07BBA749D26363ED0C1509FE277', serialNumber='3F315E175B8C05999E113C07A25F05E7', certificateKinds='(
+    "1.2.840.113635.100.6.1.12",
+    "1.2.840.113635.100.6.1.2"
+), issueDate='2022-05-26 17:27:33 +0000''>', entitlements='{
+    "application-identifier" = "E3GYNLB224.edu.uc.vomo";
+    "com.apple.developer.team-identifier" = E3GYNLB224;
+    "get-task-allow" = 1;
+}', teamID='E3GYNLB224', identifier='edu.uc.vomo', executablePath='<DVTFilePath:0x60001db31ec0:'/Users/neilmcgrogan/Library/Developer/Xcode/Archives/2023-03-27/VoMo 3-27-23, 3.30 PM.xcarchive/Products/Applications/VoMo.app/VoMo'>', hardenedRuntime='0'>'> to: /var/folders/3k/dpytxv2571d6nvcyyhz42zzr0000gn/T/XcodeDistPipeline.~~~Q9yv40/entitlements~~~2fk5T2
+2023-03-27 19:30:38 +0000  Running /usr/bin/codesign '-vvv' '--force' '--sign' '13FA501B0EA40DBADF156FB27F8EFAC34715293A' '--entitlements' '/var/folders/3k/dpytxv2571d6nvcyyhz42zzr0000gn/T/XcodeDistPipeline.~~~Q9yv40/entitlements~~~2fk5T2' '--generate-entitlement-der' '--preserve-metadata=identifier,flags,runtime' '/var/folders/3k/dpytxv2571d6nvcyyhz42zzr0000gn/T/XcodeDistPipeline.~~~Q9yv40/Root/Payload/VoMo.app'
+2023-03-27 19:30:38 +0000  /var/folders/3k/dpytxv2571d6nvcyyhz42zzr0000gn/T/XcodeDistPipeline.~~~Q9yv40/Root/Payload/VoMo.app: replacing existing signature
+2023-03-27 19:30:38 +0000  /var/folders/3k/dpytxv2571d6nvcyyhz42zzr0000gn/T/XcodeDistPipeline.~~~Q9yv40/Root/Payload/VoMo.app: signed app bundle with Mach-O thin (arm64) [edu.uc.vomo]
+2023-03-27 19:30:38 +0000  /usr/bin/codesign exited with 0
+2023-03-27 19:30:38 +0000  Processing step: IDEDistributionZipODRItemStep
+2023-03-27 19:30:38 +0000  Skipping step: IDEDistributionZipODRItemStep because it said so
+2023-03-27 19:30:38 +0000  Processing step: IDEDistributionCreateIPAStep
+2023-03-27 19:30:38 +0000  Running /usr/bin/ditto '-V' '-c' '-k' '--norsrc' '/var/folders/3k/dpytxv2571d6nvcyyhz42zzr0000gn/T/XcodeDistPipeline.~~~Q9yv40/Root' '/var/folders/3k/dpytxv2571d6nvcyyhz42zzr0000gn/T/XcodeDistPipeline.~~~Q9yv40/Packages/VoMo.ipa'
+2023-03-27 19:30:38 +0000  >>> Copying /var/folders/3k/dpytxv2571d6nvcyyhz42zzr0000gn/T/XcodeDistPipeline.~~~Q9yv40/Root 
+2023-03-27 19:30:38 +0000  copying file ./Payload/VoMo.app/_CodeSignature/CodeResources ... 
+2023-03-27 19:30:38 +0000  4327 bytes for ./Payload/VoMo.app/_CodeSignature/CodeResources
+2023-03-27 19:30:38 +0000  copying file ./Payload/VoMo.app/KR_rainbow_1.wav ... 
+2023-03-27 19:30:38 +0000  1047838 bytes for ./Payload/VoMo.app/KR_rainbow_1.wav
+2023-03-27 19:30:38 +0000  copying file ./Payload/VoMo.app/Roboto-Medium.ttf ... 
+2023-03-27 19:30:38 +0000  168644 bytes for ./Payload/VoMo.app/Roboto-Medium.ttf
+2023-03-27 19:30:38 +0000  copying file ./Payload/VoMo.app/Roboto-Light.ttf ... 
+2023-03-27 19:30:38 +0000  167000 bytes for ./Payload/VoMo.app/Roboto-Light.ttf
+2023-03-27 19:30:38 +0000  copying file ./Payload/VoMo.app/Roboto-Regular.ttf ... 
+2023-03-27 19:30:38 +0000  168260 bytes for ./Payload/VoMo.app/Roboto-Regular.ttf
+2023-03-27 19:30:38 +0000  copying file ./Payload/VoMo.app/AppIcon60x60@2x.png ... 
+2023-03-27 19:30:38 +0000  9419 bytes for ./Payload/VoMo.app/AppIcon60x60@2x.png
+2023-03-27 19:30:38 +0000  copying file ./Payload/VoMo.app/VoMo ... 
+2023-03-27 19:30:38 +0000  4435408 bytes for ./Payload/VoMo.app/VoMo
+copying file ./Payload/VoMo.app/Assets.car ... 
+2023-03-27 19:30:38 +0000  5232336 bytes for ./Payload/VoMo.app/Assets.car
+2023-03-27 19:30:38 +0000  copying file ./Payload/VoMo.app/AppIcon76x76@2x~ipad.png ... 
+13457 bytes for ./Payload/VoMo.app/AppIcon76x76@2x~ipad.png
+copying file ./Payload/VoMo.app/KR_sustained_Ah_1.wav ... 
+2023-03-27 19:30:38 +0000  567198 bytes for ./Payload/VoMo.app/KR_sustained_Ah_1.wav
+2023-03-27 19:30:38 +0000  copying file ./Payload/VoMo.app/Roboto-LightItalic.ttf ... 
+2023-03-27 19:30:38 +0000  173172 bytes for ./Payload/VoMo.app/Roboto-LightItalic.ttf
+2023-03-27 19:30:38 +0000  copying file ./Payload/VoMo.app/embedded.mobileprovision ... 
+2023-03-27 19:30:38 +0000  12014 bytes for ./Payload/VoMo.app/embedded.mobileprovision
+2023-03-27 19:30:38 +0000  copying file ./Payload/VoMo.app/Roboto-Bold.ttf ... 
+2023-03-27 19:30:38 +0000  167336 bytes for ./Payload/VoMo.app/Roboto-Bold.ttf
+2023-03-27 19:30:38 +0000  copying file ./Payload/VoMo.app/Info.plist ... 
+2023-03-27 19:30:38 +0000  1826 bytes for ./Payload/VoMo.app/Info.plist
+2023-03-27 19:30:38 +0000  copying file ./Payload/VoMo.app/PkgInfo ... 
+2023-03-27 19:30:38 +0000  8 bytes for ./Payload/VoMo.app/PkgInfo
+2023-03-27 19:30:38 +0000  /usr/bin/ditto exited with 0
+2023-03-27 19:30:38 +0000  Processing step: IDEDistributionAppStoreInformationStep
+2023-03-27 19:30:38 +0000  Skipping step: IDEDistributionAppStoreInformationStep because it said so
+2023-03-27 19:30:38 +0000  Processing step: IDEDistributionGenerateProcessedDistributionItems
+2023-03-27 19:30:38 +0000  IDEDistributionItem init <DVTFilePath:0x6000414353b0:'/var/folders/3k/dpytxv2571d6nvcyyhz42zzr0000gn/T/XcodeDistPipeline.~~~Q9yv40/Root/Payload/VoMo.app'>
+2023-03-27 19:30:38 +0000  Processing step: IDEDistributionCreateManifestStep

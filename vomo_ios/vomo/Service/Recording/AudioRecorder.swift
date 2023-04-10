@@ -46,6 +46,29 @@ class AudioRecorder: NSObject, ObservableObject {
         getProcessedData()
     }
     
+    func grantedPermission() -> Bool {
+        let audioSession = AVAudioSession.sharedInstance()
+        switch audioSession.recordPermission {
+        case .granted:
+            return true// User has granted permission to record audio
+        case .denied:
+            return false// User has denied permission to record audio
+        case .undetermined:
+            var ret = false
+            // User has not yet been asked for permission to record audio
+            audioSession.requestRecordPermission { granted in
+                if granted {
+                    ret = true// User has granted permission to record audio
+                } else {
+                    ret = false// User has denied permission to record audio
+                }
+            }
+            return ret
+        default:
+            return false
+        }
+    }
+        
     func setProcessedData(recording: Recording, metrics: [Double]) {
         self.processedData.append(ProcessedData(createdAt: recording.createdAt,
                                                 duration: metrics[0],
@@ -211,6 +234,10 @@ class AudioRecorder: NSObject, ObservableObject {
         return str
     }
     
+    /// tasks
+    /// 1 vowel
+    /// 2 duration
+    /// 3 rainbow
     func fileTask(file: URL!) -> String {
         var str = ""
         for record in recordings {
@@ -235,7 +262,7 @@ class AudioRecorder: NSObject, ObservableObject {
         } else if str == "3" {
             return "Rainbow"
         } else {
-            return "Rainbow"
+            return "Error"
         }
     }
     
@@ -247,13 +274,13 @@ class AudioRecorder: NSObject, ObservableObject {
             }
         }
         if str == "1" {
-            return "vowel"
+            return "Vowel"
         } else if str == "2" {
-            return "mpt"
+            return "MPT"
         } else if str == "3" {
-            return "rainbow"
+            return "Rainbow"
         } else {
-            return "rainbow"
+            return "Error"
         }
     }
     
@@ -292,48 +319,46 @@ class AudioRecorder: NSObject, ObservableObject {
     func syncEntries(gender: String) {
         // Determine if the same amount, if not will further process
         if recordings.count != processedData.count {
-            print("Mismatch in data\n\n\n\n\n")
+            print("Mismatch in data\n\n\n")
             
-            // On the condition that there are more recordings
-            if recordings.count > processedData.count {
-                
-                // Loop through recordings
-                for record in recordings {
-                    /// 0 if no matches, 1 if a match
-                    var count = 0
+            processedData.removeAll()
+            
+            for _ in 0..<recordings.count {
+                self.processedData.append(ProcessedData(createdAt: .now, duration: -1.0, intensity: -1.0, pitch_mean: -1.0, pitch_min: -1.0, pitch_max: -1.0, cppMean: -1.0, favorite: false))
+            }
+            
+            if recordings.count == processedData.count {
+                for index in 0..<recordings.count {
+                    let group = DispatchGroup()
+                    let labelGroup = String("test")
                     
-                    for process in processedData {
-                        
-                        // if there is a match change var to 1
-                        if record.createdAt == process.createdAt {
-                            
-                            count += 1
-                            print("match")
-                        }
-                    }
+                    group.enter()
                     
-                    // if there was a match on none of these then reprocess this file and add to proccessedData
-                    if count == 0 {
-                        print("Performed a reproccessing on this file: \(record.createdAt)")
+                    let dispatchQueue = DispatchQueue(label: labelGroup, qos: .background)
+                    dispatchQueue.async(group: group, execute: {
+                        let metrics = self.signalProcess(fileURL: self.recordings[index].fileURL, gender: gender)
                         
-                        
-                        let processings = process(recording: record, gender: gender)
-                        saveProcessedData()
-                    }
+                        self.processedData[index] = ProcessedData(createdAt: self.recordings[index].createdAt, duration: metrics[0], intensity: metrics[1], pitch_mean: metrics[2], pitch_min: metrics[3], pitch_max: metrics[4], cppMean: metrics[5], favorite: false)
+                    })
+                    
+                    group.leave()
+                    group.notify(queue: DispatchQueue.main, execute: {
+                        print("Task completed!")
+                        print("appended this: \(self.recordings[index].createdAt.toDebug())")
+                    })
+                    
+                    //process(recording: recordings[index], gender: gender)
+                }
+            }
+        } else {
+            print("Matched")
+            
+            if recordings.isNotEmpty && processedData.isNotEmpty {
+                for index in 0..<recordings.count {
+                    print("\(recordings[index].createdAt.toDebug()) & \(processedData[index].createdAt.toDebug())\n")
                 }
             }
         }
-        
-        // Check if all present
-        /*
-         pitch
-         cpp
-         etc
-         
-         */
-        
-        
-        
     }
 }
 
@@ -398,3 +423,42 @@ extension AudioRecorder {
     func filterRecordingsDay(focus: Date) -> [Recording] { return [] }
     func filterRecordingsDayExercise(focus: Date, taskNum: Int) -> [Recording] { return [] }
 }
+
+/*
+ 
+ // Loop through recordings
+ for record in recordings {
+     /// 0 if no matches, 1 if a match
+     var count = 0
+     
+     for process in processedData {
+         
+         // if there is a match change var to 1
+         if record.createdAt == process.createdAt {
+             
+             count += 1
+             print("match")
+         }
+     }
+     
+     // if there was a match on none of these then reprocess this file and add to proccessedData
+     if count == 0 {
+         print("Performed a reproccessing on this file: \(record.createdAt)")
+         
+         
+         let processings = process(recording: record, gender: gender)
+         saveProcessedData()
+     }
+ }
+} else if processedData.count > recordings.count {
+ print("Difference is: \(processedData.count) - \(recordings.count)")
+ 
+ for index in 0..<recordings.count {
+     if recordings[index].createdAt == processedData[index].createdAt {
+         print("At index: \(index) there is a match")
+     } else {
+         print("At index: \(index) there is a mismatch")
+     }
+ }
+}
+ */

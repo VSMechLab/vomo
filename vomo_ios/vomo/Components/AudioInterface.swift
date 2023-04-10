@@ -73,15 +73,10 @@ struct AudioInterface: View {
                         playing = false
                         self.audioPlayer.pause()
                     } else if !audioPlayer.isPlaying {
-                        do {
-                            //audioPlayer.delegate = self
-                            audioPlayer.play()
-                            playing = true
-                            self.audioPlayer.play()
-                        } catch {
-                            print("error")
-                        }
-                        
+                        //audioPlayer.delegate = self
+                        audioPlayer.play()
+                        playing = true
+                        self.audioPlayer.play()
                     }
                 }) {
                     Image(playing ? svm.stop_playback_img : svm.start_playback_img)
@@ -110,7 +105,9 @@ struct AudioInterface: View {
             initialiseAudioPlayer()
         }
         .onDisappear() {
-            audioPlayer.stop()
+            if audioPlayer != nil {
+                audioPlayer.stop()
+            }
         }
     }
     
@@ -168,9 +165,12 @@ struct AudioInterface: View {
         }
         
         //The formattedDuration is the string to display
-        formattedDuration = formatter.string(from: TimeInterval(self.audioPlayer.duration))!
+        // unwrap
+        guard let player = audioPlayer else { return }
+        let interval = TimeInterval(player.duration)
+        formattedDuration = formatter.string(from: interval) ?? "00"
         duration = self.audioPlayer.duration
-
+        
         Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { _ in
            if !audioPlayer.isPlaying {
                playing = false
@@ -193,5 +193,3 @@ struct AudioInterface_Previews: PreviewProvider {
             .environmentObject(AudioRecorder())
     }
 }
-
-

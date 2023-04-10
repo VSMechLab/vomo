@@ -17,6 +17,7 @@ struct DayList: View {
     let svm = SharedViewModel()
     let isExpandedList: Bool
     @Binding var deletionTarget: (Date, String)
+    @Binding var showRecordDetails: Bool
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -43,7 +44,7 @@ struct DayList: View {
             if showMore {
                 VStack(spacing: 0) {
                     ForEach(0..<element.str.count, id: \.self) { index in
-                        EntryRow(expand: expand, index: (element.str.count-1-index), element: element, isExpandedList: isExpandedList, deletionTarget: $deletionTarget)
+                        EntryRow(expand: expand, index: (element.str.count-1-index), element: element, isExpandedList: isExpandedList, deletionTarget: $deletionTarget, showRecordDetails: $showRecordDetails)
                         Color.BRIGHT_PURPLE.frame(height: 2.5).opacity(0.6)
                     }
                 }

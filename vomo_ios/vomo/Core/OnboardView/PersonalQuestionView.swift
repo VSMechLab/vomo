@@ -93,6 +93,8 @@ extension PersonalQuestionView {
                 .pickerStyle(InlinePickerStyle())
                 .onChange(of: self.sex) { newSex in
                     self.settings.sexAtBirth = sex
+                    self.gender = sex
+                    self.settings.gender = sex
                 }
 
             } label: {

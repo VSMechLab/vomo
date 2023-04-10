@@ -9,7 +9,6 @@ import SwiftUI
 
 struct Journals: Hashable {
     var createdAt: Date
-    var noteName: String
     var note: String
 }
 
@@ -19,13 +18,8 @@ struct ExpandedJournal: View {
     let createdAt: Date
     @Binding var deletionTarget: (Date, String)
     var body: some View {
-        VStack(alignment: .leading, spacing: 0) {
+        VStack(alignment: .leading) {
             ForEach(findJournal(createdAt: createdAt), id: \.self) { journal in
-                HStack {
-                    Text(journal.noteName)
-                        .font(._bodyCopyBold)
-                    Spacer()
-                }
                 Text("\(journal.note)")
                     .font(._bodyCopy)
                     .multilineTextAlignment(.leading)
@@ -33,9 +27,8 @@ struct ExpandedJournal: View {
             }
             
             HStack {
-                Spacer()
                 StarButton(type: "journal", date: createdAt)
-                    .padding(.horizontal, 7.5)
+                Spacer()
                 DeleteButton(deletionTarget: $deletionTarget, type: "Journal entry", date: createdAt)
             }
         }
@@ -51,7 +44,7 @@ extension ExpandedJournal {
         for journal in entries.journals {
             // Check if survey time matches target time
             if journal.createdAt == createdAt {
-                ret.append(Journals(createdAt: createdAt, noteName: journal.noteName, note: journal.note))
+                ret.append(Journals(createdAt: createdAt, note: journal.note))
             }
         }
         return ret

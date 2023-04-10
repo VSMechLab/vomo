@@ -181,6 +181,7 @@ class Settings: ObservableObject {
             UserDefaults.standard.set(minPitch, forKey: "min_pitch")
         }
     }
+    
     @Published var maxPitch: Bool {
         didSet {
             UserDefaults.standard.set(maxPitch, forKey: "max_pitch")
@@ -339,6 +340,24 @@ class Settings: ObservableObject {
     
     var availableRecordings: [String] {
         var ret: [String] = []
+        
+        /// 0. Custom
+        /// 1. Gender-Affirming Voice Care
+        ///
+        /// Laryngeal Dystonia / Vocal Tremor
+        ///     2. Abductor Laryngeal Dystonia
+        ///     3. Adductor Laryngeal Dystonia
+        ///     4. Adductor Laryngeal Dystonia & Vocal Tremor
+        ///     5. Mixed Laryngeal Dystonia
+        ///     6. Vocal Tremor
+        /// 7. Recurrent Respiratory Papillomatosis (RRP)
+        /// 8. Parkinson’s Disease
+        ///
+        /// Vocal Fold Paralysis / Paresis
+        ///     9. Unilateral vocal fold paralysis
+        ///     10. Unilateral vocal fold paralysis
+        ///     11. Unilateral vocal fold paresis without motion impairment
+
         switch focusSelection {
         case 0:
             if self.vowel {
@@ -353,21 +372,15 @@ class Settings: ObservableObject {
             if ret.isEmpty {
                 ret += ["vowel", "mpt", "rainbow"]
             }
-        case 1: // Laryngeal Dystonia
-            ret += ["vowel", "mpt", "rainbow"]
-        case 2: // RRP
-            ret += ["vowel", "mpt", "rainbow"]
-        case 3: // Parkinson's
-            ret += ["mpt", "rainbow"]
-        case 4: // Gender-Affirming Voice Care
+        case 1: // Gender-Affirming Voice Care
             ret += ["vowel", "rainbow"]
-        case 5: // Vocal Fold Paralysis
+        case 2...6: // Laryngeal Dystonia / Vocal Tremor
             ret += ["vowel", "mpt", "rainbow"]
-        case 6: // Vocal Tremor
+        case 7: // Recurrent Respiratory Papillomatosis (RRP)
             ret += ["vowel", "mpt", "rainbow"]
-        case 7: // Laryngeal Dystonia and Vocal Tremor
-            ret += ["vowel", "mpt", "rainbow"]
-        case 8: // None of the above
+        case 8: // Parkinson’s Disease
+            ret += ["mpt", "rainbow"]
+        case 9...11: // Vocal Fold Paralysis / Paresis
             ret += ["vowel", "mpt", "rainbow"]
         default:
             if self.vowel {
@@ -384,68 +397,79 @@ class Settings: ObservableObject {
     }
     
     func setSurveys() {
-        //var ret: [String] = []
+        /// Focus Selection
+        /// 0. Custom
+        /// 1. Gender-Affirming Voice Care
+        ///
+        /// Laryngeal Dystonia / Vocal Tremor
+        ///     2. Abductor Laryngeal Dystonia
+        ///     3. Adductor Laryngeal Dystonia
+        ///     4. Adductor Laryngeal Dystonia & Vocal Tremor
+        ///     5. Mixed Laryngeal Dystonia
+        ///     6. Vocal Tremor
+        /// 7. Recurrent Respiratory Papillomatosis (RRP)
+        /// 8. Parkinson’s Disease
+        ///
+        /// Vocal Fold Paralysis / Paresis
+        ///     9. Unilateral vocal fold paralysis
+        ///     10. Unilateral vocal fold paralysis
+        ///     11. Unilateral vocal fold paresis without motion impairment
+
+        
         switch focusSelection {
         case 0: // Custom track
-            if self.vhi {
-                //ret += ["vhi"]
-            }
-            if self.vocalEffort {
-                //ret += ["ve"]
-            }
-            if self.botulinumInjection {
-                //ret += ["bi"]
-            }
-        case 1: // Laryngeal Dystonia
-            //ret += ["vhi", "ve"] //Laryngeal Dystonia
+            print("Custom track selected")
+        case 1: // Gender-Affirming Voice Care
+            self.vhi = false
+            self.vocalEffort = true
+            self.botulinumInjection = false
+        case 2...6: // Laryngeal Dystonia / Vocal Tremor
             self.vhi = false
             self.vocalEffort = false
             self.botulinumInjection = true
-        case 2: // RRP
-            //ret += ["vhi", "ve"]
+        case 7: // Recurrent Respiratory Papillomatosis (RRP)
             self.vhi = true
             self.vocalEffort = true
             self.botulinumInjection = false
-        case 3: // Parkinson's
-            //ret += ["ve"]
+        case 8: // Parkinson’s Disease
             self.vhi = false
             self.vocalEffort = true
             self.botulinumInjection = false
-        case 4: // Gender-Affirming Voice Care
-            //ret += ["ve"]
-            self.vhi = false
-            self.vocalEffort = true
-            self.botulinumInjection = false
-        case 5: // Vocal Fold Paralysis
-            //ret += ["vhi", "ve"]
-            self.vhi = true
-            self.vocalEffort = true
-            self.botulinumInjection = false
-        case 6: // Vocal Tremor
-            self.vhi = false
-            self.vocalEffort = false
-            self.botulinumInjection = true
-        case 7: // Laryngeal Dystonia and Vocal Tremor
-            self.vhi = false
-            self.vocalEffort = false
-            self.botulinumInjection = true
-        case 8: // None of the above
-            //ret += ["vhi", "ve"]
+        case 9...11: // Vocal Fold Paralysis / Paresis
             self.vhi = true
             self.vocalEffort = true
             self.botulinumInjection = false
         default:
-            //ret += ["vhi", "ve"]
             self.vhi = true
             self.vocalEffort = true
             self.botulinumInjection = true
         }
-        //return ret
     }
 }
 
 extension Settings {
     /// Range of target for pitch
+    /// Young adult female (i.e., < age 60 years)--- 15-25 seconds
+    /// Young adult male (i.e., < age 60 years)---- 25-35 seconds
+    /// Older adult female (> 60 years)---- 15 seconds / 25
+    /// Older adult male (> 60 years)---- 15 seconds / 35
+    /// RETURN TWO VALUES
+    func durationRange() -> (CGFloat, CGFloat) {
+        let newDate: Date = dob.toDateFromDOB() ?? .now
+        let diffs = Calendar.current.dateComponents([.year], from: newDate, to: .now)
+        
+        if diffs.year ?? 0 > 60 {
+            return (15.0, 25.0)
+        } else {
+            if gender == "Female" {
+                return (15.0, 25.0)
+            } else {
+                return (25.0, 35.0)
+            }
+        }
+    }
+    
+    /// Range of target for duration
     func pitchRange() -> (CGFloat, CGFloat) {
         if focusSelection == 4 {
             if gender == "Male" {

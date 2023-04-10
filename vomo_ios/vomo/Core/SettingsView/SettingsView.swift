@@ -260,7 +260,7 @@ extension SettingsView {
                     Spacer()
                 }
                 HStack {
-                    Text("Edit.")
+                    Text("Edit")
                         .underline()
                         .foregroundColor(Color.DARK_PURPLE)
                     Spacer()
@@ -276,7 +276,7 @@ extension SettingsView {
             Button(action: {
                 self.showGoals.toggle()
             }) {
-                Text("Edit Goals.")
+                Text("Edit Goals")
                     .font(._bodyCopyLargeMedium)
                     .underline()
                     .foregroundColor(Color.DARK_PURPLE)
@@ -286,7 +286,7 @@ extension SettingsView {
             Button(action: {
                 self.showNotifications.toggle()
             }) {
-                Text("Edit Reminders.")
+                Text("Edit Reminders")
                     .font(._bodyCopyLargeMedium)
                     .underline()
                     .foregroundColor(Color.DARK_PURPLE)
@@ -295,7 +295,7 @@ extension SettingsView {
             Button(action: {
                 self.showDeleteWarning = true
             }) {
-                Text("Delete All Collected Data.")
+                Text("Delete All Collected Data")
                     .font(._bodyCopyLargeMedium)
                     .underline()
                     .foregroundColor(Color.red)
@@ -383,7 +383,12 @@ extension SettingsView {
         entries.treatments.removeAll()
         entries.journals.removeAll()
         entries.questionnaires.removeAll()
-        audioRecorder.recordings.removeAll()
+        
+        
+        for record in stride(from: audioRecorder.recordings.count-1, to: 0, by: -1) {
+            audioRecorder.deleteRecording(urlToDelete: audioRecorder.recordings[record].fileURL)
+        }
+        
         audioRecorder.processedData.removeAll()
     }
 }

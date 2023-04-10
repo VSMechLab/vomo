@@ -13,6 +13,8 @@ var tabs = ["Summary", "Pitch", "Duration", "Quality", "Survey"]
 struct Graphic: View {
     @Binding var thresholdPopUps: (Bool, Bool, Bool)
     @Binding var tappedRecording: Date
+    @Binding var showBaseline: Bool
+    @Binding var deletionTarget: (Date, String)
     
     @State var selectedTab = "Summary"
     @State var edge = UIApplication.shared.windows.first?.safeAreaInsets
@@ -32,7 +34,7 @@ struct Graphic: View {
             } else if selectedTab == "Pitch" {
                 Color.DARK_PURPLE.edgesIgnoringSafeArea(.top)
             } else if selectedTab == "Duration" {
-                Color.BRIGHT_PURPLE.edgesIgnoringSafeArea(.top)
+                Color.DARK_PURPLE.edgesIgnoringSafeArea(.top)
             } else if selectedTab == "Quality" {
                 Color.DARK_PURPLE.edgesIgnoringSafeArea(.top)
             } else if selectedTab == "Survey" {
@@ -45,16 +47,16 @@ struct Graphic: View {
                 SummaryTab(showTitle: $showTitle)
                     .tag("Summary")
                 
-                PitchTab(showTitle: $showTitle, thresholdPopUps: $thresholdPopUps, tappedRecording: $tappedRecording)
+                PitchTab(showTitle: $showTitle, thresholdPopUps: $thresholdPopUps, tappedRecording: $tappedRecording, showBaseline: self.$showBaseline, deletionTarget: $deletionTarget)
                     .tag("Pitch")
                 
-                DurationTab(showTitle: $showTitle, thresholdPopUps: $thresholdPopUps)
+                DurationTab(showTitle: $showTitle, thresholdPopUps: $thresholdPopUps, tappedRecording: $tappedRecording, showBaseline: self.$showBaseline, deletionTarget: $deletionTarget)
                     .tag("Duration")
                 
-                QualityTab(showTitle: $showTitle, thresholdPopUps: $thresholdPopUps)
+                QualityTab(showTitle: $showTitle, thresholdPopUps: $thresholdPopUps, tappedRecording: $tappedRecording, showBaseline: self.$showBaseline, deletionTarget: $deletionTarget)
                     .tag("Quality")
                 
-                SurveyTab(showTitle: $showTitle)
+                SurveyTab(showTitle: $showTitle, tappedRecording: $tappedRecording, deletionTarget: $deletionTarget)
                     .tag("Survey")
             }
             .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
@@ -139,29 +141,56 @@ struct Graphic: View {
 
 struct SummaryTab: View {
     @Binding var showTitle: Bool
+    @State var showInformation = false
     var body: some View {
-        VStack {
-            HStack {
-                Text("Summary")
+        ZStack {
+            VStack {
+                HStack {
+                    Button("Summary") {
+                        self.showInformation = true
+                    }
                     .font(Font._title1)
+                    Spacer()
+                }
+                .padding(.top, showTitle ? 15 : -20)
+                
+                HStack {
+                    Spacer()
+                    Text("Weekly Goal")
+                        .foregroundColor(Color.white)
+                        .font(._bodyCopyMedium)
+                }
+                
+                GraphView(showVHI: .constant(false), showVE: .constant(false), index: 0)
+                
                 Spacer()
             }
-            .padding(.top, showTitle ? 15 : 0)
+            .padding()
+            .frame(width: UIScreen.main.bounds.width, height: showTitle ? UIScreen.main.bounds.height * 0.325 : UIScreen.main.bounds.height * 0.345)
+            .foregroundColor(.TEAL)
+            .edgesIgnoringSafeArea(.all)
             
-            HStack {
-                Spacer()
-                Text("Weekly Goal")
-                    .foregroundColor(Color.white)
-                    .font(._bodyCopyMedium)
+            if showInformation {
+                Button(action: {
+                    self.showInformation = false
+                }) {
+                    VStack {
+                        Text("This is your summary page where you will find basic information about your progress towards your goals.")
+                            .multilineTextAlignment(.leading)
+                        Spacer()
+                    }
+                    .padding()
+                    .background(
+                        Color.white
+                            .cornerRadius(12)
+                            .shadow(color: Color.gray, radius: 5)
+                    )
+                    .padding(50)
+                }
+                .frame(width: UIScreen.main.bounds.width, height: showTitle ? UIScreen.main.bounds.height * 0.325 : UIScreen.main.bounds.height * 0.345)
             }
-            
-            GraphView(showVHI: .constant(false), showVE: .constant(false), index: 0)
-            
-            Spacer()
         }
-        .padding()
         .frame(width: UIScreen.main.bounds.width, height: showTitle ? UIScreen.main.bounds.height * 0.325 : UIScreen.main.bounds.height * 0.345)
-        .foregroundColor(.TEAL)
         .edgesIgnoringSafeArea(.all)
     }
 }
@@ -175,149 +204,366 @@ struct PitchTab: View {
     
     @Binding var tappedRecording: Date
     
+    @Binding var showBaseline: Bool
+    
+    @Binding var deletionTarget: (Date, String)
+    
+    @State var showInformation = false
+    
     var body: some View {
-        VStack {
-            HStack {
-                Text("Pitch")
+        ZStack {
+            VStack {
+                HStack {
+                    Button("Pitch") {
+                        self.showInformation = true
+                    }
                     .font(Font._title1)
-                Spacer()
-            }
-            .padding(.top, showTitle ? 15 : 0)
-            
-            HStack {
-                Spacer()
+                    Spacer()
+                }
+                .padding(.top, showTitle ? 15 : -20)
                 
-                if settings.focusSelection == 4 {
-                    switch settings.gender {
-                    case "Male":
-                        Button("Set to Male") {
-                            self.settings.gender = "Female"
-                        }
-                    case "Female":
-                        Button("Set to Female") {
-                            self.settings.gender = "Non-binary"
-                        }
-                    case "Non-binary":
-                        Button("Set to Non-Binary") {
-                            self.settings.gender = "Male"
-                        }
-                    default:
-                        Button("No threshold set") {
-                            self.settings.gender = "Male"
+                HStack {
+                    Spacer()
+                    
+                    if settings.focusSelection == 4 {
+                        switch settings.gender {
+                        case "Male":
+                            Button("Set to Male") {
+                                self.settings.gender = "Female"
+                            }
+                        case "Female":
+                            Button("Set to Female") {
+                                self.settings.gender = "Non-binary"
+                            }
+                        case "Non-binary":
+                            Button("Set to Non-Binary") {
+                                self.settings.gender = "Male"
+                            }
+                        default:
+                            Button("No threshold set") {
+                                self.settings.gender = "Male"
+                            }
                         }
                     }
                 }
+                .foregroundColor(Color.white)
+                .font(._bodyCopyMedium)
+                
+                PitchGraph(tappedRecording: $tappedRecording, showBaseline: self.$showBaseline, deletionTarget: $deletionTarget)
+                
+                Spacer()
             }
-            .foregroundColor(Color.white)
-            .font(._bodyCopyMedium)
+            .padding()
+            .frame(width: UIScreen.main.bounds.width, height: showTitle ? UIScreen.main.bounds.height * 0.325 : UIScreen.main.bounds.height * 0.345)
+            .foregroundColor(.BRIGHT_PURPLE)
+            .edgesIgnoringSafeArea(.all)
             
-            PitchGraph(tappedRecording: $tappedRecording)
-            
-            Spacer()
+            if showInformation {
+                Button(action: {
+                    self.showInformation = false
+                }) {
+                    VStack {
+                        Text("View graphs of the pitch of your voice in this tab. The data comes from the Vowel recordings you have provided.")
+                            .multilineTextAlignment(.leading)
+                        Spacer()
+                    }
+                    .padding()
+                    .background(
+                        Color.white
+                            .cornerRadius(12)
+                            .shadow(color: Color.gray, radius: 5)
+                    )
+                    .padding(50)
+                }
+                .frame(width: UIScreen.main.bounds.width, height: showTitle ? UIScreen.main.bounds.height * 0.325 : UIScreen.main.bounds.height * 0.345)
+            }
         }
-        .padding()
         .frame(width: UIScreen.main.bounds.width, height: showTitle ? UIScreen.main.bounds.height * 0.325 : UIScreen.main.bounds.height * 0.345)
-        .foregroundColor(.BRIGHT_PURPLE)
         .edgesIgnoringSafeArea(.all)
     }
 }
 
 struct DurationTab: View {
+    @EnvironmentObject var settings: Settings
+    
     @Binding var showTitle: Bool
     
     @Binding var thresholdPopUps: (Bool, Bool, Bool)
     
+    @Binding var tappedRecording: Date
+    
+    @Binding var showBaseline: Bool
+    
+    @Binding var deletionTarget: (Date, String)
+    
+    @State var showInformation = false
+    
+    
     var body: some View {
-        VStack {
-            HStack {
-                Text("Duration")
+        ZStack {
+            VStack {
+                HStack {
+                    Button("Maximum Duration") {
+                        self.showInformation = true
+                    }
                     .font(Font._title1)
-                Spacer()
-            }
-            .padding(.top, showTitle ? 15 : 0)
-            
-            HStack {
-                Spacer()
-                Button("Set Threshold") {
-                    self.thresholdPopUps.0.toggle()
+                    Spacer()
+                    
+                    
+                    HStack(spacing: 5) {
+                        Color.indigo.opacity(0.5).frame(width: 17.5, height: 17.5)
+                            .border(Color.white, width: 0.5)
+                            //.cornerRadius(5)
+                        
+                        // Typical female range
+                        // Typical male range
+                        // target range if trans
+                        if settings.focusSelection == 1 {
+                            if settings.gender == "Male" {
+                                Text("Target Male Range")
+                            } else if settings.gender == "Female" {
+                                Text("Target Female Range")
+                            } else {
+                                Text("Target Range")
+                            }
+                        } else {
+                            if settings.gender == "Male" {
+                                Text("Typical Male Range")
+                            } else if settings.gender == "Female" {
+                                Text("Typical Female Range")
+                            } else {
+                                Text("Typical Range")
+                            }
+                        }
+                    }
+                    .padding(2)
+                    .font(._fieldCopyRegular)
+                    .foregroundColor(Color.white)
+                    .padding(.top, 5)
+                    
                 }
+                .padding(.top, showTitle ? 15 : -20)
+                
+                DurationGraph(tappedRecording: $tappedRecording, showBaseline: self.$showBaseline, deletionTarget: $deletionTarget)
+                
+                Spacer()
             }
-            .foregroundColor(Color.white)
-            .font(._bodyCopyMedium)
+            .padding()
+            .frame(width: UIScreen.main.bounds.width, height: showTitle ? UIScreen.main.bounds.height * 0.325 : UIScreen.main.bounds.height * 0.345)
+            .foregroundColor(.BRIGHT_PURPLE)
+            .edgesIgnoringSafeArea(.all)
             
-            GraphView(showVHI: .constant(false), showVE: .constant(false), index: 2)
-            
-            Spacer()
+            if showInformation {
+                Button(action: {
+                    self.showInformation = false
+                }) {
+                    VStack {
+                        Text("View graphs of the duration of your voice in this tab. The data comes from the MPT recordings you have provided.")
+                            .multilineTextAlignment(.leading)
+                        Spacer()
+                    }
+                    .padding()
+                    .background(
+                        Color.white
+                            .cornerRadius(12)
+                            .shadow(color: Color.gray, radius: 5)
+                    )
+                    .padding(50)
+                }
+                .frame(width: UIScreen.main.bounds.width, height: showTitle ? UIScreen.main.bounds.height * 0.325 : UIScreen.main.bounds.height * 0.345)
+            }
         }
-        .padding()
         .frame(width: UIScreen.main.bounds.width, height: showTitle ? UIScreen.main.bounds.height * 0.325 : UIScreen.main.bounds.height * 0.345)
-        .foregroundColor(.DARK_PURPLE)
         .edgesIgnoringSafeArea(.all)
     }
 }
 
 struct QualityTab: View {
+    @EnvironmentObject var settings: Settings
+    
     @Binding var showTitle: Bool
     
     @Binding var thresholdPopUps: (Bool, Bool, Bool)
     
+    @Binding var tappedRecording: Date
+    
+    @Binding var showBaseline: Bool
+    
+    @Binding var deletionTarget: (Date, String)
+    
+    @State var showInformation = false
+    
     var body: some View {
-        VStack {
-            HStack {
-                Text("Quality")
+        ZStack {
+            VStack {
+                HStack {
+                    Button("Voice Quality") {
+                        self.showInformation = true
+                    }
                     .font(Font._title1)
-                Spacer()
-            }
-            .padding(.top, showTitle ? 15 : 0)
-            
-            HStack {
-                Spacer()
-                Button("Set Threshold") {
-                    self.thresholdPopUps.0.toggle()
+                    Spacer()
                 }
+                .padding(.top, showTitle ? 15 : -20)
+                
+                QualityGraph(tappedRecording: $tappedRecording, showBaseline: self.$showBaseline, deletionTarget: $deletionTarget)
+                
+                Spacer()
             }
-            .foregroundColor(Color.white)
-            .font(._bodyCopyMedium)
+            .padding()
+            .frame(width: UIScreen.main.bounds.width, height: showTitle ? UIScreen.main.bounds.height * 0.325 : UIScreen.main.bounds.height * 0.345)
+            .foregroundColor(.BRIGHT_PURPLE)
+            .edgesIgnoringSafeArea(.all)
             
-            GraphView(showVHI: .constant(false), showVE: .constant(false), index: 3)
-            
-            Spacer()
+            if showInformation {
+                Button(action: {
+                    self.showInformation = false
+                }) {
+                    VStack {
+                        Text("View graphs of the quality of your voice in this tab. The data comes from the Rainbow recordings you have provided.")
+                            .multilineTextAlignment(.leading)
+                        Spacer()
+                    }
+                    .padding()
+                    .background(
+                        Color.white
+                            .cornerRadius(12)
+                            .shadow(color: Color.gray, radius: 5)
+                    )
+                    .padding(50)
+                }
+                .frame(width: UIScreen.main.bounds.width, height: showTitle ? UIScreen.main.bounds.height * 0.325 : UIScreen.main.bounds.height * 0.345)
+            }
         }
-        .padding()
         .frame(width: UIScreen.main.bounds.width, height: showTitle ? UIScreen.main.bounds.height * 0.325 : UIScreen.main.bounds.height * 0.345)
-        .foregroundColor(.BRIGHT_PURPLE)
         .edgesIgnoringSafeArea(.all)
     }
 }
 
 struct SurveyTab: View {
+    @EnvironmentObject var entries: Entries
+    
     @Binding var showTitle: Bool
-    @State private var showVHI = true
+    
+    @Binding var tappedRecording: Date
+    
+    @Binding var deletionTarget: (Date, String)
+    
+    /// if 0 show vhi-10
+    /// if 1 show vocal effort
+    /// if 2 show bi
+    @State private var surveySelection: Int = -1
+    
+    @State var showInformation = false
+    
+    /// Iterate between four different graph types
+    /// "Showing VHI-10", "Showing Vocal Effort (Physical)", "Showing Vocal Effort (Mental)", "Showing Current % of Vocal Function"
+    /// Use buttons action bellow to determine when to move between different graphs
+    let surveyName = ["Showing VHI-10", "Showing % of Vocal Effort", "Showing % of Vocal Function"]
+    @State var availableSurveys: [Int] = []
+    
     var body: some View {
-        VStack {
-            HStack {
-                Text("Survey")
+        ZStack {
+            VStack {
+                HStack {
+                    Button("Survey") {
+                        self.showInformation = true
+                    }
                     .font(Font._title1)
+                    Spacer()
+                    Button(action: {
+                        var indexOfSurveys = -1
+                        
+                        for index in 0..<availableSurveys.count {
+                            if surveySelection == availableSurveys[index] {
+                                indexOfSurveys = index
+                            }
+                        }
+                        
+                        if availableSurveys.count > 0 {
+                            if indexOfSurveys + 1 < availableSurveys.endIndex {
+                                surveySelection = availableSurveys[indexOfSurveys+1]
+                            } else {
+                                surveySelection = availableSurveys[0]
+                            }
+                        }
+                    }) {
+                        Text(surveySelection != -1 ? surveyName[surveySelection] : "")
+                            .font(._bodyCopy)
+                    }
+                }
+                .padding(.top, showTitle ? 15 : -20)
+                
                 Spacer()
-                Button(action: {
-                    self.showVHI.toggle()
-                }) {
-                    Text(showVHI ? "Show Vocal Effort" : "Show VHI")
+                
+                if surveySelection != -1 {
+                    SurveyGraph(surveySelection: $surveySelection, tappedRecording: $tappedRecording, deletionTarget: $deletionTarget)
+                } else {
+                    Text("Log a survey to start seeing data.")
+                        .multilineTextAlignment(.center)
                         .font(._bodyCopy)
                 }
+                
+                Spacer()
             }
-            .padding(.top, showTitle ? 15 : 0)
+            .padding()
+            .frame(width: UIScreen.main.bounds.width, height: showTitle ? UIScreen.main.bounds.height * 0.325 : UIScreen.main.bounds.height * 0.345)
+            .foregroundColor(.TEAL)
+            .edgesIgnoringSafeArea(.all)
             
-            Spacer()
-            
-            SurveyGraph(showVHI: $showVHI)
-            
-            Spacer()
+            if showInformation {
+                Button(action: {
+                    self.showInformation = false
+                }) {
+                    VStack {
+                        Text("View graphs of your surveys in this tab. Toggle between different survey types bellow.")
+                            .multilineTextAlignment(.leading)
+                        Spacer()
+                    }
+                    .padding()
+                    .background(
+                        Color.white
+                            .cornerRadius(12)
+                            .shadow(color: Color.gray, radius: 5)
+                    )
+                    .padding(50)
+                }
+                .frame(width: UIScreen.main.bounds.width, height: showTitle ? UIScreen.main.bounds.height * 0.325 : UIScreen.main.bounds.height * 0.345)
+            }
         }
-        .padding()
         .frame(width: UIScreen.main.bounds.width, height: showTitle ? UIScreen.main.bounds.height * 0.325 : UIScreen.main.bounds.height * 0.345)
-        .foregroundColor(.TEAL)
         .edgesIgnoringSafeArea(.all)
+        .onAppear() {
+            if surveyTotals().0 != 0 {
+                availableSurveys += [0]
+            }
+            if surveyTotals().1 != 0 {
+                availableSurveys += [1]
+            }
+            if surveyTotals().2 != 0 {
+                availableSurveys += [2]
+            }
+            surveySelection = availableSurveys.first ?? -1
+        }
+    }
+    
+    func surveyTotals() -> (Double, Double, Double) {
+        var one = 0.0
+        var two = 0.0
+        var three = 0.0
+        
+        for survey in entries.questionnaires {
+            if survey.score.0 != -1 {
+                one += 1
+            }
+            if survey.score.1 != -1 || survey.score.2 != -1 {
+                two += 1
+            }
+            if survey.score.3 != -1 {
+                three += 1
+            }
+        }
+        
+        return (one, two, three)
     }
 }
 
@@ -337,6 +583,6 @@ struct TabButton: View {
 
 struct Graphic_Previews: PreviewProvider {
     static var previews: some View {
-        Graphic(thresholdPopUps: .constant((false, false, false)), tappedRecording: .constant(.now))
+        Graphic(thresholdPopUps: .constant((false, false, false)), tappedRecording: .constant(.now), showBaseline: .constant(false), deletionTarget: .constant((Date.now, String("string"))))
     }
 }

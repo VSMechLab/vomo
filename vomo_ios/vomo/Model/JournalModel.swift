@@ -9,13 +9,11 @@ import Foundation
 
 class JournalModel: Identifiable, Codable {
     var createdAt: Date
-    var noteName: String
     var note: String
     var favorite: Bool
     
-    init(createdAt: Date, noteName: String, note: String, favorite: Bool) {
+    init(createdAt: Date, note: String, favorite: Bool) {
         self.createdAt = createdAt
-        self.noteName = noteName
         self.note = note
         self.favorite = favorite
     }

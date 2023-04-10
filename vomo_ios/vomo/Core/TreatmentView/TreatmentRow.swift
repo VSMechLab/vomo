@@ -31,10 +31,6 @@ struct TreatmentRow: View {
                     withAnimation() {
                         self.droppedDown.toggle()
                     }
-                    if !droppedDown {
-                        note = ""
-                        targetTreatment = treatment.date
-                    }
                 }) {
                     HStack(spacing: 0) {
                         VStack {
@@ -74,7 +70,7 @@ struct TreatmentRow: View {
                     HStack {
                         Text("\(treatment.date.toString(dateFormat: "hh:mm a"))")
                         Spacer()
-                        AltDeleteButton(deletionTarget: $deletionTarget, type: "treatment", date: targetTreatment)
+                        AltDeleteButton(deletionTarget: $deletionTarget, type: "Treatment", date: treatment.date)
                     }
                     
                     HStack {
@@ -132,6 +128,11 @@ struct TreatmentRow: View {
                 deletePopUpSection
             }
         }
+        .onAppear() {
+            note = ""
+            targetTreatment = treatment.date
+            //print(deletionTarget)
+        }
     }
     
     /// System for adding/editing/removing notes
@@ -158,18 +159,19 @@ struct TreatmentRow: View {
         if type == "" && count == -1 {
             for index in 0..<entries.treatments.count {
                 if createdAt == entries.treatments[index].date {
-                    type = "survey"
+                    type = "Treatment"
                     count = index
+                    print(count)
                 }
             }
         }
         
         if count != -1 {
-            if type == "treatment" {
+            if type == "Treatment" {
                 if entries.treatments[count].date == createdAt {
-                    
                     entries.treatments.remove(at: count)
-                    print("deleting treatment")
+                    count = -1
+                    //print("deleting treatment at \(entries.treatments[count].date)")
                 }
             } else {
                 print("There was a mismatch in data. In order to prevent erroneous deletion of data we have disabled the functionality of deleting this specific entry.")

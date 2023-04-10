@@ -19,6 +19,7 @@ struct EntryRow: View {
     
     let isExpandedList: Bool
     @Binding var deletionTarget: (Date, String)
+    @Binding var showRecordDetails: Bool
     
     var body: some View {
         VStack(spacing: 0) {
@@ -39,7 +40,7 @@ struct EntryRow: View {
             
             if expandEntryItem {
                 if element.str[index] == "Vowel" || element.str[index] == "Duration" || element.str[index] == "Rainbow" {
-                    ExpandedRecording(createdAt: element.preciseDate[index], deletionTarget: $deletionTarget)
+                    ExpandedRecording(createdAt: element.preciseDate[index], deletionTarget: $deletionTarget, showRecordDetails: $showRecordDetails, recordType: element.str[index])
                         .onAppear() { color = .MEDIUM_PURPLE }
                 } else if element.str[index] == "Survey" {
                     ExpandedSurvey(createdAt: element.preciseDate[index], deletionTarget: $deletionTarget)

@@ -202,7 +202,6 @@ extension Filter {
     func numOfRecords() -> (Int, Int, Int) {
         var count = (0, 0, 0)
         for record in audioRecorder.recordings {
-            print(record.fileURL)
             if record.taskNum == 1 {
                 count.0 += 1
             }
@@ -213,7 +212,6 @@ extension Filter {
                 count.2 += 1
             }
         }
-        print("Count is: \(count)")
         return count
     }
     func numOfSurveys() -> Int {
@@ -226,13 +224,6 @@ extension Filter {
         for _ in entries.journals { count += 1 }
         return count
     }
-    /*func countSelected() {
-        countOfSelected = 0
-        
-        if filters.contains("Vowel") {
-            countOfSelected += 1
-        }
-    }*/
     func numOfFavorites() -> Int {
         var count = 0
         for record in audioRecorder.processedData {

@@ -14,14 +14,13 @@ struct SurveyView: View {
     //@State private var vm = RecordingViewModel()
     @State private var svm = SharedViewModel()
     @State private var submitAnimation = false
-    @State private var responses: [Int] = []
+    @State private var responses: [Double] = []
     let button_img = "VM_Gradient-Btn"
     
     @State var timeRemaining = 1
     let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
         
     @State private var showMissing = false
-    @State private var remainingQuestions: [String] = []
     
     var body: some View {
         ZStack {
@@ -104,7 +103,7 @@ struct SurveyView: View {
         }
         .onAppear() {
             self.settings.setSurveys()
-            self.responses = Array(repeating: -1, count: 16)
+            self.responses = Array(repeating: -1, count: 13)
         }
     }
 }
@@ -155,7 +154,7 @@ extension SurveyView {
                 .font(._title)
             
             ForEach(Array(svm.questions.enumerated()), id: \.element) { index, element in
-                if element == "How much physical effort did it take to make a voice?" || element == "How much mental effort did it take to make a voice?" {
+                if element == "How much **physical effort** did it take to make a voice?" || element == "How much **mental effort** did it take to make a voice?" {
                     VEScale(responses: self.$responses, prompt: element, index: index)
                         .frame(width: svm.content_width * 0.975)
                 }
@@ -165,7 +164,7 @@ extension SurveyView {
     
     private var biSection: some View {
         Group {
-            Text("Botulinum Injection")
+            Text("Current Percent of Vocal Function")
                 .foregroundColor(.black)
                 .font(._title)
             
@@ -174,6 +173,15 @@ extension SurveyView {
                     VHIScale(responses: self.$responses, prompt: element, index: index)
                         .frame(width: svm.content_width * 0.975)
                 } else if index == 12 {
+                    HStack {
+                        if entries.questionnaires.isNotEmpty {
+                            Text("Last Response: \(entries.questionnaires.last?.score.2 ?? 0, specifier: "%.0f")% (\(entries.questionnaires.last?.createdAt.dayOfWeek() ?? "") \(entries.questionnaires.last?.createdAt.toDay() ?? ""))")
+                                .font(Font._bodyCopyBold)
+                                .foregroundColor(Color.gray)
+                        }
+                        Spacer()
+                    }
+                    .frame(width: svm.content_width * 0.975)
                     VEScale(responses: self.$responses, prompt: element, index: index)
                         .frame(width: svm.content_width * 0.975)
                 }
@@ -183,7 +191,7 @@ extension SurveyView {
     
     private var submitButton: some View {
         VStack {
-            if showMissing {
+            if showMissing && remaining().isNotEmpty {
                 HStack {
                     Text("Please answer the following...")
                         .font(._CTALink)
@@ -192,7 +200,7 @@ extension SurveyView {
                 }
                 
                 VStack {
-                    ForEach(remainingQuestions, id: \.self) { text in
+                    ForEach(remaining(), id: \.self) { text in
                         HStack {
                             Text(text)
                                 .font(._CTALink)
@@ -216,20 +224,24 @@ extension SurveyView {
                         
                         if settings.vhi {
                             /// newResults just holds what is going to be appended
-                            var newResults: [Int] = []
+                            var newResults: [Double] = []
                             // two separate files to submit
                             
                             // first with just the first 10 resp
-                            for index in 0..<responses.count {
-                                if index == 10 || index == 11 {
-                                    newResults.append(-1)
-                                } else {
-                                    newResults.append(responses[index])
+                            if responses.count == 13 {
+                                for index in 0..<responses.count {
+                                    if index >= 10 {
+                                        newResults.append(-1)
+                                    } else {
+                                        newResults.append(responses[index])
+                                    }
                                 }
+                                
+                                self.entries.questionnaires.append(QuestionnaireModel(createdAt: .now, responses: newResults, favorite: false))
                             }
-                            self.entries.questionnaires.append(QuestionnaireModel(createdAt: .now, responses: newResults, favorite: false))
-                        } else if settings.vocalEffort {
-                            var newResults: [Int] = []
+                        }
+                        if settings.vocalEffort {
+                            var newResults: [Double] = []
                             // next with just the last two resp
                             newResults = []
                             for index in 0..<responses.count {
@@ -240,12 +252,13 @@ extension SurveyView {
                                 }
                             }
                             self.entries.questionnaires.append(QuestionnaireModel(createdAt: .now + 5, responses: newResults, favorite: false))
-                        } else if settings.botulinumInjection {
-                            var newResults: [Int] = []
+                        }
+                        if settings.botulinumInjection {
+                            var newResults: [Double] = []
                             // next with just the last two resp
                             newResults = []
                             for index in 0..<responses.count {
-                                if index >= 13 {
+                                if index == 12 {
                                     newResults.append(responses[index])
                                 } else {
                                     newResults.append(-1)
@@ -264,7 +277,6 @@ extension SurveyView {
                 } else {
                     Button("Submit") {
                         self.showMissing = true
-                        findRemaining()
                     }.buttonStyle(GraySubmitButton())
                 }
                 Spacer()
@@ -273,58 +285,63 @@ extension SurveyView {
     }
     
     func submitable() -> Bool {
-        var ret = true
-        print(responses)
         if responses.isNotEmpty {
-            if settings.vhi && settings.vocalEffort {
-                for resp in responses {
-                    if resp == -1 {
-                        ret = false
-                    }
-                }
-            } else if settings.vhi && !settings.vocalEffort {
-                for index in 0..<10 {
+            if settings.vhi {
+                for index in 0...9 {
                     if responses[index] == -1 {
-                        ret = false
-                    }
-                }
-            } else if !settings.vhi && settings.vocalEffort {
-                if responses.count == 12 {
-                    print(responses.count)
-                    if responses[10] == -1 || responses[11] == -1 {
-                        ret = false
+                        return false
                     }
                 }
             }
-        }
-        
-        return ret
-    }
-    
-    func findRemaining() {
-        self.remainingQuestions.removeAll()
-        
-        if settings.vhi && settings.vocalEffort {
-            for index in 0..<responses.count {
-                if responses[index] == -1 {
-                    remainingQuestions.append(svm.questions[index])
-                }
-            }
-        } else if settings.vhi && !settings.vocalEffort {
-            for index in 0..<10 {
-                if responses[index] == -1 {
-                    remainingQuestions.append(svm.questions[index])
-                }
-            }
-        } else if !settings.vhi && settings.vocalEffort {
-            if responses.count == 12 {
+            
+            if settings.vocalEffort {
                 for index in 10...11 {
                     if responses[index] == -1 {
-                        remainingQuestions.append(svm.questions[index])
+                        return false
+                    }
+                }
+            }
+            
+            if settings.botulinumInjection {
+                for index in 12...12 {
+                    if responses[index] == -1 {
+                        return false
                     }
                 }
             }
         }
+        return true
+    }
+    
+    func remaining() -> [String] {
+        var returnable: [String] = []
+        
+        
+        if responses.isNotEmpty {
+            if settings.vhi {
+                for index in 0...9 {
+                    if responses[index] == -1 {
+                        returnable.append(svm.questions[index])
+                    }
+                }
+            }
+            if settings.vocalEffort {
+                for index in 10...11 {
+                    if responses[index] == -1 {
+                        returnable.append(svm.questions[index])
+                    }
+                }
+            }
+            if settings.botulinumInjection {
+                for index in 12...12 {
+                    if responses[index] == -1 {
+                        returnable.append(svm.questions[index])
+                    }
+                }
+            }
+        }
+        
+        return returnable
     }
 }
 

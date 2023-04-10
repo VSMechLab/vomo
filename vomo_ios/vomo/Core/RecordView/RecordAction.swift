@@ -12,6 +12,7 @@ struct CompleteMenu: View {
     @EnvironmentObject var entries: Entries
     @EnvironmentObject var audioRecorder: AudioRecorder
     @EnvironmentObject var settings: Settings
+    @EnvironmentObject var viewRouter: ViewRouter
     
     @ObservedObject var audioPlayer = AudioPlayer()
     
@@ -27,9 +28,11 @@ struct CompleteMenu: View {
                 .font(._recordingPopUp)
                 .padding(.vertical)
             
-            AudioInterface(date: audioRecorder.recordings.last!.createdAt)
-                .padding()
-                .background(Color.BRIGHT_PURPLE)
+            if let url = audioRecorder.recordings.last?.createdAt {
+                AudioInterface(date: url)
+                    .padding()
+                    .background(Color.BRIGHT_PURPLE)
+            }
             
             HStack {
                 //play
@@ -79,6 +82,8 @@ extension CompleteMenu {
                 self.popUp.toggle()
                 if exercise != settings.endIndex {
                     self.exercise += 1
+                } else {
+                    viewRouter.currentPage = .home
                 }
             }) {
                 Image(svm.approved_img)

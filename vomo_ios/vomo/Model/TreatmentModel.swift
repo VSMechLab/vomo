@@ -8,7 +8,8 @@
 import SwiftUI
 import Foundation
 
-class TreatmentModel: Identifiable, Codable {
+class TreatmentModel: Identifiable, Codable  {
+    
     var date: Date
     var type: String
     var note: String

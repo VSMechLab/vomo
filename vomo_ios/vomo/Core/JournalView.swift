@@ -16,7 +16,6 @@ struct JournalView: View {
     @EnvironmentObject var entries: Entries
     @EnvironmentObject var settings: Settings
     
-    @State private var name = ""
     @State private var note = ""
     @State private var submitAnimation = false
     
@@ -41,19 +40,6 @@ struct JournalView: View {
                         widgetView
                         
                         VStack(spacing: 0) {
-                            ZStack {
-                                Image(svm.field_img)
-                                    .resizable()
-                                    .frame(height: 30)
-                                
-                                TextField(self.name.isEmpty ? "Enter Note Name..." : self.name, text: self.$name)
-                                    .focused($focused)
-                                    .font(self.name.isEmpty ? ._fieldCopyItalic : ._fieldCopyRegular)
-                                    .foregroundColor(Color.black)
-                                    .padding(.leading, 8)
-                            }
-                            .frame(height: 30)
-                            .padding(.top)
                             
                             ZStack {
                                 Image(svm.field_img)
@@ -187,7 +173,7 @@ extension JournalView {
     
     private var addNoteButton: some View {
         Group {
-            if self.name.isEmpty || self.note.isEmpty {
+            if self.note.isEmpty {
                 ZStack {
                     Image(svm.button_img)
                         .resizable()
@@ -200,8 +186,7 @@ extension JournalView {
                 .padding(.top, 10)
             } else {
                 Button("ADD NOTE") {
-                    self.entries.journals.append(JournalModel(createdAt: .now, noteName:  self.name, note: self.note, favorite: false))
-                    self.name = ""
+                    self.entries.journals.append(JournalModel(createdAt: .now, note: self.note, favorite: false))
                     self.note = ""
                     submitAnimation = true
                     

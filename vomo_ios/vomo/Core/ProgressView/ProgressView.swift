@@ -16,22 +16,23 @@ struct ProgressView: View {
     @State var filters: [String] = []
     @State var filteredList: [Element] = []
     @State var deletionTarget: (Date, String) = (.now, "")
-    
     @State private var thresholdPopUps: (Bool, Bool, Bool) = (false, false, false)
     @State private var showFilter = false
     @State private var expandAll = false
     @State private var deletePopUp = false
     @State private var showFavorites = false
     @State var reset = false
-    
+    @State var showBaseline = false
     @State var tappedRecording: Date = .now
+    
+    @State var showRecordDetails = false
     
     let svm = SharedViewModel()
     
     var body: some View {
         ZStack {
             VStack {
-                Graphic(thresholdPopUps: $thresholdPopUps, tappedRecording: $tappedRecording)
+                Graphic(thresholdPopUps: $thresholdPopUps, tappedRecording: $tappedRecording, showBaseline: self.$showBaseline, deletionTarget: $deletionTarget)
                 
                 if showFilter {
                     VStack(spacing: 0) {
@@ -49,14 +50,6 @@ struct ProgressView: View {
             
             popUpSection
         }
-        
-        
-        /*
-        // do something on deletion of data
-        .onChange(of: audioRecorder.processedData) { _ in
-            print("data has changed")
-        }*/
-        
         .onAppear() {
             refilter()
             initializeThresholds()
@@ -68,13 +61,18 @@ struct ProgressView: View {
             refilter()
             self.reset = false
         }
-        .onChange(of: expandAll) { _ in
-            refilter()
-        }
         .onChange(of: tappedRecording) { _ in
-            refilter()
+            targetItem()
+            /*print("calling here")
+            if !expandAll {
+                self.showRecordDetails = true
+            } else {
+                self.showRecordDetails = false
+            }*/
         }
-        
+        .onChange(of: showRecordDetails) { change in
+            print("ShowRecordingDetails? \(change)")
+        }
     }
 }
 
@@ -118,8 +116,7 @@ extension ProgressView {
                 }
                 .padding()
             }.padding(5)
-            
-                .frame(width: svm.content_width * 0.7, height: 200)
+            .frame(width: svm.content_width * 0.7, height: 200)
         }
     }
     
@@ -127,25 +124,52 @@ extension ProgressView {
         VStack(alignment: .center) {
             bodyTitle
             
-            if filters.count != 0 {
-                filterSection
+            ScrollView(showsIndicators: false) {
+                
+                if audioRecorder.recordings.isEmpty {
+                    HStack {
+                        Text("Make a recording to view your baseline")
+                            .font(._bodyCopy)
+                        Spacer()
+                    }
+                } else {
+                    HStack {
+                        Button(action: {
+                            self.showBaseline.toggle()
+                        }) {
+                            Text(self.showBaseline ? "Hide Baseline" : "Show Baseline")
+                                .font(._bodyCopyBold)
+                                .underline()
+                                .foregroundColor(.DARK_PURPLE)
+                        }
+                        Spacer()
+                    }
+                }
+                
+                if showBaseline {
+                    BaselineRecording(deletionTarget: $deletionTarget)
+                }
+                
+                if filters.count != 0 {
+                    filterSection
+                }
+                
+                listSection
             }
-            
-            listSection
         }
         .frame(width: svm.content_width)
     }
     
     private var listSection: some View {
-        ScrollView(showsIndicators: false) {
-            VStack(spacing: 0) {
-                ForEach(filteredList.reversed(), id: \.self) { item in
-                    Color.DARK_PURPLE.frame(height: 5).opacity(0.6)
-                    if expandAll || !filters.isEmpty {
-                        DayList(element: item, isExpandedList: true, deletionTarget: $deletionTarget)
-                    } else if filters.isEmpty {
-                        DayList(element: item, isExpandedList: false, deletionTarget: $deletionTarget)
-                    }
+        VStack(spacing: 0) {
+            ForEach(filteredList.reversed(), id: \.self) { item in
+                Color.DARK_PURPLE.frame(height: 5).opacity(0.6)
+                if item.preciseDate.contains(tappedRecording){
+                    DayList(element: item, isExpandedList: true, deletionTarget: $deletionTarget, showRecordDetails: $showRecordDetails)
+                } else if !expandAll {
+                    DayList(element: item, isExpandedList: false, deletionTarget: $deletionTarget, showRecordDetails: $showRecordDetails)
+                } else if expandAll || !filters.isEmpty {
+                    DayList(element: item, isExpandedList: true, deletionTarget: $deletionTarget, showRecordDetails: $showRecordDetails)
                 }
             }
         }
@@ -188,7 +212,7 @@ extension ProgressView {
                 .font(._title1)
             Spacer()
             ShowFavoritesButton(filters: $filters, showFavorites: self.$showFavorites, expandAll: $expandAll, reset: self.$reset)
-            ExpandAllButton(filters: $filters, expandAll: $expandAll, showFavorites: $showFavorites, reset: $reset)
+            ExpandAllButton(filters: $filters, expandAll: $expandAll, showFavorites: $showFavorites, reset: $reset, showRecordDetails: $showRecordDetails)
             Button(action: {
                 withAnimation() {
                     self.showFilter.toggle()

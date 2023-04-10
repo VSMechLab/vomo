@@ -24,37 +24,37 @@ struct ExpandedSurvey: View {
                     Text("\(score.0, specifier: "%.0f")")
                         .font(._bodyCopyBold)
                     Spacer()
-                    StarButton(type: "survey", date: createdAt)
-                        .padding(.horizontal, 7.5)
-                    DeleteButton(deletionTarget: $deletionTarget, type: "Survey response", date: createdAt)
                 }
-                Color.white.frame(height: 1)
             }
             if available.contains("ve") {
-                HStack(spacing: 0) {
-                    Text("Vocal Effort: ")
+                HStack {
+                    Text("Physical Effort: ")
                         .font(._bodyCopyMedium)
-                    Text("\(score.1, specifier: "%.0f")")
+                    Text("\(score.1, specifier: "%.0f")%")
                         .font(._bodyCopyBold)
                     Spacer()
-                    StarButton(type: "survey", date: createdAt)
-                        .padding(.trailing)
-                    DeleteButton(deletionTarget: $deletionTarget, type: "Survey response", date: createdAt)
                 }
-                Color.white.frame(height: 1)
+                HStack {
+                    Text("Mental Effort: ")
+                        .font(._bodyCopyMedium)
+                    Text("\(score.2, specifier: "%.0f")%")
+                        .font(._bodyCopyBold)
+                    Spacer()
+                }
             }
             if available.contains("bi") {
                 HStack(spacing: 0) {
-                    Text("Botulinum Injection: ")
+                    Text("Percent of Vocal Function: ")
                         .font(._bodyCopyMedium)
-                    Text("\(score.2, specifier: "%.0f")")
+                    Text("\(score.3, specifier: "%.0f")%")
                         .font(._bodyCopyBold)
                     Spacer()
-                    StarButton(type: "survey", date: createdAt)
-                        .padding(.trailing)
-                    DeleteButton(deletionTarget: $deletionTarget, type: "Survey response", date: createdAt)
                 }
-                Color.white.frame(height: 1)
+            }
+            HStack {
+                StarButton(type: "survey", date: createdAt)
+                Spacer()
+                DeleteButton(deletionTarget: $deletionTarget, type: "Survey response", date: createdAt)
             }
         }
         .foregroundColor(Color.white)
@@ -68,19 +68,19 @@ struct ExpandedSurvey: View {
             if survey.createdAt == createdAt && survey.responses.count != 0 {
                 // Check if 1-11, 1-10, or 11
                 var count = 0
-                for index in 0..<10 {
+                for index in 0...9 {
                     if survey.responses[index] == -1 {
                         count += 1
                     }
                 }
                 var count1 = 0
-                for index in 11...12 {
+                for index in 10...11 {
                     if survey.responses[index] == -1 {
                         count1 += 1
                     }
                 }
                 var count2 = 0
-                for index in 13..<16 {
+                for index in 12...12 {
                     if survey.responses[index] == -1 {
                         count2 += 1
                     }
@@ -94,7 +94,7 @@ struct ExpandedSurvey: View {
                     // Iterate through 11 different questions
                     ret += ["ve"]
                 }
-                if count2 != 4 {
+                if count2 != 1 {
                     // Iterate through 11 different questions
                     ret += ["bi"]
                 }
@@ -104,8 +104,8 @@ struct ExpandedSurvey: View {
         return ret
     }
     
-    var score: (Double, Double, Double) {
-        var ret: (Double, Double, Double) = (-1.0, -1.0, -1.0)
+    var score: (Double, Double, Double, Double) {
+        var ret: (Double, Double, Double, Double) = (-1.0, -1.0, -1.0, -1.0)
         for survey in entries.questionnaires {
             // Check if survey time matches target time
             if survey.createdAt == createdAt {

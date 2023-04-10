@@ -24,7 +24,7 @@ struct NewTreatmentForm: View {
     
     let toggleHeight: CGFloat = 39
     let svm = SharedViewModel()
-    let treatmentTypes = ["Vocal cord injection", "Botulinum injection", "Office laser treatment", "Surgery", "Other"]
+    let treatmentTypes = ["Botulinum toxin injection", "Office laser treatment", "Surgery", "Vocal cord injection", "Voice therapy session", "Other"]
     
     var body: some View {
         ZStack {

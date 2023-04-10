@@ -17,9 +17,9 @@ extension Font {
     static var _title: Font {
         Font.custom("Roboto-Bold", size: 30)
     }
-    /// Title, Size 30, Bold
+    /// Title, Size 24, Bold
     static var _title1: Font {
-        Font.custom("Roboto-Bold", size: 28)
+        Font.custom("Roboto-Bold", size: 24)
     }
     /// Subtitle, Size 17, Regular
     static var _subTitle: Font {
@@ -130,7 +130,7 @@ extension Font {
         Font.custom("Roboto-Medium", size: 16)
     }
     static var _buttonFieldCopyLarger: Font {
-        Font.custom("Roboto-Medium", size: 18)
+        Font.custom("Roboto-Regular", size: 18)
     }
     static var _subCopy: Font {
         Font.custom("Roboto-Regular", size: 15)
