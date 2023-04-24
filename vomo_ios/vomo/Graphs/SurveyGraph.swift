@@ -46,6 +46,10 @@ struct SurveyGraph: View {
     
     var body: some View {
         ZStack {
+            if surveySelection == 0 {
+                abnormalKey
+            }
+            
             /// This hstack will contain three things
             /// Y axis with labels
             /// Body of the graph
@@ -55,12 +59,14 @@ struct SurveyGraph: View {
                 }
                 
                 yLabel
-                Color.white.frame(width: 2)
+                VStack(spacing: 0) {
+                    // Basic spacing
+                    Color.clear.frame(width: 1, height: 20)
+                    
+                    Color.white.frame(width: 2)
+                }
                 
                 ZStack {
-                    if surveySelection == 0 {
-                        abnormalKey
-                    }
                     
                     HStack(spacing: 0 ) {
                         if firstPoint.data != -1 || firstPoint.secondPoint != -1 {
@@ -68,8 +74,15 @@ struct SurveyGraph: View {
                         }
                         
                         ScrollView(.horizontal, showsIndicators: false) {
-                            HStack (spacing: 0 ) {
-                                graphNodes
+                            ZStack {
+                                HStack (spacing: 0 ) {
+                                    graphNodes
+                                }
+                                
+                                
+                                HStack (spacing: 0 ) {
+                                    secondGraphNodes
+                                }
                             }
                         }
                     }
@@ -98,8 +111,8 @@ struct SurveyGraph: View {
                 }) {
                     VStack {
                         Spacer()
-                        Text(currTreatment.toDOB())
-                            .font(._bodyCopyBold)
+                        Text("\(currTreatment.dayOfWeek()) \(currTreatment.toDay()) at \(currTreatment.toStringHour())")
+                            .font(Font._bodyCopyBold)
                         Text(findType())
                             .font(._bodyCopy)
                         
@@ -142,7 +155,8 @@ struct SurveyGraph: View {
             }
             
         }
-        .foregroundColor(.white)
+        .font(._fieldCopyBold)
+        .foregroundColor(Color.white)
         .onChange(of: deletionTarget.0) { _ in
             findPoints()
         }

@@ -10,246 +10,35 @@ import SwiftUI
 
 extension SurveyGraph {
     
-    var graphNodes: some View {
-        
-        // Rest of nodes shown here
-        ForEach(points) { point in
-            ZStack {
-                if point.hasTreatment {
-                    VStack(spacing: 0) {
-                        Color.clear.frame(height: 25)
-                        if point.afterDate {
-                            DottedLine()
-                                .offset(x: 20)
-                        } else {
-                            DottedLine()
-                                .offset(x: -20)
-                        }
-                    }
-                }
+    var baseline: some View {
+        ZStack {
+            // RX
+            if firstPoint.hasTreatment {
+                dottedLine
+                    .offset(x: firstPoint.afterDate ? 20 : -20)
                 
                 VStack(spacing: 0) {
-                    GeometryReader { geo in
-                        
-                        // This will contain the union of two points if on survey selection 1
-                        if surveySelection == 1 {
-                          
-                            ZStack {
-                                
-                                
-                                // Point one
-                                VStack(spacing: 0) {
-                                    //Color.clear.frame(height: 20)
-                                    ZStack {
-                                        /// Spacing above, the circle and spacing bellow the axis
-                                        Color.clear.frame(height: geo.size.height * nodes(value: point.data).3)
-                                        
-                                        VStack {
-                                            if point.hasTreatment {
-                                                Button(action: {
-                                                    if showMoreTreatmentInfo == false {
-                                                        currTreatment = point.treatmentDate
-                                                    }
-                                                    if point.hasTreatment {
-                                                        showMoreTreatmentInfo.toggle()
-                                                    }
-                                                    
-                                                    if self.tappedRecording == point.dataDate {
-                                                        self.tappedRecording = .now
-                                                    } else {
-                                                        self.tappedRecording = point.dataDate
-                                                    }
-                                                }) {
-                                                    if point.afterDate {
-                                                        Image(svm.rx_sign)
-                                                            .resizable()
-                                                            .frame(width: geo.size.height * 0.10, height: geo.size.height * nodes(value: point.data).2)
-                                                            .offset(x: 20)
-                                                            .padding(2)
-                                                    } else {
-                                                        Image(svm.rx_sign)
-                                                            .resizable()
-                                                            .frame(width: geo.size.height * 0.10, height: geo.size.height * nodes(value: point.data).2)
-                                                            .offset(x: -20)
-                                                            .padding(2)
-                                                    }
-                                                }
-                                                
-                                            }
-                                            
-                                            Spacer()
-                                        }
-                                        .frame(height: geo.size.height * nodes(value: point.data).3)
-                                    }
-                                    .frame(height: geo.size.height * nodes(value: point.data).3)
-                                    
-                                    Button(action: {
-                                        if showMoreTreatmentInfo == false {
-                                            currTreatment = point.treatmentDate
-                                        }
-                                        if self.tappedRecording == point.dataDate {
-                                            self.tappedRecording = .now
-                                        } else {
-                                            self.tappedRecording = point.dataDate
-                                        }
-                                    }) {
-                                        ZStack {
-                                            Circle()
-                                                .strokeBorder(.white, lineWidth: 2)
-                                                .background(Circle().fill(Color.TEAL))
-                                                .frame(width: geo.size.height * 0.10, height: geo.size.height * nodes(value: point.data).2)
-                                                .offset(x: point.data == point.secondPoint ? -5 : 0)
-                                            
-                                            if point.data > point.secondPoint {
-                                                Text("\(point.data, specifier: "%.0f")").font(._fieldCopyBold)
-                                                    .offset(y: -20)
-                                            } else if point.data < point.secondPoint {
-                                                Text("\(point.data, specifier: "%.0f")").font(._fieldCopyBold)
-                                                    .offset(y: 20)
-                                            } else if point.data == point.secondPoint {
-                                                Text("\(point.data, specifier: "%.0f")").font(._fieldCopyBold)
-                                                    .offset(y: -20)
-                                            }
-                                        }
-                                    }
-                                    
-                                    Color.clear.frame(height: geo.size.height * nodes(value: point.data).1)
-                                }
-                                
-                                // Second Point
-                                VStack(spacing: 0) {
-                                    ZStack {
-                                        /// Spacing above, the circle and spacing bellow the axis
-                                        Color.clear.frame(height: geo.size.height * nodes(value: point.secondPoint).3)
-                                        
-                                        VStack {
-                                            
-                                            Spacer()
-                                        }
-                                        .frame(height: geo.size.height * nodes(value: point.secondPoint).3)
-                                    }
-                                    .frame(height: geo.size.height * nodes(value: point.secondPoint).3)
-                                    
-                                    Button(action: {
-                                        if showMoreTreatmentInfo == false {
-                                            currTreatment = point.treatmentDate
-                                        }
-                                        if self.tappedRecording == point.dataDate {
-                                            self.tappedRecording = .now
-                                        } else {
-                                            self.tappedRecording = point.dataDate
-                                        }
-                                    }) {
-                                        ZStack {
-                                            Circle()
-                                                .strokeBorder(.white, lineWidth: 2)
-                                                .background(Circle().fill(Color.DARK_PURPLE))
-                                                .frame(width: geo.size.height * 0.10, height: geo.size.height * nodes(value: point.secondPoint).2)
-                                                .offset(x: point.data == point.secondPoint ? 5 : 0)
-                                            
-                                            if point.secondPoint > point.data {
-                                                Text("\(point.secondPoint, specifier: "%.0f")").font(._fieldCopyBold)
-                                                    .offset(y: -20)
-                                            } else if point.secondPoint < point.data {
-                                                Text("\(point.secondPoint, specifier: "%.0f")").font(._fieldCopyBold)
-                                                    .offset(y: 20)
-                                            }
-                                        }
-                                    }
-                                    
-                                    Color.clear.frame(height: geo.size.height * nodes(value: point.secondPoint).1)
-                                }
-                            }
-                            
-                        } else {
-                            VStack(spacing: 0) {
-                                //Color.clear.frame(height: 20)
-                                ZStack {
-                                    /// Spacing above, the circle and spacing bellow the axis
-                                    Color.clear.frame(height: geo.size.height * nodes(value: point.data).3)
-                                    
-                                    VStack {
-                                        if point.hasTreatment {
-                                            Button(action: {
-                                                if showMoreTreatmentInfo == false {
-                                                    currTreatment = point.treatmentDate
-                                                }
-                                                if point.hasTreatment {
-                                                    showMoreTreatmentInfo.toggle()
-                                                }
-                                                
-                                                if self.tappedRecording == point.dataDate {
-                                                    self.tappedRecording = .now
-                                                } else {
-                                                    self.tappedRecording = point.dataDate
-                                                }
-                                            }) {
-                                                if point.afterDate {
-                                                    Image(svm.rx_sign)
-                                                        .resizable()
-                                                        .frame(width: geo.size.height * 0.10, height: geo.size.height * nodes(value: point.data).2)
-                                                        .offset(x: 20)
-                                                        .padding(2)
-                                                } else {
-                                                    Image(svm.rx_sign)
-                                                        .resizable()
-                                                        .frame(width: geo.size.height * 0.10, height: geo.size.height * nodes(value: point.data).2)
-                                                        .offset(x: -20)
-                                                        .padding(2)
-                                                }
-                                            }
-                                            
-                                        }
-                                        
-                                        Spacer()
-                                    }
-                                    .frame(height: geo.size.height * nodes(value: point.data).3)
-                                }
-                                .frame(height: geo.size.height * nodes(value: point.data).3)
-                                
-                                Button(action: {
-                                    if showMoreTreatmentInfo == false {
-                                        currTreatment = point.treatmentDate
-                                    }
-                                    if self.tappedRecording == point.dataDate {
-                                        self.tappedRecording = .now
-                                    } else {
-                                        self.tappedRecording = point.dataDate
-                                    }
-                                }) {
-                                    ZStack {
-                                        Circle()
-                                            .strokeBorder(.white, lineWidth: 2)
-                                            .background(Circle().fill(nodes(value: point.data).0))
-                                            .frame(width: geo.size.height * 0.10, height: geo.size.height * nodes(value: point.data).2)
-                                        Text("\(point.data, specifier: "%.0f")").font(._fieldCopyBold)
-                                            .offset(y: -20)
-                                    }
-                                }
-                                
-                                Color.clear.frame(height: geo.size.height * nodes(value: point.data).1)
-                            }
+                    Button(action: {
+                        if showMoreTreatmentInfo == false {
+                            currTreatment = firstPoint.treatmentDate
                         }
-                        
-                        
+                        if firstPoint.hasTreatment {
+                            showMoreTreatmentInfo.toggle()
+                        }
+                    }) {
+                        rxSign.offset(x: firstPoint.afterDate ? 20 : -20)
                     }
                     
-                    /// bottom of axis & date
-                    Color.white.frame(height: 2)
-                    Text("\(point.dataDate.shortDay())")
-                        .font(._fieldCopyRegular)
-                        .frame(width: point.hasTreatment ? 100 : 50, height: 15)
+                    Spacer()
                 }
-            }.frame(width: point.hasTreatment ? 100 : 50)
-        }
-    }
-    
-    var baseline: some View {
-        // Baseline shown here
-        VStack(spacing: 0) {
-            ZStack {
+            }
+            
+            // Baseline shown here
+            VStack(spacing: 0) {
+                // Basic spacing
+                Color.clear.frame(width: 1, height: 20)
+                
                 GeometryReader { geo in
-                    
                     if surveySelection == 1 {
                         
                         ZStack {
@@ -277,11 +66,10 @@ extension SurveyGraph {
                                                 .offset(y: -20)
                                         }
                                         
-                                        Text("P")
-                                            .font(._fieldCopyBold).foregroundColor(Color.white)
+                                        Text("B")
                                             .padding(.horizontal, 3).background(Color.TEAL)
                                             .cornerRadius(10).padding(1).background(Color.white).cornerRadius(10)
-                                            .frame(width: geo.size.height * 0.10, height: geo.size.height * nodes(value: firstPoint.data).2)
+                                            .frame(width: geo.size.height * 0.10, height: geo.size.height * 0.10)
                                     }
                                 }
 
@@ -310,20 +98,17 @@ extension SurveyGraph {
                                                 .offset(y: 20)
                                         }
                                         
-                                        Text("M")
-                                            .font(._fieldCopyBold).foregroundColor(Color.white)
+                                        Text("B")
                                             .padding(.horizontal, 3).background(nodes(value: firstPoint.secondPoint).0)
                                             .cornerRadius(10).padding(1).background(Color.white).cornerRadius(10)
-                                            .frame(width: geo.size.height * 0.10, height: geo.size.height * nodes(value: firstPoint.secondPoint).2)
+                                            .frame(width: geo.size.height * 0.10, height: geo.size.height * 0.10)
                                     }
                                 }
 
                                 Color.clear.frame(height: geo.size.height * nodes(value: firstPoint.secondPoint).1)
                             }
                         }
-                        
                     } else {
-                        
                         VStack(spacing: 0) {
                             /// Spacing above, the circle and spacing bellow the axis
                             Color.clear.frame(height: geo.size.height * nodes(value: firstPoint.data).3)
@@ -340,10 +125,9 @@ extension SurveyGraph {
                                         .offset(y: -20)
                                     
                                     Text("B")
-                                        .font(._fieldCopyBold).foregroundColor(Color.white)
                                         .padding(.horizontal, 3).background(nodes(value: firstPoint.data).0)
                                         .cornerRadius(10).padding(1).background(Color.white).cornerRadius(10)
-                                        .frame(width: geo.size.height * 0.10, height: geo.size.height * nodes(value: firstPoint.data).2)
+                                        .frame(width: geo.size.height * 0.10, height: geo.size.height * 0.10)
                                 }
                             }
 
@@ -352,20 +136,215 @@ extension SurveyGraph {
                     }
                 }
                 
+                /// bottom of axis & date
+                Color.white.frame(height: 2)
+                Text("\(points.first?.dataDate.toDay() ?? (Date.now).toDay())")
+                    .font(._fieldCopyRegular)
+                    .frame(width: 75, height: 15)
+            }
+        }
+        .frame(width: 75)
+    }
+    
+    private var dottedLine: some View {
+        VStack(spacing: 0) {
+            GeometryReader { geo in
                 VStack(spacing: 0) {
-                    Spacer()
-                    Text("BASELINE")
-                        .font(._fieldCopyRegular)
+                    ForEach(0..<30, id: \.self) { num in
+                        HStack {
+                            Spacer()
+                            if num % 2 == 0 {
+                                Color.white.frame(width: 2, height: geo.size.height / 30)
+                            } else {
+                                Color.clear.frame(width: 2, height: geo.size.height / 30)
+                            }
+                            Spacer()
+                        }
+                    }
                 }
             }
             
-            /// bottom of axis & date
-            Color.white.frame(height: 2)
-            Text("\(points.first?.dataDate.toDay() ?? (Date.now).toDay())")
-                .font(._fieldCopyRegular)
-                .frame(width: 58.5, height: 15)
+            Color.clear.frame(height: 17)
         }
-        .frame(width: 58.5)
+    }
+    
+    var graphNodes: some View {
+        // Rest of nodes shown here
+        ForEach(points) { point in
+            ZStack {
+                // RX
+                if point.hasTreatment {
+                    dottedLine
+                        .offset(x: point.afterDate ? 20 : -20)
+                    
+                    VStack(spacing: 0) {
+                        Button(action: {
+                            if showMoreTreatmentInfo == false {
+                                currTreatment = point.treatmentDate
+                            }
+                            if point.hasTreatment {
+                                showMoreTreatmentInfo.toggle()
+                            }
+                        }) {
+                            rxSign.offset(x: point.afterDate ? 20 : -20)
+                        }
+                        
+                        Spacer()
+                    }
+                }
+                
+                // Baseline shown here
+                VStack(spacing: 0) {
+                    // Basic spacing
+                    Color.clear.frame(width: 1, height: 20)
+                    
+                    
+                    GeometryReader { geo in
+                        if surveySelection == 1 {
+                            
+                            ZStack {
+                                // First Point
+                                VStack(spacing: 0) {
+                                    /// Spacing above, the circle and spacing bellow the axis
+                                    Color.clear.frame(height: geo.size.height * nodes(value: point.data).3)
+                                    
+                                    Button(action: {
+                                        if self.tappedRecording == point.dataDate {
+                                            self.tappedRecording = .now
+                                        } else {
+                                            self.tappedRecording = point.dataDate
+                                        }
+                                    }) {
+                                        ZStack {
+                                            if point.data > point.secondPoint {
+                                                Text("\(point.data, specifier: "%.0f")").font(._fieldCopyBold)
+                                                    .offset(y: -20)
+                                            } else if point.data < point.secondPoint {
+                                                Text("\(point.data, specifier: "%.0f")").font(._fieldCopyBold)
+                                                    .offset(y: 20)
+                                            } else if point.data == point.secondPoint {
+                                                Text("\(point.data, specifier: "%.0f")").font(._fieldCopyBold)
+                                                    .offset(y: -20)
+                                            }
+                                            
+                                            Circle()
+                                                .strokeBorder(.white, lineWidth: 2)
+                                                .background(Circle().fill(Color.TEAL))
+                                                .frame(width: geo.size.height * 0.10, height: geo.size.height * nodes(value: point.data).2)
+                                                .offset(x: point.data == point.secondPoint ? -5 : 0)
+                                        }
+                                    }
+
+                                    Color.clear.frame(height: geo.size.height * nodes(value: point.data).1)
+                                }
+                            }
+                        } else {
+                            VStack(spacing: 0) {
+                                /// Spacing above, the circle and spacing bellow the axis
+                                Color.clear.frame(height: geo.size.height * nodes(value: point.data).3)
+                                
+                                Button(action: {
+                                    if self.tappedRecording == point.dataDate {
+                                        self.tappedRecording = .now
+                                    } else {
+                                        self.tappedRecording = point.dataDate
+                                    }
+                                }) {
+                                    ZStack {
+                                        Circle()
+                                            .strokeBorder(.white, lineWidth: 2)
+                                            .background(Circle().fill(nodes(value: point.data).0))
+                                            .frame(width: geo.size.height * 0.10, height: geo.size.height * nodes(value: point.data).2)
+                                        Text("\(point.data, specifier: "%.0f")").font(._fieldCopyBold)
+                                            .offset(y: -20)
+                                    }
+                                }
+
+                                Color.clear.frame(height: geo.size.height * nodes(value: point.data).1)
+                            }
+                        }
+                    }
+                    
+                    /// bottom of axis & date
+                    Color.white.frame(height: 2)
+                    Text("\(point.dataDate.toDay())")
+                        .font(._fieldCopyRegular)
+                        .frame(width: 75, height: 15)
+                }
+            }
+            .frame(width: 75)
+        }
+    }
+    
+    var secondGraphNodes: some View {
+        // Rest of nodes shown here
+        ForEach(points) { point in
+            ZStack {
+                VStack(spacing: 0) {
+                    // Basic spacing
+                    Color.clear.frame(width: 1, height: 20)
+                    
+                    
+                    GeometryReader { geo in
+                        if surveySelection == 1 {
+                            
+                            ZStack {
+                                // Second Point
+                                VStack(spacing: 0) {
+                                    /// Spacing above, the circle and spacing bellow the axis
+                                    Color.clear.frame(height: geo.size.height * nodes(value: point.secondPoint).3)
+                                    
+                                    Button(action: {
+                                        if self.tappedRecording == point.dataDate {
+                                            self.tappedRecording = .now
+                                        } else {
+                                            self.tappedRecording = point.dataDate
+                                        }
+                                    }) {
+                                        ZStack {
+                                            if point.secondPoint > point.data {
+                                                Text("\(point.secondPoint, specifier: "%.0f")").font(._fieldCopyBold)
+                                                    .offset(y: -20)
+                                            } else if point.secondPoint < point.data {
+                                                Text("\(point.secondPoint, specifier: "%.0f")").font(._fieldCopyBold)
+                                                    .offset(y: 20)
+                                            }
+                                            
+                                            Circle()
+                                                .strokeBorder(.white, lineWidth: 2)
+                                                .background(Circle().fill(
+                                                    
+                                                    nodes(value: point.secondPoint).0
+                                                    
+                                                )
+                                                )
+                                                .frame(width: geo.size.height * 0.10, height: geo.size.height * nodes(value: point.data).2)
+                                                .offset(x: point.data == point.secondPoint ? -5 : 0)
+                                        }
+                                    }
+
+                                    Color.clear.frame(height: geo.size.height * nodes(value: point.secondPoint).1)
+                                }
+                            }
+                        }
+                    }
+                    
+                    /// bottom of axis & date
+                    Color.white.frame(height: 2)
+                    Text("\(point.dataDate.toDay())")
+                        .font(._fieldCopyRegular)
+                        .frame(width: 75, height: 15)
+                }
+            }
+            .frame(width: 75)
+        }
+    }
+    
+    
+    private var rxSign: some View {
+        Image(svm.rx_sign)
+            .resizable()
+            .frame(width: 20, height: 20)
     }
     
     var voiceQualitySection: some View {
@@ -386,27 +365,24 @@ extension SurveyGraph {
     
     var yLabel: some View {
         VStack(alignment: .trailing, spacing: 0) {
+            // Basic spacing
+            Color.clear.frame(width: 1, height: 20)
+            
             Text("\(height, specifier: "%.0f") ")
             Spacer()
             if surveySelection == 0 {
-                Text("VHI-10")
+                Text("  VHI-10")
                     .padding(.horizontal, -10)
                     .rotationEffect(Angle(degrees: -90))
                     .frame(width: 40)
             } else if surveySelection == 1 {
-                Text("% physical effort")
-                    .frame(width: 120)
-                    .padding(.horizontal, -10)
-                    .rotationEffect(Angle(degrees: -90))
-                    .frame(width: 40)
-            } else if surveySelection == 2 {
-                Text("% mental effort")
+                Text("% effort")
                     .frame(width: 120)
                     .padding(.horizontal, -10)
                     .rotationEffect(Angle(degrees: -90))
                     .frame(width: 40)
             } else {
-                Text("Percentage")
+                Text("% of normal effort")
                     .frame(width: 130)
                     .padding(.horizontal, -10)
                     .rotationEffect(Angle(degrees: -90))
@@ -415,7 +391,7 @@ extension SurveyGraph {
             Spacer()
             Text("0 ")
         }
-        .font(._bodyCopy)
+        .font(._bodyCopyBold)
         .frame(width: 40)
     }
     
@@ -448,8 +424,10 @@ extension SurveyGraph {
     var abnormalKey: some View {
         ZStack {
             VStack(spacing: 0) {
+                
                 GeometryReader { geo in
                     VStack(alignment: .leading, spacing: 0) {
+                        
                         ZStack {
                             HStack {
                                 Color.clear
@@ -460,7 +438,7 @@ extension SurveyGraph {
                                 Spacer()
                                 HStack {
                                     Text("Abnormal")
-                                        .padding(2.5)
+                                        .padding(1.5)
                                     Spacer()
                                 }
                             }
@@ -473,7 +451,7 @@ extension SurveyGraph {
                             VStack {
                                 HStack {
                                     Text("Normal")
-                                        .padding(2.5)
+                                        .padding(1.5)
                                     Spacer()
                                 }
                                 Spacer()
@@ -482,7 +460,7 @@ extension SurveyGraph {
                         .frame(height: geo.size.height * ((12) / maxHeight()))
                         .background(Color.white.opacity(0.2))
                     }
-                    .font(._bodyCopy)
+                    .font(._fieldCopyRegular)
                     .frame(width: geo.size.width, height: geo.size.height)
                 }
                 

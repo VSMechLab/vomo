@@ -7,14 +7,7 @@
 
 import Foundation
 import SwiftUI
-/*
- Add hbar chart
- Add line chart
- 
- Fix bar chart - scaling issues
-    Algorithm that changes graph on the bases of spacing
-    Changes size of text, hides certain texts if needed
-*/
+
 struct Graph: View {
     
     @EnvironmentObject var entries: Entries
@@ -51,11 +44,11 @@ struct Graph: View {
     /// only accounts for vhi for now, vocal effort later
     func surveysEntered(start: Date, end: Date) -> Double {
         //var ret = 0.0
-        let fakeData: [QuestionnaireModel] = [
-            QuestionnaireModel(createdAt: .now, responses: [0, 1, 2, 3, 4, 5, 6, 7,  8, 9, 10, 22], favorite: false),
-            QuestionnaireModel(createdAt: .now, responses: [0, 1, 2, 3, 4, 5, 6, 7,  8, 9, 10, 22], favorite: false),
-            QuestionnaireModel(createdAt: .now, responses: [0, 1, 2, 3, 4, 5, 6, 7,  8, 9, 10, 22], favorite: false),
-            QuestionnaireModel(createdAt: .now, responses: [0, 1, 2, 3, 4, 5, 6, 7,  8, 9, 10, 22], favorite: false)
+        let fakeData: [SurveyModel] = [
+            SurveyModel(createdAt: .now, responses: [0, 1, 2, 3, 4, 5, 6, 7,  8, 9, 10, 22], favorite: false),
+            SurveyModel(createdAt: .now, responses: [0, 1, 2, 3, 4, 5, 6, 7,  8, 9, 10, 22], favorite: false),
+            SurveyModel(createdAt: .now, responses: [0, 1, 2, 3, 4, 5, 6, 7,  8, 9, 10, 22], favorite: false),
+            SurveyModel(createdAt: .now, responses: [0, 1, 2, 3, 4, 5, 6, 7,  8, 9, 10, 22], favorite: false)
         ]
         
         for _ in fakeData {

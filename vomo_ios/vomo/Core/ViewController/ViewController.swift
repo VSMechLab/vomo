@@ -36,6 +36,9 @@ struct ViewController: View {
                     .padding(.bottom, self.variablePadding)
             }
         }
+        .foregroundColor(Color.black)
+        .background(Color.white)
+        .preferredColorScheme(.light)
         .onAppear() {
             var keyWindow: UIWindow? {
                 return UIApplication.shared.connectedScenes

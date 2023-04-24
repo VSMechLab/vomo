@@ -26,12 +26,13 @@ class DurationNodeModel: Identifiable, Codable {
 }
 
 struct DurationGraph: View {
+    @EnvironmentObject var viewRouter: ViewRouter
     @EnvironmentObject var audioRecorder: AudioRecorder
     @EnvironmentObject var settings: Settings
     @EnvironmentObject var entries: Entries
     
     @Binding var tappedRecording: Date
-    @Binding var showBaseline: Bool
+    @Binding var showBaseline: (Bool, Int)
     @Binding var deletionTarget: (Date, String)
     
     @State private var showMoreTreatmentInfo = false
@@ -48,73 +49,95 @@ struct DurationGraph: View {
         
         ZStack {
             
-            
-            /// This hstack will contain three things
-            /// Y axis with labels
-            /// Body of the graph
-            HStack(spacing: 0) {
+            if firstPoint.data != 0.0 {
                 
-                /// Contains the label for the y axis and the y axis
-                /// Will have a fixed range height of 300 hz
-                /// Will have a fixed range bottom of 0 hz
-                yAxis
-                
-                
-                ZStack {
-                    targetBar
+                /// This hstack will contain three things
+                /// Y axis with labels
+                /// Body of the graph
+                HStack(spacing: 0) {
                     
-                    HStack(spacing: 0) {
-                        if firstPoint.dataDate != .now {
-                            baseline
-                        }
+                    /// Contains the label for the y axis and the y axis
+                    /// Will have a fixed range height of 300 hz
+                    /// Will have a fixed range bottom of 0 hz
+                    yAxis
+                    
+                    
+                    ZStack {
+                        targetBar
                         
-                        ScrollView(.horizontal, showsIndicators: false) {
-                            ZStack {
-                                //targetBar
-                                
-                                HStack(spacing: 0) {
+                        HStack(spacing: 0) {
+                            if firstPoint.dataDate != .now {
+                                baseline
+                            }
+                            
+                            ScrollView(.horizontal, showsIndicators: false) {
+                                ZStack {
+                                    //targetBar
                                     
-                                    
-                                    graphNodes
+                                    HStack(spacing: 0) {
+                                        
+                                        
+                                        graphNodes
+                                    }
                                 }
                             }
                         }
                     }
+                    
+                    
+                    Spacer()
                 }
                 
-                
-                Spacer()
-            }
-            .onAppear() {
-                findPoints()
-            }
-            
-            if showMoreTreatmentInfo && currTreatment != .now {
-                Button(action: {
-                    self.showMoreTreatmentInfo = false
-                }) {
-                    VStack {
-                        Spacer()
-                        Text(currTreatment.toDOB())
-                            .font(._bodyCopyBold)
-                        Text(findType())
-                            .font(._bodyCopy)
-                        
-                        Spacer()
-                        
-                        DeleteButton(deletionTarget: $deletionTarget, type: "treatment", date: currTreatment)
+                if showMoreTreatmentInfo && currTreatment != .now {
+                    Button(action: {
+                        self.showMoreTreatmentInfo = false
+                    }) {
+                        VStack {
+                            Spacer()
+                            Text("\(currTreatment.dayOfWeek()) \(currTreatment.toDay()) at \(currTreatment.toStringHour())")
+                                .font(Font._bodyCopyBold)
+                            Text(findType())
+                                .font(._bodyCopy)
+                            
+                            Spacer()
+                            
+                            DeleteButton(deletionTarget: $deletionTarget, type: "treatment", date: currTreatment)
+                        }
+                        .foregroundColor(Color.black)
+                        .padding(20)
+                        .background(Color.BRIGHT_PURPLE)
+                        .cornerRadius(5)
+                        .shadow(radius: 5)
+                        .padding(.vertical, 50)
                     }
-                    .foregroundColor(Color.black)
-                    .padding(20)
-                    .background(Color.BRIGHT_PURPLE)
-                    .cornerRadius(5)
-                    .shadow(radius: 5)
-                    .padding(.vertical, 50)
+                }
+                
+            } else {
+                Button(action: {
+                    viewRouter.currentPage = .record
+                    settings.hyperLinkedRecording = 1
+                    // To do, hyperlink to propper task
+                }) {
+                    HStack {
+                        Text("Record at least one entry")
+                                    .underline(true, color: .white)
+                                    .underline(true, color: .clear)
+                                    + Text(" to see data on this graph")
+                        Spacer()
+                    }
+                    .padding(.vertical, 5)
                 }
             }
             
         }
+        .font(._fieldCopyBold)
         .foregroundColor(Color.white)
+        .onAppear() {
+            findPoints()
+        }
+        .onChange(of: audioRecorder.processedData.last?.duration) { _ in
+            findPoints()
+        }
         .onChange(of: deletionTarget.0) { _ in
             findPoints()
         }
@@ -122,7 +145,8 @@ struct DurationGraph: View {
             findPoints()
             showMoreTreatmentInfo = false
         }
-        .onChange(of: audioRecorder.recordings.count) { _ in
+        .onChange(of: audioRecorder.processedData.count) { _ in
+            print("got here")
             findPoints()
         }
         .onAppear() {
@@ -150,11 +174,6 @@ struct DurationGraph: View {
                     points.append(DurationNodeModel(data: data.duration, dataDate: data.createdAt, hasTreatment: false, afterDate: false, treatmentDate: .now, treatmentType: "error"))
                 }
             }
-        }
-        
-        if points.count > 0 {
-            firstPoint = points[0]
-            points.remove(at: 0)
         }
         
         // numbers assigned to spots
@@ -191,6 +210,13 @@ struct DurationGraph: View {
             
             distance = (10000000000.0, -1)
         }
+        
+        if points.count > 0 {
+            firstPoint = points[0]
+            points.remove(at: 0)
+        } else {
+            firstPoint.data = 0.0
+        }
     }
 }
 
@@ -198,6 +224,9 @@ extension DurationGraph {
     private var yAxis: some View {
         Group {
             VStack(spacing: 0) {
+                // Basic spacing
+                Color.clear.frame(width: 1, height: 20)
+                
                 Text("\(height, specifier: "%.0f")")
                 
                 Spacer()
@@ -215,52 +244,83 @@ extension DurationGraph {
             .font(._fieldCopyRegular)
             .frame(width: 25)
             
-            Color.white.frame(width: 2)
+            VStack(spacing: 0) {
+                // Basic spacing
+                Color.clear.frame(width: 1, height: 20)
+                
+                Color.white.frame(width: 2)
+            }
         }
     }
     
     private var baseline: some View {
-        // Baseline shown here
-        VStack(spacing: 0) {
-            ZStack {
+        ZStack {
+            // RX
+            if firstPoint.hasTreatment {
+                dottedLine
+                    .offset(x: firstPoint.afterDate ? 20 : -20)
+                
+                VStack(spacing: 0) {
+                    Button(action: {
+                        if showMoreTreatmentInfo == false {
+                            currTreatment = firstPoint.treatmentDate
+                        }
+                        if firstPoint.hasTreatment {
+                            showMoreTreatmentInfo.toggle()
+                        }
+                    }) {
+                        rxSign.offset(x: firstPoint.afterDate ? 20 : -20)
+                    }
+                    
+                    Spacer()
+                }
+            }
+            
+            // Baseline shown here
+            VStack(spacing: 0) {
+                // Basic spacing
+                Color.clear.frame(width: 1, height: 20)
+                
                 GeometryReader { geo in
                     VStack(spacing: 0) {
-                        /// Spacing above, the circle and spacing bellow the axis
                         Color.clear.frame(height: geo.size.height * nodes(duration: firstPoint.data).3)
                         
                         Button(action: {
-                            self.showBaseline.toggle()
+                            if showBaseline.0 && showBaseline.1 != 2 {
+                                self.showBaseline.1 = 2
+                            } else {
+                                self.showBaseline.0.toggle()
+                                self.showBaseline.1 = 2
+                            }
                         }) {
                             ZStack {
-                                Text("\(firstPoint.data, specifier: "%.1f")").font(._fieldCopyBold)
+                                Text("\(firstPoint.data, specifier: "%.1f")")
                                     .offset(y: -20)
-                                
                                 Text("B")
-                                    .font(._fieldCopyBold).foregroundColor(Color.white)
                                     .padding(.horizontal, 3).background(nodes(duration: firstPoint.data).0)
                                     .cornerRadius(10).padding(1).background(Color.white).cornerRadius(10)
-                                    .frame(width: geo.size.height * 0.10, height: geo.size.height * nodes(duration: firstPoint.data).2)
+                                    .frame(width: geo.size.height * 0.10, height: geo.size.height * 0.10)
                             }
                         }
-
+                        
                         Color.clear.frame(height: geo.size.height * nodes(duration: firstPoint.data).1)
                     }
                 }
                 
-                VStack(spacing: 0) {
-                    Spacer()
-                    Text("BASELINE")
-                        .font(._fieldCopyRegular)
-                }
+                /// bottom of axis & date
+                Color.white.frame(height: 2)
+                Text("\(firstPoint.dataDate.toDay())")
+                    .font(._fieldCopyRegular)
+                    .frame(width: 75, height: 15)
             }
-            
-            /// bottom of axis & date
-            Color.white.frame(height: 2)
-            Text("\(points.first?.dataDate.toDay() ?? (Date.now).toDay())")
-                .font(._fieldCopyRegular)
-                .frame(width: 75, height: 15)
         }
         .frame(width: 75)
+    }
+    
+    private var rxSign: some View {
+        Image(svm.rx_sign)
+            .resizable()
+            .frame(width: 20, height: 20)
     }
     
     private var dottedLine: some View {
@@ -290,71 +350,44 @@ extension DurationGraph {
         // Rest of nodes shown here
         ForEach(points) { point in
             ZStack {
-                VStack(spacing: 0) {
-                    Color.clear.frame(height: 25)
+                // RX
+                if point.hasTreatment {
+                    dottedLine
+                        .offset(x: point.afterDate ? 20 : -20)
                     
-                    if point.hasTreatment {
-                        if point.afterDate {
-                            dottedLine
-                                .offset(x: 20)
-                        } else {
-                            dottedLine
-                                .offset(x: -20)
+                    VStack(spacing: 0) {
+                        Button(action: {
+                            if showMoreTreatmentInfo == false {
+                                currTreatment = point.treatmentDate
+                            }
+                            if point.hasTreatment {
+                                showMoreTreatmentInfo.toggle()
+                            }
+                        }) {
+                            rxSign.offset(x: point.afterDate ? 20 : -20)
                         }
+                        
+                        Spacer()
                     }
                 }
                 
+                // Point shown here
                 VStack(spacing: 0) {
+                    // Basic spacing
+                    Color.clear.frame(width: 1, height: 20)
+                    
                     GeometryReader { geo in
                         VStack(spacing: 0) {
-                            Color.clear.frame(height: 20)
-                            ZStack {
-                                /// Spacing above, the circle and spacing bellow the axis
-                                Color.clear.frame(height: geo.size.height * nodes(duration: point.data).3)
-                                
-                                VStack {
-                                    if point.hasTreatment {
-                                        Button(action: {
-                                            if showMoreTreatmentInfo == false {
-                                                currTreatment = point.treatmentDate
-                                            }
-                                            if point.hasTreatment {
-                                                showMoreTreatmentInfo.toggle()
-                                            }
-                                            
-                                            if self.tappedRecording == point.dataDate {
-                                                self.tappedRecording = .now
-                                            } else {
-                                                self.tappedRecording = point.dataDate
-                                            }
-                                        }) {
-                                            if point.afterDate {
-                                                Image(svm.rx_sign)
-                                                    .resizable()
-                                                    .frame(width: geo.size.height * 0.10, height: geo.size.height * nodes(duration: point.data).2)
-                                                    .offset(x: 20)
-                                                    .padding(2)
-                                            } else {
-                                                Image(svm.rx_sign)
-                                                    .resizable()
-                                                    .frame(width: geo.size.height * 0.10, height: geo.size.height * nodes(duration: point.data).2)
-                                                    .offset(x: -20)
-                                                    .padding(2)
-                                            }
-                                        }
-                                        
-                                    }
-                                    
-                                    Spacer()
-                                }
-                                .frame(height: geo.size.height * nodes(duration: point.data).3)
-                            }
-                            .frame(height: geo.size.height * nodes(duration: point.data).3)
+                            Color.clear.frame(height: geo.size.height * nodes(duration: point.data).3)
                             
                             Button(action: {
                                 if showMoreTreatmentInfo == false {
                                     currTreatment = point.treatmentDate
                                 }
+                                if point.hasTreatment {
+                                    showMoreTreatmentInfo.toggle()
+                                }
+                                
                                 if self.tappedRecording == point.dataDate {
                                     self.tappedRecording = .now
                                 } else {
@@ -362,12 +395,13 @@ extension DurationGraph {
                                 }
                             }) {
                                 ZStack {
+                                    Text("\(point.data, specifier: "%.1f")")
+                                        .offset(y: -20)
                                     Circle()
                                         .strokeBorder(.white, lineWidth: 2)
                                         .background(Circle().fill(nodes(duration: point.data).0))
                                         .frame(width: geo.size.height * 0.10, height: geo.size.height * nodes(duration: point.data).2)
-                                    Text("\(point.data, specifier: "%.1f")").font(._fieldCopyBold)
-                                        .offset(y: -20)
+                                        .offset(x: point.data == point.data ? -5 : 0)
                                 }
                             }
                             
@@ -389,15 +423,16 @@ extension DurationGraph {
     private var targetBar: some View {
         ZStack {
             VStack(spacing: 0) {
+                // Basic spacing
+                Color.clear.frame(width: 1, height: 20)
+                
                 GeometryReader { geo in
                     VStack(spacing: 0) {
                         Color.indigo.opacity(0.5)
-                            .frame(height: geo.size.height / 2)
-
+                            .frame(height: geo.size.height * nodes(duration: settings.durationRange().0).3 / 0.90)
                         Color.clear
-                            .frame(height: geo.size.height / 2)
+                            .frame(height: geo.size.height * nodes(duration: settings.durationRange().0).1 / 0.90)
                     }
-                    .frame(height: geo.size.height)
                 }
                 
                 Color.clear.frame(height: 17)
@@ -463,6 +498,6 @@ extension DurationGraph {
 
 struct DurationGraph_Previews: PreviewProvider {
     static var previews: some View {
-        DurationGraph(tappedRecording: .constant(Date.now), showBaseline: .constant(false), deletionTarget: .constant((Date.now, String("string"))))
+        DurationGraph(tappedRecording: .constant(Date.now), showBaseline: .constant((false, 2)), deletionTarget: .constant((Date.now, String("string"))))
     }
 }

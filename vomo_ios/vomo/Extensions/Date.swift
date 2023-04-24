@@ -70,11 +70,11 @@ extension Date {
         return dateFormatter.string(from: self)
     }
     
-    /// "dd/MM/yyyy HH:mm"
+    /// "dd/MM/yyyy HH:mm:ss"
     func toStringDay() -> String
     {
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "MM/dd/yyyy HH:mm"
+        dateFormatter.dateFormat = "MM/dd/yyyy HH:mm:ss"
         return dateFormatter.string(from: self)
     }
     

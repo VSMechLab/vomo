@@ -8,17 +8,19 @@
 import SwiftUI
 import UIKit
 
+/// Main thread in which the app is called
 @main
 struct VoMoApp: App {
     var body: some Scene {
         WindowGroup {
-            SplashScreen()
+            LaunchScreen()
                 .dynamicTypeSize(.medium)
         }
     }
 }
 
-struct SplashScreen: View {
+/// Shows app opening annimation, then shows the view controller which serves different views
+struct LaunchScreen: View {
     @State var animate = false
     @State var endSplash = false
     @State var hideAnimation = false
@@ -28,6 +30,12 @@ struct SplashScreen: View {
     
     var body: some View {
         if !hideAnimation {
+            /*
+             
+             Upon launch of the app, logo is shown then animates out after a fraction of a second
+             After this time, hideAnimation is set to false, switching the view over to showing ViewController
+             
+            */
             ZStack(alignment: .center) {
                 Color.BLUE
                     .edgesIgnoringSafeArea(.all)
@@ -45,18 +53,28 @@ struct SplashScreen: View {
             .onAppear(perform: animateSplash)
             .opacity(endSplash ? 0 : 1)
         } else {
+            /*
+             
+             ViewController is shown, environment variables are called here
+             These environment variables are models that contain useful information about the app
+             
+             ViewRouter - sets the current page being served
+             AudioRecorder - stores audio files, saved processings of files and functions for the files
+             Entries - stores journals, surveys and treatments
+             Settings - stores the users information like date of birth, sex, gender etc
+             Notifications - queues notifications
+             
+            */
             ViewController()
                 .environmentObject(ViewRouter())
                 .environmentObject(AudioRecorder())
                 .environmentObject(Entries())
                 .environmentObject(Settings())
                 .environmentObject(Notification())
-                .foregroundColor(Color.black)
-                .background(Color.white)
-                .preferredColorScheme(.light)
         }
     }
     
+    /// Animates the logo on the screen when the app is launched
     func animateSplash() {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
             withAnimation(Animation.easeOut(duration: 0.45)) {
@@ -72,6 +90,7 @@ struct SplashScreen: View {
     }
 }
 
+/// Calls upon a settings didFinishLaunchingWithOptions which will tell us wether or not the app has been launched before
 class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.

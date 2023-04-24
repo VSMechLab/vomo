@@ -26,11 +26,6 @@ extension SurveyGraph {
             }
         }
         
-        if points.count > 0 {
-            firstPoint = points[0]
-            points.remove(at: 0)
-        }
-        
         var distance: (Double, Int) = (10000000000.0, -1)
         
         for treatment in entries.treatments {
@@ -58,6 +53,13 @@ extension SurveyGraph {
             }
             
             distance = (10000000000.0, -1)
+        }
+        
+        if points.count > 0 {
+            firstPoint = points[0]
+            points.remove(at: 0)
+        } else {
+            firstPoint.data = 0.0
         }
     }
     
