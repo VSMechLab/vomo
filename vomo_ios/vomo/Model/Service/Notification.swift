@@ -37,7 +37,7 @@ class Notification: ObservableObject {
             UserDefaults.standard.set(notificationsOn, forKey: "notifications_on")
             if !notificationsOn {
                 clearAll()
-                print("Cleared notifications")
+                Logging.notificationLog.debug("Cleared notifications")
             }
         }
     }
@@ -96,11 +96,7 @@ extension Notification {
         
         var dateComponents = DateComponents()
         
-        
-        
         for trig in triggers {
-            print("\(Date.now) and \(trig.date)")
-            
             if trig.date > .now {
                 dateComponents.year = trig.date.splitYear
                 dateComponents.month = trig.date.splitMonth
@@ -134,9 +130,9 @@ extension Notification {
     func requestPermission() {
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { success, error in
             if success {
-                //print("All set!")
+                Logging.notificationLog.notice("Notification Authorization Granted")
             } else if let error = error {
-                print(error.localizedDescription)
+                Logging.notificationLog.notice("\(error.localizedDescription)")
             }
         }
     }
@@ -149,7 +145,7 @@ extension Notification {
         let center = UNUserNotificationCenter.current()
         center.getPendingNotificationRequests(completionHandler: { requests in
             for request in requests {
-                print(request.trigger.unsafelyUnwrapped)
+                Logging.notificationLog.notice("\(request.trigger?.description ?? "Failed to unwrap")")
             }
         })
     }

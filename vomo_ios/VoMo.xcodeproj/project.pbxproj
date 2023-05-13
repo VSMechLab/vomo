@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		22253A042A1003AC004FD26B /* Logging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22253A032A1003AC004FD26B /* Logging.swift */; };
 		AD00C71E29F71F2C0017385E /* SharedViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD00C71D29F71F2C0017385E /* SharedViewModel.swift */; };
 		AD00C72A29F720530017385E /* GoalEntryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD00C72329F720530017385E /* GoalEntryView.swift */; };
 		AD00C72B29F720530017385E /* LandingPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD00C72429F720530017385E /* LandingPageView.swift */; };
@@ -138,6 +139,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		22253A032A1003AC004FD26B /* Logging.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Logging.swift; path = vomo/Model/Service/Logging.swift; sourceTree = SOURCE_ROOT; };
 		AD00C71D29F71F2C0017385E /* SharedViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SharedViewModel.swift; path = VoMo/Model/DataModels/SharedViewModel.swift; sourceTree = SOURCE_ROOT; };
 		AD00C72329F720530017385E /* GoalEntryView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GoalEntryView.swift; path = vomo/Core/Views/OnboardView/GoalEntryView.swift; sourceTree = SOURCE_ROOT; };
 		AD00C72429F720530017385E /* LandingPageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LandingPageView.swift; path = vomo/Core/Views/OnboardView/LandingPageView.swift; sourceTree = SOURCE_ROOT; };
@@ -312,6 +314,7 @@
 				AD81B71D28BFCF83009920FB /* Notification.swift */,
 				AD81B72128BFCFCA009920FB /* AudioPlayer.swift */,
 				AD72972328CFD736001E7211 /* SignalProcess.swift */,
+				22253A032A1003AC004FD26B /* Logging.swift */,
 			);
 			path = Service;
 			sourceTree = "<group>";
@@ -839,6 +842,7 @@
 				ADA0E0C228255F6A00CF05D1 /* ChartBase+Extension.swift in Sources */,
 				AD00C73329F720650017385E /* ProgressBar.swift in Sources */,
 				AD00C76129F720C10017385E /* DayList.swift in Sources */,
+				22253A042A1003AC004FD26B /* Logging.swift in Sources */,
 				AD00C77A29F721BC0017385E /* HomeBackground.swift in Sources */,
 				AD00C72C29F720530017385E /* OnboardView.swift in Sources */,
 				AD81B72028BFCFB2009920FB /* AudioRecorder.swift in Sources */,
@@ -1013,7 +1017,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 29;
 				DEVELOPMENT_ASSET_PATHS = "\"VoMo/Preview Content\"";
-				DEVELOPMENT_TEAM = E3GYNLB224;
+				DEVELOPMENT_TEAM = 3B52K98W7P;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = VoMo/Info.plist;
@@ -1054,7 +1058,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 29;
 				DEVELOPMENT_ASSET_PATHS = "\"VoMo/Preview Content\"";
-				DEVELOPMENT_TEAM = E3GYNLB224;
+				DEVELOPMENT_TEAM = 3B52K98W7P;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = VoMo/Info.plist;

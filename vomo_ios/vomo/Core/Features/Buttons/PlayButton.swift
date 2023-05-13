@@ -52,8 +52,7 @@ struct StarButton: View {
         Button(action: {
             if type == "record" {
                 for index in 0..<audioRecorder.processedData.count {
-                    print("got here")
-                    print("Date \(date), \(audioRecorder.processedData[index].createdAt)")
+                    Logging.defaultLog.notice("Date \(date), \(audioRecorder.processedData[index].createdAt)")
                     
                     if audioRecorder.processedData[index].createdAt == date {
                         audioRecorder.processedData[index].favorite.toggle()
@@ -123,7 +122,6 @@ struct ShareButtonByDate: View {
     
     var body: some View {
         Button(action: {
-            print(date)
             
             for target in audioRecorder.recordings {
                 if date == target.createdAt {
@@ -137,42 +135,3 @@ struct ShareButtonByDate: View {
         }
     }
 }
-
-
-/*
-struct PlayButton: View {
-    @ObservedObject var audioPlayer = AudioPlayer()
-    
-    var audio: URL
-    
-    var body: some View {
-        Button(action: {
-            print(audio)
-            if audioPlayer.isPlaying {
-                self.audioPlayer.stopPlayback()
-            } else {
-                self.audioPlayer.startPlayback(audio: audio)
-            }
-        }) {
-            Image(systemName: audioPlayer.isPlaying ?  "stop.fill" : "play.fill")
-        }
-    }
-}
-
-struct PlaybackButton: View {
-    @ObservedObject var audioPlayer = AudioPlayer()
-    let file: URL
-    var body: some View {
-        Button(action: {
-            if audioPlayer.isPlaying {
-                audioPlayer.stopPlayback()
-            } else {
-                audioPlayer.startPlayback(audio: file)
-            }
-        }) {
-            Image(systemName: audioPlayer.isPlaying ? "stop.circle" : "play.circle")
-                .foregroundColor(audioPlayer.isPlaying ? Color.red.opacity(0.8) : Color.TEAL)
-        }
-    }
-}
-*/

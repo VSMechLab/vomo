@@ -164,11 +164,6 @@ extension RecordView {
                 .font(._subTitle)
                 .foregroundColor(Color.BODY_COPY)
             
-            /*Text("")
-                .onAppear() {
-                    print(settings.taskList)
-                    print(exercise)
-                }*/
             if exercise < settings.taskList.count {
                 if !landingPopUp {
                     ScrollView(showsIndicators: true) {

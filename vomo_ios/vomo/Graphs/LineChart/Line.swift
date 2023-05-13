@@ -53,9 +53,6 @@ public struct Line: View {
                         .rotation3DEffect(.degrees(180), axis: (x: 0, y: 1, z: 0))
                         
                         .onChange(of: touchLocation.x) { i in
-                            /*
-                            print("X location: \(touchLocation.x)")
-                            print(touchLocation.y)*/
                             index = Int(14 * (touchLocation.x))
                         }
                 }

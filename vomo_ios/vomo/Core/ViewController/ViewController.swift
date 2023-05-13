@@ -66,12 +66,12 @@ struct ViewController: View {
             
             group.leave()
             group.notify(queue: DispatchQueue.main, execute: {
-                print("Synced all recordings!")
+                Logging.defaultLog.notice("Synced all recordings!")
             })
         }
         
         .onChange(of: audioRecorder.recording) { _ in
-            print(audioRecorder.recording)
+            Logging.defaultLog.debug("Recording status: \(audioRecorder.recording)")
         }
     }
 }

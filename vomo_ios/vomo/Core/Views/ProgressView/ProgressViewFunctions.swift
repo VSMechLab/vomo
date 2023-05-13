@@ -83,8 +83,6 @@ extension ProgressView {
                 preciseDates = preciseDates.sorted(by: { $0.compare($1) == .orderedAscending })
                 
                 for sortedDate in preciseDates {
-                    print(sortedDate)
-                    
                     for matchedDate in selectedEntries {
                         if sortedDate == matchedDate.0 {
                             strs.append(matchedDate.1)
@@ -187,8 +185,6 @@ extension ProgressView {
                 preciseDates = preciseDates.sorted(by: { $0.compare($1) == .orderedAscending })
                 
                 for sortedDate in preciseDates {
-                    print(sortedDate)
-                    
                     for matchedDate in selectedEntries {
                         if sortedDate == matchedDate.0 {
                             strs.append(matchedDate.1)
@@ -261,7 +257,8 @@ extension ProgressView {
     /// If theres a match a target called deleteIndex gets assigned and type is assigned
     /// deleteIndex, if set will delete at that index of the proper type
     func deleteAtDate(createdAt: Date) {
-        print("\n\n\nstarting sequence for deletion at \(deletionTarget.0), \(deletionTarget.1)")
+        
+        Logging.defaultLog.notice("Starting sequence for deletion at \(deletionTarget.0), \(deletionTarget.1)")
         
         var type = ""
         var count = -1
@@ -270,7 +267,7 @@ extension ProgressView {
         // looks for a match on both before otherwise canceling the process
         for index in 0..<audioRecorder.recordings.count {
             if createdAt == audioRecorder.recordings[index].createdAt {
-                print("found file to delete: \(audioRecorder.recordings[index].createdAt.toStringDay())")
+                Logging.defaultLog.notice("found file to delete: \(audioRecorder.recordings[index].createdAt.toStringDay())")
                 type = "record"
                 count = index
             }
@@ -302,7 +299,7 @@ extension ProgressView {
         }
         if count != -1 {
             if type == "record" {
-                print("able to delete recording")
+                Logging.defaultLog.notice("able to delete recording")
                 
                 if audioRecorder.recordings.count == audioRecorder.processedData.count {
                     
@@ -311,7 +308,7 @@ extension ProgressView {
                     
                     audioRecorder.syncEntries(gender: settings.gender)
                     
-                    print("deleting record")
+                    Logging.defaultLog.notice("deleting record")
                     self.reset.toggle()
                 } else {
                     audioRecorder.syncEntries(gender: settings.gender)
@@ -321,7 +318,7 @@ extension ProgressView {
                     
                     entries.questionnaires.remove(at: count)
                     
-                    print("deleting survey")
+                    Logging.defaultLog.notice("deleting survey")
                     self.reset.toggle()
                 }
             } else if type == "journal" {
@@ -329,7 +326,7 @@ extension ProgressView {
                     
                     entries.journals.remove(at: count)
                     
-                    print("deleting journal")
+                    Logging.defaultLog.notice("deleting journal")
                     self.reset.toggle()
                 }
             } else if type == "treatment" {
@@ -337,11 +334,11 @@ extension ProgressView {
                     
                     entries.treatments.remove(at: count)
                     
-                    print("deleting treatment")
+                    Logging.defaultLog.notice("deleting treatment")
                     self.reset.toggle()
                 }
             } else {
-                print("There was a mismatch in data. In order to prevent erroneous deletion of data we have disabled the functionality of deleting this specific entry.")
+                Logging.defaultLog.error("There was a mismatch in data. In order to prevent erroneous deletion of data we have disabled the functionality of deleting this specific entry.")
             }
         }
     }

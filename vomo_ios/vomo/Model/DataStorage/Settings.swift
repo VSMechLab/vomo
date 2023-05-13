@@ -427,7 +427,7 @@ class Settings: ObservableObject {
         
         switch focusSelection {
         case 0: // Custom track
-            print("Custom track selected")
+            Logging.defaultLog.debug("Custom track")
         case 1: // Gender-Affirming Voice Care
             self.vhi = false
             self.vocalEffort = true
@@ -548,7 +548,7 @@ extension Settings {
         let amountDays = recordPerWeek * numWeeks
         
         for i in 0..<amountDays {
-            print("start date: \(String(describing: startDate.toFullDate()))")
+            Logging.defaultLog.info("start date: \(String(describing: self.startDate.toFullDate()))")
             ret.append(TriggerModel(date: Date(timeInterval: Double(frequency) * (Double(i) * 86400), since: startDate.toFullDate() ?? .now), identifier: String(i)))
         }
         

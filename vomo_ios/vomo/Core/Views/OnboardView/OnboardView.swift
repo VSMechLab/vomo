@@ -160,7 +160,8 @@ extension OnboardView {
                 
             } else {
                 Button("GET STARTED") {
-                    print("Recording permission status \(audioRecorder.grantedPermission())")
+                    
+                    Logging.defaultLog.notice("Recording permission status \(audioRecorder.grantedPermission())")
                     
                     stepSwitch += 1
                 }.buttonStyle(SubmitButton())

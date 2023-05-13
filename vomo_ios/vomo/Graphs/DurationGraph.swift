@@ -146,7 +146,6 @@ struct DurationGraph: View {
             showMoreTreatmentInfo = false
         }
         .onChange(of: audioRecorder.processedData.count) { _ in
-            print("got here")
             findPoints()
         }
         .onAppear() {

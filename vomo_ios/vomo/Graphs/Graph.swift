@@ -51,9 +51,9 @@ struct Graph: View {
             SurveyModel(createdAt: .now, responses: [0, 1, 2, 3, 4, 5, 6, 7,  8, 9, 10, 22], favorite: false)
         ]
         
-        for _ in fakeData {
-            print("worth")
-        }
+//        for _ in fakeData {
+//            print("worth")
+//        }
         
         return 1.0
         

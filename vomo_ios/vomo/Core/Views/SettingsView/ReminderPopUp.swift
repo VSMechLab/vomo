@@ -135,7 +135,7 @@ extension ReminderPopUp {
                             self.notifications.preferedHour = date.splitHour
                             self.notifications.preferedMinute = date.splitMinute
                             
-                            print("Set to be notified at: \(notifications.preferedHour):\(notifications.preferedMinute)")
+                            Logging.defaultLog.notice("Set to be notified at: \(notifications.preferedHour):\(notifications.preferedMinute)")
                         }
                 }
             }

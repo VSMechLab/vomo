@@ -66,15 +66,9 @@ struct ProgressView: View {
         }
         .onChange(of: tappedRecording) { _ in
             targetItem()
-            /*print("calling here")
-            if !expandAll {
-                self.showRecordDetails = true
-            } else {
-                self.showRecordDetails = false
-            }*/
         }
         .onChange(of: showRecordDetails) { change in
-            print("ShowRecordingDetails? \(change)")
+            Logging.defaultLog.notice("ShowRecordingDetails state: \(change)")
         }
     }
 }

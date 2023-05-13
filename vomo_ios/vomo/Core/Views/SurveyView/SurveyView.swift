@@ -197,7 +197,7 @@ extension SurveyView {
         for quest in entries.questionnaires {
             if quest.responses[12] != -1.0 {
                 resp = quest
-                print( resp.responses[12] )
+                Logging.defaultLog.notice("Survey Model entry 13: \(resp.responses[12])")
             }
         }
         

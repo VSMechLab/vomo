@@ -125,7 +125,7 @@ extension CompleteMenu {
         if audioRecorder.recordings.count > 0 {
             delete(at: [audioRecorder.recordings.count-1])
         } else {
-            print("set is empty")
+            Logging.defaultLog.info("Can't delete last recording because there are none")
         }
     }
     

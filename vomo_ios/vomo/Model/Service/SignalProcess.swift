@@ -56,7 +56,7 @@ extension AudioRecorder {
                         buffer = try AVAudioPCMBuffer(url: fileURL)!
                     }
                     catch {
-                        print("ERROR: Could not create buffer!")
+                        Logging.signalProcessLog.error("Could not create buffer: \(error.localizedDescription)")
                     }
 
                     //["Other", "Genderqueer", "Non-binary", "Female", "Male"]
@@ -118,18 +118,14 @@ extension AudioRecorder {
                     let minP: Double = calcMin(filteredPitchValues)
                     let maxP: Double = calcMax(filteredPitchValues)
                     let meanCPP: Double = calcMean(signalCPPValues)
-
-                    //processings.duration = dur
-                    //processings.intensity = inten
-                    //processings.pitch_mean = meanP
-                    //processings.pitch_min = minP
-                    //processings.pitch_max = maxP
                     
-                    print("Duration: \(dur) s")
-                    print("Intensity: \(inten) dB")
-                    print("Mean Pitch: \(meanP) Hz")
-                    print("Min Pitch: \(minP) Hz")
-                    print("Max Pitch: \(maxP) Hz")
+                    Logging.signalProcessLog.notice("""
+                        Duration: \(dur) s
+                        Intensity: \(inten) dB
+                        Mean Pitch: \(meanP) Hz
+                        Min Pitch: \(minP) Hz
+                        Max Pitch: \(maxP) Hz
+                    """)
 
                     // Return array of metrics
                     audioMetrics = [dur, inten, meanP, minP, maxP, meanCPP]
@@ -137,8 +133,7 @@ extension AudioRecorder {
             } // End for
             // Catch all
         } catch {
-            print("testing\n\n\\n\ntesting")
-            print("Error: \(error)")
+            Logging.signalProcessLog.error("Processing failed: \(error.localizedDescription)")
             // Handle the error in some way (e.g. show an error message to the user)
         }
         return audioMetrics

@@ -133,11 +133,10 @@ struct NewTreatmentForm: View {
                         Button(action: {
                             submitAnimation = true
                             self.treatment.type = self.type
-                            print("Selection is: \(treatment.note)")
+                            Logging.defaultLog.notice("Selection is: \(treatment.note, privacy: .private)")
                             self.entries.treatments.append(treatment)
                             self.newTreatment.toggle()
                             self.treatment.note = ""
-                            print(entries.treatments)
                         }) {
                             ZStack {
                                 Image(svm.button_img)
@@ -166,7 +165,6 @@ struct NewTreatmentForm: View {
                     Button(action: {
                         self.newTreatment.toggle()
                         self.treatment.note = ""
-                        print(entries.treatments)
                     }) {
                         ZStack {
                             Image(svm.blank_btn)
@@ -277,61 +275,3 @@ struct NewTreatmentForm_Previews: PreviewProvider {
             .environmentObject(Settings())
     }
 }
-
-
-/*
- Group {
-     HStack {
-         Text("Type")
-             .font(._subsubHeadline)
-         Spacer()
-     }
-     
-     Button(action: {
-         withAnimation() {
-             self.showDate = false
-             self.showTime = false
-         }
-     }) {
-         Menu {
-             Picker("Choose One1111", selection: $visit.type) {
-                 ForEach(visitTypes, id: \.self) { visits in
-                     Text("\(visits)\n")
-                         .font(._fieldCopyRegular)
-                 }
-             }
-             .labelsHidden()
-             .pickerStyle(InlinePickerStyle())
-
-         } label: {
-             HStack {
-                 Image(svm.type_img)
-                     .resizable()
-                     .scaledToFit()
-                     .frame(height: toggleHeight * 0.8)
-                     .padding(.leading)
-                 Menu {
-                     Picker("Choose One222", selection: $visit.type) {
-                         ForEach(visitTypes, id: \.self) { visits in
-                             Text("\(visits)\n")
-                                 .font(._fieldCopyRegular)
-                         }
-                     }
-                     .labelsHidden()
-                     .pickerStyle(InlinePickerStyle())
-
-                 } label: {
-                     Text("\(visit.type.isEmpty ? "Choose Type333" : visit.type)")
-                         .font(._fieldCopyRegular)
-                 }
-                 Spacer()
-             }
-             .onChange(of: visit.type) { change in
-                 print(change)
-             }
-             .padding(.vertical).frame(height: toggleHeight)
-             .background(Color.white).cornerRadius(10)
-         }
-     }
- }
- */

@@ -94,29 +94,6 @@ struct MiniAudioInterface: View {
         formatter.unitsStyle = .positional
         formatter.zeroFormattingBehavior = [ .pad ]
         
-        /*
-         func startPlayback (audio: URL) {
-             
-             let playbackSession = AVAudioSession.sharedInstance()
-             
-             do {
-                 try playbackSession.setCategory(.playAndRecord, mode: .default)
-                 try playbackSession.overrideOutputAudioPort(AVAudioSession.PortOverride.speaker)
-             } catch {
-                 print("Playing over the device's speakers failed")
-             }
-             
-             do {
-                 audioPlayer = try AVAudioPlayer(contentsOf: audio)
-                 audioPlayer.delegate = self
-                 audioPlayer.play()
-                 isPlaying = true
-             } catch {
-                 print("Playback failed.")
-             }
-         }
-         */
-        
         for target in audioRecorder.recordings {
             if date == target.createdAt {
                 /*self.audioPlayer = try! AVAudioPlayer(contentsOf: target.fileURL)
@@ -130,12 +107,12 @@ struct MiniAudioInterface: View {
                     try playbackSession.setCategory(.playback, mode: .default)
                     try playbackSession.overrideOutputAudioPort(AVAudioSession.PortOverride.speaker)
                 } catch {
-                    print("Playing over the device's speakers failed")
+                    Logging.audioPlayerLog.error("Playing over the device's speakers failed: \(error.localizedDescription)")
                 }
                 do {
                     audioPlayer = try AVAudioPlayer(contentsOf: target.fileURL)
                 } catch {
-                    print("Playback failed.")
+                    Logging.audioPlayerLog.error("Playback failed: \(error.localizedDescription)")
                 }
             }
         }
