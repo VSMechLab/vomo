@@ -16,92 +16,114 @@ struct ReminderPopUp: View {
     @State private var showTime: Bool = false
     @State private var date: Date = .now
     let svm = SharedViewModel()
+    
     var body: some View {
-        VStack(alignment: .leading) {
+        VStack(alignment: .leading, spacing: 15) {
             HStack {
-                Text("Edit your prefered frequency of notifications")
-                    .font(._subHeadline)
+                Text("Notification Settings")
+                    .font(._title1)
                     .multilineTextAlignment(.leading)
                 Spacer()
             }
             
-            onOffButton
-            
+            notificationsToggle
+                        
             if notifications.notificationsOn {
-                timeOfDay
+                notificationTimeSelection
+                notificationFrequencySelection
             }
         }
-        .padding(.vertical)
         .padding()
+        .padding(.vertical)
         .frame(width: svm.content_width)
         .background(Color.white)
         .cornerRadius(15)
         .shadow(color: Color.gray, radius: 5)
-        .padding(.vertical)
-        .padding(.vertical)
-        .onAppear() {
-            var dateComponents = DateComponents()
-            dateComponents.hour = notifications.preferedHour
-            dateComponents.minute = notifications.preferedMinute
-            
-            self.date = Calendar.current.date(from: dateComponents) ?? .now
-        }
     }
 }
 
 extension ReminderPopUp {
-    private var onOffButton: some View {
-        Group {
-            Text("Would you like to be notified?")
-                .font(._subsubHeadline)
-                .padding(.top)
+    
+    private var notificationsToggle: some View {
+        
+        VStack(alignment: .leading) {
             
-            HStack(spacing: 0) {
-                Button("") {
-                    withAnimation() {
-                        self.notifications.notificationsOn = true
-                    }
-                }.buttonStyle(YesButton(selected: notifications.notificationsOn))
-                Spacer()
-                Button("") {
-                    withAnimation() {
-                        self.notifications.notificationsOn = false
-                    }
-                }.buttonStyle(NoButton(selected: notifications.notificationsOn))
-            }
-            
-            if !self.notifications.getStatus() {
-                Text("You must enable notifications in settings")
-                    .multilineTextAlignment(.leading)
-                    .foregroundColor(.red)
-                    .font(._bodyCopy)
+            Toggle(isOn: $notifications.notificationsOn) {
                 
-                Button(action: {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("Receive Notifications")
+                        .font(._BTNCopy)
+                    if (!notifications.getStatus()) {
+                        HStack(spacing: 5) {
+                            Image(systemName: "exclamationmark.circle.fill")
+                                .font(.system(size: 13))
+                                .foregroundColor(.red)
+                            Text("Please enable in iOS settings")
+                                .font(._fieldCopyRegular)
+                        }
+                    }
+                }
+            }
+            .tint(Color.MEDIUM_PURPLE)
+            
+            if (!notifications.getStatus()) {
+                Button {
                     if #available(iOS 16, *) {
                         openURL(URL(string: UIApplication.openNotificationSettingsURLString)!)
-                    }
-                    if #available(iOS 15.4, *) {
-                        openURL(URL(string: UIApplicationOpenNotificationSettingsURLString)!)
-                    }
-                    if #available(iOS 8.0, *) {
-                        // just opens settings
+                    } else {
                         openURL(URL(string: UIApplication.openSettingsURLString)!)
                     }
-                }) {
-                    Text("Go to settings")
-                        .font(._bodyCopyBold)
+                } label: {
+                    Text("Open Settings")
+                        .font(._buttonFieldCopy)
                         .foregroundColor(Color.DARK_PURPLE)
-                        .padding(.bottom)
                 }
-                .padding(.bottom, 5)
             }
+        }
+    }
+    
+    private var notificationTimeSelection: some View {
+        
+        VStack(alignment: .leading) {
+            
+            HStack {
+                Text("Remind Me:")
+                    .font(._BTNCopy)
+
+                DatePicker("", selection: $date, displayedComponents: .hourAndMinute)
+                    .datePickerStyle(.graphical)
+                    .onChange(of: date) { _ in
+                        self.notifications.preferedHour = date.splitHour
+                        self.notifications.preferedMinute = date.splitMinute
+                        
+                        Logging.defaultLog.notice("Set to be notified at: \(notifications.preferedHour):\(notifications.preferedMinute)")
+                    }
+                    .onAppear() {
+                        var dateComponents = DateComponents()
+                        dateComponents.hour = notifications.preferedHour
+                        dateComponents.minute = notifications.preferedMinute
+                        
+                        self.date = Calendar.current.date(from: dateComponents) ?? .now
+                    }
+                    .tint(.MEDIUM_PURPLE)
+                    .offset(x: 10.0, y: 0)
+            }
+        }
+    }
+    
+    private var notificationFrequencySelection: some View {
+        
+        VStack(alignment: .center) {
+            
+            
+            
         }
     }
     
     private var timeOfDay: some View {
         Group {
             HStack {
-                Text("Remind me at a time of the day")
+                Text("Remind me at:")
                     .font(._subsubHeadline)
                 Spacer()
             }
@@ -210,23 +232,14 @@ extension ReminderPopUp {
 }
 
 struct ReminderPopUp_Previews: PreviewProvider {
+    
+    static let previewNotificationService = Notification()
+    
     static var previews: some View {
         ReminderPopUp(showNotifications: .constant(false))
-            .environmentObject(Notification())
+            .environmentObject(previewNotificationService)
+            .onAppear() {
+                previewNotificationService.notificationsOn = true
+            }
     }
 }
-
-/*
- /// Sent to notification service to schedule notifications calculated in real time based on goal considerations
- func triggers() -> [TriggerModel] {
-     var ret: [TriggerModel] = []
-     
-     let amountDays = recordPerWeek * numWeeks
-     
-     for i in 0..<amountDays {
-         ret.append(TriggerModel(date: Date(timeInterval: Double(i) * 86400, since: startDate.toFullDate() ?? .now), identifier: String(i)))
-     }
-     
-     return ret
- }
- */
