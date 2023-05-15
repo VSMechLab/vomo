@@ -18,6 +18,7 @@ struct ReminderPopUp: View {
     let svm = SharedViewModel()
     
     var body: some View {
+        
         VStack(alignment: .leading, spacing: 15) {
             HStack {
                 Text("Notification Settings")
@@ -30,9 +31,12 @@ struct ReminderPopUp: View {
                         
             if notifications.notificationsOn {
                 notificationTimeSelection
-                notificationFrequencySelection
+                    .transition(.slideUp)
             }
         }
+        
+        .animation(.spring(), value: notifications.notificationsOn)
+        
         .padding()
         .padding(.vertical)
         .frame(width: svm.content_width)
@@ -86,6 +90,8 @@ extension ReminderPopUp {
         
         VStack(alignment: .leading) {
             
+            Divider()
+            
             HStack {
                 Text("Remind Me:")
                     .font(._BTNCopy)
@@ -108,15 +114,6 @@ extension ReminderPopUp {
                     .tint(.MEDIUM_PURPLE)
                     .offset(x: 10.0, y: 0)
             }
-        }
-    }
-    
-    private var notificationFrequencySelection: some View {
-        
-        VStack(alignment: .center) {
-            
-            
-            
         }
     }
     
