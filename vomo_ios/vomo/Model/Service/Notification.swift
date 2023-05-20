@@ -18,19 +18,15 @@ struct TriggerModel {
     var identifier: String
 }
 
-enum Frequencies {
-    case daily, weekly
-}
-
 /// Notifications - queues notifications
 class Notification: ObservableObject {
     @EnvironmentObject var settings: Settings
-    /*
-    var setFrequency: String {
-        return Frequencies.daily
-    }*/
     
     let defaults = UserDefaults.standard
+    
+    enum Frequency: String, CaseIterable {
+        case daily = "Daily", everyOtherDay = "Every other day", monthly = "Monthly", custom = "Custom..."
+    }
     
     @Published var notificationsOn: Bool {
         didSet {

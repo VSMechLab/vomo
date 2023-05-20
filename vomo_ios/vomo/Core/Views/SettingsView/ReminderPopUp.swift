@@ -19,27 +19,31 @@ struct ReminderPopUp: View {
     
     var body: some View {
         
-        VStack(alignment: .leading, spacing: 15) {
-            HStack {
-                Text("Notification Settings")
-                    .font(._title1)
-                    .multilineTextAlignment(.leading)
+        NavigationView {
+            VStack(alignment: .leading, spacing: 15) {
+                HStack {
+                    Text("Notification Settings")
+                        .font(._title1)
+                        .multilineTextAlignment(.leading)
+                    Spacer()
+                }
+                
+                notificationsToggle
+                            
+                if notifications.notificationsOn {
+                    notificationTimeSelection
+                        .transition(.slideUp)
+                }
+                
                 Spacer()
             }
             
-            notificationsToggle
-                        
-            if notifications.notificationsOn {
-                notificationTimeSelection
-                    .transition(.slideUp)
-            }
+            .animation(.spring(), value: notifications.notificationsOn)
+            .padding()
+            .padding(.vertical)
         }
         
-        .animation(.spring(), value: notifications.notificationsOn)
-        
-        .padding()
-        .padding(.vertical)
-        .frame(width: svm.content_width)
+        .frame(width: svm.content_width, height: 350)
         .background(Color.white)
         .cornerRadius(15)
         .shadow(color: Color.gray, radius: 5)
@@ -57,15 +61,6 @@ extension ReminderPopUp {
                 VStack(alignment: .leading, spacing: 4) {
                     Text("Receive Notifications")
                         .font(._BTNCopy)
-                    if (!notifications.getStatus()) {
-                        HStack(spacing: 5) {
-                            Image(systemName: "exclamationmark.circle.fill")
-                                .font(.system(size: 13))
-                                .foregroundColor(.red)
-                            Text("Please enable in iOS settings")
-                                .font(._fieldCopyRegular)
-                        }
-                    }
                 }
             }
             .tint(Color.MEDIUM_PURPLE)
@@ -78,7 +73,11 @@ extension ReminderPopUp {
                         openURL(URL(string: UIApplication.openSettingsURLString)!)
                     }
                 } label: {
-                    Text("Open Settings")
+                    HStack(spacing: 4) {
+                        Text("Please enable in settings")
+                        Image(systemName: "arrow.up.right")
+                            .font(.system(size: 14, weight: .semibold))
+                    }
                         .font(._buttonFieldCopy)
                         .foregroundColor(Color.DARK_PURPLE)
                 }
@@ -88,12 +87,12 @@ extension ReminderPopUp {
     
     private var notificationTimeSelection: some View {
         
-        VStack(alignment: .leading) {
+        VStack(alignment: .leading, spacing: 15) {
             
             Divider()
             
             HStack {
-                Text("Remind Me:")
+                Text("Remind Me")
                     .font(._BTNCopy)
 
                 DatePicker("", selection: $date, displayedComponents: .hourAndMinute)
@@ -114,74 +113,104 @@ extension ReminderPopUp {
                     .tint(.MEDIUM_PURPLE)
                     .offset(x: 10.0, y: 0)
             }
+            
+            Toggle(isOn: $notifications.autoSchedule) {
+                Text("Auto Schedule")
+                    .font(._BTNCopy)
+            }
+            .tint(Color.MEDIUM_PURPLE)
+            
+            HStack {
+                Text("Frequency")
+                    .font(._BTNCopy)
+                Spacer()
+                Picker("Frequency", selection: .constant(Notification.Frequency.daily)) {
+                    ForEach(Notification.Frequency.allCases, id: \.self) { frequency in
+                        Text(frequency.rawValue)
+                    }
+                }
+                .pickerStyle(.menu)
+                .tint(.black)
+            }
+            
+            if (!notifications.autoSchedule) {
+                NavigationLink {
+                    NotificationFrequencySelection()
+                } label: {
+                    HStack {
+                        Text("Frequency")
+                            .font(._BTNCopy)
+                        Spacer()
+                        HStack {
+                            Text("Daily")
+                            Image(systemName: "chevron.right")
+                                .font(.system(size: 14))
+                        }
+
+                    }
+                }
+                .transition(.slideUp)
+                .buttonStyle(.borderless)
+                .tint(.black)
+                .padding(.top, 10)
+            }
         }
+        .animation(.spring(), value: notifications.autoSchedule)
     }
     
-    private var timeOfDay: some View {
-        Group {
-            HStack {
-                Text("Remind me at:")
-                    .font(._subsubHeadline)
-                Spacer()
-            }
-            
-            Button(action: {
-                withAnimation() {
-                    self.showTime.toggle()
-                }
-            }) {
-                HStack {
-                    Image(svm.time_img)
-                        .resizable()
-                        .scaledToFit()
-                        .frame(height: 40 * 0.8)
-                        .padding(.leading)
-                    Text(self.date.toStringHour())
-                        .font(._fieldCopyRegular)
-                    Spacer()
-                }
-                .padding(.vertical).frame(height: 40)
-                .background(Color.INPUT_FIELDS).cornerRadius(10)
-            }
-            
-            ZStack {
-                if showTime {
-                    DatePicker("", selection: $date, displayedComponents: .hourAndMinute)
-                        .datePickerStyle(WheelDatePickerStyle())
-                        .frame(maxWidth: 260, maxHeight: 175)
-                        .clipped()
-                        .onChange(of: date) { _ in
-                            self.notifications.preferedHour = date.splitHour
-                            self.notifications.preferedMinute = date.splitMinute
-                            
-                            Logging.defaultLog.notice("Set to be notified at: \(notifications.preferedHour):\(notifications.preferedMinute)")
+    // fileprivate struct so that it can be showed in previews
+    fileprivate struct NotificationFrequencySelection: View {
+        
+        @Environment(\.dismiss) var dismiss
+        @EnvironmentObject var notifications: Notification
+        
+        var body: some View {
+            VStack {
+                ScrollView(showsIndicators: false) {
+                    ForEach(1..<7) { num in
+                        HStack {
+                            Button {
+                                // select
+                            } label: {
+                                HStack {
+                                    Text("^[\(num) day](inflect: true)")
+                                        .font(._BTNCopyUnbold)
+                                    Spacer()
+                                    
+                                    Image(systemName: notifications.frequency == num ? "circle.inset.filled" : "circle")
+                                        .foregroundColor(notifications.frequency == num ? Color.MEDIUM_PURPLE : .black)
+                                        .font(.system(size: 20))
+                                }
+                                .padding(.vertical, 5)
+                            }
+                            .buttonStyle(.borderless)
+                            .tint(.black)
                         }
+                    }
                 }
-            }
-            .transition(.slide)
-            
-            Text("Let us automatically select your notification frequency")
-                .font(._subsubHeadline)
-            
-            HStack(spacing: 0) {
-                Button("") {
-                    withAnimation() {
-                        self.notifications.autoSchedule = true
-                    }
-                }.buttonStyle(YesButton(selected: notifications.autoSchedule))
                 Spacer()
-                Button("") {
-                    withAnimation() {
-                        self.notifications.autoSchedule = false
-                    }
-                }.buttonStyle(NoButton(selected: notifications.autoSchedule))
             }
-            
-            if !notifications.autoSchedule {
-                Text("Select your prefered notification frequency")
-                    .font(._subsubHeadline)
-                
-                listOfFrequencies
+            .padding(.horizontal, 15)
+            .navigationBarTitleDisplayMode(.inline)
+            .navigationBarBackButtonHidden(true)
+            .toolbar {
+                ToolbarItem(placement: .principal) {
+                    Text("Notify Me Every")
+                        .font(._BTNCopy)
+                }
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button {
+                        dismiss()
+                    } label: {
+                        HStack(spacing: 4) {
+                            Image(systemName: "chevron.left")
+                                .font(.system(size: 12))
+                            Text("Back")
+                                .font(._lastUsed)
+                        }
+                    }
+                    .buttonStyle(.plain)
+                }
             }
         }
     }
@@ -238,5 +267,16 @@ struct ReminderPopUp_Previews: PreviewProvider {
             .onAppear() {
                 previewNotificationService.notificationsOn = true
             }
+            .previewDisplayName("Pop Up")
+        
+        NavigationView {
+            ReminderPopUp.NotificationFrequencySelection()
+                .environmentObject(previewNotificationService)
+        }
+        .frame(width: 340, height: 350)
+        .background(Color.white)
+        .cornerRadius(15)
+        .shadow(color: Color.gray, radius: 5)
+        .previewDisplayName("Frequency Selection")
     }
 }

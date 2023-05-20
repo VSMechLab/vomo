@@ -27,6 +27,9 @@ struct ViewController: View {
     
     var body: some View {
         VStack(spacing: 0) {
+            
+            Spacer().frame(height: 1)
+            
             currentPage
             
             Spacer()
@@ -195,5 +198,6 @@ struct ViewController_Preview: PreviewProvider {
             .environmentObject(ViewRouter())
             .environmentObject(Notification())
             .environmentObject(Settings())
+            .environmentObject(AudioRecorder())
     }
 }
