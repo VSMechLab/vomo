@@ -56,7 +56,7 @@ struct ViewController: View {
                 self.variablePadding = 17.5
             }
             notification.requestPermission()
-            notification.updateNotifications(triggers: settings.triggers())
+//            notification.updateNotifications(triggers: settings.triggers())
             
             let group = DispatchGroup()
             let labelGroup = String("test")

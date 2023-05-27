@@ -14,7 +14,7 @@ struct ReminderPopUp: View {
     @EnvironmentObject var settings: Settings
     @Binding var showNotifications: Bool
     @State private var showTime: Bool = false
-    @State private var date: Date = .now
+//    @State private var date: Date = .now
     let svm = SharedViewModel()
     
     var body: some View {
@@ -34,15 +34,12 @@ struct ReminderPopUp: View {
                     notificationTimeSelection
                         .transition(.slideUp)
                 }
-                
                 Spacer()
             }
-            
             .animation(.spring(), value: notifications.notificationsOn)
             .padding()
             .padding(.vertical)
         }
-        
         .frame(width: svm.content_width, height: 350)
         .background(Color.white)
         .cornerRadius(15)
@@ -78,8 +75,8 @@ extension ReminderPopUp {
                         Image(systemName: "arrow.up.right")
                             .font(.system(size: 14, weight: .semibold))
                     }
-                        .font(._buttonFieldCopy)
-                        .foregroundColor(Color.DARK_PURPLE)
+                    .font(._buttonFieldCopy)
+                    .foregroundColor(Color.DARK_PURPLE)
                 }
             }
         }
@@ -94,22 +91,9 @@ extension ReminderPopUp {
             HStack {
                 Text("Remind Me")
                     .font(._BTNCopy)
-
-                DatePicker("", selection: $date, displayedComponents: .hourAndMinute)
+                
+                DatePicker("", selection: $notifications.notificationSettings.time, displayedComponents: .hourAndMinute)
                     .datePickerStyle(.graphical)
-                    .onChange(of: date) { _ in
-                        self.notifications.preferedHour = date.splitHour
-                        self.notifications.preferedMinute = date.splitMinute
-                        
-                        Logging.defaultLog.notice("Set to be notified at: \(notifications.preferedHour):\(notifications.preferedMinute)")
-                    }
-                    .onAppear() {
-                        var dateComponents = DateComponents()
-                        dateComponents.hour = notifications.preferedHour
-                        dateComponents.minute = notifications.preferedMinute
-                        
-                        self.date = Calendar.current.date(from: dateComponents) ?? .now
-                    }
                     .tint(.MEDIUM_PURPLE)
                     .offset(x: 10.0, y: 0)
             }
@@ -120,19 +104,6 @@ extension ReminderPopUp {
             }
             .tint(Color.MEDIUM_PURPLE)
             
-            HStack {
-                Text("Frequency")
-                    .font(._BTNCopy)
-                Spacer()
-                Picker("Frequency", selection: .constant(Notification.Frequency.daily)) {
-                    ForEach(Notification.Frequency.allCases, id: \.self) { frequency in
-                        Text(frequency.rawValue)
-                    }
-                }
-                .pickerStyle(.menu)
-                .tint(.black)
-            }
-            
             if (!notifications.autoSchedule) {
                 NavigationLink {
                     NotificationFrequencySelection()
@@ -142,11 +113,11 @@ extension ReminderPopUp {
                             .font(._BTNCopy)
                         Spacer()
                         HStack {
-                            Text("Daily")
+                            Text("\(notifications.notificationSettings.frequency.rawValue)")
                             Image(systemName: "chevron.right")
                                 .font(.system(size: 14))
                         }
-
+                        
                     }
                 }
                 .transition(.slideUp)
@@ -165,39 +136,35 @@ extension ReminderPopUp {
         @EnvironmentObject var notifications: Notification
         
         var body: some View {
-            VStack {
-                ScrollView(showsIndicators: false) {
-                    ForEach(1..<7) { num in
-                        HStack {
-                            Button {
-                                // select
-                            } label: {
-                                HStack {
-                                    Text("^[\(num) day](inflect: true)")
-                                        .font(._BTNCopyUnbold)
-                                    Spacer()
-                                    
-                                    Image(systemName: notifications.frequency == num ? "circle.inset.filled" : "circle")
-                                        .foregroundColor(notifications.frequency == num ? Color.MEDIUM_PURPLE : .black)
-                                        .font(.system(size: 20))
-                                }
-                                .padding(.vertical, 5)
+            VStack(spacing: 15) {
+                Divider()
+                ForEach(Notification.Frequency.allCases, id: \.self) { frequency in
+                    HStack {
+                        Button {
+                            notifications.notificationSettings.frequency = frequency
+                        } label: {
+                            HStack(spacing: 10) {
+                                
+                                Image(systemName: (frequency == notifications.notificationSettings.frequency) ? "circle.inset.filled" : "circle")
+                                    .font(.system(size: 20))
+                                
+                                Text(frequency.rawValue)
+                                    .font(._BTNCopy)
+                                Spacer()
                             }
-                            .buttonStyle(.borderless)
-                            .tint(.black)
+                            .padding(.vertical, 5)
                         }
+                        .buttonStyle(.plain)
+                        .tint(.black)
                     }
                 }
+                
                 Spacer()
             }
             .padding(.horizontal, 15)
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarBackButtonHidden(true)
             .toolbar {
-                ToolbarItem(placement: .principal) {
-                    Text("Notify Me Every")
-                        .font(._BTNCopy)
-                }
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button {
                         dismiss()
@@ -210,47 +177,6 @@ extension ReminderPopUp {
                         }
                     }
                     .buttonStyle(.plain)
-                }
-            }
-        }
-    }
-    
-    private var listOfFrequencies: some View {
-        ScrollView(showsIndicators: false) {
-            ForEach(1...6, id: \.self) { index in
-                Button(action: {
-                    self.notifications.frequency = index
-                    self.notifications.updateNotifications(triggers: settings.editedTrigger(frequency: index))
-                }) {
-                    ZStack(alignment: .leading) {
-                        ZStack {
-                            if notifications.frequency == index {
-                                Color.MEDIUM_PURPLE
-                                    .frame(width: svm.content_width - 2, height: 60)
-                            } else {
-                                Color.white
-                                    .frame(width: svm.content_width - 2, height: 60)
-                            }
-                            
-                            HStack {
-                                Image(notifications.frequency == index ? svm.select : svm.unselect)
-                                    .resizable()
-                                    .frame(width: 27.5, height: 27.5)
-                                    .padding(.leading, 15)
-                                Spacer()
-                            }
-                        }
-                        .cornerRadius(10)
-                        .shadow(color: Color.gray, radius: 1)
-                        .padding(1)
-                        
-                        VStack(alignment: .leading) {
-                            Text("Be notified every \(index) days")
-                                .foregroundColor(notifications.frequency == index ? Color.white : Color.gray)
-                                .font(._buttonFieldCopyLarger)
-                                .multilineTextAlignment(.leading)
-                        }.padding(.leading, svm.content_width / 7)
-                    }
                 }
             }
         }
