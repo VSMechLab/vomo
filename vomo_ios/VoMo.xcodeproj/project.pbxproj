@@ -20,6 +20,7 @@
 		22253A282A103394004FD26B /* Roboto-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 22253A1C2A103394004FD26B /* Roboto-Italic.ttf */; };
 		22253A292A103394004FD26B /* Roboto-LightItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 22253A1D2A103394004FD26B /* Roboto-LightItalic.ttf */; };
 		22253A2A2A103394004FD26B /* Roboto-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 22253A1E2A103394004FD26B /* Roboto-Medium.ttf */; };
+		2296348E2A22CBD500F627B4 /* AnimatedWaveforms.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2296348D2A22CBD500F627B4 /* AnimatedWaveforms.swift */; };
 		AD00C71E29F71F2C0017385E /* SharedViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD00C71D29F71F2C0017385E /* SharedViewModel.swift */; };
 		AD00C72A29F720530017385E /* GoalEntryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD00C72329F720530017385E /* GoalEntryView.swift */; };
 		AD00C72B29F720530017385E /* LandingPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD00C72429F720530017385E /* LandingPageView.swift */; };
@@ -159,6 +160,7 @@
 		22253A1C2A103394004FD26B /* Roboto-Italic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Roboto-Italic.ttf"; path = "vomo/Fonts/Roboto-Italic.ttf"; sourceTree = SOURCE_ROOT; };
 		22253A1D2A103394004FD26B /* Roboto-LightItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Roboto-LightItalic.ttf"; path = "vomo/Fonts/Roboto-LightItalic.ttf"; sourceTree = SOURCE_ROOT; };
 		22253A1E2A103394004FD26B /* Roboto-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Roboto-Medium.ttf"; path = "vomo/Fonts/Roboto-Medium.ttf"; sourceTree = SOURCE_ROOT; };
+		2296348D2A22CBD500F627B4 /* AnimatedWaveforms.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AnimatedWaveforms.swift; path = vomo/Core/Features/CommonComponents/AnimatedWaveforms.swift; sourceTree = SOURCE_ROOT; };
 		AD00C71D29F71F2C0017385E /* SharedViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SharedViewModel.swift; path = VoMo/Model/DataModels/SharedViewModel.swift; sourceTree = SOURCE_ROOT; };
 		AD00C72329F720530017385E /* GoalEntryView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GoalEntryView.swift; path = vomo/Core/Views/OnboardView/GoalEntryView.swift; sourceTree = SOURCE_ROOT; };
 		AD00C72429F720530017385E /* LandingPageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LandingPageView.swift; path = vomo/Core/Views/OnboardView/LandingPageView.swift; sourceTree = SOURCE_ROOT; };
@@ -414,6 +416,7 @@
 				AD00C77429F721BC0017385E /* HomeBackground.swift */,
 				AD00C77529F721BC0017385E /* TextEntryField.swift */,
 				AD00C77829F721BC0017385E /* Wave.swift */,
+				2296348D2A22CBD500F627B4 /* AnimatedWaveforms.swift */,
 			);
 			path = CommonComponents;
 			sourceTree = "<group>";
@@ -897,6 +900,7 @@
 				ADA0E0C828255FD900CF05D1 /* View+Extension.swift in Sources */,
 				AD81B72C28BFD774009920FB /* TreatmentModel.swift in Sources */,
 				AD7BF16629B7121200FA0AF8 /* DurationGraph.swift in Sources */,
+				2296348E2A22CBD500F627B4 /* AnimatedWaveforms.swift in Sources */,
 				AD0FB6D329D21C5700E54749 /* SurveyGraphFunctions.swift in Sources */,
 				ADA0E0DE282561C400CF05D1 /* LineChart.swift in Sources */,
 				ADBDFF9028C26DD100518354 /* JournalView.swift in Sources */,

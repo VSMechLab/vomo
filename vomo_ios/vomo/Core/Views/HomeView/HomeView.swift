@@ -159,8 +159,9 @@ extension HomeView {
     }
     
     private var wavesSection: some View {
-        Image(svm.home_wave_img)
-            .resizable()
+//        Image(svm.home_wave_img)
+//            .resizable()
+        AnimatedWaveforms()
             .frame(width: UIScreen.main.bounds.width, height: 50)
             .padding(.vertical)
     }
