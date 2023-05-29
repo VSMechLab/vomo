@@ -20,5 +20,5 @@ Extensions - Useful tools and functions that are extended off of classes
 
 **Collecting Logs from iOS Devices**
 
-Run `log collect --device` while connected to the iOS device with a Mac
-Open resulting .logarchive in Console.app
+Run `sudo log collect --device` while connected to the iOS device with a Mac
+Open resulting .logarchive in Console.app. Add flag `--last 4h` to collect last 4 hours of logs
