@@ -11,6 +11,9 @@ import UIKit
 /// Main thread in which the app is called
 @main
 struct VoMoApp: App {
+    
+    @UIApplicationDelegateAdaptor var appDelegate: AppDelegate
+    
     var body: some Scene {
         WindowGroup {
             LaunchScreen()
@@ -66,7 +69,7 @@ struct LaunchScreen: View {
              
             */
             ViewController()
-                .environmentObject(ViewRouter())
+                .environmentObject(ViewRouter.shared)
                 .environmentObject(AudioRecorder())
                 .environmentObject(Entries())
                 .environmentObject(Settings())

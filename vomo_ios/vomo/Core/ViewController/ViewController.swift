@@ -195,7 +195,7 @@ extension ViewController {
 struct ViewController_Preview: PreviewProvider {
     static var previews: some View {
         ViewController()
-            .environmentObject(ViewRouter())
+            .environmentObject(ViewRouter.shared)
             .environmentObject(Notification())
             .environmentObject(Settings())
             .environmentObject(AudioRecorder())

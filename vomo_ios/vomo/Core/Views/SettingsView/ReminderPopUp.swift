@@ -156,6 +156,11 @@ extension ReminderPopUp {
                         }
                         .buttonStyle(.plain)
                         .tint(.black)
+                        
+                        if (frequency == notifications.notificationSettings.frequency && frequency == .custom) {
+                            Stepper("^[\(notifications.notificationSettings.customFrequency) day](inflect: true)", value: $notifications.notificationSettings.customFrequency, in: 1...30)
+                        }
+                        
                     }
                 }
                 

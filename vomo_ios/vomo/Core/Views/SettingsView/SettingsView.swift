@@ -392,7 +392,7 @@ struct SettingsView_Previews: PreviewProvider {
     static var previews: some View {
         SettingsView()
             .foregroundColor(Color.black)
-            .environmentObject(ViewRouter())
+            .environmentObject(ViewRouter.shared)
             .environmentObject(Settings())
     }
 }

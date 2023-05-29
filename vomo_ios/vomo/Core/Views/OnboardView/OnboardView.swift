@@ -175,7 +175,7 @@ extension OnboardView {
 struct OnboardView_Preview: PreviewProvider {
     static var previews: some View {
         OnboardView()
-            .environmentObject(ViewRouter())
+            .environmentObject(ViewRouter.shared)
             .environmentObject(Settings())
     }
 }

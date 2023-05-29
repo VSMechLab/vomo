@@ -16,6 +16,8 @@ import UserNotifications
 struct NotificationSettings: Codable {
     var frequency: Notification.Frequency = .daily
     
+    var customFrequency: Int = 1
+    
     /// Always access using Calendar.current.dateComponents([.hour, .minute], from: notifTime)
     var time: Date = Calendar.current.date(bySetting: .hour, value: 7, of: Date())!
 }
@@ -26,23 +28,27 @@ class Notification: ObservableObject {
     
     let defaults = UserDefaults.standard
     
+    var frequencyValue: Int {
+        switch notificationSettings.frequency {
+            case .daily:
+                return 1
+            case .everyOtherDay:
+                return 2
+            case .weekly:
+                return 7
+            case .monthly:
+                return 30
+            case .custom:
+                return notificationSettings.customFrequency
+        }
+    }
+    
+    enum NotificationType: String {
+        case recordingReminder = "RecordingReminder"
+    }
+  
     enum Frequency: String, CaseIterable, Codable {
         case daily = "Daily", everyOtherDay = "Every other day", weekly = "Weekly", monthly = "Monthly", custom = "Custom"
-        
-        var value: Int {
-            switch self {
-                case .daily:
-                    return 1
-                case .everyOtherDay:
-                    return 2
-                case .weekly:
-                    return 7
-                case .monthly:
-                    return 30
-                case .custom:
-                    return 1 // for now
-            }
-        }
     }
     
     @Published var notificationsOn: Bool {
@@ -70,11 +76,7 @@ class Notification: ObservableObject {
     
     init() {
         self.notificationsOn = UserDefaults.standard.object(forKey: "notifications_on") as? Bool ?? true
-//        self.notificationFrequency = UserDefaults.standard.object(forKey: "notification_frequency") as? String ?? ""
-//        self.preferedHour = UserDefaults.standard.object(forKey: "prefered_hour") as? Int ?? 5
-//        self.preferedMinute = UserDefaults.standard.object(forKey: "prefered_minute") as? Int ?? 0
         self.autoSchedule = UserDefaults.standard.object(forKey: "auto_schedule") as? Bool ?? true
-//        self.frequency = UserDefaults.standard.object(forKey: "frequency") as? Int ?? 1
         self.notificationSettings = Notification.load(NotificationSettings.self) ?? .init()
     }
     
@@ -107,10 +109,11 @@ extension Notification {
         let notificationContent = UNMutableNotificationContent()
         notificationContent.title = "Vomo"
         notificationContent.body = "Let's record an entry! 🎙️"
+        notificationContent.categoryIdentifier = "RecordingReminder"
         notificationContent.sound = .default
         
         let calendar = Calendar.current
-        let frequency = self.notificationSettings.frequency.value
+        let frequency = self.frequencyValue
         
         for i in 0...(30 / frequency) {
             
@@ -125,12 +128,6 @@ extension Notification {
             
             UNUserNotificationCenter.current().add(request)
         }
-        
-//        UNUserNotificationCenter.current().getPendingNotificationRequests { requests in
-//            requests.forEach { request in
-//                Logging.notificationLog.notice("\(request.trigger?.description)")
-//            }
-//        }
     }
     
     /// Gets status to ask you to turn on notifications again

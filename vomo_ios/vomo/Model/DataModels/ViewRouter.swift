@@ -9,6 +9,9 @@ import SwiftUI
 
 /// ViewRouter - sets the current page being served
 class ViewRouter: ObservableObject {
+    
+    static let shared = ViewRouter()
+    
     @Published var currentPage: Page = .home
     
     init() {
