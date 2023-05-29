@@ -110,28 +110,26 @@ extension Notification {
         notificationContent.sound = .default
         
         let calendar = Calendar.current
-//        let frequency = self.notificationFrequency.value
+        let frequency = self.notificationSettings.frequency.value
         
-        let dateComponents = calendar.dateComponents([.hour, .minute], from: self.notificationSettings.time)
-        
-        Logging.notificationLog.notice("Scheduling notification for: \(dateComponents.debugDescription)")
-        
-        let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: true)
-        let request = UNNotificationRequest(identifier: UUID().uuidString, content: notificationContent, trigger: trigger)
-        
-        UNUserNotificationCenter.current().add(request)
-        
-//        for i in 1...(30 / frequency) {
-//
-//            let hour = calendar.component(.hour, from: self.notificationTime)
-//            let minute = calendar.component(.minute, from: self.notificationTime)
+        for i in 0...(30 / frequency) {
             
-//            let triggerDate = calendar.date(bySettingHour: hour, minute: minute, second: 0, of: calendar.date(byAdding: .day, value: i * frequency, to: Date()))
-//            let trigger = UNCalendarNotificationTrigger(dateMatching: <#T##DateComponents#>, repeats: false)
+            var dateComponents = calendar.dateComponents([.hour, .minute], from: self.notificationSettings.time)
             
-//            let request = UNNotificationRequest(identifier: <#T##String#>, content: <#T##UNNotificationContent#>, trigger: <#T##UNNotificationTrigger?#>)
-//            Logging.notificationLog.notice("Schedled for time: \(calendar.dateComponents([.hour, .minute], from: self.notificationTime))")
-//            Logging.notificationLog.notice("Scheduled Message for \(String(describing: date))")
+            let triggerDate = calendar.date(byAdding: .day, value: i * frequency, to: Date())
+            dateComponents.day = calendar.component(.day, from: triggerDate ?? Date())
+            
+            let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: false)
+            
+            let request = UNNotificationRequest(identifier: UUID().uuidString, content: notificationContent, trigger: trigger)
+            
+            UNUserNotificationCenter.current().add(request)
+        }
+        
+//        UNUserNotificationCenter.current().getPendingNotificationRequests { requests in
+//            requests.forEach { request in
+//                Logging.notificationLog.notice("\(request.trigger?.description)")
+//            }
 //        }
     }
     
