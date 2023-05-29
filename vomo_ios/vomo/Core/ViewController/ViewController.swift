@@ -31,15 +31,16 @@ struct ViewController: View {
             
             Spacer()
             
-            if !settings.keyboardShown && viewRouter.currentPage != .onboard && viewRouter.currentPage != .home && !focused {
+            if !settings.keyboardShown && viewRouter.currentPage != .onboard && !focused {
                 tabBar
-                    .padding(.bottom, self.variablePadding)
+                    .padding(.bottom, 17.5)
             }
         }
         .foregroundColor(Color.black)
         .background(Color.white)
         .preferredColorScheme(.light)
         .onAppear() {
+            
             var keyWindow: UIWindow? {
                 return UIApplication.shared.connectedScenes
                     .filter { $0.activationState == .foregroundActive }
@@ -47,11 +48,14 @@ struct ViewController: View {
                     .flatMap({ $0 as? UIWindowScene })?.windows
                     .first(where: \.isKeyWindow)
             }
-            if keyWindow!.safeAreaInsets.bottom > 0 {
+
+            if keyWindow?.safeAreaInsets.bottom ?? 0 > 0 {
                 self.variablePadding = 0
             } else {
                 self.variablePadding = 17.5
             }
+            
+            // TODO: Move requesting permissions to a different spot (e.g. in onboarding flow)
             notification.requestPermission()
             notification.updateNotifications(triggers: settings.triggers())
             
