@@ -37,6 +37,10 @@ struct SettingsView: View {
     @State private var showDeleteWarning = false
     let svm = SharedViewModel()
     
+    #if DEBUG
+        @State private var showDebugMenu = false
+    #endif
+    
     var body: some View {
         ZStack {
             ScrollView(showsIndicators: false) {
@@ -58,6 +62,20 @@ struct SettingsView: View {
                     trackStatementSection
                     
                     extraButtonSection
+                    
+                    // MARK: Debug Menu
+                    #if DEBUG
+                    
+                    Button {
+                        self.showDebugMenu = true
+                    } label: {
+                        Text("Debug Menu")
+                            .font(._bodyCopyLargeMedium)
+                            .underline()
+                            .foregroundColor(Color.DARK_PURPLE)
+                    }
+                    
+                    #endif
                 }
                 .font(._fieldLabel)
                 .padding(.bottom, 75)
@@ -73,6 +91,12 @@ struct SettingsView: View {
             sex = self.settings.sexAtBirth
             gender = self.settings.gender
         }
+        
+        #if DEBUG
+        .sheet(isPresented: $showDebugMenu) {
+            DebugMenuView()
+        }
+        #endif
     }
 }
 
