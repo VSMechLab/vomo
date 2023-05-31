@@ -130,6 +130,18 @@ extension Notification {
         }
     }
     
+    static func printScheduledNotifications() {
+        UNUserNotificationCenter.current().getPendingNotificationRequests { requests in
+            if requests.count != 0 {
+                requests.forEach { request in
+                    Logging.notificationLog.notice("\(request.content.categoryIdentifier) | Scheduled for \(request.trigger.debugDescription)")
+                }
+            } else {
+                Logging.notificationLog.notice("No notifications scheduled for delivery")
+            }
+        }
+    }
+    
     /// Gets status to ask you to turn on notifications again
     func getStatus() -> Bool {
         guard let settings = UIApplication.shared.currentUserNotificationSettings else {
