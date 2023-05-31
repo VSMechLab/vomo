@@ -9,7 +9,15 @@ import SwiftUI
 
 /// ViewRouter - sets the current page being served
 class ViewRouter: ObservableObject {
+    
+    /// Future deprecation
     @Published var currentPage: Page = .home
+    
+    @Published var currentTab: Tab = .home
+    
+    enum Tab: Int {
+        case home, recording, progress, settings
+    }
     
     init() {
         if !UserDefaults.standard.bool(forKey: "didLaunchBefore") {

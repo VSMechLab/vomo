@@ -20,40 +20,66 @@ struct ViewController: View {
     @EnvironmentObject var viewRouter: ViewRouter
     @EnvironmentObject var notification: Notification
     @EnvironmentObject var settings: Settings
-    @State private var variablePadding: CGFloat = 0
     let svm = SharedViewModel()
     
     @FocusState private var focused: Bool
     
-    var body: some View {
-        VStack(spacing: 0) {
-            currentPage
-            
-            Spacer()
-            
-            if !settings.keyboardShown && viewRouter.currentPage != .onboard && !focused {
-                tabBar
-                    .padding(.bottom, 17.5)
+    private struct TabIcon: View {
+        var icon: UIImage
+        var size: CGSize = CGSize(width: 30, height: 30)
+
+        var resizedIcon: UIImage {
+            let rect = CGRect(origin: CGPoint(x: 0, y: 0), size: self.size)
+            UIGraphicsBeginImageContextWithOptions(self.size, false, 1)
+            defer {
+                UIGraphicsEndImageContext()
             }
+            icon.draw(in: rect)
+            return UIGraphicsGetImageFromCurrentImageContext()!
         }
-        .foregroundColor(Color.black)
-        .background(Color.white)
+
+        var body: some View {
+            Image(uiImage: resizedIcon.withRenderingMode(.alwaysTemplate))
+        }
+    }
+    
+    var body: some View {
+        
+        TabView(selection: $viewRouter.currentTab) {
+            
+            HomeView()
+                .tabItem {
+                    TabIcon(icon: UIImage(named: "VM_home-nav-icon") ?? UIImage())
+                    Text("Home")
+                }
+                .tag(ViewRouter.Tab.home)
+            
+            RecordView()
+                .tabItem {
+                    TabIcon(icon: UIImage(named: "VoMo-App-Outline_8_RECORD_BTN_PRPL") ?? UIImage())
+                    Text("Record")
+                }
+                .tag(ViewRouter.Tab.recording)
+            
+            ProgressView()
+                .tabItem {
+                    TabIcon(icon: UIImage(named: "VoMo-App-Outline_8_PROGRESS_BTN_GREY") ?? UIImage())
+                    Text("Progress")
+                }
+                .tag(ViewRouter.Tab.progress)
+            
+            SettingsView()
+                .tabItem {
+                    TabIcon(icon: UIImage(named: svm.home_settings_img) ?? UIImage())
+                    Text("Settings")
+                }
+                .tag(ViewRouter.Tab.settings)
+
+        }
+        .tint(Color.DARK_PURPLE)
+        
         .preferredColorScheme(.light)
         .onAppear() {
-            
-            var keyWindow: UIWindow? {
-                return UIApplication.shared.connectedScenes
-                    .filter { $0.activationState == .foregroundActive }
-                    .first(where: { $0 is UIWindowScene })
-                    .flatMap({ $0 as? UIWindowScene })?.windows
-                    .first(where: \.isKeyWindow)
-            }
-
-            if keyWindow?.safeAreaInsets.bottom ?? 0 > 0 {
-                self.variablePadding = 0
-            } else {
-                self.variablePadding = 17.5
-            }
             
             // TODO: Move requesting permissions to a different spot (e.g. in onboarding flow)
             notification.requestPermission()
@@ -84,25 +110,26 @@ extension ViewController {
     private var currentPage: some View {
         Group {
             switch viewRouter.currentPage {
-            case .onboard:
-                OnboardView()
-            case .home:
-                HomeView()
-            case .settings:
-                SettingsView()
-            case .record:
-                RecordView()
-            case .questionnaire:
-                SurveyView()
-            case .journal:
-                JournalView()
-            case .treatment:
-                TreatmentView()
-            case .progress:
-                ProgressView()
+                case .onboard:
+                    OnboardView()
+                case .home:
+                    HomeView()
+                case .settings:
+                    SettingsView()
+                case .record:
+                    RecordView()
+                case .questionnaire:
+                    SurveyView()
+                case .journal:
+                    JournalView()
+                case .treatment:
+                    TreatmentView()
+                case .progress:
+                    ProgressView()
             }
         }
     }
+}
     /*
     let home_icon = "VM_home-nav-icon"
     let record_icon = "VoMo-App-Outline_8_RECORD_BTN_PRPL"
@@ -110,88 +137,88 @@ extension ViewController {
     let  = "VoMo-App-Outline_8_PROGRESS_BTN_GREY"
     let selected_progress_icon = "VoMo-App-Outline_8_PROGRESS_BTN_PRPL"
     */
-    private var tabBar: some View {
-        HStack {
-            if audioRecorder.recording {
-                VStack(spacing: 5) {
-                    Image(svm.home_icon)
-                        .tabImage()
-                    
-                    Text("HOME")
-                        .font(Font._tabTitle)
-                        .foregroundColor(Color.gray)
-                }.frame(width: UIScreen.main.bounds.width / 3)
-                
-                VStack(spacing: 5) {
-                    Image(viewRouter.currentPage == .record ? svm.record_icon : svm.selected_record_icon)
-                        .resizable()
-                        .frame(width: 20.0, height: 27.5)
-                    
-                    Text("RECORDING")
-                        .font(Font._tabTitle)
-                        .foregroundColor(viewRouter.currentPage == .record ? Color.DARK_PURPLE : Color.gray)
-                }.frame(width: UIScreen.main.bounds.width / 3)
-                
-                VStack(spacing: 5) {
-                    Image(viewRouter.currentPage == .progress ? svm.selected_progress_icon : svm.progress_icon)
-                        .resizable()
-                        .frame(width: 35, height: 27.5)
-                    
-                    Text("PROGRESS")
-                        .font(Font._tabTitle)
-                        .foregroundColor(viewRouter.currentPage == .progress ? Color.DARK_PURPLE : Color.gray)
-                }.frame(width: UIScreen.main.bounds.width / 3)
-            } else {
-                Button(action: {
-                    viewRouter.currentPage = .home
-                }) {
-                    VStack(spacing: 5) {
-                        Image(svm.home_icon)
-                            .tabImage()
-                        
-                        Text("HOME")
-                            .font(Font._tabTitle)
-                            .foregroundColor(Color.gray)
-                    }.frame(width: UIScreen.main.bounds.width / 3)
-                }
-                
-                Button(action: {
-                    viewRouter.currentPage = .record
-                }) {
-                    VStack(spacing: 5) {
-                        Image(viewRouter.currentPage == .record ? svm.record_icon : svm.selected_record_icon)
-                            .resizable()
-                            .frame(width: 20.0, height: 27.5)
-                        
-                        Text("RECORDING")
-                            .font(Font._tabTitle)
-                            .foregroundColor(viewRouter.currentPage == .record ? Color.DARK_PURPLE : Color.gray)
-                    }.frame(width: UIScreen.main.bounds.width / 3)
-                }
-                Button(action: {
-                    viewRouter.currentPage = .progress
-                }) {
-                    VStack(spacing: 5) {
-                        Image(viewRouter.currentPage == .progress ? svm.selected_progress_icon : svm.progress_icon)
-                            .resizable()
-                            .frame(width: 35, height: 27.5)
-                        
-                        Text("PROGRESS")
-                            .font(Font._tabTitle)
-                            .foregroundColor(viewRouter.currentPage == .progress ? Color.DARK_PURPLE : Color.gray)
-                    }.frame(width: UIScreen.main.bounds.width / 3)
-                }
-            }
-            
-        }
-        .font(._tabBarFont)
-        .frame(width: UIScreen.main.bounds.width)
-        .padding(.bottom, -5)
-        .padding(.top, 7.5)
-        .background(Color.white)
-        .shadow(color: Color.gray.opacity(0.2), radius: 2, x: 0, y: 0)
-    }
-}
+//    private var tabBar: some View {
+//        HStack {
+//            if audioRecorder.recording {
+//                VStack(spacing: 5) {
+//                    Image(svm.home_icon)
+//                        .tabImage()
+//
+//                    Text("HOME")
+//                        .font(Font._tabTitle)
+//                        .foregroundColor(Color.gray)
+//                }.frame(width: UIScreen.main.bounds.width / 3)
+//
+//                VStack(spacing: 5) {
+//                    Image(viewRouter.currentPage == .record ? svm.record_icon : svm.selected_record_icon)
+//                        .resizable()
+//                        .frame(width: 20.0, height: 27.5)
+//
+//                    Text("RECORDING")
+//                        .font(Font._tabTitle)
+//                        .foregroundColor(viewRouter.currentPage == .record ? Color.DARK_PURPLE : Color.gray)
+//                }.frame(width: UIScreen.main.bounds.width / 3)
+//
+//                VStack(spacing: 5) {
+//                    Image(viewRouter.currentPage == .progress ? svm.selected_progress_icon : svm.progress_icon)
+//                        .resizable()
+//                        .frame(width: 35, height: 27.5)
+//
+//                    Text("PROGRESS")
+//                        .font(Font._tabTitle)
+//                        .foregroundColor(viewRouter.currentPage == .progress ? Color.DARK_PURPLE : Color.gray)
+//                }.frame(width: UIScreen.main.bounds.width / 3)
+//            } else {
+//                Button(action: {
+//                    viewRouter.currentPage = .home
+//                }) {
+//                    VStack(spacing: 5) {
+//                        Image(svm.home_icon)
+//                            .tabImage()
+//
+//                        Text("HOME")
+//                            .font(Font._tabTitle)
+//                            .foregroundColor(Color.gray)
+//                    }.frame(width: UIScreen.main.bounds.width / 3)
+//                }
+//
+//                Button(action: {
+//                    viewRouter.currentPage = .record
+//                }) {
+//                    VStack(spacing: 5) {
+//                        Image(viewRouter.currentPage == .record ? svm.record_icon : svm.selected_record_icon)
+//                            .resizable()
+//                            .frame(width: 20.0, height: 27.5)
+//
+//                        Text("RECORDING")
+//                            .font(Font._tabTitle)
+//                            .foregroundColor(viewRouter.currentPage == .record ? Color.DARK_PURPLE : Color.gray)
+//                    }.frame(width: UIScreen.main.bounds.width / 3)
+//                }
+//                Button(action: {
+//                    viewRouter.currentPage = .progress
+//                }) {
+//                    VStack(spacing: 5) {
+//                        Image(viewRouter.currentPage == .progress ? svm.selected_progress_icon : svm.progress_icon)
+//                            .resizable()
+//                            .frame(width: 35, height: 27.5)
+//
+//                        Text("PROGRESS")
+//                            .font(Font._tabTitle)
+//                            .foregroundColor(viewRouter.currentPage == .progress ? Color.DARK_PURPLE : Color.gray)
+//                    }.frame(width: UIScreen.main.bounds.width / 3)
+//                }
+//            }
+//
+//        }
+//        .font(._tabBarFont)
+//        .frame(width: UIScreen.main.bounds.width)
+//        .padding(.bottom, -5)
+//        .padding(.top, 7.5)
+//        .background(Color.white)
+//        .shadow(color: Color.gray.opacity(0.2), radius: 2, x: 0, y: 0)
+//    }
+//}
 
 struct ViewController_Preview: PreviewProvider {
     static var previews: some View {
@@ -199,5 +226,6 @@ struct ViewController_Preview: PreviewProvider {
             .environmentObject(ViewRouter())
             .environmentObject(Notification())
             .environmentObject(Settings())
+            .environmentObject(AudioRecorder())
     }
 }
