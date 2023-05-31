@@ -55,8 +55,8 @@ class Notification: ObservableObject {
         didSet {
             UserDefaults.standard.set(notificationsOn, forKey: "notifications_on")
             if !notificationsOn {
-                clearAll()
-                Logging.notificationLog.debug("Cleared notifications")
+                UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
+                Logging.notificationLog.debug("Notifications turned off – cleared pending notifications")
             }
         }
     }
@@ -134,7 +134,7 @@ extension Notification {
         UNUserNotificationCenter.current().getPendingNotificationRequests { requests in
             if requests.count != 0 {
                 requests.forEach { request in
-                    Logging.notificationLog.notice("\(request.content.categoryIdentifier) | Scheduled for \(request.trigger.debugDescription)")
+                    Logging.notificationLog.notice("\(request.content.categoryIdentifier) | Scheduled for \(request.trigger?.description ?? "Failed to unwrap")")
                 }
             } else {
                 Logging.notificationLog.notice("No notifications scheduled for delivery")
@@ -160,19 +160,6 @@ extension Notification {
             }
         }
     }
-    
-    func clearAll() {
-        UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
-    }
-    
-//    func getPending() {
-//        let center = UNUserNotificationCenter.current()
-//        center.getPendingNotificationRequests(completionHandler: { requests in
-//            for request in requests {
-//                Logging.notificationLog.notice("\(request.trigger?.description ?? "Failed to unwrap")")
-//            }
-//        })
-//    }
     
     func clearDelivered() {
         UNUserNotificationCenter.current().removeAllDeliveredNotifications()
