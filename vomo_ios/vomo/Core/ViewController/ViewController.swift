@@ -200,7 +200,7 @@ struct ViewController_Preview: PreviewProvider {
     static var previews: some View {
         ViewController()
             .environmentObject(ViewRouter.shared)
-            .environmentObject(Notification())
+            .environmentObject(Notification.shared)
             .environmentObject(Settings())
             .environmentObject(AudioRecorder())
     }

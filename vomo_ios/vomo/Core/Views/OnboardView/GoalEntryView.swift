@@ -284,7 +284,7 @@ extension GoalEntryView {
 struct GoalEntryView_Previews: PreviewProvider {
     static var previews: some View {
         GoalEntryView()
-            .environmentObject(Notification())
+            .environmentObject(Notification.shared)
             .environmentObject(Settings())
     }
 }

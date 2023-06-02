@@ -20,11 +20,16 @@ struct NotificationSettings: Codable {
     
     /// Always access using Calendar.current.dateComponents([.hour, .minute], from: notifTime)
     var time: Date = Calendar.current.date(bySetting: .hour, value: 7, of: Date())!
+    
+    var notificationsOn: Bool = true
 }
 
 /// Notifications - queues notifications
 class Notification: ObservableObject {
+    
     @EnvironmentObject var settings: Settings
+    
+    static let shared = Notification()
     
     let defaults = UserDefaults.standard
     
@@ -50,21 +55,16 @@ class Notification: ObservableObject {
     enum Frequency: String, CaseIterable, Codable {
         case daily = "Daily", everyOtherDay = "Every other day", weekly = "Weekly", monthly = "Monthly", custom = "Custom"
     }
-    
-    @Published var notificationsOn: Bool {
-        didSet {
-            UserDefaults.standard.set(notificationsOn, forKey: "notifications_on")
-            if !notificationsOn {
-                UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
-                Logging.notificationLog.debug("Notifications turned off – cleared pending notifications")
-            }
-        }
-    }
-    
+
     @Published var notificationSettings: NotificationSettings {
         didSet {
             Notification.write(notificationSettings)
-            self.scheduleNotifications()
+            if (notificationSettings.notificationsOn) {
+                self.scheduleNotifications()
+            } else {
+                UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
+                Logging.notificationLog.notice("Cleared all pending notifications")
+            }
         }
     }
     
@@ -75,7 +75,6 @@ class Notification: ObservableObject {
     }
     
     init() {
-        self.notificationsOn = UserDefaults.standard.object(forKey: "notifications_on") as? Bool ?? true
         self.autoSchedule = UserDefaults.standard.object(forKey: "auto_schedule") as? Bool ?? true
         self.notificationSettings = Notification.load(NotificationSettings.self) ?? .init()
     }
@@ -133,6 +132,7 @@ extension Notification {
     static func printScheduledNotifications() {
         UNUserNotificationCenter.current().getPendingNotificationRequests { requests in
             if requests.count != 0 {
+                Logging.notificationLog.notice("\(requests.count) notifications scheduled for delivery")
                 requests.forEach { request in
                     Logging.notificationLog.notice("\(request.content.categoryIdentifier) | Scheduled for \(request.trigger?.description ?? "Failed to unwrap")")
                 }
@@ -159,9 +159,5 @@ extension Notification {
                 Logging.notificationLog.notice("\(error.localizedDescription)")
             }
         }
-    }
-    
-    func clearDelivered() {
-        UNUserNotificationCenter.current().removeAllDeliveredNotifications()
     }
 }

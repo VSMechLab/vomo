@@ -30,13 +30,13 @@ struct ReminderPopUp: View {
                 
                 notificationsToggle
                             
-                if notifications.notificationsOn {
+                if notifications.notificationSettings.notificationsOn {
                     notificationTimeSelection
                         .transition(.slideUp)
                 }
                 Spacer()
             }
-            .animation(.spring(), value: notifications.notificationsOn)
+            .animation(.spring(), value: notifications.notificationSettings.notificationsOn)
             .padding()
             .padding(.vertical)
         }
@@ -53,7 +53,7 @@ extension ReminderPopUp {
         
         VStack(alignment: .leading) {
             
-            Toggle(isOn: $notifications.notificationsOn) {
+            Toggle(isOn: $notifications.notificationSettings.notificationsOn) {
                 
                 VStack(alignment: .leading, spacing: 4) {
                     Text("Receive Notifications")
@@ -190,14 +190,11 @@ extension ReminderPopUp {
 
 struct ReminderPopUp_Previews: PreviewProvider {
     
-    static let previewNotificationService = Notification()
+    static let previewNotificationService = Notification.shared
     
     static var previews: some View {
         ReminderPopUp(showNotifications: .constant(false))
             .environmentObject(previewNotificationService)
-            .onAppear() {
-                previewNotificationService.notificationsOn = true
-            }
             .previewDisplayName("Pop Up")
         
         NavigationView {
