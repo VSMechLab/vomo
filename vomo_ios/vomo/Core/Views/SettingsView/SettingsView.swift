@@ -14,7 +14,7 @@ import SwiftUI
  Wrap up the rest of settings
  Move on to other parts of the application
  
- */
+ */ 
 
 struct SettingsView: View {
     @EnvironmentObject var viewRouter: ViewRouter
@@ -36,6 +36,8 @@ struct SettingsView: View {
     @State private var showNotifications = false
     @State private var showDeleteWarning = false
     let svm = SharedViewModel()
+    
+    @Environment(\.dismiss) private var dismiss
     
     #if DEBUG
         @State private var showDebugMenu = false
@@ -106,6 +108,15 @@ extension SettingsView {
             Text("Settings")
                 .font(._title)
             Spacer()
+            Button {
+                self.dismiss()
+            } label: {
+                Image(systemName: "xmark.circle.fill")
+                    .font(.system(size: 30))
+                    .foregroundColor(.gray)
+                    .symbolRenderingMode(.hierarchical)
+            }
+
         }
         .padding(.vertical)
     }
@@ -414,9 +425,11 @@ extension SettingsView {
 
 struct SettingsView_Previews: PreviewProvider {
     static var previews: some View {
-        SettingsView()
-            .foregroundColor(Color.black)
-            .environmentObject(ViewRouter())
-            .environmentObject(Settings())
+        NavigationView {
+            SettingsView()
+                .foregroundColor(Color.black)
+                .environmentObject(ViewRouter())
+                .environmentObject(Settings())
+        }
     }
 }

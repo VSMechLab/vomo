@@ -16,7 +16,7 @@ class ViewRouter: ObservableObject {
     @Published var currentTab: Tab = .home
     
     enum Tab: Int {
-        case home, recording, progress, settings
+        case home, recording, progress
     }
     
     init() {

@@ -24,6 +24,7 @@ struct ViewController: View {
     
     @FocusState private var focused: Bool
     
+    // MARK: Review for deletion if moving to symbol based tab icons instead of bitmap
     private struct TabIcon: View {
         var icon: UIImage
         var size: CGSize = CGSize(width: 30, height: 30)
@@ -49,31 +50,27 @@ struct ViewController: View {
             
             HomeView()
                 .tabItem {
-                    TabIcon(icon: UIImage(named: "VM_home-nav-icon") ?? UIImage())
+//                    TabIcon(icon: UIImage(named: "VM_home-nav-icon") ?? UIImage())
+                    Image(systemName: "house")
                     Text("Home")
                 }
                 .tag(ViewRouter.Tab.home)
             
             RecordView()
                 .tabItem {
-                    TabIcon(icon: UIImage(named: "VoMo-App-Outline_8_RECORD_BTN_PRPL") ?? UIImage())
+//                    TabIcon(icon: UIImage(named: "VoMo-App-Outline_8_RECORD_BTN_PRPL") ?? UIImage())
+                    Image(systemName: "mic")
                     Text("Record")
                 }
                 .tag(ViewRouter.Tab.recording)
             
             ProgressView()
                 .tabItem {
-                    TabIcon(icon: UIImage(named: "VoMo-App-Outline_8_PROGRESS_BTN_GREY") ?? UIImage())
+//                    TabIcon(icon: UIImage(named: "VoMo-App-Outline_8_PROGRESS_BTN_GREY") ?? UIImage())
+                    Image(systemName: "calendar")
                     Text("Progress")
                 }
                 .tag(ViewRouter.Tab.progress)
-            
-            SettingsView()
-                .tabItem {
-                    TabIcon(icon: UIImage(named: svm.home_settings_img) ?? UIImage())
-                    Text("Settings")
-                }
-                .tag(ViewRouter.Tab.settings)
 
         }
         .tint(Color.DARK_PURPLE)

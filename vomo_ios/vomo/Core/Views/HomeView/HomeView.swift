@@ -20,11 +20,16 @@ struct HomeView: View {
     
     @State private var totalProgress = true
     
+    @State private var showingSettingsView = false
+    
     let svm = SharedViewModel()
     var body: some View {
         NavigationView {
             quickLinks
                 .padding(.vertical)
+        }
+        .fullScreenCover(isPresented: $showingSettingsView) {
+            SettingsView()
         }
     }
 }
@@ -32,7 +37,7 @@ struct HomeView: View {
 extension HomeView {
     private var quickLinks: some View {
         VStack {
-//            settingsSection
+            settingsSection
             
             greetingSection
             
@@ -54,29 +59,22 @@ extension HomeView {
 }
 
 extension HomeView {
-//    private var settingsSection: some View {
-//        HStack {
-//            Spacer()
-//
-//            NavigationLink {
-//                SettingsView()
-//            } label: {
-//                Image(svm.home_settings_img)
-//                    .resizable()
-//                    .frame(width: 35, height: 35)
-//            }
-//
-////            Button(action: {
-////                viewRouter.currentPage = .settings
-////            }) {
-////                Image(svm.home_settings_img)
-////                    .resizable()
-////                    .frame(width: 35, height: 35)
-////            }
-//        }
-//        .frame(width: svm.content_width)
-//    }
-//
+    private var settingsSection: some View {
+        HStack {
+            Spacer()
+
+            Button(action: {
+//                viewRouter.currentPage = .settings
+                self.showingSettingsView = true
+            }) {
+                Image(svm.home_settings_img)
+                    .resizable()
+                    .frame(width: 35, height: 35)
+            }
+        }
+        .frame(width: svm.content_width)
+    }
+
     private var greetingSection: some View {
         HStack(spacing: 0) {
             Text("Hi, ")
