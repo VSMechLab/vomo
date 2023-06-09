@@ -105,15 +105,52 @@ class AudioRecorder: NSObject, ObservableObject {
         return ret
     }
     
-    func baseLine() -> MetricsModel {
-        var ret = MetricsModel(createdAt: .now, duration: -1.0, intensity: -1.0, pitch_mean: -1.0, pitch_min: -1.0, pitch_max: -1.0, cppMean: -1.0, favorite: false)
+    /// Baseline for vowel
+    func baselineVowel() -> MetricsModel {
+        for index in recordings.indices {
+            if recordings[index].taskNum == 1 {
+                return processedData[index]
+            }
+        }
         
-        ret = processedData.first ?? MetricsModel(createdAt: .now, duration: -1.0, intensity: -1.0, pitch_mean: -1.0, pitch_min: -1.0, pitch_max: -1.0, cppMean: -1.0, favorite: false)
+        return MetricsModel(createdAt: .now, duration: -1.0, intensity: -1.0, pitch_mean: -1.0, pitch_min: -1.0, pitch_max: -1.0, cppMean: -1.0, favorite: false)
+    }
+    
+    /// Baseline for duration
+    func baselineDuration() -> MetricsModel {
+        for index in recordings.indices {
+            if recordings[index].taskNum == 2 {
+                return processedData[index]
+            }
+        }
         
-        return ret
+        return MetricsModel(createdAt: .now, duration: -1.0, intensity: -1.0, pitch_mean: -1.0, pitch_min: -1.0, pitch_max: -1.0, cppMean: -1.0, favorite: false)
+    }
+    
+    /// Baseline for rainbow
+    func baselineRainbow() -> MetricsModel {
+        for index in recordings.indices {
+            if recordings[index].taskNum == 3 {
+                return processedData[index]
+            }
+        }
+        
+        return MetricsModel(createdAt: .now, duration: -1.0, intensity: -1.0, pitch_mean: -1.0, pitch_min: -1.0, pitch_max: -1.0, cppMean: -1.0, favorite: false)
     }
     
     func startRecording(taskNum: Int) {
+        var taskName = ""
+        switch taskNum {
+        case 1:
+            taskName = "vowel"
+        case 2:
+            taskName = "MPT"
+        case 3:
+            taskName = "rainbow"
+        default:
+            taskName = ""
+        }
+        
         let recordingSession = AVAudioSession.sharedInstance()
         
         do {
@@ -124,7 +161,7 @@ class AudioRecorder: NSObject, ObservableObject {
         }
         
         let documentPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-        let audioFilename = documentPath.appendingPathComponent("\(Date().toString(dateFormat: "MM-dd-YYYY_HH-mm-ss"))_task\(taskNum).m4a")
+        let audioFilename = documentPath.appendingPathComponent("\(Date().toString(dateFormat: "MM-dd-YYYY_HH-mm-ss"))_\(taskName).m4a")
         
         let settings = [
             AVFormatIDKey: Int(kAudioFormatAppleLossless), //Int(kAudioFormatMPEG4AAC),
@@ -177,6 +214,15 @@ class AudioRecorder: NSObject, ObservableObject {
         return createdAt
     }
     
+    func returnFileURL(createdAt: Date) -> URL? {
+        for record in recordings {
+            if record.createdAt == createdAt {
+                return record.fileURL
+            }
+        }
+        return nil
+    }
+    
     /// fetchRecordings fetches recordings from the files then orders them in the data model: Recording
     func fetchRecordings() {
         let fileManager = FileManager.default
@@ -195,12 +241,38 @@ class AudioRecorder: NSObject, ObservableObject {
     
     func taskNum(selection: Int, file: URL) -> Bool {
         var taskNum = 0
-        taskNum = Int(String(file.lastPathComponent).suffix(5).prefix(1))!
+        let taskString = String(file.lastPathComponent).suffix(5).prefix(1)
+        
+        switch taskString {
+        case "l":
+            taskNum = 1
+        case "T":
+            taskNum = 2
+        case "w":
+            taskNum = 3
+        default:
+            taskNum = 0
+        }
         
         if selection == taskNum {
             return true
         } else {
             return false
+        }
+    }
+    
+    func taskNumToString(file: URL) -> String {
+        let taskString = String(file.lastPathComponent).suffix(5).prefix(1)
+        
+        switch taskString {
+        case "l":
+            return "Vowel"
+        case "T":
+            return "Duration"
+        case "w":
+            return "Rainbow"
+        default:
+            return ""
         }
     }
     
@@ -261,7 +333,16 @@ class AudioRecorder: NSObject, ObservableObject {
                 str = record.fileURL.lastPathComponent.suffix(5).prefix(1) + ""
             }
         }
-        return str
+        switch str {
+        case "l":
+            return "1"
+        case "T":
+            return "2"
+        case "w":
+            return "3"
+        default:
+            return "1"
+        }
     }
     
     func viewableTask(file: URL!) -> String {
@@ -271,11 +352,11 @@ class AudioRecorder: NSObject, ObservableObject {
                 str = record.fileURL.lastPathComponent.suffix(5).prefix(1) + ""
             }
         }
-        if str == "1" {
+        if str == "l" {
             return "Vowel"
-        } else if str == "2" {
+        } else if str == "T" {
             return "Duration"
-        } else if str == "3" {
+        } else if str == "w" {
             return "Rainbow"
         } else {
             return "Error"
@@ -289,11 +370,11 @@ class AudioRecorder: NSObject, ObservableObject {
                 str = record.fileURL.lastPathComponent.suffix(5).prefix(1) + ""
             }
         }
-        if str == "1" {
+        if str == "l" {
             return "Vowel"
-        } else if str == "2" {
+        } else if str == "T" {
             return "MPT"
-        } else if str == "3" {
+        } else if str == "w" {
             return "Rainbow"
         } else {
             return "Error"
@@ -331,6 +412,16 @@ class AudioRecorder: NSObject, ObservableObject {
         
         // UIApplication.shared.windows.first?.rootViewController?.present(av, animated: true, completion: nil)
      }
+    
+    func allFiles() -> [URL] {
+        var returnable: [URL] = []
+        
+        for record in recordings {
+            returnable.append( record.fileURL )
+        }
+        
+        return returnable
+    }
     
     func syncEntries(gender: String) {
         // Determine if the same amount, if not will further process
@@ -444,19 +535,7 @@ func getCreationDate(for file: URL) -> Date {
 }
 
 extension AudioRecorder {
-    func tasksPresent(day: Date) -> [String] {
-        var target: [String] = []
-        var filtered: String = ""
-        
-        for record in recordings {
-            if day.toDay() == record.createdAt.toDay() {
-                filtered = String(String(record.fileURL.lastPathComponent).suffix(5).prefix(1))
-                target.append(filtered)
-            }
-        }
-        
-        return target
-    }
+    
     
     func months() -> [Date] {
         var model: [Date] = []

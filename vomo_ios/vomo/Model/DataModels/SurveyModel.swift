@@ -32,8 +32,6 @@ class SurveyModel: Identifiable, Codable {
         
         
         if responses.count == 13 {
-            print("returned a score from here")
-            
             // Check if 1-11, 1-10, or 11
             var count = 0
             for index in 0...9 {

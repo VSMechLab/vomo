@@ -93,6 +93,9 @@ extension Font {
     static var _day: Font {
         Font.custom("Roboto-Light", size: 12)
     }
+    static var _surveyNormalLabel: Font {
+        Font.custom("Roboto-Bold", size: 12)
+    }
     static var _date: Font {
         Font.custom("Roboto-Regular", size: 38)
     }
@@ -110,6 +113,9 @@ extension Font {
     }
     static var _fieldCopyRegular: Font {
         Font.custom("Roboto-Light", size: 14)
+    }
+    static var _fieldCopyMedium: Font {
+        Font.custom("Roboto-Medium", size: 14)
     }
     static var _fieldCopyBold: Font {
         Font.custom("Roboto-Bold", size: 14)

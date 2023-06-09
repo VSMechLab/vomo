@@ -6,6 +6,9 @@
 //
 
 import SwiftUI
+import UIKit
+import MobileCoreServices
+import UniformTypeIdentifiers
 
 /*
  
@@ -37,6 +40,9 @@ struct SettingsView: View {
     @State private var showDeleteWarning = false
     let svm = SharedViewModel()
     
+    
+    @State private var selectedFiles = [URL]()
+    
     var body: some View {
         ZStack {
             ScrollView(showsIndicators: false) {
@@ -58,6 +64,9 @@ struct SettingsView: View {
                     trackStatementSection
                     
                     extraButtonSection
+                    
+                    Text("Version 1.19")
+                        .font(._bodyCopyUnBold)
                 }
                 .font(._fieldLabel)
                 .padding(.bottom, 75)
@@ -293,6 +302,41 @@ extension SettingsView {
             }
             
             Button(action: {
+                selectedFiles = audioRecorder.allFiles()
+                
+                var filesToShare = [Any]()
+                for fileURL in selectedFiles {
+                    do {
+                        let data = try Data(contentsOf: fileURL)
+                        let tempURL = FileManager.default.temporaryDirectory.appendingPathComponent(fileURL.lastPathComponent)
+                        try data.write(to: tempURL)
+                        filesToShare.append(tempURL)
+                    } catch {
+                        print(error.localizedDescription)
+                    }
+                }
+                    
+                    
+                if !filesToShare.isEmpty {
+                    let activityVC = UIActivityViewController(activityItems: filesToShare, applicationActivities: nil)
+                    UIApplication.shared.windows.first?.rootViewController?.present(activityVC, animated: true)
+                }
+            }) {
+                HStack {
+                    Image(svm.share_button_alt)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(height: 22.5)
+                    Text("Share all voice recording data")
+                        .font(._bodyCopyLargeMedium)
+                        .underline()
+                        .foregroundColor(Color.DARK_PURPLE)
+                    Spacer()
+                }
+            }
+            .padding(.vertical)
+            
+            Button(action: {
                 self.showDeleteWarning = true
             }) {
                 Text("Delete All Collected Data")
@@ -394,5 +438,14 @@ struct SettingsView_Previews: PreviewProvider {
             .foregroundColor(Color.black)
             .environmentObject(ViewRouter())
             .environmentObject(Settings())
+    }
+}
+
+class DocumentPicker: NSObject, UIDocumentPickerDelegate {
+    
+    var selectedFiles = [URL]()
+    
+    func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
+        selectedFiles.append(contentsOf: urls)
     }
 }

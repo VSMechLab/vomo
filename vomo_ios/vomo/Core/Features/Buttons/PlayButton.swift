@@ -113,32 +113,6 @@ struct StarButton: View {
     }
 }
 
-struct ShareButtonByDate: View {
-    
-    @EnvironmentObject var audioRecorder: AudioRecorder
-    
-    var date: Date
-    
-    let svm = SharedViewModel()
-    
-    var body: some View {
-        Button(action: {
-            print(date)
-            
-            for target in audioRecorder.recordings {
-                if date == target.createdAt {
-                    self.audioRecorder.saveFile(file: target.fileURL)
-                }
-            }
-        }) {
-            Image(svm.share_button)
-                .resizable()
-                .frame(width: 18, height: 20)
-        }
-    }
-}
-
-
 /*
 struct PlayButton: View {
     @ObservedObject var audioPlayer = AudioPlayer()

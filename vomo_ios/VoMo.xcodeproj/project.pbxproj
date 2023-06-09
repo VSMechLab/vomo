@@ -113,6 +113,7 @@
 		ADA0E0E2282561D700CF05D1 /* LineShapeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADA0E0E1282561D700CF05D1 /* LineShapeView.swift */; };
 		ADA1EC9B2899C6B000EE58E3 /* AVAduioPCMBuffer.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADA1EC9A2899C6B000EE58E3 /* AVAduioPCMBuffer.swift */; };
 		ADA1EC9E2899C99400EE58E3 /* AudioKitUI in Frameworks */ = {isa = PBXBuildFile; productRef = ADA1EC9D2899C99400EE58E3 /* AudioKitUI */; };
+		ADB402042A2FA58A0001001E /* ShareButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADB402032A2FA58A0001001E /* ShareButton.swift */; };
 		ADB4A81B29369516003D8556 /* AnyTransition.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADB4A81A29369516003D8556 /* AnyTransition.swift */; };
 		ADB4A82E2936C3E1003D8556 /* ElementModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADB4A82D2936C3E1003D8556 /* ElementModel.swift */; };
 		ADB4A8392936CFE2003D8556 /* DeleteButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADB4A8382936CFE2003D8556 /* DeleteButton.swift */; };
@@ -244,6 +245,7 @@
 		ADA0E0E1282561D700CF05D1 /* LineShapeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = LineShapeView.swift; path = vomo/Graphs/LineChart/LineShapeView.swift; sourceTree = SOURCE_ROOT; };
 		ADA0E0E52826E42600CF05D1 /* VoMo.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = VoMo.entitlements; sourceTree = "<group>"; };
 		ADA1EC9A2899C6B000EE58E3 /* AVAduioPCMBuffer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AVAduioPCMBuffer.swift; path = vomo/Extensions/AVAduioPCMBuffer.swift; sourceTree = SOURCE_ROOT; };
+		ADB402032A2FA58A0001001E /* ShareButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ShareButton.swift; path = vomo/Core/Features/Buttons/ShareButton.swift; sourceTree = SOURCE_ROOT; };
 		ADB4A81A29369516003D8556 /* AnyTransition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AnyTransition.swift; path = vomo/Extensions/AnyTransition.swift; sourceTree = SOURCE_ROOT; };
 		ADB4A82D2936C3E1003D8556 /* ElementModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ElementModel.swift; path = VoMo/Model/DataModels/ElementModel.swift; sourceTree = SOURCE_ROOT; };
 		ADB4A8382936CFE2003D8556 /* DeleteButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DeleteButton.swift; path = VoMo/Core/Features/Buttons/DeleteButton.swift; sourceTree = SOURCE_ROOT; };
@@ -378,6 +380,7 @@
 			children = (
 				AD915C36280624E200B48A5C /* ProfileButton.swift */,
 				AD9EC70428050DBF007F0395 /* PlayButton.swift */,
+				ADB402032A2FA58A0001001E /* ShareButton.swift */,
 				ADB4A8382936CFE2003D8556 /* DeleteButton.swift */,
 				AD67CEC128A49646006AF596 /* TabIcons.swift */,
 				AD67CEC328A4965A006AF596 /* SubmissionButton.swift */,
@@ -508,8 +511,8 @@
 		AD59E6F82939E65100F5BCF7 /* SettingsView */ = {
 			isa = PBXGroup;
 			children = (
-				AD00C73529F720720017385E /* ReminderPopUp.swift */,
 				AD00C73629F720720017385E /* SettingsView.swift */,
+				AD00C73529F720720017385E /* ReminderPopUp.swift */,
 			);
 			path = SettingsView;
 			sourceTree = "<group>";
@@ -799,6 +802,7 @@
 				AD00C75C29F720C10017385E /* SetThreshold.swift in Sources */,
 				AD00C77D29F721BC0017385E /* Arrow.swift in Sources */,
 				AD67CEC228A49646006AF596 /* TabIcons.swift in Sources */,
+				ADB402042A2FA58A0001001E /* ShareButton.swift in Sources */,
 				AD81B73128BFDBF6009920FB /* Settings.swift in Sources */,
 				ADB4A82E2936C3E1003D8556 /* ElementModel.swift in Sources */,
 				AD26BA202829F4E600AC1A7B /* BarChartRow.swift in Sources */,
@@ -1011,7 +1015,7 @@
 				CODE_SIGN_ENTITLEMENTS = VoMo/VoMo.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 29;
+				CURRENT_PROJECT_VERSION = 33;
 				DEVELOPMENT_ASSET_PATHS = "\"VoMo/Preview Content\"";
 				DEVELOPMENT_TEAM = E3GYNLB224;
 				ENABLE_PREVIEWS = YES;
@@ -1033,7 +1037,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.16;
+				MARKETING_VERSION = 1.20;
 				PRODUCT_BUNDLE_IDENTIFIER = edu.uc.vomo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1052,7 +1056,7 @@
 				CODE_SIGN_ENTITLEMENTS = VoMo/VoMo.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 29;
+				CURRENT_PROJECT_VERSION = 33;
 				DEVELOPMENT_ASSET_PATHS = "\"VoMo/Preview Content\"";
 				DEVELOPMENT_TEAM = E3GYNLB224;
 				ENABLE_PREVIEWS = YES;
@@ -1074,7 +1078,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.16;
+				MARKETING_VERSION = 1.20;
 				PRODUCT_BUNDLE_IDENTIFIER = edu.uc.vomo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

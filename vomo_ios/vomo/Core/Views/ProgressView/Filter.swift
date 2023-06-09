@@ -199,6 +199,7 @@ extension Filter {
     func delete(element: String) {
         filters = filters.filter({ $0 != element })
     }
+    
     func numOfRecords() -> (Int, Int, Int) {
         var count = (0, 0, 0)
         for record in audioRecorder.recordings {

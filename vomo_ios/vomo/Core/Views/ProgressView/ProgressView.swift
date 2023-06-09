@@ -34,7 +34,7 @@ struct ProgressView: View {
     
     var body: some View {
         ZStack {
-            VStack {
+            VStack(spacing: 0) {
                 Graphic(thresholdPopUps: $thresholdPopUps, tappedRecording: $tappedRecording, showBaseline: self.$showBaseline, deletionTarget: $deletionTarget)
                 
                 if showFilter {
@@ -45,10 +45,10 @@ struct ProgressView: View {
                     }
                     .transition(.slideUp)
                 } else {
-                    bodySection
+                    HStack(alignment: .top, spacing: 0) {
+                        bodySection
+                    }
                 }
-                
-                Spacer()
             }
             
             popUpSection
@@ -139,19 +139,27 @@ extension ProgressView {
                 listSection
             }
         }
-        .frame(width: svm.content_width)
+        .frame(width: svm.content_width * 1.075)
     }
     
     private var listSection: some View {
         VStack(spacing: 0) {
             ForEach(filteredList.reversed(), id: \.self) { item in
-                Color.DARK_PURPLE.frame(height: 5).opacity(0.6)
                 if item.preciseDate.contains(tappedRecording){
                     DayList(element: item, isExpandedList: true, deletionTarget: $deletionTarget, showRecordDetails: $showRecordDetails, audioPlayer: $audioPlayer)
+                        .background(Color.HEADLINE_COPY.opacity(0.75))
+                        .cornerRadius(10)
+                        .padding(.bottom, 5)
                 } else if !expandAll {
                     DayList(element: item, isExpandedList: false, deletionTarget: $deletionTarget, showRecordDetails: $showRecordDetails, audioPlayer: $audioPlayer)
+                        .background(Color.HEADLINE_COPY.opacity(0.75))
+                        .cornerRadius(10)
+                        .padding(.bottom, 5)
                 } else if expandAll || !filters.isEmpty {
                     DayList(element: item, isExpandedList: true, deletionTarget: $deletionTarget, showRecordDetails: $showRecordDetails, audioPlayer: $audioPlayer)
+                        .background(Color.HEADLINE_COPY.opacity(0.75))
+                        .cornerRadius(10)
+                        .padding(.bottom, 5)
                 }
             }
         }
@@ -261,7 +269,8 @@ extension ProgressView {
                     Text(self.showBaseline.0 ? "Baseline" : "Baseline")
                         .foregroundColor(showBaseline.0 ? Color.white : Color.BODY_COPY)
                         .font(._CTALink)
-                        .padding(7)
+                        .padding(.horizontal, 2.5)
+                        .padding(4.5)
                         .background(showBaseline.0 ? Color.BODY_COPY : Color.white)
                         .cornerRadius(5)
                         .padding(1)
@@ -278,6 +287,8 @@ extension ProgressView {
                 FilterButton()
             }
         }
+        .padding(.top, 5)
+        .padding(.bottom, -2.5)
     }
     
     private var popUpSection: some View {

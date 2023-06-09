@@ -151,9 +151,7 @@ struct SurveyGraph: View {
                         Spacer()
                     }
                 }
-                
             }
-            
         }
         .font(._fieldCopyBold)
         .foregroundColor(Color.white)

@@ -54,7 +54,7 @@ extension ProgressView {
                 
                 for audio in audioRecorder.recordings {
                     if day == audio.createdAt.toDay() {
-                        if filters.isEmpty || filters.contains(audioRecorder.taskNum(file: audio.fileURL)) {
+                        if filters.isEmpty || filters.contains(audioRecorder.taskNumToString(file: audio.fileURL)) {
                             preciseDates.append(audio.createdAt)
                             date = audio.createdAt
                             selectedEntries.append((date, audioRecorder.viewableTask(file: audio.fileURL)))
@@ -149,8 +149,7 @@ extension ProgressView {
                 
                 for audio in audioRecorder.recordings {
                     if day == audio.createdAt.toDay() {
-                        
-                        if filters.contains(audioRecorder.taskNum(file: audio.fileURL)) {
+                        if filters.contains(audioRecorder.taskNumToString(file: audio.fileURL)) {
                             preciseDates.append(audio.createdAt)
                             date = audio.createdAt
                             selectedEntries.append((date, audioRecorder.viewableTask(file: audio.fileURL)))
