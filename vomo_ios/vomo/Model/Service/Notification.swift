@@ -60,7 +60,7 @@ class Notification: ObservableObject {
         didSet {
             Notification.write(notificationSettings)
             if (notificationSettings.notificationsOn) {
-                self.scheduleNotifications()
+                self.scheduleNotifications(startDate: Date())
             } else {
                 UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
                 Logging.notificationLog.notice("Cleared all pending notifications")
@@ -102,13 +102,13 @@ class Notification: ObservableObject {
 
 extension Notification {
     
-    func scheduleNotifications() {
+    func scheduleNotifications(startDate: Date) {
         UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
         
         let notificationContent = UNMutableNotificationContent()
         notificationContent.title = "Vomo"
         notificationContent.body = "Let's record an entry! 🎙️"
-        notificationContent.categoryIdentifier = "RecordingReminder"
+        notificationContent.categoryIdentifier = NotificationType.recordingReminder.rawValue
         notificationContent.sound = .default
         
         let calendar = Calendar.current
@@ -118,8 +118,8 @@ extension Notification {
             
             var dateComponents = calendar.dateComponents([.hour, .minute], from: self.notificationSettings.time)
             
-            let triggerDate = calendar.date(byAdding: .day, value: i * frequency, to: Date())
-            dateComponents.day = calendar.component(.day, from: triggerDate ?? Date())
+            let triggerDate = calendar.date(byAdding: .day, value: i * frequency, to: startDate)
+            dateComponents.day = calendar.component(.day, from: triggerDate ?? startDate)
             
             let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: false)
             

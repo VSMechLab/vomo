@@ -16,6 +16,9 @@ import UIKit
  */
 
 struct ViewController: View {
+    
+    @Environment(\.scenePhase) var scene
+    
     @EnvironmentObject var audioRecorder: AudioRecorder
     @EnvironmentObject var viewRouter: ViewRouter
     @EnvironmentObject var notification: Notification
@@ -75,6 +78,19 @@ struct ViewController: View {
             group.notify(queue: DispatchQueue.main, execute: {
                 Logging.defaultLog.notice("Synced all recordings!")
             })
+        }
+        
+        .onChange(of: scene) { newScenePhase in
+            switch newScenePhase {
+                case .background:
+                    break
+                case .inactive:
+                    break
+                case .active:
+                    print("Entered foreground")
+                @unknown default:
+                    Logging.defaultLog.warning("Unknown scene phase encountered")
+            }
         }
         
         .onChange(of: audioRecorder.recording) { _ in
