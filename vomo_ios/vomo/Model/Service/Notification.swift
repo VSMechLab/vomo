@@ -60,7 +60,7 @@ class Notification: ObservableObject {
         didSet {
             Notification.write(notificationSettings)
             if (notificationSettings.notificationsOn) {
-                self.scheduleNotifications(startDate: Date())
+                self.scheduleNotifications()
             } else {
                 UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
                 Logging.notificationLog.notice("Cleared all pending notifications")
@@ -102,7 +102,11 @@ class Notification: ObservableObject {
 
 extension Notification {
     
-    func scheduleNotifications(startDate: Date) {
+    func scheduleNotifications() {
+        
+        // determine what start date should be based on persisted information
+        let startDate = Date()
+        
         UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
         
         let notificationContent = UNMutableNotificationContent()
@@ -114,12 +118,13 @@ extension Notification {
         let calendar = Calendar.current
         let frequency = self.frequencyValue
         
-        for i in 0...(30 / frequency) {
+        for i in 0...(60 / frequency) {
             
             var dateComponents = calendar.dateComponents([.hour, .minute], from: self.notificationSettings.time)
             
             let triggerDate = calendar.date(byAdding: .day, value: i * frequency, to: startDate)
             dateComponents.day = calendar.component(.day, from: triggerDate ?? startDate)
+            dateComponents.month = calendar.component(.month, from: triggerDate ?? startDate)
             
             let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: false)
             

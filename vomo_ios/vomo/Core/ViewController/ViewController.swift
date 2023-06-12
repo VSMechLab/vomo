@@ -83,11 +83,12 @@ struct ViewController: View {
         .onChange(of: scene) { newScenePhase in
             switch newScenePhase {
                 case .background:
+                    Logging.defaultLog.notice("Entered background – scheduling notification block")
                     break
                 case .inactive:
                     break
                 case .active:
-                    print("Entered foreground")
+                    break
                 @unknown default:
                     Logging.defaultLog.warning("Unknown scene phase encountered")
             }
