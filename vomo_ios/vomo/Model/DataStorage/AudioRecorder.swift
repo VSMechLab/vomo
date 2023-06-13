@@ -38,17 +38,78 @@ class AudioRecorder: NSObject, ObservableObject {
     var processedData: [MetricsModel] = [] {
         didSet { saveProcessedData() }
     }
+
     // Q: What is this used for?
-    var processings = Processings()
+    //var processings = Processings()
+    
+    // Live Recording Values
+    // TODOSW seperate out into additional file where applicable
+    @Published var outputValue:Float = 0
+    @Published var gain: Float = 0.025
+    @Published var zeroReference: Double = 1000
+    let captureSession = AVCaptureSession()
+    let audioOutput = AVCaptureAudioDataOutput()
+    let captureQueue = DispatchQueue(label: "captureQueue",
+                                     qos: .userInitiated,
+                                     attributes: [],
+                                     autoreleaseFrequency: .workItem)
+    let sessionQueue = DispatchQueue(label: "sessionQueue",
+                                     attributes: [],
+                                     autoreleaseFrequency: .workItem)
+    var rawAudioData = [Int16]()
+    /// The number of samples per frame — the height of the spectrogram.
+    static let sampleCount = 1024
+    /// The number of displayed buffers — the width of the spectrogram.
+    static let bufferCount = 768
+    /// Determines the overlap between frames.
+    static let hopCount = 512
+    /// A reusable array that contains the current frame of time-domain audio data as single-precision
+    /// values.
+    var timeDomainBuffer = [Float](repeating: 0,
+                                   count: sampleCount)
+    
+    /// A resuable array that contains the frequency-domain representation of the current frame of
+    /// audio data.
+    var frequencyDomainBuffer = [Float](repeating: 0,
+                                        count: sampleCount)
+    let forwardDCT = vDSP.DCT(count: sampleCount,
+                              transformType: .II)!
+    
+    /// The window sequence for reducing spectral leakage.
+    let hanningWindow = vDSP.window(ofType: Float.self,
+                                    usingSequence: .hanningDenormalized,
+                                    count: sampleCount,
+                                    isHalfWindow: false)
+    
+    let dispatchSemaphore = DispatchSemaphore(value: 1)
+    
+    /// The highest frequency that the app can represent.
+    ///
+    /// The first call of `AudioSpectrogram.captureOutput(_:didOutput:from:)` calculates
+    /// this value.
+    var nyquistFrequency: Float = 0
+    
+    /// Raw frequency-domain values.
+    var frequencyDomainValues = [Float](repeating: 0,
+                                        count: bufferCount * sampleCount)
+    
+    
     
     override init() {
         super.init()
         fetchRecordings()
         getProcessedData()
+        
+        // Live Recording Setup
+        configureCaptureSession()
+        //audioOutput.setSampleBufferDelegate(self,
+        //                                    queue: captureQueue)
+        
     }
     
     func grantedPermission() -> Bool {
         let audioSession = AVAudioSession.sharedInstance()
+        
         switch audioSession.recordPermission {
         case .granted:
             return true// User has granted permission to record audio
@@ -169,12 +230,15 @@ class AudioRecorder: NSObject, ObservableObject {
             AVNumberOfChannelsKey: 1,
             AVEncoderAudioQualityKey: AVAudioQuality.high.rawValue
         ]
-        
         do {
-            audioRecorder = try AVAudioRecorder(url: audioFilename, settings: settings)
-            audioRecorder.record()
-
-            recording = true
+                audioRecorder = try AVAudioRecorder(url: audioFilename, settings: settings)
+                audioRecorder.record()
+                sessionQueue.async {
+                    if AVCaptureDevice.authorizationStatus(for: .audio) == .authorized {
+                        self.captureSession.startRunning()
+                    }
+                }
+                recording = true
         } catch {
             print("Could not start recording")
         }
@@ -184,6 +248,166 @@ class AudioRecorder: NSObject, ObservableObject {
         audioRecorder.stop()
         recording = false
         fetchRecordings()
+    }
+    
+    
+    func configureCaptureSession() {
+        // Also note that:
+        //
+        // When running in iOS, you need to add a "Privacy - Microphone Usage
+        // Description" entry.
+        //
+        // When running in macOS, you need to add a "Privacy - Microphone Usage
+        // Description" entry to `Info.plist`, and select Audio Input and Camera
+        // Access in the Resource Access category of Hardened Runtime.
+        switch AVCaptureDevice.authorizationStatus(for: .audio) {
+            case .authorized:
+                    break
+            case .notDetermined:
+                sessionQueue.suspend()
+                AVCaptureDevice.requestAccess(for: .audio,
+                                              completionHandler: { granted in
+                    if !granted {
+                        fatalError("App requires microphone access.")
+                    } else {
+                        self.configureCaptureSession()
+                        self.sessionQueue.resume()
+                    }
+                })
+                return
+            default:
+                // Users can add authorization by choosing Settings > Privacy >
+                // Microphone on an iOS device, or System Preferences >
+                // Security & Privacy > Microphone on a macOS device.
+                fatalError("App requires microphone access.")
+        }
+        
+        captureSession.beginConfiguration()
+        
+        if captureSession.canAddOutput(audioOutput) {
+            captureSession.addOutput(audioOutput)
+        } else {
+            fatalError("Can't add `audioOutput`.")
+        }
+
+        guard
+            let microphone = AVCaptureDevice.default(.builtInMicrophone,
+                                                     for: .audio,
+                                                     position: .unspecified),
+            // Failure here TODOSW
+            let microphoneInput = try? AVCaptureDeviceInput(device: microphone) else {
+                fatalError("Can't create microphone.")
+        }
+        
+        if captureSession.canAddInput(microphoneInput) {
+            captureSession.addInput(microphoneInput)
+        }
+
+        captureSession.commitConfiguration()
+    }
+    
+    
+    public func captureOutput(_ output: AVCaptureOutput,
+                             didOutput sampleBuffer: CMSampleBuffer,
+                             from connection: AVCaptureConnection) {
+
+       var audioBufferList = AudioBufferList()
+       var blockBuffer: CMBlockBuffer?
+
+       CMSampleBufferGetAudioBufferListWithRetainedBlockBuffer(
+           sampleBuffer,
+           bufferListSizeNeededOut: nil,
+           bufferListOut: &audioBufferList,
+           bufferListSize: MemoryLayout.stride(ofValue: audioBufferList),
+           blockBufferAllocator: nil,
+           blockBufferMemoryAllocator: nil,
+           flags: kCMSampleBufferFlag_AudioBufferList_Assure16ByteAlignment,
+           blockBufferOut: &blockBuffer)
+       
+       guard let data = audioBufferList.mBuffers.mData else {
+           return
+       }
+       
+       /// The _Nyquist frequency_ is the highest frequency that a sampled system can properly
+       /// reproduce and is half the sampling rate of such a system. Although  this app doesn't use
+       /// `nyquistFrequency`,  you may find this code useful to add an overlay to the user interface.
+       if nyquistFrequency == 0 {
+           let duration = Float(CMSampleBufferGetDuration(sampleBuffer).value)
+           let timescale = Float(CMSampleBufferGetDuration(sampleBuffer).timescale)
+           let numsamples = Float(CMSampleBufferGetNumSamples(sampleBuffer))
+           nyquistFrequency = 0.5 / (duration / timescale / numsamples)
+       }
+       
+       /// Because the audio spectrogram code requires exactly `sampleCount` (which the app defines
+       /// as 1024) samples, but audio sample buffers from AVFoundation may not always contain exactly
+       /// 1024 samples, the app adds the contents of each audio sample buffer to `rawAudioData`.
+       ///
+       /// The following code creates an array from `data` and appends it to  `rawAudioData`:
+       if self.rawAudioData.count < AudioRecorder.sampleCount * 2 {
+           let actualSampleCount = CMSampleBufferGetNumSamples(sampleBuffer)
+           
+           let pointer = data.bindMemory(to: Int16.self,
+                                         capacity: actualSampleCount)
+           let buffer = UnsafeBufferPointer(start: pointer,
+                                            count: actualSampleCount)
+           
+           rawAudioData.append(contentsOf: Array(buffer))
+       }
+
+       /// The following code app passes the first `sampleCount`elements of raw audio data to the
+       /// `processData(values:)` function, and removes the first `hopCount` elements from
+       /// `rawAudioData`.
+       ///
+       /// By removing fewer elements than each step processes, the rendered frames of data overlap,
+       /// ensuring no loss of audio data.
+       while self.rawAudioData.count >= AudioRecorder.sampleCount {
+           let dataToProcess = Array(self.rawAudioData[0 ..< AudioRecorder.sampleCount])
+           self.rawAudioData.removeFirst(AudioRecorder.hopCount)
+           self.processData(values: dataToProcess)
+       }
+
+       DispatchQueue.main.async { [self] in
+           outputValue = 0 // TODOSW, add calculation
+       }
+    }
+
+        
+    /// Process a frame of raw audio data.
+    ///
+    /// * Convert supplied `Int16` values to single-precision and write the result to `timeDomainBuffer`.
+    /// * Apply a Hann window to the audio data in `timeDomainBuffer`.
+    /// * Perform a forward discrete cosine transform and write the result to `frequencyDomainBuffer`.
+    /// * Convert frequency-domain values in `frequencyDomainBuffer` to decibels and scale by the
+    ///     `gain` value.
+    /// * Append the values in `frequencyDomainBuffer` to `frequencyDomainValues`.
+    func processData(values: [Int16]) {
+        vDSP.convertElements(of: values,
+                             to: &timeDomainBuffer)
+        
+        vDSP.multiply(timeDomainBuffer,
+                      hanningWindow,
+                      result: &timeDomainBuffer)
+        
+        forwardDCT.transform(timeDomainBuffer,
+                             result: &frequencyDomainBuffer)
+        
+        vDSP.absolute(frequencyDomainBuffer,
+                      result: &frequencyDomainBuffer)
+        
+        // forced linear, not mel mode
+        vDSP.convert(amplitude: frequencyDomainBuffer,
+                     toDecibels: &frequencyDomainBuffer,
+                     zeroReference: Float(zeroReference))
+
+        vDSP.multiply(Float(gain),
+                      frequencyDomainBuffer,
+                      result: &frequencyDomainBuffer)
+        
+        if frequencyDomainValues.count > AudioRecorder.sampleCount {
+            frequencyDomainValues.removeFirst(AudioRecorder.sampleCount)
+        }
+        
+        frequencyDomainValues.append(contentsOf: frequencyDomainBuffer)
     }
     
     func process(recording rec: Recording, gender: String) {
@@ -535,8 +759,7 @@ func getCreationDate(for file: URL) -> Date {
 }
 
 extension AudioRecorder {
-    
-    
+
     func months() -> [Date] {
         var model: [Date] = []
         
@@ -575,6 +798,8 @@ extension AudioRecorder {
     func filterRecordingsDayExercise(focus: Date, taskNum: Int) -> [Recording] { return [] }
 }
 
+
+//extension AudioRecorder
 /*
  
  // Loop through recordings
