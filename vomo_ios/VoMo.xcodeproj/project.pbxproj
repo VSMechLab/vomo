@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		221861772A2503DE00F63D0A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 221861762A2503DE00F63D0A /* AppDelegate.swift */; };
 		22253A042A1003AC004FD26B /* Logging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22253A032A1003AC004FD26B /* Logging.swift */; };
 		22253A1F2A103394004FD26B /* Roboto-Thin.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 22253A132A103393004FD26B /* Roboto-Thin.ttf */; };
 		22253A202A103394004FD26B /* Roboto-BlackItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 22253A142A103393004FD26B /* Roboto-BlackItalic.ttf */; };
@@ -78,7 +79,6 @@
 		AD67CEC428A4965A006AF596 /* SubmissionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD67CEC328A4965A006AF596 /* SubmissionButton.swift */; };
 		AD67CEC628A49665006AF596 /* YesButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD67CEC528A49665006AF596 /* YesButton.swift */; };
 		AD67CEC828A49673006AF596 /* NoButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD67CEC728A49673006AF596 /* NoButton.swift */; };
-		AD6B031C27FCB26F0066B77D /* APIPlayground.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD6B031B27FCB26F0066B77D /* APIPlayground.swift */; };
 		AD72972428CFD736001E7211 /* SignalProcess.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD72972328CFD736001E7211 /* SignalProcess.swift */; };
 		AD7BF16429B6ACF700FA0AF8 /* View.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD7BF16329B6ACF700FA0AF8 /* View.swift */; };
 		AD7BF16629B7121200FA0AF8 /* DurationGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD7BF16529B7121200FA0AF8 /* DurationGraph.swift */; };
@@ -96,7 +96,7 @@
 		AD81B72C28BFD774009920FB /* TreatmentModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD81B72B28BFD774009920FB /* TreatmentModel.swift */; };
 		AD81B72F28BFDB13009920FB /* Entries.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD81B72E28BFDB13009920FB /* Entries.swift */; };
 		AD81B73128BFDBF6009920FB /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD81B73028BFDBF6009920FB /* Settings.swift */; };
-		AD81B73828C00070009920FB /* ViewControllerModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD81B73728C00070009920FB /* ViewControllerModel.swift */; };
+		AD81B73828C00070009920FB /* ViewRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD81B73728C00070009920FB /* ViewRouter.swift */; };
 		AD915C37280624E200B48A5C /* ProfileButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD915C36280624E200B48A5C /* ProfileButton.swift */; };
 		AD9BBAB7283419A30081331C /* KR_rainbow_1.wav in Resources */ = {isa = PBXBuildFile; fileRef = AD9BBAB6283419A30081331C /* KR_rainbow_1.wav */; };
 		AD9BBAB9283419A80081331C /* KR_sustained_Ah_1.wav in Resources */ = {isa = PBXBuildFile; fileRef = AD9BBAB8283419A80081331C /* KR_sustained_Ah_1.wav */; };
@@ -147,6 +147,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		221861762A2503DE00F63D0A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = vomo/AppDelegate.swift; sourceTree = SOURCE_ROOT; };
 		22253A032A1003AC004FD26B /* Logging.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Logging.swift; path = vomo/Model/Service/Logging.swift; sourceTree = SOURCE_ROOT; };
 		22253A132A103393004FD26B /* Roboto-Thin.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Roboto-Thin.ttf"; path = "vomo/Fonts/Roboto-Thin.ttf"; sourceTree = SOURCE_ROOT; };
 		22253A142A103393004FD26B /* Roboto-BlackItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Roboto-BlackItalic.ttf"; path = "vomo/Fonts/Roboto-BlackItalic.ttf"; sourceTree = SOURCE_ROOT; };
@@ -219,7 +220,6 @@
 		AD67CEC328A4965A006AF596 /* SubmissionButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SubmissionButton.swift; path = VoMo/Core/Features/Buttons/SubmissionButton.swift; sourceTree = SOURCE_ROOT; };
 		AD67CEC528A49665006AF596 /* YesButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = YesButton.swift; path = VoMo/Core/Features/Buttons/YesButton.swift; sourceTree = SOURCE_ROOT; };
 		AD67CEC728A49673006AF596 /* NoButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = NoButton.swift; path = VoMo/Core/Features/Buttons/NoButton.swift; sourceTree = SOURCE_ROOT; };
-		AD6B031B27FCB26F0066B77D /* APIPlayground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIPlayground.swift; sourceTree = "<group>"; };
 		AD72972328CFD736001E7211 /* SignalProcess.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SignalProcess.swift; path = VoMo/Model/Service/SignalProcess.swift; sourceTree = SOURCE_ROOT; };
 		AD7BF16329B6ACF700FA0AF8 /* View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = View.swift; path = vomo/Extensions/View.swift; sourceTree = SOURCE_ROOT; };
 		AD7BF16529B7121200FA0AF8 /* DurationGraph.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DurationGraph.swift; path = vomo/Graphs/DurationGraph.swift; sourceTree = SOURCE_ROOT; };
@@ -237,7 +237,7 @@
 		AD81B72B28BFD774009920FB /* TreatmentModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = TreatmentModel.swift; path = VoMo/Model/DataModels/TreatmentModel.swift; sourceTree = SOURCE_ROOT; };
 		AD81B72E28BFDB13009920FB /* Entries.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Entries.swift; path = VoMo/Model/DataStorage/Entries.swift; sourceTree = SOURCE_ROOT; };
 		AD81B73028BFDBF6009920FB /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Settings.swift; path = VoMo/Model/DataStorage/Settings.swift; sourceTree = SOURCE_ROOT; };
-		AD81B73728C00070009920FB /* ViewControllerModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ViewControllerModel.swift; path = VoMo/Model/DataModels/ViewControllerModel.swift; sourceTree = SOURCE_ROOT; };
+		AD81B73728C00070009920FB /* ViewRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ViewRouter.swift; path = VoMo/Model/DataModels/ViewRouter.swift; sourceTree = SOURCE_ROOT; };
 		AD915C36280624E200B48A5C /* ProfileButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileButton.swift; sourceTree = "<group>"; };
 		AD9BBAB6283419A30081331C /* KR_rainbow_1.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = KR_rainbow_1.wav; path = ../../vomo/Sounds/KR_rainbow_1.wav; sourceTree = "<group>"; };
 		AD9BBAB8283419A80081331C /* KR_sustained_Ah_1.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = KR_sustained_Ah_1.wav; path = vomo/Sounds/KR_sustained_Ah_1.wav; sourceTree = SOURCE_ROOT; };
@@ -340,7 +340,7 @@
 		AD00C71A29F71CAB0017385E /* DataModels */ = {
 			isa = PBXGroup;
 			children = (
-				AD81B73728C00070009920FB /* ViewControllerModel.swift */,
+				AD81B73728C00070009920FB /* ViewRouter.swift */,
 				AD00C71D29F71F2C0017385E /* SharedViewModel.swift */,
 				AD81B72728BFD769009920FB /* SurveyModel.swift */,
 				AD59E6FB293A92CB00F5BCF7 /* RecordingModel.swift */,
@@ -477,13 +477,13 @@
 			children = (
 				ADA0E0E52826E42600CF05D1 /* VoMo.entitlements */,
 				AD158E6B279919A500C3119A /* VoMoApp.swift */,
+				221861762A2503DE00F63D0A /* AppDelegate.swift */,
 				AD064FBA27DB680C00D6CA26 /* Model */,
 				ADC5A600283584FB000C73DF /* Core */,
 				AD3FA000280F16F5007E6327 /* Graphs */,
 				22253A052A103159004FD26B /* Sounds */,
 				22253A062A103345004FD26B /* Fonts */,
 				ADD6846A27D8325C00FF23D2 /* Extensions */,
-				AD6B031B27FCB26F0066B77D /* APIPlayground.swift */,
 				ADBAE8052829984F00A7BD1B /* Assets.xcassets */,
 				AD158E71279919A600C3119A /* Preview Content */,
 			);
@@ -818,7 +818,7 @@
 				AD00C77329F7219D0017385E /* AudioInterface.swift in Sources */,
 				ADA0E0BC28255F1900CF05D1 /* Array+Extension.swift in Sources */,
 				AD00C74029F720940017385E /* RecordView.swift in Sources */,
-				AD81B73828C00070009920FB /* ViewControllerModel.swift in Sources */,
+				AD81B73828C00070009920FB /* ViewRouter.swift in Sources */,
 				ADA0E0D6282561A600CF05D1 /* IndicatorPoint.swift in Sources */,
 				AD81B72A28BFD76E009920FB /* JournalModel.swift in Sources */,
 				AD81B71128BC21F8009920FB /* Graph.swift in Sources */,
@@ -847,6 +847,7 @@
 				ADA0E0BA28255EDA00CF05D1 /* ChartValue.swift in Sources */,
 				AD00C74E29F720B20017385E /* TreatmentView.swift in Sources */,
 				ADE416442911821500133437 /* Image.swift in Sources */,
+				221861772A2503DE00F63D0A /* AppDelegate.swift in Sources */,
 				AD00C75C29F720C10017385E /* SetThreshold.swift in Sources */,
 				AD00C77D29F721BC0017385E /* Arrow.swift in Sources */,
 				AD67CEC228A49646006AF596 /* TabIcons.swift in Sources */,
@@ -884,7 +885,6 @@
 				ADE8921A295D426900351EA1 /* SurveyGraph.swift in Sources */,
 				ADA0E0E0282561CA00CF05D1 /* LineShape.swift in Sources */,
 				AD7BF16829B7121E00FA0AF8 /* QualityGraph.swift in Sources */,
-				AD6B031C27FCB26F0066B77D /* APIPlayground.swift in Sources */,
 				AD00C72D29F720530017385E /* VoiceQuestionView.swift in Sources */,
 				AD00C75D29F720C10017385E /* ProgressViewFunctions.swift in Sources */,
 				ADA0E0C228255F6A00CF05D1 /* ChartBase+Extension.swift in Sources */,

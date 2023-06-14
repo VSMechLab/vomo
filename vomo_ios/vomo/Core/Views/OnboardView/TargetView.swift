@@ -342,7 +342,7 @@ extension TargetView {
 struct TargetView_Previews: PreviewProvider {
     static var previews: some View {
         TargetView()
-            .environmentObject(ViewRouter())
+            .environmentObject(ViewRouter.shared)
             .environmentObject(Settings())
     }
 }

@@ -528,33 +528,33 @@ extension Settings {
         }
     }
     
-    /// Sent to notification service to schedule notifications calculated in real time based on goal considerations
-    func triggers() -> [TriggerModel] {
-        var ret: [TriggerModel] = []
-        
-        let amountDays = recordPerWeek * numWeeks
-        
-        for i in 0..<amountDays {
-            ret.append(TriggerModel(date: Date(timeInterval: Double(i) * 86400, since: startDate.toFullDate() ?? .now), identifier: String(i)))
-        }
-        
-        return ret
-    }
-    
-    /// Sent to notification service to schedule notifications calculated in real time based on goal considerations
-    func editedTrigger(frequency: Int) -> [TriggerModel] {
-        var ret: [TriggerModel] = []
-        
-        let amountDays = recordPerWeek * numWeeks
-        
-        for i in 0..<amountDays {
-            Logging.defaultLog.info("start date: \(String(describing: self.startDate.toFullDate()))")
-            ret.append(TriggerModel(date: Date(timeInterval: Double(frequency) * (Double(i) * 86400), since: startDate.toFullDate() ?? .now), identifier: String(i)))
-        }
-        
-        return ret
-    }
-    
+//    /// Sent to notification service to schedule notifications calculated in real time based on goal considerations
+//    func triggers() -> [TriggerModel] {
+//        var ret: [TriggerModel] = []
+//        
+//        let amountDays = recordPerWeek * numWeeks
+//        
+//        for i in 0..<amountDays {
+//            ret.append(TriggerModel(date: Date(timeInterval: Double(i) * 86400, since: startDate.toFullDate() ?? .now), identifier: String(i)))
+//        }
+//        
+//        return ret
+//    }
+//    
+//    /// Sent to notification service to schedule notifications calculated in real time based on goal considerations
+//    func editedTrigger(frequency: Int) -> [TriggerModel] {
+//        var ret: [TriggerModel] = []
+//        
+//        let amountDays = recordPerWeek * numWeeks
+//        
+//        for i in 0..<amountDays {
+//            Logging.defaultLog.info("start date: \(String(describing: self.startDate.toFullDate()))")
+//            ret.append(TriggerModel(date: Date(timeInterval: Double(frequency) * (Double(i) * 86400), since: startDate.toFullDate() ?? .now), identifier: String(i)))
+//        }
+//        
+//        return ret
+//    }
+//    
     /// Checks if goal is active on the basis of the start date + nWeeks > .now
     func isActive() -> Bool {
         let weeksElapsed = (-1 * Double(startDate.toDate()?.timeIntervalSinceNow ?? 0.0) / 604800.0)

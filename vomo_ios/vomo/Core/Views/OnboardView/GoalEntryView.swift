@@ -253,7 +253,7 @@ extension GoalEntryView {
                         if numWeeks != 0 {
                             Button("SET GOAL") {
                                 settings.setGoal(nWeeks: numWeeks, records: recordPerWeek, quests: questsPerWeek, journs: journalsPerWeek)
-                                notification.updateNotifications(triggers: settings.triggers())
+//                                notification.updateNotifications(triggers: settings.triggers())
                             }.buttonStyle(SubmitButton())
                             .padding(.top, 10)
                         } else {
@@ -284,7 +284,7 @@ extension GoalEntryView {
 struct GoalEntryView_Previews: PreviewProvider {
     static var previews: some View {
         GoalEntryView()
-            .environmentObject(Notification())
+            .environmentObject(Notification.shared)
             .environmentObject(Settings())
     }
 }

@@ -308,7 +308,7 @@ extension RecordView {
 struct RecordView_Previews: PreviewProvider {
     static var previews: some View {
         RecordView()
-            .environmentObject(ViewRouter())
+            .environmentObject(ViewRouter.shared)
             .environmentObject(Settings())
             .environmentObject(AudioRecorder())
     }

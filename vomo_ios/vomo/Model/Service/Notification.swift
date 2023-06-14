@@ -13,116 +13,133 @@ import UserNotifications
 /// Todo, find  a way to deal with notifications scheduled over 64 times (OS Maximum)
 /// For now limit to 63 max (7 entries per week over 9 weeks)
 
-struct TriggerModel {
-    var date: Date
-    var identifier: String
-}
-
-enum Frequencies {
-    case daily, weekly
+struct NotificationSettings: Codable {
+    var frequency: Notification.Frequency = .daily
+    
+    var customFrequency: Int = 1
+    
+    /// Always access using Calendar.current.dateComponents([.hour, .minute], from: notifTime)
+    var time: Date = Calendar.current.date(bySetting: .hour, value: 7, of: Date())!
+    
+    var notificationsOn: Bool = true
 }
 
 /// Notifications - queues notifications
 class Notification: ObservableObject {
+    
     @EnvironmentObject var settings: Settings
-    /*
-    var setFrequency: String {
-        return Frequencies.daily
-    }*/
+    
+    static let shared = Notification()
     
     let defaults = UserDefaults.standard
     
-    @Published var notificationsOn: Bool {
+    var frequencyValue: Int {
+        switch notificationSettings.frequency {
+            case .daily:
+                return 1
+            case .everyOtherDay:
+                return 2
+            case .weekly:
+                return 7
+            case .monthly:
+                return 30
+            case .custom:
+                return notificationSettings.customFrequency
+        }
+    }
+    
+    enum NotificationType: String {
+        case recordingReminder = "RecordingReminder"
+    }
+  
+    enum Frequency: String, CaseIterable, Codable {
+        case daily = "Daily", everyOtherDay = "Every other day", weekly = "Weekly", monthly = "Monthly", custom = "Custom"
+    }
+
+    @Published var notificationSettings: NotificationSettings {
         didSet {
-            UserDefaults.standard.set(notificationsOn, forKey: "notifications_on")
-            if !notificationsOn {
-                clearAll()
-                Logging.notificationLog.debug("Cleared notifications")
+            Notification.write(notificationSettings)
+            if (notificationSettings.notificationsOn) {
+                self.scheduleNotifications()
+            } else {
+                UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
+                Logging.notificationLog.notice("Cleared all pending notifications")
             }
         }
     }
     
-    @Published var notificationFrequency: String {
-        didSet {
-            UserDefaults.standard.set(notificationFrequency, forKey: "notification_frequency")
-        }
-    }
-    
-    /// Prefered time of day  as an hour
-    @Published var preferedHour: Int {
-        didSet {
-            UserDefaults.standard.set(preferedHour, forKey: "prefered_hour")
-        }
-    }
-    /// Prefered time of day  as a minute
-    @Published var preferedMinute: Int {
-        didSet {
-            UserDefaults.standard.set(preferedMinute, forKey: "prefered_minute")
-        }
-    }
     @Published var autoSchedule: Bool {
         didSet {
             UserDefaults.standard.set(autoSchedule, forKey: "auto_schedule")
         }
     }
-    @Published var frequency: Int {
-        didSet {
-            UserDefaults.standard.set(frequency, forKey: "frequency")
-        }
-    }
     
     init() {
-        self.notificationsOn = UserDefaults.standard.object(forKey: "notifications_on") as? Bool ?? true
-        self.notificationFrequency = UserDefaults.standard.object(forKey: "notification_frequency") as? String ?? ""
-        self.preferedHour = UserDefaults.standard.object(forKey: "prefered_hour") as? Int ?? 5
-        self.preferedMinute = UserDefaults.standard.object(forKey: "prefered_minute") as? Int ?? 0
         self.autoSchedule = UserDefaults.standard.object(forKey: "auto_schedule") as? Bool ?? true
-        self.frequency = UserDefaults.standard.object(forKey: "frequency") as? Int ?? 1
+        self.notificationSettings = Notification.load(NotificationSettings.self) ?? .init()
+    }
+    
+    // MARK: Move all of this to persistance service eventually
+    private static let userDefaults = UserDefaults.standard
+    private static let encoder = JSONEncoder()
+    private static let decoder = JSONDecoder()
+    
+    private static func load<T: Codable>(_ type: T.Type) -> T? {
+        if let loaded = userDefaults.object(forKey: "notification_settings") as? Data {
+            if let model = try? decoder.decode(type.self, from: loaded) {
+                return model
+            }
+        }
+        return nil
+    }
+    
+    private static func write<T: Codable>(_ model: T) {
+        if let encoded = try? encoder.encode(model) {
+            userDefaults.set(encoded, forKey: "notification_settings")
+        }
     }
 }
 
 extension Notification {
-    func updateNotifications(triggers: [TriggerModel]) {
-        clearAll()
-        scheduleNotification(triggers: triggers)
-        getPending()
-    }
     
-    func scheduleNotification(triggers: [TriggerModel]) {
-        let content = UNMutableNotificationContent()
-        content.title = "It's time for some voice therapy"
-        content.subtitle = "Record an entry today"
-        content.sound = UNNotificationSound.default
+    func scheduleNotifications() {
         
-        var dateComponents = DateComponents()
+        // determine what start date should be based on persisted information
+        let startDate = Date()
         
-        for trig in triggers {
-            if trig.date > .now {
-                dateComponents.year = trig.date.splitYear
-                dateComponents.month = trig.date.splitMonth
-                dateComponents.day = trig.date.splitDay
-                dateComponents.hour = preferedHour
-                dateComponents.minute = preferedMinute
-                
-                // show this notification five seconds from now
-                let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: false)
-                
-                content.subtitle = "For testing purposes, id: " + trig.identifier
-                
-                // choose a random identifier
-                let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
-                
-                // add our notification request
-                UNUserNotificationCenter.current().add(request)
-            }
+        UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
+        
+        let notificationContent = UNMutableNotificationContent()
+        notificationContent.title = "Vomo"
+        notificationContent.body = "Let's record an entry! 🎙️"
+        notificationContent.categoryIdentifier = NotificationType.recordingReminder.rawValue
+        notificationContent.sound = .default
+        
+        let calendar = Calendar.current
+        let frequency = self.frequencyValue
+        
+        for i in 0...(60 / frequency) {
+            
+            var dateComponents = calendar.dateComponents([.hour, .minute], from: self.notificationSettings.time)
+            
+            let triggerDate = calendar.date(byAdding: .day, value: i * frequency, to: startDate)
+            dateComponents.day = calendar.component(.day, from: triggerDate ?? startDate)
+            dateComponents.month = calendar.component(.month, from: triggerDate ?? startDate)
+            
+            let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: false)
+            
+            let request = UNNotificationRequest(identifier: UUID().uuidString, content: notificationContent, trigger: trigger)
+            
+            UNUserNotificationCenter.current().add(request)
         }
     }
     
     static func printScheduledNotifications() {
         UNUserNotificationCenter.current().getPendingNotificationRequests { requests in
             if requests.count != 0 {
+                Logging.notificationLog.notice("\(requests.count) notifications scheduled for delivery")
                 requests.forEach { request in
-                    Logging.notificationLog.notice("\(request.content.categoryIdentifier) | Scheduled for \(request.trigger.debugDescription)")
+                    Logging.notificationLog.notice("\(request.content.categoryIdentifier) | Scheduled for \(request.trigger?.description ?? "Failed to unwrap")")
                 }
             } else {
                 Logging.notificationLog.notice("No notifications scheduled for delivery")
@@ -147,22 +164,5 @@ extension Notification {
                 Logging.notificationLog.notice("\(error.localizedDescription)")
             }
         }
-    }
-    
-    func clearAll() {
-        UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
-    }
-    
-    func getPending() {
-        let center = UNUserNotificationCenter.current()
-        center.getPendingNotificationRequests(completionHandler: { requests in
-            for request in requests {
-                Logging.notificationLog.notice("\(request.trigger?.description ?? "Failed to unwrap")")
-            }
-        })
-    }
-    
-    func clearDelivered() {
-        UNUserNotificationCenter.current().removeAllDeliveredNotifications()
     }
 }
