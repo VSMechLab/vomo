@@ -160,7 +160,7 @@ extension RecordView {
     
     private var exercises: some View {
         VStack(spacing: 10) {
-            Text("\(audioRecorder.recording ? "Recording..." : " ")")
+            Text("\(audioRecorder.recording ? "Recording..." + String(audioRecorder.nyqFreq) : " ")")
                 .font(._subTitle)
                 .foregroundColor(Color.BODY_COPY)
             
