@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		221254292A39568A001035E5 /* FeedbackRecordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 221254282A39568A001035E5 /* FeedbackRecordView.swift */; };
 		22253A042A1003AC004FD26B /* Logging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22253A032A1003AC004FD26B /* Logging.swift */; };
 		22253A1F2A103394004FD26B /* Roboto-Thin.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 22253A132A103393004FD26B /* Roboto-Thin.ttf */; };
 		22253A202A103394004FD26B /* Roboto-BlackItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 22253A142A103393004FD26B /* Roboto-BlackItalic.ttf */; };
@@ -147,6 +148,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		221254282A39568A001035E5 /* FeedbackRecordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FeedbackRecordView.swift; path = vomo/Core/Views/RecordView/FeedbackRecordView.swift; sourceTree = SOURCE_ROOT; };
 		22253A032A1003AC004FD26B /* Logging.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Logging.swift; path = vomo/Model/Service/Logging.swift; sourceTree = SOURCE_ROOT; };
 		22253A132A103393004FD26B /* Roboto-Thin.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Roboto-Thin.ttf"; path = "vomo/Fonts/Roboto-Thin.ttf"; sourceTree = SOURCE_ROOT; };
 		22253A142A103393004FD26B /* Roboto-BlackItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Roboto-BlackItalic.ttf"; path = "vomo/Fonts/Roboto-BlackItalic.ttf"; sourceTree = SOURCE_ROOT; };
@@ -692,6 +694,7 @@
 			children = (
 				AD00C73D29F720940017385E /* RecordAction.swift */,
 				AD00C73E29F720940017385E /* RecordView.swift */,
+				221254282A39568A001035E5 /* FeedbackRecordView.swift */,
 			);
 			path = RecordView;
 			sourceTree = "<group>";
@@ -868,6 +871,7 @@
 				AD67CEC428A4965A006AF596 /* SubmissionButton.swift in Sources */,
 				AD00C75B29F720C10017385E /* Graphic.swift in Sources */,
 				AD00C77F29F721BC0017385E /* EntryField.swift in Sources */,
+				221254292A39568A001035E5 /* FeedbackRecordView.swift in Sources */,
 				AD915C37280624E200B48A5C /* ProfileButton.swift in Sources */,
 				AD00C77229F7219D0017385E /* MiniAudioInterface.swift in Sources */,
 				AD00C76A29F720DE0017385E /* ExpandedRecording.swift in Sources */,
