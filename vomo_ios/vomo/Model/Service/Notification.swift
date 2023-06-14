@@ -16,7 +16,7 @@ import UserNotifications
 struct NotificationSettings: Codable {
     var frequency: Notification.Frequency = .daily
     
-    var customFrequency: Int = 1
+//    var customFrequency: Int = 1
     
     /// Always access using Calendar.current.dateComponents([.hour, .minute], from: notifTime)
     var time: Date = Calendar.current.date(bySetting: .hour, value: 7, of: Date())!
@@ -43,8 +43,8 @@ class Notification: ObservableObject {
                 return 7
             case .monthly:
                 return 30
-            case .custom:
-                return notificationSettings.customFrequency
+//            case .custom:
+//                return notificationSettings.customFrequency
         }
     }
     
@@ -53,7 +53,8 @@ class Notification: ObservableObject {
     }
   
     enum Frequency: String, CaseIterable, Codable {
-        case daily = "Daily", everyOtherDay = "Every other day", weekly = "Weekly", monthly = "Monthly", custom = "Custom"
+        case daily = "Daily", everyOtherDay = "Every other day", weekly = "Weekly", monthly = "Monthly"
+//        , custom = "Custom"
     }
 
     @Published var notificationSettings: NotificationSettings {

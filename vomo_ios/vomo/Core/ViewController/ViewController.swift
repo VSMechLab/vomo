@@ -39,7 +39,7 @@ struct ViewController: View {
             
             if !settings.keyboardShown && viewRouter.currentPage != .onboard && !focused {
                 tabBar
-                    .padding(.bottom, 17.5)
+                    .padding(.bottom, variablePadding)
             }
         }
         .foregroundColor(Color.black)
