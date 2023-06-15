@@ -20,9 +20,13 @@ struct NotificationSettings: Codable {
     
     /// Always access using Calendar.current.dateComponents([.hour, .minute], from: notifTime)
     var time: Date = Calendar.current.date(bySetting: .hour, value: 7, of: Date())!
-    var startDate: Date = Date()
+    var startDate: Date
     
     var notificationsOn: Bool = true
+    
+    init() {
+        startDate = Date.now
+    }
 }
 
 /// Notifications - queues notifications
@@ -144,9 +148,7 @@ extension Notification {
     }
     
     static func printScheduledNotifications() {
-        
-        Logging.notificationLog.notice("Start date set for \(Notification.shared.notificationSettings.startDate)")
-        
+                
         UNUserNotificationCenter.current().getPendingNotificationRequests { requests in
             if requests.count != 0 {
                 Logging.notificationLog.notice("\(requests.count) notifications scheduled for delivery")
