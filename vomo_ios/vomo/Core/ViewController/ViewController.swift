@@ -83,7 +83,7 @@ struct ViewController: View {
         .onChange(of: scene) { newScenePhase in
             switch newScenePhase {
                 case .background:
-                    Logging.defaultLog.notice("Entered background – scheduling notification block")
+                    notification.scheduleNotifications()
                     break
                 case .inactive:
                     break

@@ -20,6 +20,7 @@ struct NotificationSettings: Codable {
     
     /// Always access using Calendar.current.dateComponents([.hour, .minute], from: notifTime)
     var time: Date = Calendar.current.date(bySetting: .hour, value: 7, of: Date())!
+    var startDate: Date = Date()
     
     var notificationsOn: Bool = true
 }
@@ -60,9 +61,9 @@ class Notification: ObservableObject {
     @Published var notificationSettings: NotificationSettings {
         didSet {
             Notification.write(notificationSettings)
-            if (notificationSettings.notificationsOn) {
-                self.scheduleNotifications()
-            } else {
+            
+            // remove scheduled notifications if notifications are turned off
+            if (!notificationSettings.notificationsOn) {
                 UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
                 Logging.notificationLog.notice("Cleared all pending notifications")
             }
@@ -105,8 +106,11 @@ extension Notification {
     
     func scheduleNotifications() {
         
-        // determine what start date should be based on persisted information
-        let startDate = Date()
+        // check if start date is in the past
+        if (notificationSettings.startDate.startOfDay < Date.now.startOfDay) {
+            notificationSettings.startDate = Calendar.current.date(byAdding: .day, value: frequencyValue, to: notificationSettings.startDate) ?? Date()
+            Logging.notificationLog.notice("Start date set to \(self.notificationSettings.startDate)")
+        }
         
         UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
         
@@ -123,6 +127,8 @@ extension Notification {
             
             var dateComponents = calendar.dateComponents([.hour, .minute], from: self.notificationSettings.time)
             
+            let startDate = notificationSettings.startDate
+            
             let triggerDate = calendar.date(byAdding: .day, value: i * frequency, to: startDate)
             dateComponents.day = calendar.component(.day, from: triggerDate ?? startDate)
             dateComponents.month = calendar.component(.month, from: triggerDate ?? startDate)
@@ -133,9 +139,14 @@ extension Notification {
             
             UNUserNotificationCenter.current().add(request)
         }
+        
+        Logging.notificationLog.notice("Scheduled notifications")
     }
     
     static func printScheduledNotifications() {
+        
+        Logging.notificationLog.notice("Start date set for \(Notification.shared.notificationSettings.startDate)")
+        
         UNUserNotificationCenter.current().getPendingNotificationRequests { requests in
             if requests.count != 0 {
                 Logging.notificationLog.notice("\(requests.count) notifications scheduled for delivery")
