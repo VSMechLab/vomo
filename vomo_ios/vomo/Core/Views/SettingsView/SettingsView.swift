@@ -99,7 +99,7 @@ extension SettingsView {
         Group {
             Text("First Name")
             
-            TextEntryField(topic: $settings.firstName, label: "First Name")
+            NameEntryField(topic: $settings.firstName, label: "First Name", type: .givenName)
         }
     }
     
@@ -107,7 +107,7 @@ extension SettingsView {
         Group {
             Text("Last Name")
             
-            TextEntryField(topic: $settings.lastName, label: "Last Name")
+            NameEntryField(topic: $settings.lastName, label: "Last Name", type: .familyName)
         }
     }
     

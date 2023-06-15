@@ -44,7 +44,7 @@
 		AD00C77229F7219D0017385E /* MiniAudioInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD00C77029F7219D0017385E /* MiniAudioInterface.swift */; };
 		AD00C77329F7219D0017385E /* AudioInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD00C77129F7219D0017385E /* AudioInterface.swift */; };
 		AD00C77A29F721BC0017385E /* HomeBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD00C77429F721BC0017385E /* HomeBackground.swift */; };
-		AD00C77B29F721BC0017385E /* TextEntryField.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD00C77529F721BC0017385E /* TextEntryField.swift */; };
+		AD00C77B29F721BC0017385E /* NameEntryField.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD00C77529F721BC0017385E /* NameEntryField.swift */; };
 		AD00C77C29F721BC0017385E /* DateEntryField.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD00C77629F721BC0017385E /* DateEntryField.swift */; };
 		AD00C77D29F721BC0017385E /* Arrow.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD00C77729F721BC0017385E /* Arrow.swift */; };
 		AD00C77E29F721BC0017385E /* Wave.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD00C77829F721BC0017385E /* Wave.swift */; };
@@ -176,7 +176,7 @@
 		AD00C77029F7219D0017385E /* MiniAudioInterface.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MiniAudioInterface.swift; path = vomo/Core/Features/AudioPlayerInterface/MiniAudioInterface.swift; sourceTree = SOURCE_ROOT; };
 		AD00C77129F7219D0017385E /* AudioInterface.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AudioInterface.swift; path = vomo/Core/Features/AudioPlayerInterface/AudioInterface.swift; sourceTree = SOURCE_ROOT; };
 		AD00C77429F721BC0017385E /* HomeBackground.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HomeBackground.swift; path = vomo/Core/Features/CommonComponents/HomeBackground.swift; sourceTree = SOURCE_ROOT; };
-		AD00C77529F721BC0017385E /* TextEntryField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TextEntryField.swift; path = vomo/Core/Features/CommonComponents/TextEntryField.swift; sourceTree = SOURCE_ROOT; };
+		AD00C77529F721BC0017385E /* NameEntryField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NameEntryField.swift; path = vomo/Core/Features/CommonComponents/NameEntryField.swift; sourceTree = SOURCE_ROOT; };
 		AD00C77629F721BC0017385E /* DateEntryField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DateEntryField.swift; path = vomo/Core/Features/CommonComponents/DateEntryField.swift; sourceTree = SOURCE_ROOT; };
 		AD00C77729F721BC0017385E /* Arrow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Arrow.swift; path = vomo/Core/Features/CommonComponents/Arrow.swift; sourceTree = SOURCE_ROOT; };
 		AD00C77829F721BC0017385E /* Wave.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Wave.swift; path = vomo/Core/Features/CommonComponents/Wave.swift; sourceTree = SOURCE_ROOT; };
@@ -369,7 +369,7 @@
 				AD00C77629F721BC0017385E /* DateEntryField.swift */,
 				AD00C77929F721BC0017385E /* EntryField.swift */,
 				AD00C77429F721BC0017385E /* HomeBackground.swift */,
-				AD00C77529F721BC0017385E /* TextEntryField.swift */,
+				AD00C77529F721BC0017385E /* NameEntryField.swift */,
 				AD00C77829F721BC0017385E /* Wave.swift */,
 			);
 			path = CommonComponents;
@@ -874,7 +874,7 @@
 				AD00C75E29F720C10017385E /* Filter.swift in Sources */,
 				AD00C76929F720DE0017385E /* BaselineRecording.swift in Sources */,
 				ADA0E0E2282561D700CF05D1 /* LineShapeView.swift in Sources */,
-				AD00C77B29F721BC0017385E /* TextEntryField.swift in Sources */,
+				AD00C77B29F721BC0017385E /* NameEntryField.swift in Sources */,
 				ADE3A01628395A8C00E56527 /* String.swift in Sources */,
 				AD00C74D29F720B20017385E /* TreatmentLog.swift in Sources */,
 				AD00C72E29F720530017385E /* CustomTargetView.swift in Sources */,
