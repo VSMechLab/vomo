@@ -56,45 +56,6 @@ struct PitchGraph: View {
     var body: some View {
         ZStack {
             if firstPoint.data != 0.0 {
-                VStack {
-                    HStack {
-                        Spacer()
-                        
-                        HStack {
-                            // Typical female range
-                            // Typical male range
-                            // target range if trans
-                            if settings.focusSelection == 1 {
-                                if settings.gender == "Male" {
-                                    Text("Target Male Range")
-                                } else if settings.gender == "Female" {
-                                    Text("Target Female Range")
-                                } else {
-                                    Text("Target Range")
-                                }
-                            } else {
-                                if settings.gender == "Male" {
-                                    Text("Typical Male Range")
-                                } else if settings.gender == "Female" {
-                                    Text("Typical Female Range")
-                                } else {
-                                    Text("Typical Range")
-                                }
-                            }
-                            
-                        }
-                        .font(._fieldCopyRegular)
-                        .padding(3.5)
-                        .background(
-                            Color.indigo.opacity(0.5)
-                        )
-                        .cornerRadius(5)
-                    }
-                    
-                    Spacer()
-                }
-                    
-                
                 /// This hstack will contain three things
                 /// Y axis with labels
                 /// Body of the graph
@@ -159,14 +120,19 @@ struct PitchGraph: View {
                     settings.hyperLinkedRecording = 2
                     // To do, hyperlink to propper task
                 }) {
-                    HStack {
-                        Text("Record at least one entry")
-                                    .underline(true, color: .white)
-                                    .underline(true, color: .clear)
-                                    + Text(" to see data on this graph")
+                    VStack {
+                        Spacer()
+                        HStack {
+                            Spacer()
+                            Text("Record at least one entry")
+                                        .underline(true, color: .white)
+                                        .underline(true, color: .clear)
+                                        + Text(" to see data on this graph")
+                            Spacer()
+                        }
+                        .padding(.vertical, 5)
                         Spacer()
                     }
-                    .padding(.vertical, 5)
                 }
             }
         }
@@ -335,7 +301,7 @@ extension PitchGraph {
                             }
                         }) {
                             ZStack {
-                                Text("\(firstPoint.data, specifier: "%.1f")")
+                                Text("\(firstPoint.data, specifier: "%.0f")")
                                     .offset(y: -20)
                                 Text("B")
                                     .padding(.horizontal, 3).background(nodes(pitch: firstPoint.data).0)
@@ -350,8 +316,8 @@ extension PitchGraph {
                 
                 /// bottom of axis & date
                 Color.white.frame(height: 2)
-                Text("\(firstPoint.dataDate.toDay())")
-                    .font(._fieldCopyRegular)
+                Text("\(firstPoint.dataDate.baselineLabel())")
+                    .font(._day)
                     .frame(width: 75, height: 15)
             }
         }
@@ -422,13 +388,6 @@ extension PitchGraph {
                             Color.clear.frame(height: geo.size.height * nodes(pitch: point.data).3)
                             
                             Button(action: {
-                                if showMoreTreatmentInfo == false {
-                                    currTreatment = point.treatmentDate
-                                }
-                                if point.hasTreatment {
-                                    showMoreTreatmentInfo.toggle()
-                                }
-                                
                                 if self.tappedRecording == point.dataDate {
                                     self.tappedRecording = .now
                                 } else {
@@ -436,13 +395,15 @@ extension PitchGraph {
                                 }
                             }) {
                                 ZStack {
-                                    Text("\(point.data, specifier: "%.1f")")
+                                    Text("\(point.data, specifier: "%.0f")")
                                         .offset(y: -20)
-                                    Circle()
-                                        .strokeBorder(.white, lineWidth: 2)
-                                        .background(Circle().fill(nodes(pitch: point.data).0))
-                                        .frame(width: geo.size.height * 0.10, height: geo.size.height * nodes(pitch: point.data).2)
+                                    Text("B")
+                                        .foregroundColor(.clear)
+                                        .padding(.horizontal, 3).background(nodes(pitch: point.data).0)
+                                        .cornerRadius(10).padding(1).background(Color.white).cornerRadius(10)
+                                        .frame(width: geo.size.height * 0.10, height: geo.size.height * 0.10)
                                         .offset(x: point.data == point.data ? -5 : 0)
+                                        .padding(10)
                                 }
                             }
                             
@@ -452,8 +413,8 @@ extension PitchGraph {
                     
                     /// bottom of axis & date
                     Color.white.frame(height: 2)
-                    Text("\(point.dataDate.shortDay())")
-                        .font(._fieldCopyRegular)
+                    Text("\(point.dataDate.nodeLabel())")
+                        .font(._day)
                         .frame(width: point.hasTreatment ? 100 : 50, height: 15)
                 }
                 

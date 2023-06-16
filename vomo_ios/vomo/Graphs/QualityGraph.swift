@@ -117,14 +117,19 @@ struct QualityGraph: View {
                     settings.hyperLinkedRecording = 2
                     // To do, hyperlink to propper task
                 }) {
-                    HStack {
-                        Text("Record at least one entry")
-                                    .underline(true, color: .white)
-                                    .underline(true, color: .clear)
-                                    + Text(" to see data on this graph")
+                    VStack {
+                        Spacer()
+                        HStack {
+                            Spacer()
+                            Text("Record at least one entry")
+                                        .underline(true, color: .white)
+                                        .underline(true, color: .clear)
+                                        + Text(" to see data on this graph")
+                            Spacer()
+                        }
+                        .padding(.vertical, 5)
                         Spacer()
                     }
-                    .padding(.vertical, 5)
                 }
             }
         }
@@ -232,9 +237,14 @@ struct QualityGraph: View {
 extension QualityGraph {
     private var voiceQualitySection: some View {
         VStack {
-            Text("Better\nVoice")
+            Text("**Better**\nVoice")
             Spacer()
-            Text("Worse\nVoice")
+            Image(svm.vertical_arrow)
+                .resizable()
+                .scaledToFit()
+                .frame(width: 11.5)
+            Spacer()
+            Text("**Worse**\nVoice")
         }
         .font(._bodyCopy)
         .frame(width: 50.0)
@@ -328,8 +338,8 @@ extension QualityGraph {
                 
                 /// bottom of axis & date
                 Color.white.frame(height: 2)
-                Text("\(firstPoint.dataDate.toDay())")
-                    .font(._fieldCopyRegular)
+                Text("\(firstPoint.dataDate.baselineLabel())")
+                    .font(._day)
                     .frame(width: 75, height: 15)
             }
         }
@@ -399,13 +409,6 @@ extension QualityGraph {
                             Color.clear.frame(height: geo.size.height * nodes(cpp: point.data).3)
                             
                             Button(action: {
-                                if showMoreTreatmentInfo == false {
-                                    currTreatment = point.treatmentDate
-                                }
-                                if point.hasTreatment {
-                                    showMoreTreatmentInfo.toggle()
-                                }
-                                
                                 if self.tappedRecording == point.dataDate {
                                     self.tappedRecording = .now
                                 } else {
@@ -415,11 +418,17 @@ extension QualityGraph {
                                 ZStack {
                                     Text("\(point.data, specifier: "%.1f")")
                                         .offset(y: -20)
-                                    Circle()
+                                    Text("B")
+                                        .foregroundColor(.clear)
+                                        .padding(.horizontal, 3).background(nodes(cpp: point.data).0)
+                                        .cornerRadius(10).padding(1).background(Color.white).cornerRadius(10)
+                                        .frame(width: geo.size.height * 0.10, height: geo.size.height * 0.10)
+                                    /*
                                         .strokeBorder(.white, lineWidth: 2)
                                         .background(Circle().fill(nodes(cpp: point.data).0))
                                         .frame(width: geo.size.height * 0.10, height: geo.size.height * nodes(cpp: point.data).2)
                                         .offset(x: point.data == point.data ? -5 : 0)
+                                     */
                                 }
                             }
                             
@@ -429,8 +438,8 @@ extension QualityGraph {
                     
                     /// bottom of axis & date
                     Color.white.frame(height: 2)
-                    Text("\(point.dataDate.shortDay())")
-                        .font(._fieldCopyRegular)
+                    Text("\(point.dataDate.nodeLabel())")
+                        .font(._day)
                         .frame(width: point.hasTreatment ? 100 : 50, height: 15)
                 }
                 

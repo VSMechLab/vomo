@@ -78,7 +78,7 @@ struct VHIScale: View {
                                     .shadow(color: .gray, radius: 5)
                             }
                         }
-                        .padding(.bottom, 42.5)
+                        .padding(.bottom, 25)
                         .onChange(of: self.position) { selection in
                             if responses.count > 0 {
                                 self.responses[index] = selection
@@ -87,12 +87,12 @@ struct VHIScale: View {
                     } else {
                         UISliderView(value: $position, minValue: 0.0, maxValue: 4.0, thumbColor: .purple, minTrackColor: .clear, maxTrackColor: .clear)
                             .shadow(color: .gray, radius: 5)
-                            .padding(.bottom, 42.5)
+                            .padding(.bottom, 25)
                     }
                 }
             }
         }
-        .padding(2.5)
+        .padding(1.0)
         .onChange(of: self.position) { selection in
             if responses.count > 0 {
                 self.responses[index] = selection
@@ -110,18 +110,17 @@ extension VHIScale {
     }
     
     private var textPrompt: some View {
-        ZStack {
-            VStack {
-                HStack {
-                    Text(prompt)
-                        .font(._question)
-                        .foregroundColor(Color.BODY_COPY)
-                        .multilineTextAlignment(.leading)
-                    Spacer()
-                }
+        VStack(alignment: .leading) {
+            HStack {
+                Text(prompt)
+                    .font(._question)
+                    .foregroundColor(Color.BODY_COPY)
+                    .multilineTextAlignment(.leading)
+                    .padding(.leading, 0.1)
                 Spacer()
-            }.padding()
-        }
+            }
+            Spacer()
+        }.padding(7.5)
     }
 }
 

@@ -5,6 +5,7 @@
 
 # Xcode User config
 *.xcworkspace/xcuserdata
+*xcuserdata
 
 # Icon must end with two \r
 Icon

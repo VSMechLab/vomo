@@ -14,8 +14,9 @@ struct SmallerArrow: View {
             Spacer()
             Image(arrow_img)
                 .resizable()
-                .frame(width: 8, height: 16)
+                .frame(width: 10, height: 16)
         }.frame(width: 16, height: 16)
+        .scaleEffect(0.90)
     }
 }
 
@@ -25,8 +26,9 @@ struct SmallArrow: View {
         Group {
             Image(arrow_img)
                 .resizable()
-                .frame(width: 9, height: 18)
-        }.frame(width: 20, height: 20)
+                .frame(width: 12, height: 18)
+        }.frame(width: 18, height: 18)
+        .scaleEffect(0.90)
     }
 }
 

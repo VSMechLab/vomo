@@ -16,6 +16,9 @@ import UIKit
  */
 
 struct ViewController: View {
+    
+    @Environment(\.scenePhase) var scene
+    
     @EnvironmentObject var audioRecorder: AudioRecorder
     @EnvironmentObject var viewRouter: ViewRouter
     @EnvironmentObject var notification: Notification
@@ -27,13 +30,16 @@ struct ViewController: View {
     
     var body: some View {
         VStack(spacing: 0) {
+            
+            Spacer().frame(height: 1)
+            
             currentPage
             
             Spacer()
             
             if !settings.keyboardShown && viewRouter.currentPage != .onboard && !focused {
                 tabBar
-                    .padding(.bottom, 17.5)
+                    .padding(.bottom, variablePadding)
             }
         }
         .foregroundColor(Color.black)
@@ -57,7 +63,7 @@ struct ViewController: View {
             
             // TODO: Move requesting permissions to a different spot (e.g. in onboarding flow)
             notification.requestPermission()
-            notification.updateNotifications(triggers: settings.triggers())
+//            notification.updateNotifications(triggers: settings.triggers())
             
             let group = DispatchGroup()
             let labelGroup = String("test")
@@ -72,6 +78,20 @@ struct ViewController: View {
             group.notify(queue: DispatchQueue.main, execute: {
                 Logging.defaultLog.notice("Synced all recordings!")
             })
+        }
+        
+        .onChange(of: scene) { newScenePhase in
+            switch newScenePhase {
+                case .background:
+                    notification.scheduleNotifications()
+                    break
+                case .inactive:
+                    break
+                case .active:
+                    break
+                @unknown default:
+                    Logging.defaultLog.warning("Unknown scene phase encountered")
+            }
         }
         
         .onChange(of: audioRecorder.recording) { _ in
@@ -197,8 +217,9 @@ extension ViewController {
 struct ViewController_Preview: PreviewProvider {
     static var previews: some View {
         ViewController()
-            .environmentObject(ViewRouter())
-            .environmentObject(Notification())
+            .environmentObject(ViewRouter.shared)
+            .environmentObject(Notification.shared)
             .environmentObject(Settings())
+            .environmentObject(AudioRecorder())
     }
 }

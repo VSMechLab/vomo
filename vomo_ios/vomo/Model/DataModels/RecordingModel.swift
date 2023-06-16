@@ -14,7 +14,19 @@ struct Recording {
     
     var taskNum: Int {
         var taskNum = 0
-        taskNum = Int(String(fileURL.lastPathComponent).suffix(5).prefix(1))!
+        let taskString = String(fileURL.lastPathComponent).suffix(5).prefix(1)
+        
+        switch taskString {
+        case "l":
+            taskNum = 1
+        case "T":
+            taskNum = 2
+        case "w":
+            taskNum = 3
+        default:
+            taskNum = 0
+        }
+        
         return taskNum
     }
 }

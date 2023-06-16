@@ -112,26 +112,40 @@ struct StarButton: View {
     }
 }
 
-struct ShareButtonByDate: View {
+/*
+struct PlayButton: View {
+    @ObservedObject var audioPlayer = AudioPlayer()
     
-    @EnvironmentObject var audioRecorder: AudioRecorder
-    
-    var date: Date
-    
-    let svm = SharedViewModel()
+    var audio: URL
     
     var body: some View {
         Button(action: {
-            
-            for target in audioRecorder.recordings {
-                if date == target.createdAt {
-                    self.audioRecorder.saveFile(file: target.fileURL)
-                }
+            print(audio)
+            if audioPlayer.isPlaying {
+                self.audioPlayer.stopPlayback()
+            } else {
+                self.audioPlayer.startPlayback(audio: audio)
             }
         }) {
-            Image(svm.share_button)
-                .resizable()
-                .frame(width: 18, height: 20)
+            Image(systemName: audioPlayer.isPlaying ?  "stop.fill" : "play.fill")
         }
     }
 }
+
+struct PlaybackButton: View {
+    @ObservedObject var audioPlayer = AudioPlayer()
+    let file: URL
+    var body: some View {
+        Button(action: {
+            if audioPlayer.isPlaying {
+                audioPlayer.stopPlayback()
+            } else {
+                audioPlayer.startPlayback(audio: file)
+            }
+        }) {
+            Image(systemName: audioPlayer.isPlaying ? "stop.circle" : "play.circle")
+                .foregroundColor(audioPlayer.isPlaying ? Color.red.opacity(0.8) : Color.TEAL)
+        }
+    }
+}
+*/

@@ -15,6 +15,8 @@ import Foundation
  */
 
 struct SharedViewModel {
+    let vertical_arrow = "vertical_arrow"
+    
     /// Maximum width content will occupy on screen
     let content_width = 340.0
     /// Padding for entry fields with text or images overlayed
@@ -178,6 +180,7 @@ struct SharedViewModel {
     let trash_can = "VoMo-App-Outline_9_delete_btn"
     let alt_can = "VoMo-App-Outline_8_DELETE_BTN_PRPL"
     let share_button = "VoMo-App-Outline_9_share_btn"
+    let share_button_alt = "VoMo-App-Outline_8_SHARE_BTN_PRPL"
     let heart_img = "VoMo-App-Outline_9_heart_prpl_btn"
     let heart_gray_img = "VoMo-App-Outline_9_heart_white_btn"
     

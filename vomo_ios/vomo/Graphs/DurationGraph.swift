@@ -61,7 +61,6 @@ struct DurationGraph: View {
                     /// Will have a fixed range bottom of 0 hz
                     yAxis
                     
-                    
                     ZStack {
                         targetBar
                         
@@ -118,14 +117,19 @@ struct DurationGraph: View {
                     settings.hyperLinkedRecording = 1
                     // To do, hyperlink to propper task
                 }) {
-                    HStack {
-                        Text("Record at least one entry")
-                                    .underline(true, color: .white)
-                                    .underline(true, color: .clear)
-                                    + Text(" to see data on this graph")
+                    VStack {
+                        Spacer()
+                        HStack {
+                            Spacer()
+                            Text("Record at least one entry")
+                                        .underline(true, color: .white)
+                                        .underline(true, color: .clear)
+                                        + Text(" to see data on this graph")
+                            Spacer()
+                        }
+                        .padding(.vertical, 5)
                         Spacer()
                     }
-                    .padding(.vertical, 5)
                 }
             }
             
@@ -137,6 +141,7 @@ struct DurationGraph: View {
         }
         .onChange(of: audioRecorder.processedData.last?.duration) { _ in
             findPoints()
+            print("Changed")
         }
         .onChange(of: deletionTarget.0) { _ in
             findPoints()
@@ -144,13 +149,6 @@ struct DurationGraph: View {
         .onChange(of: entries.treatments.count) { _ in
             findPoints()
             showMoreTreatmentInfo = false
-        }
-        .onChange(of: audioRecorder.processedData.count) { _ in
-            findPoints()
-        }
-        .onAppear() {
-            height = settings.durationRange().1
-            bottom = 0.0
         }
     }
     
@@ -175,12 +173,6 @@ struct DurationGraph: View {
             }
         }
         
-        // numbers assigned to spots
-        // first number is the index of the treatments
-        // second is the amount on that day
-        //var spots: [(Int, Int)] = []
-        
-        //
         var distance: (Double, Int) = (10000000000.0, -1)
         
         for treatment in entries.treatments {
@@ -215,6 +207,58 @@ struct DurationGraph: View {
             points.remove(at: 0)
         } else {
             firstPoint.data = 0.0
+        }
+        
+        height = settings.durationRange().1
+        
+        if points.isNotEmpty {
+            var bot: Double = 10000.0
+            
+            for point in points {
+                if point.data < bot {
+                    bot = point.data
+                }
+            }
+            if firstPoint.data < bot {
+                bot = firstPoint.data
+            }
+            bottom = 0.75 * bot
+            
+            // Assign height here as well
+            var hei = 0.0
+            
+            for point in points {
+                if point.data > hei {
+                    hei = point.data
+                }
+            }
+            if firstPoint.data > hei {
+                hei = firstPoint.data
+            }
+            
+            if hei > settings.durationRange().1 {
+                height = 1.05 * hei
+            } else {
+                height = settings.durationRange().1
+            }
+        } else {
+            var bot: Double = 10000.0
+            if firstPoint.data < bot {
+                bot = firstPoint.data
+                print("Assigning here: \(firstPoint.data)")
+            }
+            bottom = 0.75 * bot
+            
+            // Assign height here as well
+            var hei = 0.0
+            if firstPoint.data > hei {
+                hei = firstPoint.data
+            }
+            if hei > settings.durationRange().1 {
+                height = 1.05 * hei
+            } else {
+                height = settings.durationRange().1
+            }
         }
     }
 }
@@ -308,8 +352,8 @@ extension DurationGraph {
                 
                 /// bottom of axis & date
                 Color.white.frame(height: 2)
-                Text("\(firstPoint.dataDate.toDay())")
-                    .font(._fieldCopyRegular)
+                Text("\(firstPoint.dataDate.baselineLabel())")
+                    .font(._day)
                     .frame(width: 75, height: 15)
             }
         }
@@ -380,13 +424,6 @@ extension DurationGraph {
                             Color.clear.frame(height: geo.size.height * nodes(duration: point.data).3)
                             
                             Button(action: {
-                                if showMoreTreatmentInfo == false {
-                                    currTreatment = point.treatmentDate
-                                }
-                                if point.hasTreatment {
-                                    showMoreTreatmentInfo.toggle()
-                                }
-                                
                                 if self.tappedRecording == point.dataDate {
                                     self.tappedRecording = .now
                                 } else {
@@ -396,11 +433,11 @@ extension DurationGraph {
                                 ZStack {
                                     Text("\(point.data, specifier: "%.1f")")
                                         .offset(y: -20)
-                                    Circle()
-                                        .strokeBorder(.white, lineWidth: 2)
-                                        .background(Circle().fill(nodes(duration: point.data).0))
-                                        .frame(width: geo.size.height * 0.10, height: geo.size.height * nodes(duration: point.data).2)
-                                        .offset(x: point.data == point.data ? -5 : 0)
+                                    Text("B")
+                                        .foregroundColor(.clear)
+                                        .padding(.horizontal, 3).background(nodes(duration: point.data).0)
+                                        .cornerRadius(10).padding(1).background(Color.white).cornerRadius(10)
+                                        .frame(width: geo.size.height * 0.10, height: geo.size.height * 0.10)
                                 }
                             }
                             
@@ -410,8 +447,8 @@ extension DurationGraph {
                     
                     /// bottom of axis & date
                     Color.white.frame(height: 2)
-                    Text("\(point.dataDate.shortDay())")
-                        .font(._fieldCopyRegular)
+                    Text("\(point.dataDate.nodeLabel())")
+                        .font(._day)
                         .frame(width: point.hasTreatment ? 100 : 50, height: 15)
                 }
                 
@@ -420,46 +457,38 @@ extension DurationGraph {
     }
     
     private var targetBar: some View {
-        ZStack {
-            VStack(spacing: 0) {
-                // Basic spacing
-                Color.clear.frame(width: 1, height: 20)
-                
+        VStack(spacing: 0) {
+            // Basic spacing
+            Color.clear.frame(width: 1, height: 20)
+            
+            if (nodes(duration: settings.durationRange().0).3 / 0.90) > 1 {
+                GeometryReader { geo in
+                    Color.indigo.opacity(0.5)
+                        .frame(width: geo.size.width, height: geo.size.height)
+                }
+            } else {
                 GeometryReader { geo in
                     VStack(spacing: 0) {
-                        Color.indigo.opacity(0.5)
-                            .frame(height: geo.size.height * nodes(duration: settings.durationRange().0).3 / 0.90)
+                        ZStack {
+                            Color.indigo.opacity(0.5)
+                                .frame(height: geo.size.height * nodes(duration: settings.durationRange().0).3 / 0.90)
+                            VStack {
+                                Spacer()
+                                HStack {
+                                    Text(" \(settings.durationRange().0, specifier: "%.0f")")
+                                        .font(._fieldCopyBold)
+                                        .padding(2.5)
+                                    Spacer()
+                                }
+                            }
+                        }
+                        .frame(height: geo.size.height * nodes(duration: settings.durationRange().0).3 / 0.90)
                         Color.clear
                             .frame(height: geo.size.height * nodes(duration: settings.durationRange().0).1 / 0.90)
                     }
                 }
-                
-                Color.clear.frame(height: 17)
             }
-            
-            VStack(spacing: 0) {
-                GeometryReader { geo in
-                    VStack(spacing: 0) {
-                        Color.clear.opacity(0.5).frame(height: geo.size.height * spaceAroundTarget.1)
-
-                        VStack(spacing: 0) {
-                            HStack(spacing: 0) {
-                                Text(" \(settings.durationRange().0, specifier: "%.0f")")
-                                    .font(._fieldCopyBold)
-                                    .padding(.leading, 2.5)
-                                Spacer()
-                            }
-                            Spacer()
-                        }.frame(height: geo.size.height * spaceAroundTarget.0)
-
-                    }
-                    .frame(height: geo.size.height)
-                }
-                
-                Color.clear.frame(height: 17)
-            }
-            .foregroundColor(Color.white.opacity(0.5))
-            
+            Color.clear.frame(height: 17)
         }
     }
     
@@ -478,7 +507,7 @@ extension DurationGraph {
         values.2 = 0.10 // Locked to %10 of the view
         values.1 = 0.9 * ((duration - bottom) / difference)
 
-        if duration > settings.durationRange().0 {
+        if duration >= settings.durationRange().0 {
             values.0 = .green
         } else {
              values.0 = .red

@@ -144,6 +144,9 @@ struct Graphic: View {
 }
 
 struct SummaryTab: View {
+    @EnvironmentObject var settings: Settings
+    @EnvironmentObject var entries: Entries
+    @EnvironmentObject var audioRecorder: AudioRecorder
     @Binding var showTitle: Bool
     @State var showInformation = false
     var body: some View {
@@ -165,8 +168,53 @@ struct SummaryTab: View {
                         .font(._bodyCopyMedium)
                 }
                 
-                GraphView(showVHI: .constant(false), showVE: .constant(false), index: 0)
+                VStack {
+                    Group {
+                        Spacer()
+                        
+                        HStack {
+                            Text("**Recordings** (\(settings.recordEntered) total / \(settings.currentWeekRecordings(recordings: audioRecorder.recordings)) this week)")
+                            Spacer()
+                            Text("\(settings.recordProgress, specifier: "%.0f")%")
+                        }
+                        
+                        Spacer()
+                    }
+                    
+                    dottedLine
+                    
+                    Group {
+                        Spacer()
+                        
+                        HStack {
+                            Text("**Surveys** (\(settings.surveyEntered) total / \(settings.currentWeekSurveys(surveys: entries.questionnaires)) this week)")
+                            Spacer()
+                            Text("\(settings.surveyProgress, specifier: "%.0f")%")
+                        }
+                        
+                        Spacer()
+                    }
+                    
+                    dottedLine
+                    
+                    Group {
+                        Spacer()
+                        
+                        HStack {
+                            Text("**Journals** (\(settings.journalEntered) total / \(settings.currentWeekJournals(journals: entries.journals)) this week)")
+                            Spacer()
+                            Text("\(settings.journalProgress, specifier: "%.0f")%")
+                        }
+                        
+                        Spacer()
+                    }
+                }
+                .foregroundColor(.white)
                 
+                /*
+                 self.hChartData = ChartData([("Recordings", settings.recordProgress), ("Surveys", settings.surveyProgress), ("Journals", settings.journalProgress)])
+                GraphView(showVHI: .constant(false), showVE: .constant(false), index: 0)
+                */
                 Spacer()
             }
             .padding()
@@ -197,6 +245,18 @@ struct SummaryTab: View {
         .frame(width: UIScreen.main.bounds.width, height: showTitle ? UIScreen.main.bounds.height * 0.325 : UIScreen.main.bounds.height * 0.345)
         .edgesIgnoringSafeArea(.all)
     }
+    
+    private var dottedLine: some View {
+        HStack(spacing: 0) {
+            ForEach(0..<15) { index in
+                if index % 2 == 0 {
+                    Color.white.frame(height: 2)
+                } else {
+                    Color.clear.frame(height: 2)
+                }
+            }
+        }
+    }
 }
 
 struct PitchTab: View {
@@ -222,13 +282,48 @@ struct PitchTab: View {
                         self.showInformation = true
                     }
                     .font(Font._title1)
+                    
                     Spacer()
+                    
+                    HStack(spacing: 5) {
+                        Spacer()
+                        
+                        Color.indigo.opacity(0.5)
+                            .frame(width: 14, height: 14)
+                            .background(Color.DARK_PURPLE)
+                            .cornerRadius(2.5)
+                            .padding(1)
+                            .background(Color.white)
+                            .cornerRadius(2.5)
+                        
+                        // Typical female range
+                        // Typical male range
+                        // target range if trans
+                        if settings.focusSelection == 1 {
+                            if settings.gender == "Male" {
+                                Text("Target Male Range")
+                            } else if settings.gender == "Female" {
+                                Text("Target Female Range")
+                            } else {
+                                Text("Target Range")
+                            }
+                        } else {
+                            if settings.gender == "Male" {
+                                Text("Typical Male Range")
+                            } else if settings.gender == "Female" {
+                                Text("Typical Female Range")
+                            } else {
+                                Text("Typical Range")
+                            }
+                        }
+                    }
+                    .foregroundColor(.white)
+                    .font(._fieldCopyRegular)
+                    .offset(y: 10)
                 }
                 .padding(.top, showTitle ? 15 : -20)
                 
                 HStack {
-                    Spacer()
-                    
                     if settings.focusSelection == 4 {
                         switch settings.gender {
                         case "Male":
@@ -311,13 +406,17 @@ struct DurationTab: View {
                         self.showInformation = true
                     }
                     .font(Font._title1)
+                    
                     Spacer()
                     
-                    
                     HStack(spacing: 5) {
-                        Color.indigo.opacity(0.5).frame(width: 17.5, height: 17.5)
-                            .border(Color.white, width: 0.5)
-                            //.cornerRadius(5)
+                        Color.indigo.opacity(0.5)
+                            .frame(width: 14, height: 14)
+                            .background(Color.DARK_PURPLE)
+                            .cornerRadius(2.5)
+                            .padding(1)
+                            .background(Color.white)
+                            .cornerRadius(2.5)
                         
                         // Typical female range
                         // Typical male range
@@ -340,11 +439,9 @@ struct DurationTab: View {
                             }
                         }
                     }
-                    .padding(2)
+                    .foregroundColor(.white)
                     .font(._fieldCopyRegular)
-                    .foregroundColor(Color.white)
-                    .padding(.top, 5)
-                    
+                    .offset(y: 10)
                 }
                 .padding(.top, showTitle ? 15 : -20)
                 
@@ -445,6 +542,7 @@ struct QualityTab: View {
 
 struct SurveyTab: View {
     @EnvironmentObject var entries: Entries
+    @EnvironmentObject var viewRouter: ViewRouter
     
     @Binding var showTitle: Bool
     
@@ -462,7 +560,7 @@ struct SurveyTab: View {
     /// Iterate between four different graph types
     /// "Showing VHI-10", "Showing Vocal Effort (Physical)", "Showing Vocal Effort (Mental)", "Showing Current % of Vocal Function"
     /// Use buttons action bellow to determine when to move between different graphs
-    let surveyName = ["Showing VHI-10", "Showing % of Vocal Effort", "Showing % of Vocal Function"]
+    let surveyName = ["Showing VHI-10", "Showing Current Vocal **Effort**", "Showing Current Vocal **Function**"]
     @State var availableSurveys: [Int] = []
     
     var body: some View {
@@ -491,7 +589,7 @@ struct SurveyTab: View {
                             }
                         }
                     }) {
-                        Text(surveySelection != -1 ? surveyName[surveySelection] : "")
+                        Text(surveySelection != -1 ? .init(surveyName[surveySelection]) : "")
                             .font(._bodyCopy)
                     }
                 }
@@ -502,9 +600,15 @@ struct SurveyTab: View {
                 if surveySelection != -1 {
                     SurveyGraph(surveySelection: $surveySelection, tappedRecording: $tappedRecording, deletionTarget: $deletionTarget)
                 } else {
-                    Text("Log a survey to start seeing data.")
-                        .multilineTextAlignment(.center)
-                        .font(._bodyCopy)
+                    Button(action: {
+                        viewRouter.currentPage = .questionnaire
+                    }) {
+                        Text("Take a voice survey")
+                            .underline()
+                            .font(._bodyCopy)
+                             + Text(" to see this graph")
+                            .font(._bodyCopy)
+                    }
                 }
                 
                 Spacer()
@@ -519,7 +623,7 @@ struct SurveyTab: View {
                     self.showInformation = false
                 }) {
                     VStack {
-                        Text("View graphs of your surveys in this tab. Toggle between different survey types bellow.")
+                        Text("Displays graphs of your voice survey results. If multiple types of surveys have been answered, toggle between different survey graphs by clicking on survey name in top right corner.")
                             .multilineTextAlignment(.leading)
                         Spacer()
                     }
@@ -537,17 +641,28 @@ struct SurveyTab: View {
         .frame(width: UIScreen.main.bounds.width, height: showTitle ? UIScreen.main.bounds.height * 0.325 : UIScreen.main.bounds.height * 0.345)
         .edgesIgnoringSafeArea(.all)
         .onAppear() {
-            if surveyTotals().0 != 0 {
-                availableSurveys += [0]
-            }
-            if surveyTotals().1 != 0 {
-                availableSurveys += [1]
-            }
-            if surveyTotals().2 != 0 {
-                availableSurveys += [2]
-            }
-            surveySelection = availableSurveys.first ?? -1
+            refreshSurveys()
         }
+        .onChange(of: entries.questionnaires.count) { _ in
+            print("refreshing surveys")
+            refreshSurveys()
+        }
+    }
+    
+    func refreshSurveys() {
+        surveySelection = -1
+        availableSurveys.removeAll()
+        
+        if surveyTotals().0 != 0 {
+            availableSurveys += [0]
+        }
+        if surveyTotals().1 != 0 {
+            availableSurveys += [1]
+        }
+        if surveyTotals().2 != 0 {
+            availableSurveys += [2]
+        }
+        surveySelection = availableSurveys.first ?? -1
     }
     
     func surveyTotals() -> (Double, Double, Double) {

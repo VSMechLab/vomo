@@ -59,17 +59,30 @@ extension SurveyGraph {
                                             Text("\(firstPoint.data, specifier: "%.0f")").font(._fieldCopyBold)
                                                 .offset(y: -20)
                                         } else if firstPoint.data < firstPoint.secondPoint {
-                                            Text("\(firstPoint.data, specifier: "%.0f")").font(._fieldCopyBold)
-                                                .offset(y: 20)
+                                            if firstPoint.data <= 5 {
+                                                Text("\(firstPoint.data, specifier: "%.0f")").font(._fieldCopyBold)
+                                                    .offset(x: 20)
+                                            } else {
+                                                Text("\(firstPoint.data, specifier: "%.0f")").font(._fieldCopyBold)
+                                                    .offset(y: 20)
+                                            }
                                         } else if firstPoint.data == firstPoint.secondPoint {
                                             Text("\(firstPoint.data, specifier: "%.0f")").font(._fieldCopyBold)
                                                 .offset(y: -20)
                                         }
                                         
-                                        Text("B")
-                                            .padding(.horizontal, 3).background(Color.TEAL)
-                                            .cornerRadius(10).padding(1).background(Color.white).cornerRadius(10)
-                                            .frame(width: geo.size.height * 0.10, height: geo.size.height * 0.10)
+                                        if firstPoint.data == firstPoint.secondPoint {
+                                            Text("B")
+                                                .padding(.horizontal, 3).background(Color.TEAL)
+                                                .cornerRadius(10).padding(1).background(Color.white).cornerRadius(10)
+                                                .frame(width: geo.size.height * 0.10, height: geo.size.height * 0.10)
+                                                .offset(x: -5)
+                                        } else {
+                                            Text("B")
+                                                .padding(.horizontal, 3).background(Color.TEAL)
+                                                .cornerRadius(10).padding(1).background(Color.white).cornerRadius(10)
+                                                .frame(width: geo.size.height * 0.10, height: geo.size.height * 0.10)
+                                        }
                                     }
                                 }
 
@@ -94,14 +107,28 @@ extension SurveyGraph {
                                             Text("\(firstPoint.secondPoint, specifier: "%.0f")").font(._fieldCopyBold)
                                                 .offset(y: -20)
                                         } else if firstPoint.secondPoint < firstPoint.data {
-                                            Text("\(firstPoint.secondPoint, specifier: "%.0f")").font(._fieldCopyBold)
-                                                .offset(y: 20)
+                                            if firstPoint.secondPoint <= 5 {
+                                                Text("\(firstPoint.secondPoint, specifier: "%.0f")").font(._fieldCopyBold)
+                                                    .offset(x: -20)
+                                            } else {
+                                                Text("\(firstPoint.secondPoint, specifier: "%.0f")").font(._fieldCopyBold)
+                                                    .offset(y: 20)
+                                            }
                                         }
                                         
-                                        Text("B")
-                                            .padding(.horizontal, 3).background(nodes(value: firstPoint.secondPoint).0)
-                                            .cornerRadius(10).padding(1).background(Color.white).cornerRadius(10)
-                                            .frame(width: geo.size.height * 0.10, height: geo.size.height * 0.10)
+                                        
+                                        if firstPoint.data == firstPoint.secondPoint {
+                                            Text("B")
+                                                .padding(.horizontal, 3).background(nodes(value: firstPoint.secondPoint).0)
+                                                .cornerRadius(10).padding(1).background(Color.white).cornerRadius(10)
+                                                .frame(width: geo.size.height * 0.10, height: geo.size.height * 0.10)
+                                                .offset(x: 5)
+                                        } else {
+                                            Text("B")
+                                                .padding(.horizontal, 3).background(nodes(value: firstPoint.secondPoint).0)
+                                                .cornerRadius(10).padding(1).background(Color.white).cornerRadius(10)
+                                                .frame(width: geo.size.height * 0.10, height: geo.size.height * 0.10)
+                                        }
                                     }
                                 }
 
@@ -138,8 +165,8 @@ extension SurveyGraph {
                 
                 /// bottom of axis & date
                 Color.white.frame(height: 2)
-                Text("\(points.first?.dataDate.toDay() ?? (Date.now).toDay())")
-                    .font(._fieldCopyRegular)
+                Text("\(points.first?.dataDate.baselineLabel() ?? (Date.now).baselineLabel())")
+                    .font(._day)
                     .frame(width: 75, height: 15)
             }
         }
@@ -220,18 +247,34 @@ extension SurveyGraph {
                                                 Text("\(point.data, specifier: "%.0f")").font(._fieldCopyBold)
                                                     .offset(y: -20)
                                             } else if point.data < point.secondPoint {
-                                                Text("\(point.data, specifier: "%.0f")").font(._fieldCopyBold)
-                                                    .offset(y: 20)
+                                                if point.data <= 5 {
+                                                    Text("\(point.data, specifier: "%.0f")").font(._fieldCopyBold)
+                                                        .offset(x: 20)
+                                                } else {
+                                                    Text("\(point.data, specifier: "%.0f")").font(._fieldCopyBold)
+                                                        .offset(y: 20)
+                                                }
                                             } else if point.data == point.secondPoint {
                                                 Text("\(point.data, specifier: "%.0f")").font(._fieldCopyBold)
                                                     .offset(y: -20)
                                             }
                                             
-                                            Circle()
-                                                .strokeBorder(.white, lineWidth: 2)
-                                                .background(Circle().fill(Color.TEAL))
-                                                .frame(width: geo.size.height * 0.10, height: geo.size.height * nodes(value: point.data).2)
-                                                .offset(x: point.data == point.secondPoint ? -5 : 0)
+                                            if point.data == point.secondPoint {
+                                                Text("B")
+                                                    .foregroundColor(.clear)
+                                                    .padding(.horizontal, 3).background(Color.TEAL)
+                                                    .cornerRadius(10).padding(1).background(Color.white).cornerRadius(10)
+                                                    .frame(width: geo.size.height * 0.10, height: geo.size.height * 0.10)
+                                                    .offset(x: point.data == point.secondPoint ? -5 : 0)
+                                                    .offset(x: -5)
+                                            } else {
+                                                Text("B")
+                                                    .foregroundColor(.clear)
+                                                    .padding(.horizontal, 3).background(Color.TEAL)
+                                                    .cornerRadius(10).padding(1).background(Color.white).cornerRadius(10)
+                                                    .frame(width: geo.size.height * 0.10, height: geo.size.height * 0.10)
+                                                    .offset(x: point.data == point.secondPoint ? -5 : 0)
+                                            }
                                         }
                                     }
 
@@ -251,10 +294,11 @@ extension SurveyGraph {
                                     }
                                 }) {
                                     ZStack {
-                                        Circle()
-                                            .strokeBorder(.white, lineWidth: 2)
-                                            .background(Circle().fill(nodes(value: point.data).0))
-                                            .frame(width: geo.size.height * 0.10, height: geo.size.height * nodes(value: point.data).2)
+                                        Text("B")
+                                            .foregroundColor(.clear)
+                                            .padding(.horizontal, 3).background(nodes(value: point.data).0)
+                                            .cornerRadius(10).padding(1).background(Color.white).cornerRadius(10)
+                                            .frame(width: geo.size.height * 0.10, height: geo.size.height * 0.10)
                                         Text("\(point.data, specifier: "%.0f")").font(._fieldCopyBold)
                                             .offset(y: -20)
                                     }
@@ -267,8 +311,8 @@ extension SurveyGraph {
                     
                     /// bottom of axis & date
                     Color.white.frame(height: 2)
-                    Text("\(point.dataDate.toDay())")
-                        .font(._fieldCopyRegular)
+                    Text("\(point.dataDate.nodeLabel())")
+                        .font(._day)
                         .frame(width: 75, height: 15)
                 }
             }
@@ -306,20 +350,34 @@ extension SurveyGraph {
                                                 Text("\(point.secondPoint, specifier: "%.0f")").font(._fieldCopyBold)
                                                     .offset(y: -20)
                                             } else if point.secondPoint < point.data {
-                                                Text("\(point.secondPoint, specifier: "%.0f")").font(._fieldCopyBold)
-                                                    .offset(y: 20)
+                                                if firstPoint.secondPoint <= 5 {
+                                                    Text("\(point.secondPoint, specifier: "%.0f")").font(._fieldCopyBold)
+                                                        .offset(x: -20)
+                                                } else {
+                                                    Text("\(point.secondPoint, specifier: "%.0f")").font(._fieldCopyBold)
+                                                        .offset(y: 20)
+                                                }
+                                            } else if point.data == point.secondPoint {
+                                                Text("\(point.data, specifier: "%.0f")").font(._fieldCopyBold)
+                                                    .offset(y: -20)
                                             }
                                             
-                                            Circle()
-                                                .strokeBorder(.white, lineWidth: 2)
-                                                .background(Circle().fill(
-                                                    
-                                                    nodes(value: point.secondPoint).0
-                                                    
-                                                )
-                                                )
-                                                .frame(width: geo.size.height * 0.10, height: geo.size.height * nodes(value: point.data).2)
-                                                .offset(x: point.data == point.secondPoint ? -5 : 0)
+                                            if point.data == point.secondPoint {
+                                                Text("B")
+                                                    .foregroundColor(.clear)
+                                                    .padding(.horizontal, 3).background(nodes(value: point.data).0)
+                                                    .cornerRadius(10).padding(1).background(Color.white).cornerRadius(10)
+                                                    .frame(width: geo.size.height * 0.10, height: geo.size.height * 0.10)
+                                                    .offset(x: point.data == point.secondPoint ? -5 : 0)
+                                                    .offset(x: 5)
+                                            } else {
+                                                Text("B")
+                                                    .foregroundColor(.clear)
+                                                    .padding(.horizontal, 3).background(nodes(value: point.data).0)
+                                                    .cornerRadius(10).padding(1).background(Color.white).cornerRadius(10)
+                                                    .frame(width: geo.size.height * 0.10, height: geo.size.height * 0.10)
+                                                    .offset(x: point.data == point.secondPoint ? -5 : 0)
+                                            }
                                         }
                                     }
 
@@ -330,10 +388,7 @@ extension SurveyGraph {
                     }
                     
                     /// bottom of axis & date
-                    Color.white.frame(height: 2)
-                    Text("\(point.dataDate.toDay())")
-                        .font(._fieldCopyRegular)
-                        .frame(width: 75, height: 15)
+                    Color.clear.frame(width: 75, height: 17)
                 }
             }
             .frame(width: 75)
@@ -350,13 +405,13 @@ extension SurveyGraph {
     var voiceQualitySection: some View {
         VStack {
             if surveySelection == 0 {
-                Text("Worse\nVoice")
+                Text("**Worse**\nVoice")
                 Spacer()
-                Text("Better\nVoice")
+                Text("**Better**\nVoice")
             } else if surveySelection == 3 {
-                Text("Normal\nFunction")
+                Text("**Normal**\nFunction")
                 Spacer()
-                Text("No\nFunction")
+                Text("**No**\nFunction")
             }
         }
         .font(._bodyCopy)
@@ -375,6 +430,7 @@ extension SurveyGraph {
                     .padding(.horizontal, -10)
                     .rotationEffect(Angle(degrees: -90))
                     .frame(width: 40)
+                    .offset(x: 12.5)
             } else if surveySelection == 1 {
                 Text("% effort")
                     .frame(width: 120)
@@ -382,7 +438,7 @@ extension SurveyGraph {
                     .rotationEffect(Angle(degrees: -90))
                     .frame(width: 40)
             } else {
-                Text("% of normal effort")
+                Text("% of normal function")
                     .frame(width: 130)
                     .padding(.horizontal, -10)
                     .rotationEffect(Angle(degrees: -90))
@@ -426,48 +482,72 @@ extension SurveyGraph {
             VStack(spacing: 0) {
                 
                 GeometryReader { geo in
-                    VStack(alignment: .leading, spacing: 0) {
-                        
-                        ZStack {
-                            HStack {
+                    HStack(spacing: 0) {
+                        VStack(alignment: .center, spacing: 0) {
+                            
+                            Image(svm.vertical_arrow)
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 11.5)
+                        }
+                        .frame(width: 50.0)
+
+                        VStack(alignment: .leading, spacing: 0) {
+                            
+                            ZStack {
+                                HStack {
+                                    Color.clear
+                                    Spacer()
+                                }
+                                
+                                VStack(spacing: 0) {
+                                    Spacer()
+                                    HStack(spacing: 0) {
+                                        Text("Abnormal")
+                                            .font(._surveyNormalLabel)
+                                            .rotationEffect(Angle(degrees: -90), anchor: .topLeading)
+                                            .padding(1.5)
+                                            .padding(.vertical)
+                                            .offset(y: 50)
+                                        Spacer()
+                                    }
+                                    Spacer()
+                                }
+                            }
+                            .frame(height: geo.size.height * ((maxHeight() - 12) / maxHeight()))
+                            
+                            ZStack {
                                 Color.clear
-                                Spacer()
-                            }
-                            
-                            VStack {
-                                Spacer()
-                                HStack {
-                                    Text("Abnormal")
-                                        .padding(1.5)
+                                
+                                VStack(spacing: 0) {
+                                    Spacer()
+                                    HStack(spacing: 0) {
+                                        Text("Normal")
+                                            .font(._surveyNormalLabel)
+                                            .rotationEffect(Angle(degrees: -90), anchor: .topLeading)
+                                            .padding(1.5)
+                                            .padding(.vertical)
+                                            .offset(y: 20)
+                                        Spacer()
+                                    }
                                     Spacer()
                                 }
                             }
+                            .frame(height: geo.size.height * ((12) / maxHeight()))
+                            .background(Color.white.opacity(0.2))
                         }
-                        .frame(height: geo.size.height * ((maxHeight() - 12) / maxHeight()))
-                        
-                        ZStack {
-                            Color.clear
-                            
-                            VStack {
-                                HStack {
-                                    Text("Normal")
-                                        .padding(1.5)
-                                    Spacer()
-                                }
-                                Spacer()
-                            }
-                        }
-                        .frame(height: geo.size.height * ((12) / maxHeight()))
-                        .background(Color.white.opacity(0.2))
+                        .font(._fieldCopyRegular)
+                        .frame(width: geo.size.width, height: geo.size.height)
                     }
-                    .font(._fieldCopyRegular)
-                    .frame(width: geo.size.width, height: geo.size.height)
                 }
                 
                 Color.clear.frame(height: 17)
             }
             
-            targetLine
+            HStack(spacing: 0) {
+                Color.clear.frame(width: 50)
+                targetLine
+            }
         }
     }
 }
