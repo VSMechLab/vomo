@@ -191,6 +191,22 @@ extension Date {
         return dateFormatter.string(from: self).uppercased()
     }
     
+    /// For baseline
+    /// "EEE M/d/yy"
+    func baselineLabel() -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "EEE M/d/yy"
+        return dateFormatter.string(from: self).uppercased()
+    }
+    
+    /// For node
+    /// "EEE M/d"
+    func nodeLabel() -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "EEE M/d"
+        return dateFormatter.string(from: self).uppercased()
+    }
+    
     /// "M/d"
     func shortDay() -> String
     {

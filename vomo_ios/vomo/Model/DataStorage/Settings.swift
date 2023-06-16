@@ -615,6 +615,67 @@ extension Settings {
         }
     }
     
+    /// Records completed in the current week
+    func currentWeekRecordings(recordings: [Recording]) -> Int {
+        var count = 0
+        
+        var newArray: [Recording] = []
+        
+        if recordings.count >= recordEntered {
+            newArray = Array(recordings.suffix(recordEntered))
+            
+            for index in newArray.indices {
+                //print("\(newArray[index].createdAt) && \(Date.now.startOfWeek)")
+                if newArray[index].createdAt > Date.now.startOfWeek! {
+                    count += 1
+                }
+            }
+        }
+        
+        return count
+    }
+    
+    /// Surveys completed in the current week
+    func currentWeekSurveys(surveys: [SurveyModel]) -> Int {
+        var count = 0
+        
+        var newArray: [SurveyModel] = []
+        
+        if surveys.count >= surveyEntered {
+            newArray = Array(surveys.suffix(surveyEntered))
+            
+            for index in newArray.indices {
+                //print("\(newArray[index].createdAt) && \(Date.now.startOfWeek)")
+                if newArray[index].createdAt > Date.now.startOfWeek! {
+                    count += 1
+                }
+            }
+        }
+        
+        return count
+    }
+    
+    /// Journals completed in the current week
+    func currentWeekJournals(journals: [JournalModel]) -> Int {
+        
+        var count = 0
+        
+        var newArray: [JournalModel] = []
+        
+        if journals.count >= journalEntered {
+            newArray = Array(journals.suffix(journalEntered))
+            
+            for index in newArray.indices {
+                //print("\(newArray[index].createdAt) && \(Date.now.startOfWeek)")
+                if newArray[index].createdAt > Date.now.startOfWeek! {
+                    count += 1
+                }
+            }
+        }
+        
+        return count
+    }
+    
     /// Total amount of surveys required to complete the goal
     var surveyGoal: Double {
         return ( Double(surveysPerWeek) * Double(numWeeks) + 0.000001)

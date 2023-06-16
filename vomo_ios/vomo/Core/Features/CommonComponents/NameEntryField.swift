@@ -7,12 +7,15 @@
 
 import SwiftUI
 
-struct TextEntryField: View {
+struct NameEntryField: View {
     @Binding var topic: String
     @EnvironmentObject var settings: Settings
     @FocusState private var focused: Bool
     let label: String
     let svm = SharedViewModel()
+    
+    let type: UITextContentType
+    
     var body: some View {
         ZStack {
             EntryField()
@@ -21,6 +24,7 @@ struct TextEntryField: View {
                 .font(self.topic.isEmpty ? ._fieldCopyItalic : ._fieldCopyRegular)
                 .padding(.horizontal, svm.fieldPadding)
                 .focused($focused)
+                .textContentType(type)
         }
         .onChange(of: focused) { focus in
             settings.keyboardShown = focus

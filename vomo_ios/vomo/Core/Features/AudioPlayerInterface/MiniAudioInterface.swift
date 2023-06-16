@@ -30,7 +30,7 @@ struct MiniAudioInterface: View {
     
     var body: some View {
         // the control buttons
-        HStack(alignment: .center, spacing: 15) {
+        HStack(alignment: .center, spacing: 20) {
             Button(action: {
                 let decrease = self.audioPlayer.currentTime - 5
                 if decrease < 0.0 {
@@ -59,7 +59,6 @@ struct MiniAudioInterface: View {
                 Image(playing ? svm.stop_playback_img : svm.start_playback_img)
                     .resizable()
                     .frame(width: 17.5, height: 17.5)
-                    .padding(.horizontal, 3.5)
             }
             
             Button(action: {

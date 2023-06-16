@@ -19,42 +19,35 @@ struct ExpandedSurvey: View {
         VStack(alignment: .leading) {
             if available.contains("vhi") {
                 HStack(spacing: 0) {
-                    Text("VHI-10: ")
+                    Text("**VHI-10:** \(score.0, specifier: "%.0f")")
                         .font(._bodyCopyMedium)
-                    Text("\(score.0, specifier: "%.0f")")
-                        .font(._bodyCopyBold)
                     Spacer()
+                    StarButton(type: "survey", date: createdAt)
+                        .padding(7.5)
+                    DeleteButton(deletionTarget: $deletionTarget, type: "Survey response", date: createdAt)
+                        .padding(7.5)
                 }
             }
             if available.contains("ve") {
-                HStack {
-                    Text("Physical Effort: ")
-                        .font(._bodyCopyMedium)
-                    Text("\(score.1, specifier: "%.0f")%")
-                        .font(._bodyCopyBold)
+                HStack(spacing: 0) {
+                    Text("Effort: **Physical:** \(score.1, specifier: "%.0f")% / **Mental:** \(score.2, specifier: "%.0f")%")
                     Spacer()
-                }
-                HStack {
-                    Text("Mental Effort: ")
-                        .font(._bodyCopyMedium)
-                    Text("\(score.2, specifier: "%.0f")%")
-                        .font(._bodyCopyBold)
-                    Spacer()
+                    StarButton(type: "survey", date: createdAt)
+                        .padding(7.5)
+                    DeleteButton(deletionTarget: $deletionTarget, type: "Survey response", date: createdAt)
+                        .padding(7.5)
                 }
             }
             if available.contains("bi") {
                 HStack(spacing: 0) {
-                    Text("Percent of Vocal Function: ")
+                    Text("Percent of **Vocal Function**: \(score.3, specifier: "%.0f")%")
                         .font(._bodyCopyMedium)
-                    Text("\(score.3, specifier: "%.0f")%")
-                        .font(._bodyCopyBold)
                     Spacer()
+                    StarButton(type: "survey", date: createdAt)
+                        .padding(7.5)
+                    DeleteButton(deletionTarget: $deletionTarget, type: "Survey response", date: createdAt)
+                        .padding(7.5)
                 }
-            }
-            HStack {
-                StarButton(type: "survey", date: createdAt)
-                Spacer()
-                DeleteButton(deletionTarget: $deletionTarget, type: "Survey response", date: createdAt)
             }
         }
         .foregroundColor(Color.white)

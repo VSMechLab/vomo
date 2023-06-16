@@ -6,6 +6,9 @@
 //
 
 import SwiftUI
+import UIKit
+import MobileCoreServices
+import UniformTypeIdentifiers
 
 /*
  
@@ -40,6 +43,8 @@ struct SettingsView: View {
     #if DEBUG
         @State private var showDebugMenu = false
     #endif
+	
+	@State private var selectedFiles = [URL]()
     
     var body: some View {
         ZStack {
@@ -63,6 +68,9 @@ struct SettingsView: View {
                     
                     extraButtonSection
                     
+                    Text("Version \(Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "")")
+                        .font(._bodyCopyUnBold)
+
                     // MARK: Debug Menu
                     #if DEBUG
                     
@@ -114,7 +122,7 @@ extension SettingsView {
         Group {
             Text("First Name")
             
-            TextEntryField(topic: $settings.firstName, label: "First Name")
+            NameEntryField(topic: $settings.firstName, label: "First Name", type: .givenName)
         }
     }
     
@@ -122,7 +130,7 @@ extension SettingsView {
         Group {
             Text("Last Name")
             
-            TextEntryField(topic: $settings.lastName, label: "Last Name")
+            NameEntryField(topic: $settings.lastName, label: "Last Name", type: .familyName)
         }
     }
     
@@ -317,6 +325,41 @@ extension SettingsView {
             }
             
             Button(action: {
+                selectedFiles = audioRecorder.allFiles()
+                
+                var filesToShare = [Any]()
+                for fileURL in selectedFiles {
+                    do {
+                        let data = try Data(contentsOf: fileURL)
+                        let tempURL = FileManager.default.temporaryDirectory.appendingPathComponent(fileURL.lastPathComponent)
+                        try data.write(to: tempURL)
+                        filesToShare.append(tempURL)
+                    } catch {
+                        print(error.localizedDescription)
+                    }
+                }
+                    
+                    
+                if !filesToShare.isEmpty {
+                    let activityVC = UIActivityViewController(activityItems: filesToShare, applicationActivities: nil)
+                    UIApplication.shared.windows.first?.rootViewController?.present(activityVC, animated: true)
+                }
+            }) {
+                HStack {
+                    Image(svm.share_button_alt)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(height: 22.5)
+                    Text("Share all voice recording data")
+                        .font(._bodyCopyLargeMedium)
+                        .underline()
+                        .foregroundColor(Color.DARK_PURPLE)
+                    Spacer()
+                }
+            }
+            .padding(.vertical)
+            
+            Button(action: {
                 self.showDeleteWarning = true
             }) {
                 Text("Delete All Collected Data")
@@ -418,5 +461,14 @@ struct SettingsView_Previews: PreviewProvider {
             .foregroundColor(Color.black)
             .environmentObject(ViewRouter.shared)
             .environmentObject(Settings())
+    }
+}
+
+class DocumentPicker: NSObject, UIDocumentPickerDelegate {
+    
+    var selectedFiles = [URL]()
+    
+    func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
+        selectedFiles.append(contentsOf: urls)
     }
 }

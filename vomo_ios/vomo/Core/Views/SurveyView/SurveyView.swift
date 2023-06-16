@@ -24,48 +24,42 @@ struct SurveyView: View {
     
     var body: some View {
         ZStack {
-            VStack(alignment: .leading) {
-                infoSection
-                
-                ScrollView(showsIndicators: true) {
-                    VStack(alignment: .leading) {
-                        if settings.vhi || settings.vocalEffort || settings.botulinumInjection {
-                            if settings.vhi {
-                                vhiSection
-                            }
-                            if settings.vocalEffort {
-                                veSection
-                            }
-                            if settings.botulinumInjection {
-                                biSection
-                            }
-                            
-                            submitButton
-                        } else {
-                            HStack {
-                                Text("No survey selection")
-                                    .foregroundColor(.black)
-                                    .font(._title)
-                                    .padding(.top)
-                                Spacer()
-                            }
-                            HStack {
-                                Text("You may edit your voice plan in settings to include an option that asks you to complete surveys.")
-                                    .font(._subTitle)
-                                    .foregroundColor(Color.BODY_COPY)
-                                    .multilineTextAlignment(.leading)
-                                Spacer()
-                            }
+            ScrollView(showsIndicators: true) {
+                VStack(alignment: .center, spacing: 5) {
+                    if settings.vhi || settings.vocalEffort || settings.botulinumInjection {
+                        
+                        if settings.vhi {
+                            vhiSection
+                        }
+                        if settings.vocalEffort {
+                            veSection
+                        }
+                        if settings.botulinumInjection {
+                            biSection
+                        }
+                        
+                        submitButton
+                    } else {
+                        HStack {
+                            Text("No survey selection")
+                                .foregroundColor(.black)
+                                .font(._title)
+                                .padding(.top)
+                            Spacer()
+                        }
+                        HStack {
+                            Text("You may edit your voice plan in settings to include an option that asks you to complete surveys.")
+                                .font(._subTitle)
+                                .foregroundColor(Color.BODY_COPY)
+                                .multilineTextAlignment(.leading)
+                            Spacer()
                         }
                     }
-                    .frame(width: svm.content_width * 0.9)
-                    .padding(.trailing, 10)
-                    .frame(width: svm.content_width)
                 }
+                .frame(width: svm.content_width)
+                .padding(.trailing)
             }
-            .frame(width: svm.content_width * 0.9)
-            .padding(.trailing, 10)
-            .frame(width: svm.content_width)
+            .frame(width: svm.content_width * 1.05)
             
             if submitAnimation {
                 ZStack {
@@ -110,34 +104,31 @@ struct SurveyView: View {
 
 extension SurveyView {
     private var infoSection: some View {
-        Group {
-            if settings.vhi {
-                Image(svm.start_scale_img)
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: svm.content_width * 0.975)
-            }
-        }
+        Image(svm.start_scale_img)
+            .resizable()
+            .scaledToFit()
     }
     
     private var vhiSection: some View {
         Group {
-            /*Text("VHI")
-                .font(._subTitle)
-                .foregroundColor(Color.BODY_COPY)
-                .multilineTextAlignment(.leading)
-                .padding(.top)
-            */
-            Text("Vocal Handicap Index (VHI)-10")
-                .foregroundColor(.black)
-                .font(._title)
+            HStack {
+                Text("Vocal Handicap Index (VHI)-10")
+                    .foregroundColor(.black)
+                    .font(._title)
+                Spacer()
+            }
+            
+            infoSection
             
             ForEach(Array(svm.questions.enumerated()), id: \.element) { index, element in
                 if index <= 9 {
+                    if index == 6 {
+                        infoSection
+                    }
                     VHIScale(responses: self.$responses, prompt: element, index: index)
-                        .frame(width: svm.content_width * 0.975)
                 }
             }
+            
         }
     }
     
@@ -149,14 +140,16 @@ extension SurveyView {
                 .multilineTextAlignment(.leading)
                 .padding(.top)
             */
-            Text("Vocal Effort Rating")
-                .foregroundColor(.black)
-                .font(._title)
+            HStack {
+                Text("Vocal Effort Rating")
+                    .foregroundColor(.black)
+                    .font(._title)
+                Spacer()
+            }
             
             ForEach(Array(svm.questions.enumerated()), id: \.element) { index, element in
                 if element == "How much **physical effort** does it take to make a voice?" || element == "How much **mental effort** does it take to make a voice?" {
                     VEScale(responses: self.$responses, prompt: element, index: index)
-                        .frame(width: svm.content_width * 0.975)
                 }
             }
         }
@@ -164,14 +157,16 @@ extension SurveyView {
     
     private var biSection: some View {
         Group {
-            Text("Current Percent of Vocal Function")
-                .foregroundColor(.black)
-                .font(._title)
+            HStack {
+                Text("Current Percent of Vocal Function")
+                    .foregroundColor(.black)
+                    .font(._title)
+                Spacer()
+            }
             
             ForEach(Array(svm.questions.enumerated()), id: \.element) { index, element in
                 if index > 12 {
                     VHIScale(responses: self.$responses, prompt: element, index: index)
-                        .frame(width: svm.content_width * 0.975)
                 } else if index == 12 {
                     HStack {
                         if lastResponse().responses[12] != -1.0 {
@@ -182,10 +177,7 @@ extension SurveyView {
                         }
                     }
                     
-                    .frame(width: svm.content_width * 0.975)
-                    
                     VEScale(responses: self.$responses, prompt: element, index: index)
-                        .frame(width: svm.content_width * 0.975)
                 }
             }
         }
@@ -197,7 +189,6 @@ extension SurveyView {
         for quest in entries.questionnaires {
             if quest.responses[12] != -1.0 {
                 resp = quest
-                Logging.defaultLog.notice("Survey Model entry 13: \(resp.responses[12])")
             }
         }
         
@@ -205,7 +196,7 @@ extension SurveyView {
     }
     
     private var submitButton: some View {
-        VStack {
+        VStack(alignment: .center) {
             if showMissing && remaining().isNotEmpty {
                 HStack {
                     Text("Please answer the following...")
@@ -227,13 +218,13 @@ extension SurveyView {
             
             HStack {
                 Spacer()
-                
                 if submitable() || settings.allowIncompleteSurvey {
                     Button("Submit") {
                         // editing this to separate the two different surveys to save independently
                         
                         self.showMissing = false
                         
+                        print(responses)
                         
                         /// Separate into three separate sections
                         
@@ -241,6 +232,8 @@ extension SurveyView {
                             /// newResults just holds what is going to be appended
                             var newResults: [Double] = []
                             // two separate files to submit
+                            
+                            var count = -1
                             
                             // first with just the first 10 resp
                             if responses.count == 13 {
@@ -252,13 +245,22 @@ extension SurveyView {
                                     }
                                 }
                                 
-                                self.entries.questionnaires.append(SurveyModel(createdAt: .now, responses: newResults, favorite: false))
+                                for i in newResults.indices {
+                                    if newResults[i] != -1 {
+                                        count = 0
+                                    }
+                                }
+                                
+                                if count == 0 {
+                                    self.entries.questionnaires.append(SurveyModel(createdAt: .now, responses: newResults, favorite: false))
+                                }
                             }
                         }
                         if settings.vocalEffort {
                             var newResults: [Double] = []
                             // next with just the last two resp
                             newResults = []
+                            var count = -1
                             for index in 0..<responses.count {
                                 if index == 10 || index == 11 {
                                     newResults.append(responses[index])
@@ -266,12 +268,22 @@ extension SurveyView {
                                     newResults.append(-1)
                                 }
                             }
-                            self.entries.questionnaires.append(SurveyModel(createdAt: .now + 5, responses: newResults, favorite: false))
+                            
+                            for i in newResults.indices {
+                                if newResults[i] != -1 {
+                                    count = 0
+                                }
+                            }
+                            
+                            if count == 0 {
+                                self.entries.questionnaires.append(SurveyModel(createdAt: .now + 5, responses: newResults, favorite: false))
+                            }
                         }
                         if settings.botulinumInjection {
                             var newResults: [Double] = []
                             // next with just the last two resp
                             newResults = []
+                            var count = -1
                             for index in 0..<responses.count {
                                 if index == 12 {
                                     newResults.append(responses[index])
@@ -279,7 +291,16 @@ extension SurveyView {
                                     newResults.append(-1)
                                 }
                             }
-                            self.entries.questionnaires.append(SurveyModel(createdAt: .now + 10, responses: newResults, favorite: false))
+                            
+                            for i in newResults.indices {
+                                if newResults[i] != -1 {
+                                    count = 0
+                                }
+                            }
+                            
+                            if count == 0 {
+                                self.entries.questionnaires.append(SurveyModel(createdAt: .now + 10, responses: newResults, favorite: false))
+                            }
                         }
                         
                         responses = []
@@ -289,10 +310,12 @@ extension SurveyView {
                             settings.surveyEntered += 1
                         }
                     }.buttonStyle(SubmitButton())
+                    .offset(x: 10)
                 } else {
                     Button("Submit") {
                         self.showMissing = true
                     }.buttonStyle(GraySubmitButton())
+                    .offset(x: 10)
                 }
                 Spacer()
             }

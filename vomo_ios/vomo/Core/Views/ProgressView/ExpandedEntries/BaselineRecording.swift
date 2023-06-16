@@ -114,7 +114,6 @@ struct BaselineRecording: View {
         .font(._bodyCopyBold)
         .padding(8)
         .foregroundColor(Color.white)
-        .frame(width: svm.content_width)
         .background(Color.MEDIUM_PURPLE)
     }
     
@@ -126,10 +125,6 @@ struct BaselineRecording: View {
         ret.2 = audioRecorder.returnProcessing(createdAt: baselineDate.4)
         
         return ret
-    }
-    
-    var baseline: MetricsModel {
-        return audioRecorder.baseLine()
     }
     
     var baselineDate: (Date, Bool, Date, Bool, Date, Bool) {
@@ -155,26 +150,30 @@ extension BaselineRecording {
         VStack(alignment: .leading, spacing: 1) {
             Text("Vowel Baseline **\(result.0.createdAt.weekAndDay())**")
             
-            HStack {
-                Text("Mean Pitch:")
-                    .font(._bodyCopy)
-                Spacer()
-                Text(result.0.pitch_mean == -1 ? "N/A" : "\(result.0.pitch_mean, specifier: "%.2f")")
-                    .font(._bodyCopyBold)
+            Group {
+                HStack {
+                    Text("Mean Pitch (Hertz):")
+                        .font(._bodyCopy)
+                    Spacer()
+                    Text(result.0.pitch_mean == -1 ? "N/A" : "\(result.0.pitch_mean, specifier: "%.0f")")
+                        .font(._bodyCopyBold)
+                }
+                HStack {
+                    Text("Mean CPP (dB):")
+                        .font(._bodyCopy)
+                    Spacer()
+                    Text(result.0.pitch_min == -1 ? "N/A" : "\(result.0.cppMean, specifier: "%.1f")")
+                        .font(._bodyCopyBold)
+                }
             }
-            HStack {
-                Text("Mean CPP:")
-                    .font(._bodyCopy)
-                Spacer()
-                Text(result.0.pitch_min == -1 ? "N/A" : "\(result.0.cppMean, specifier: "%.2f")")
-                    .font(._bodyCopyBold)
-            }
+            .padding(.leading, 8)
+            
             
             ZStack {
                 HStack {
-                    DeleteButton(deletionTarget: $deletionTarget, type: "Vowel", date: result.0.createdAt)
+                    ShareButtonByDate(date: result.0.createdAt)
                     Spacer()
-                    ShareButtonByDate(date: result.2.createdAt)
+                    DeleteButton(deletionTarget: $deletionTarget, type: "Vowel", date: result.0.createdAt)
                 }
                 .padding(.horizontal, 5)
                 
@@ -190,19 +189,23 @@ extension BaselineRecording {
         VStack(alignment: .leading, spacing: 1) {
             Text("Maximum Duration Baseline **\(result.1.createdAt.weekAndDay())**")
             
-            HStack {
-                Text("Maximum Duration:")
-                    .font(._bodyCopy)
-                Spacer()
-                Text(result.1.duration == -1 ? "N/A" : "\(result.1.duration, specifier: "%.2f")")
-                    .font(._bodyCopyBold)
+            Group {
+                HStack {
+                    Text("Maximum Duration (seconds):")
+                        .font(._bodyCopy)
+                    Spacer()
+                    Text(result.1.duration == -1 ? "N/A" : "\(result.1.duration, specifier: "%.1f")")
+                        .font(._bodyCopyBold)
+                }
             }
+            .padding(.leading, 8)
+            
             
             ZStack {
                 HStack {
-                    DeleteButton(deletionTarget: $deletionTarget, type: "Duration", date: result.1.createdAt)
+                    ShareButtonByDate(date: result.1.createdAt)
                     Spacer()
-                    ShareButtonByDate(date: result.2.createdAt)
+                    DeleteButton(deletionTarget: $deletionTarget, type: "Duration", date: result.1.createdAt)
                 }
                 .padding(.horizontal, 5)
                 
@@ -218,26 +221,29 @@ extension BaselineRecording {
         VStack(alignment: .leading, spacing: 1) {
             Text("Rainbow Baseline **\(result.2.createdAt.weekAndDay())**")
             
-            HStack {
-                Text("Mean Pitch:")
-                    .font(._bodyCopy)
-                Spacer()
-                Text(result.2.pitch_mean == -1 ? "N/A" : "\(result.2.pitch_mean, specifier: "%.2f")")
-                    .font(._bodyCopyBold)
+            Group {
+                HStack {
+                    Text("Mean Pitch (Hertz):")
+                        .font(._bodyCopy)
+                    Spacer()
+                    Text(result.2.pitch_mean == -1 ? "N/A" : "\(result.2.pitch_mean, specifier: "%.0f")")
+                        .font(._bodyCopyBold)
+                }
+                HStack {
+                    Text("Mean CPP (dB):")
+                        .font(._bodyCopy)
+                    Spacer()
+                    Text(result.2.cppMean == -1 ? "N/A" : "\(result.2.cppMean, specifier: "%.1f")")
+                        .font(._bodyCopyBold)
+                }
             }
-            HStack {
-                Text("Mean CPP:")
-                    .font(._bodyCopy)
-                Spacer()
-                Text(result.2.pitch_min == -1 ? "N/A" : "\(result.2.cppMean, specifier: "%.2f")")
-                    .font(._bodyCopyBold)
-            }
+            .padding(.leading, 8)
             
             ZStack {
                 HStack {
-                    DeleteButton(deletionTarget: $deletionTarget, type: "Rainbow", date: result.2.createdAt)
-                    Spacer()
                     ShareButtonByDate(date: result.2.createdAt)
+                    Spacer()
+                    DeleteButton(deletionTarget: $deletionTarget, type: "Rainbow", date: result.2.createdAt)
                 }
                 .padding(.horizontal, 5)
                 
@@ -249,67 +255,3 @@ extension BaselineRecording {
         .transition(.slideDown)
     }
 }
-
-/*private var infoSection: some View {
-    Button(action: {
-        withAnimation() {
-            self.showMore.toggle()
-        }
-    }) {
-        VStack {
-            HStack {
-                Text("Metric")
-                    .font(._bodyCopy)
-                Spacer()
-                Text("Baseline")
-                    .font(._bodyCopy)
-            }
-            .padding(.top, 2.5)
-            Color.white.frame(height: 1)
-                .padding(.vertical, -2.5)
-            HStack {
-                Text("Duration:")
-                    .font(._bodyCopy)
-                Spacer()
-                Text(result.duration == -1 ? "N/A" : "\(result.duration, specifier: "%.2f")")
-                    .font(._bodyCopyBold)
-            }
-            HStack {
-                Text("Intensity:")
-                    .font(._bodyCopy)
-                Spacer()
-                Text(result.intensity == -1 ? "N/A" : "\(result.intensity, specifier: "%.2f")")
-                    .font(._bodyCopyBold)
-            }
-            HStack {
-                Text("Maximum Pitch:")
-                    .font(._bodyCopy)
-                Spacer()
-                Text(result.pitch_max == -1 ? "N/A" : "\(result.pitch_max, specifier: "%.2f")")
-                    .font(._bodyCopyBold)
-            }
-            HStack {
-                Text("Mean Pitch:")
-                    .font(._bodyCopy)
-                Spacer()
-                Text(result.pitch_mean == -1 ? "N/A" : "\(result.pitch_mean, specifier: "%.2f")")
-                    .font(._bodyCopyBold)
-            }
-            HStack {
-                Text("Minimum Pitch:")
-                    .font(._bodyCopy)
-                Spacer()
-                Text(result.pitch_min == -1 ? "N/A" : "\(result.pitch_min, specifier: "%.2f")")
-                    .font(._bodyCopyBold)
-            }
-            HStack {
-                Text("Mean CPP:")
-                    .font(._bodyCopy)
-                Spacer()
-                Text(result.pitch_min == -1 ? "N/A" : "\(result.cppMean, specifier: "%.2f")")
-                    .font(._bodyCopyBold)
-            }
-        }
-    }
-    .transition(.slideDown)
-}*/

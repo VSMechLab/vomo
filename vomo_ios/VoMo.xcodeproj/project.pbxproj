@@ -59,7 +59,7 @@
 		AD00C77229F7219D0017385E /* MiniAudioInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD00C77029F7219D0017385E /* MiniAudioInterface.swift */; };
 		AD00C77329F7219D0017385E /* AudioInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD00C77129F7219D0017385E /* AudioInterface.swift */; };
 		AD00C77A29F721BC0017385E /* HomeBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD00C77429F721BC0017385E /* HomeBackground.swift */; };
-		AD00C77B29F721BC0017385E /* TextEntryField.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD00C77529F721BC0017385E /* TextEntryField.swift */; };
+		AD00C77B29F721BC0017385E /* NameEntryField.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD00C77529F721BC0017385E /* NameEntryField.swift */; };
 		AD00C77C29F721BC0017385E /* DateEntryField.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD00C77629F721BC0017385E /* DateEntryField.swift */; };
 		AD00C77D29F721BC0017385E /* Arrow.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD00C77729F721BC0017385E /* Arrow.swift */; };
 		AD00C77E29F721BC0017385E /* Wave.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD00C77829F721BC0017385E /* Wave.swift */; };
@@ -127,6 +127,7 @@
 		ADA0E0E2282561D700CF05D1 /* LineShapeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADA0E0E1282561D700CF05D1 /* LineShapeView.swift */; };
 		ADA1EC9B2899C6B000EE58E3 /* AVAduioPCMBuffer.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADA1EC9A2899C6B000EE58E3 /* AVAduioPCMBuffer.swift */; };
 		ADA1EC9E2899C99400EE58E3 /* AudioKitUI in Frameworks */ = {isa = PBXBuildFile; productRef = ADA1EC9D2899C99400EE58E3 /* AudioKitUI */; };
+		ADB402042A2FA58A0001001E /* ShareButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADB402032A2FA58A0001001E /* ShareButton.swift */; };
 		ADB4A81B29369516003D8556 /* AnyTransition.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADB4A81A29369516003D8556 /* AnyTransition.swift */; };
 		ADB4A82E2936C3E1003D8556 /* ElementModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADB4A82D2936C3E1003D8556 /* ElementModel.swift */; };
 		ADB4A8392936CFE2003D8556 /* DeleteButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADB4A8382936CFE2003D8556 /* DeleteButton.swift */; };
@@ -199,7 +200,7 @@
 		AD00C77029F7219D0017385E /* MiniAudioInterface.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MiniAudioInterface.swift; path = vomo/Core/Features/AudioPlayerInterface/MiniAudioInterface.swift; sourceTree = SOURCE_ROOT; };
 		AD00C77129F7219D0017385E /* AudioInterface.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AudioInterface.swift; path = vomo/Core/Features/AudioPlayerInterface/AudioInterface.swift; sourceTree = SOURCE_ROOT; };
 		AD00C77429F721BC0017385E /* HomeBackground.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HomeBackground.swift; path = vomo/Core/Features/CommonComponents/HomeBackground.swift; sourceTree = SOURCE_ROOT; };
-		AD00C77529F721BC0017385E /* TextEntryField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TextEntryField.swift; path = vomo/Core/Features/CommonComponents/TextEntryField.swift; sourceTree = SOURCE_ROOT; };
+		AD00C77529F721BC0017385E /* NameEntryField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NameEntryField.swift; path = vomo/Core/Features/CommonComponents/NameEntryField.swift; sourceTree = SOURCE_ROOT; };
 		AD00C77629F721BC0017385E /* DateEntryField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DateEntryField.swift; path = vomo/Core/Features/CommonComponents/DateEntryField.swift; sourceTree = SOURCE_ROOT; };
 		AD00C77729F721BC0017385E /* Arrow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Arrow.swift; path = vomo/Core/Features/CommonComponents/Arrow.swift; sourceTree = SOURCE_ROOT; };
 		AD00C77829F721BC0017385E /* Wave.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Wave.swift; path = vomo/Core/Features/CommonComponents/Wave.swift; sourceTree = SOURCE_ROOT; };
@@ -267,6 +268,7 @@
 		ADA0E0E1282561D700CF05D1 /* LineShapeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = LineShapeView.swift; path = vomo/Graphs/LineChart/LineShapeView.swift; sourceTree = SOURCE_ROOT; };
 		ADA0E0E52826E42600CF05D1 /* VoMo.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = VoMo.entitlements; sourceTree = "<group>"; };
 		ADA1EC9A2899C6B000EE58E3 /* AVAduioPCMBuffer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AVAduioPCMBuffer.swift; path = vomo/Extensions/AVAduioPCMBuffer.swift; sourceTree = SOURCE_ROOT; };
+		ADB402032A2FA58A0001001E /* ShareButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ShareButton.swift; path = vomo/Core/Features/Buttons/ShareButton.swift; sourceTree = SOURCE_ROOT; };
 		ADB4A81A29369516003D8556 /* AnyTransition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AnyTransition.swift; path = vomo/Extensions/AnyTransition.swift; sourceTree = SOURCE_ROOT; };
 		ADB4A82D2936C3E1003D8556 /* ElementModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ElementModel.swift; path = VoMo/Model/DataModels/ElementModel.swift; sourceTree = SOURCE_ROOT; };
 		ADB4A8382936CFE2003D8556 /* DeleteButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DeleteButton.swift; path = VoMo/Core/Features/Buttons/DeleteButton.swift; sourceTree = SOURCE_ROOT; };
@@ -415,7 +417,7 @@
 				AD00C77629F721BC0017385E /* DateEntryField.swift */,
 				AD00C77929F721BC0017385E /* EntryField.swift */,
 				AD00C77429F721BC0017385E /* HomeBackground.swift */,
-				AD00C77529F721BC0017385E /* TextEntryField.swift */,
+				AD00C77529F721BC0017385E /* NameEntryField.swift */,
 				AD00C77829F721BC0017385E /* Wave.swift */,
 			);
 			path = CommonComponents;
@@ -426,6 +428,7 @@
 			children = (
 				AD915C36280624E200B48A5C /* ProfileButton.swift */,
 				AD9EC70428050DBF007F0395 /* PlayButton.swift */,
+				ADB402032A2FA58A0001001E /* ShareButton.swift */,
 				ADB4A8382936CFE2003D8556 /* DeleteButton.swift */,
 				AD67CEC128A49646006AF596 /* TabIcons.swift */,
 				AD67CEC328A4965A006AF596 /* SubmissionButton.swift */,
@@ -551,8 +554,8 @@
 		AD59E6F82939E65100F5BCF7 /* SettingsView */ = {
 			isa = PBXGroup;
 			children = (
-				AD00C73529F720720017385E /* ReminderPopUp.swift */,
 				AD00C73629F720720017385E /* SettingsView.swift */,
+				AD00C73529F720720017385E /* ReminderPopUp.swift */,
 			);
 			path = SettingsView;
 			sourceTree = "<group>";
@@ -851,6 +854,7 @@
 				AD00C75C29F720C10017385E /* SetThreshold.swift in Sources */,
 				AD00C77D29F721BC0017385E /* Arrow.swift in Sources */,
 				AD67CEC228A49646006AF596 /* TabIcons.swift in Sources */,
+				ADB402042A2FA58A0001001E /* ShareButton.swift in Sources */,
 				AD81B73128BFDBF6009920FB /* Settings.swift in Sources */,
 				ADB4A82E2936C3E1003D8556 /* ElementModel.swift in Sources */,
 				AD26BA202829F4E600AC1A7B /* BarChartRow.swift in Sources */,
@@ -922,7 +926,7 @@
 				AD00C75E29F720C10017385E /* Filter.swift in Sources */,
 				AD00C76929F720DE0017385E /* BaselineRecording.swift in Sources */,
 				ADA0E0E2282561D700CF05D1 /* LineShapeView.swift in Sources */,
-				AD00C77B29F721BC0017385E /* TextEntryField.swift in Sources */,
+				AD00C77B29F721BC0017385E /* NameEntryField.swift in Sources */,
 				ADE3A01628395A8C00E56527 /* String.swift in Sources */,
 				AD00C74D29F720B20017385E /* TreatmentLog.swift in Sources */,
 				AD00C72E29F720530017385E /* CustomTargetView.swift in Sources */,
@@ -1063,9 +1067,9 @@
 				CODE_SIGN_ENTITLEMENTS = VoMo/VoMo.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 29;
+				CURRENT_PROJECT_VERSION = 33;
 				DEVELOPMENT_ASSET_PATHS = "\"VoMo/Preview Content\"";
-				DEVELOPMENT_TEAM = 3B52K98W7P;
+				DEVELOPMENT_TEAM = E3GYNLB224;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = VoMo/Info.plist;
@@ -1085,7 +1089,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.16;
+				MARKETING_VERSION = 1.20;
 				PRODUCT_BUNDLE_IDENTIFIER = edu.uc.vomo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1104,9 +1108,9 @@
 				CODE_SIGN_ENTITLEMENTS = VoMo/VoMo.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 29;
+				CURRENT_PROJECT_VERSION = 33;
 				DEVELOPMENT_ASSET_PATHS = "\"VoMo/Preview Content\"";
-				DEVELOPMENT_TEAM = 3B52K98W7P;
+				DEVELOPMENT_TEAM = E3GYNLB224;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = VoMo/Info.plist;
@@ -1126,7 +1130,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.16;
+				MARKETING_VERSION = 1.20;
 				PRODUCT_BUNDLE_IDENTIFIER = edu.uc.vomo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
