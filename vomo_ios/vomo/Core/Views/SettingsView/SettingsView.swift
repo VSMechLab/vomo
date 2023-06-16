@@ -65,7 +65,7 @@ struct SettingsView: View {
                     
                     extraButtonSection
                     
-                    Text("Version 1.19")
+                    Text("Version \(Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "")")
                         .font(._bodyCopyUnBold)
                 }
                 .font(._fieldLabel)
