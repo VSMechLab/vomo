@@ -71,7 +71,6 @@ extension AudioRecorder: AVCaptureAudioDataOutputSampleBufferDelegate {
         }
         
         DispatchQueue.main.async { [self] in
-            //outputImage = makeAudioSpectrogramImage()
             nyqFreq = average
         }
     }
@@ -133,7 +132,12 @@ extension AudioRecorder: AVCaptureAudioDataOutputSampleBufferDelegate {
                                                  position: .unspecified)
         if (microphone == nil)
         {
-            fatalError("Simulator Error")
+#if targetEnvironment(simulator)
+            
+            // microphone =
+#else
+            fatalError("Did not detect simulator or microphone! Error!")
+#endif
         }
         
         let microphoneInput = try? AVCaptureDeviceInput(device: (microphone ?? AVCaptureDevice.default(for: .audio))!)

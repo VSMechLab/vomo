@@ -718,11 +718,12 @@ extension AudioRecorder {
                      toDecibels: &frequencyDomainBuffer,
                      zeroReference: Float(zeroReference))
         
-        average = vDSP.mean(frequencyDomainBuffer)*Float(gain)
-        
         vDSP.multiply(Float(gain),
                       frequencyDomainBuffer,
                       result: &frequencyDomainBuffer)
+        
+        // TODOSW
+        average = 10*(vDSP.maximum(frequencyDomainBuffer)-vDSP.minimum(frequencyDomainBuffer))
         
         if frequencyDomainValues.count > AudioRecorder.sampleCount {
             frequencyDomainValues.removeFirst(AudioRecorder.sampleCount)
