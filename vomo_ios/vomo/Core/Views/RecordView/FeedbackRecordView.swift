@@ -19,7 +19,7 @@ class WaveformPointsDummyStream {
     
      init() {
         
-        let amplitude: Float = 0.20  // Amplitude of the sine wave
+        let amplitude: Float = 0.25  // Amplitude of the sine wave
         let frequency: Float = 10.0  // Frequency of the sine wave (in Hz)
         var time: Float = 0.0
 
@@ -168,6 +168,42 @@ struct FeedbackWaveform: View {
     
 }
 
+struct FeedbackSyllables: View {
+    
+    var sentence: [String] = "The quick brown fox jumps over the lazy dog".split(separator: " ").map({ String($0) })
+    
+    public let size: CGSize
+    
+    @State var index = 0
+    
+    var body: some View {
+        ScrollViewReader { proxy in
+            ScrollView(.horizontal) {
+                HStack() {
+                    ForEach(sentence, id: \.self) { word in
+                        Text(word)
+                            .font(._large_title)
+                            .id(word)
+                            .frame(width: size.width)
+                    }
+                }
+            }
+            .disabled(true)
+            
+            Button {
+                withAnimation {
+                    proxy.scrollTo(sentence[index])
+                }
+                index += 1
+            } label: {
+                Image(systemName: "arrow.right.circle.fill")
+                    .font(.largeTitle)
+            }
+            .tint(.MEDIUM_PURPLE)
+        }
+    }
+}
+
 struct FeedbackRecordView: View {
     
     // MARK: Delete later
@@ -176,19 +212,15 @@ struct FeedbackRecordView: View {
     var body: some View {
         
         VStack {
-            
+                        
             GeometryReader { proxy in
+                                
                 FeedbackWaveform(size: proxy.size)
+                
+                FeedbackSyllables(size: proxy.size)
+
             }
             
-//            Slider(value: $dummyInput, in: 0...1)
-//                .padding()
-//                .onAppear(perform: {
-//                    let _ = Timer.scheduledTimer(withTimeInterval: 0.01, repeats: true) { _ in
-//                        WaveformPointsDummyStream.shared.push(Float(dummyInput))
-//                    }
-//                })
-//                .tint(.MEDIUM_PURPLE)
         }
     }
 }
