@@ -194,12 +194,43 @@ struct FeedbackSyllables: View {
                 withAnimation {
                     proxy.scrollTo(sentence[index])
                 }
-                index += 1
+                
+                if index < sentence.count - 1 {
+                    index += 1
+                }
+                
             } label: {
                 Image(systemName: "arrow.right.circle.fill")
                     .font(.largeTitle)
             }
             .tint(.MEDIUM_PURPLE)
+        }
+    }
+}
+
+struct FeedbackVolume: View {
+    var body: some View {
+        VStack {
+            Spacer()
+            
+            ZStack(alignment: .leading) {
+                
+                RoundedRectangle(cornerRadius: 10)
+                    .stroke(.black, lineWidth: 1)
+                    .foregroundColor(.white)
+                
+                RoundedRectangle(cornerRadius: 10)
+                    .foregroundColor(.MEDIUM_PURPLE)
+                    .frame(width: 100)
+                
+                Rectangle()
+                    .frame(width: 3)
+                    .foregroundColor(.green)
+                    .offset(x: 200, y: 0)
+                
+            }
+            .frame(height: 35)
+            .padding()
         }
     }
 }
@@ -210,17 +241,15 @@ struct FeedbackRecordView: View {
 //    @State private var dummyInput: Float = 0.5
     
     var body: some View {
-        
-        VStack {
                         
-            GeometryReader { proxy in
-                                
-                FeedbackWaveform(size: proxy.size)
-                
-                FeedbackSyllables(size: proxy.size)
-
-            }
+        GeometryReader { proxy in
+                            
+            FeedbackWaveform(size: proxy.size)
             
+            FeedbackSyllables(size: proxy.size)
+            
+            FeedbackVolume()
+
         }
     }
 }
