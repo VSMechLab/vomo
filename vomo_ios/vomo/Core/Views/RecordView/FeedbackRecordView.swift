@@ -42,6 +42,27 @@ class WaveformPointsDummyStream {
     
 }
 
+fileprivate class DummyStream {
+    
+    let amplitude: Float = 0.25  // Amplitude of the sine wave
+    let frequency: Float = 10.0  // Frequency of the sine wave (in Hz)
+    var time: Float = 0.0
+    
+    var scheduledTimer: Timer?
+        
+    init() {
+        
+        self.scheduledTimer = Timer.scheduledTimer(withTimeInterval: 0.01, repeats: true) { timer in
+            Task {
+                let value = self.amplitude * sin(2 * Float.pi * self.frequency * self.time) + 0.5
+                self.time += 0.001
+                await WaveformPointsManager.shared.points.add(value)
+            }
+        }
+    }
+}
+
+@MainActor
 class WaveformPointsManager: ObservableObject {
                     
     struct Points {
@@ -57,6 +78,7 @@ class WaveformPointsManager: ObservableObject {
         }
         
         func add(_ point: Float?) {
+                        
             if buffer.baseAddress != nil {
                 // shift up to last item
                 for address in 0..<(count - 1) {
@@ -81,45 +103,55 @@ class WaveformPointsManager: ObservableObject {
     
     @Published var points: Points
     
-    public var consumer: Task<(), Never>?
-    public var stream: WaveformPointsDummyStream?
+//    public var consumer: Task<(), Never>?
+//    public var stream: WaveformPointsDummyStream?
+    private var stream: DummyStream?
     
     public init(count: Int) {
         self.points = Points(count: count)
     }
     
+    public func startStream() {
+        self.stream = DummyStream()
+    }
+    
+    public func stopStream() {
+        self.stream?.scheduledTimer?.invalidate()
+        self.stream = nil
+    }
+    
     func update(date: Date) {}
     
-    public func observeStreams() {
-        
-        stream = WaveformPointsDummyStream()
-        
-        if stream != nil {
-            consumer = Task {
-                
-                do {
-                    for await point in self.stream!.stream {
-                        try Task.checkCancellation()
-                        self.points.add(point)
-                    }
-                } catch {
-                    print("Cancelled")
-                }
-                
-            }
-        }
-    }
+//    public func observeStreams() {
+//        
+//        stream = WaveformPointsDummyStream()
+//        
+//        if stream != nil {
+//            consumer = Task {
+//                
+//                do {
+//                    for await point in self.stream!.stream {
+//                        try Task.checkCancellation()
+//                        self.points.add(point)
+//                    }
+//                } catch {
+//                    print("Cancelled")
+//                }
+//                
+//            }
+//        }
+//    }
     
-    public func cancelStreamObservation() {
-        consumer?.cancel()
-        stream = nil
-    }
+//    public func cancelStreamObservation() {
+//        consumer?.cancel()
+//        stream = nil
+//    }
     
     // memory-safety
-    deinit {
-        points.deallocate()
-        print("WaveformPointsManager Deinit")
-    }
+//    deinit {
+//        points.deallocate()
+//        print("Deallocated WaveformPointsManager buffer")
+//    }
     
 }
 
@@ -157,11 +189,13 @@ struct FeedbackWaveform: View {
             }
             
             .onAppear {
-                waveform.observeStreams()
+//                waveform.observeStreams()
+                waveform.startStream()
             }
             
             .onDisappear {
-                waveform.cancelStreamObservation()
+//                waveform.cancelStreamObservation()
+                waveform.stopStream()
             }
         }
     }
@@ -170,10 +204,8 @@ struct FeedbackWaveform: View {
 
 struct FeedbackSyllables: View {
     
-    var sentence: [String] = "The quick brown fox jumps over the lazy dog".split(separator: " ").map({ String($0) })
-    
-    public let size: CGSize
-    
+    var sentence: [String] = "Come back right away".split(separator: " ").map({ String($0) })
+        
     @State var index = 0
     
     var body: some View {
@@ -182,9 +214,8 @@ struct FeedbackSyllables: View {
                 HStack() {
                     ForEach(sentence, id: \.self) { word in
                         Text(word)
-                            .font(._large_title)
+                            .font(._title1)
                             .id(word)
-                            .frame(width: size.width)
                     }
                 }
             }
@@ -237,19 +268,47 @@ struct FeedbackVolume: View {
 
 struct FeedbackRecordView: View {
     
-    // MARK: Delete later
-//    @State private var dummyInput: Float = 0.5
+    @Environment(\.dismiss) private var dismiss
     
     var body: some View {
-                        
-        GeometryReader { proxy in
+        
+        VStack {
+            
+            GeometryReader { proxy in
+                                
+                FeedbackWaveform(size: proxy.size)
+                
+                FeedbackSyllables()
                             
-            FeedbackWaveform(size: proxy.size)
-            
-            FeedbackSyllables(size: proxy.size)
-            
-            FeedbackVolume()
+//                FeedbackVolume()
 
+            }
+            
+            recordingControls()
+                .padding(.horizontal)
+            
+        }
+    }
+    
+    @ViewBuilder
+    private func recordingControls() -> some View {
+        HStack {
+            
+            Button {
+                
+            } label: {
+                Image(systemName: "xmark.circle.fill")
+            }
+            
+            Spacer()
+            
+            Button {
+                
+            } label: {
+                Image(systemName: "play.circle.fill")
+            }
+            
+            Spacer()
         }
     }
 }

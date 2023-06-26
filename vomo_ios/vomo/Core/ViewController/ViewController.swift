@@ -112,7 +112,8 @@ extension ViewController {
                 SettingsView()
             case .record:
 //                RecordView()
-                FeedbackRecordView()
+//                FeedbackRecordView()
+                    ExerciseSelectionView()
             case .questionnaire:
                 SurveyView()
             case .journal:
