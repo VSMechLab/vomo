@@ -24,6 +24,8 @@ extension Color {
     static var BODY_COPY = Color(red: 125/255, green: 125/255, blue: 125/255)
     /// Lightest Gray
     static var INPUT_FIELDS = Color(red: 235/255, green: 235/255, blue: 235/255)
+    
+    static var YELLOW = Color(red: 255/255, green: 255/255, blue: 0/255)
 }
 
 struct ColorView: View {

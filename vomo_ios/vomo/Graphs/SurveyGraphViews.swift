@@ -165,9 +165,13 @@ extension SurveyGraph {
                 
                 /// bottom of axis & date
                 Color.white.frame(height: 2)
-                Text("\(points.first?.dataDate.baselineLabel() ?? (Date.now).baselineLabel())")
-                    .font(._day)
-                    .frame(width: 75, height: 15)
+                VStack(spacing: 0) {
+                    Text("\(points.first?.dataDate.nodeTitle() ?? "")")
+                    Text("\(points.first?.dataDate.baselineLabelBody() ?? "")")
+                        .foregroundColor(.YELLOW)
+                }
+                .font(._day)
+                .frame(width: points.first?.hasTreatment ?? false ? 100 : 50, height: 23)
             }
         }
         .frame(width: 75)
@@ -191,7 +195,7 @@ extension SurveyGraph {
                 }
             }
             
-            Color.clear.frame(height: 17)
+            Color.clear.frame(height: 25)
         }
     }
     
@@ -311,9 +315,13 @@ extension SurveyGraph {
                     
                     /// bottom of axis & date
                     Color.white.frame(height: 2)
-                    Text("\(point.dataDate.nodeLabel())")
-                        .font(._day)
-                        .frame(width: 75, height: 15)
+                    VStack(spacing: 0) {
+                        Text("\(point.dataDate.nodeTitle())")
+                        Text("\(point.dataDate.nodeHeader())")
+                            .foregroundColor(.YELLOW)
+                    }
+                    .font(._day)
+                    .frame(width: point.hasTreatment ? 100 : 50, height: 23)
                 }
             }
             .frame(width: 75)
@@ -388,7 +396,7 @@ extension SurveyGraph {
                     }
                     
                     /// bottom of axis & date
-                    Color.clear.frame(width: 75, height: 17)
+                    Color.clear.frame(width: 75, height: 25)
                 }
             }
             .frame(width: 75)
@@ -426,11 +434,12 @@ extension SurveyGraph {
             Text("\(height, specifier: "%.0f") ")
             Spacer()
             if surveySelection == 0 {
-                Text("  VHI-10")
+                Text("VHI-10")
                     .padding(.horizontal, -10)
                     .rotationEffect(Angle(degrees: -90))
                     .frame(width: 40)
                     .offset(x: 12.5)
+                    .offset(y: -10)
             } else if surveySelection == 1 {
                 Text("% effort")
                     .frame(width: 120)
@@ -473,7 +482,7 @@ extension SurveyGraph {
                 .frame(height: geo.size.height)
             }
             
-            Color.clear.frame(height: 17)
+            Color.clear.frame(height: 25)
         }
     }
     
@@ -541,7 +550,7 @@ extension SurveyGraph {
                     }
                 }
                 
-                Color.clear.frame(height: 17)
+                Color.clear.frame(height: 25)
             }
             
             HStack(spacing: 0) {

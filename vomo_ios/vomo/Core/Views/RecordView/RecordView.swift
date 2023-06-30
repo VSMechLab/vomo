@@ -22,6 +22,8 @@ struct RecordView: View {
     @State private var landingPopUp = false
     @State private var time: Int = 0
     
+    @State private var playCountdown: Int = 0
+    
     let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
     let svm = SharedViewModel()
     
@@ -53,6 +55,33 @@ struct RecordView: View {
                 ZStack {
                     Color.white.opacity(0.001)
                     CompleteMenu(popUp: $completePopUp, exercise: $exercise)
+                }
+            }
+            
+            if playCountdown != 0 {
+                ZStack {
+                    Color.BLUE
+                    
+                    VStack {
+                        Text("Record your voice in")
+                            .font(._BTNCopy)
+                            .padding(50)
+                        Spacer()
+                    }
+                    
+                    Text("\(playCountdown)")
+                        .font(._countdown)
+                        .font(.system(size: 75))
+                }
+                .foregroundColor(.white)
+            }
+        }
+        .onReceive(timer) { _ in
+            if playCountdown != 0 {
+                playCountdown -= 1
+                
+                if playCountdown == 0 {
+                    audioRecorder.startRecording(taskNum: settings.taskList[exercise].taskNum)
                 }
             }
         }
@@ -222,12 +251,8 @@ extension RecordView {
                         self.completePopUp.toggle()
                         self.time = 0
                     } else {
-                        audioRecorder.startRecording(taskNum: settings.taskList[exercise].taskNum)
+                        playCountdown = 3
                     }
-                    
-                    /*if self.audioPlayer?.isPlaying == true {
-                        self.audioPlayer?.stopPlayback()
-                    }*/
                     
                     if self.audioPlayer.isPlaying {
                         self.audioPlayer.stopPlayback()
@@ -297,9 +322,13 @@ extension RecordView {
     }
     
     private var promptPlaybackButton: some View {
-        Button("Hear an example") {
-            let sound = Bundle.main.path(forResource: svm.audio[exercise], ofType: "wav")
-            audioPlayer.startPlayback(audio: URL(fileURLWithPath: sound!))
+        Button(audioPlayer.isPlaying ? "Stop" : "Hear an example") {
+            if audioPlayer.isPlaying {
+                audioPlayer.stopPlayback()
+            } else {
+                let sound = Bundle.main.path(forResource: svm.audio[exercise], ofType: "wav")
+                audioPlayer.startPlayback(audio: URL(fileURLWithPath: sound!))
+            }
         }
         .buttonStyle(SubmitButton())
         .onChange(of: exercise) { _ in

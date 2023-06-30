@@ -22,44 +22,103 @@ struct SurveyView: View {
         
     @State private var showMissing = false
     
+    @State private var page = 1
+    
     var body: some View {
         ZStack {
-            ScrollView(showsIndicators: true) {
-                VStack(alignment: .center, spacing: 5) {
-                    if settings.vhi || settings.vocalEffort || settings.botulinumInjection {
-                        
-                        if settings.vhi {
-                            vhiSection
-                        }
-                        if settings.vocalEffort {
-                            veSection
-                        }
-                        if settings.botulinumInjection {
-                            biSection
-                        }
-                        
-                        submitButton
-                    } else {
-                        HStack {
-                            Text("No survey selection")
-                                .foregroundColor(.black)
-                                .font(._title)
-                                .padding(.top)
-                            Spacer()
-                        }
-                        HStack {
-                            Text("You may edit your voice plan in settings to include an option that asks you to complete surveys.")
-                                .font(._subTitle)
-                                .foregroundColor(Color.BODY_COPY)
-                                .multilineTextAlignment(.leading)
-                            Spacer()
+            VStack(alignment: .center, spacing: 5) {
+                if settings.vhi && page == 1 {
+                    infoSection
+                        .frame(width: svm.content_width)
+                        .padding(.trailing)
+                }
+                
+                
+                ScrollView(showsIndicators: true) {
+                    // View for all surveys
+                    VStack(alignment: .center, spacing: 5) {
+                        if settings.vhi || settings.vocalEffort || settings.botulinumInjection {
+                            /*
+                             Logic:
+                             if only vhi
+                             if !vhi
+                             else
+                             */
+                            
+                            if settings.vhi && !settings.vocalEffort && !settings.botulinumInjection {
+                                if settings.vhi {
+                                    vhiSection
+                                    
+                                    submitButton
+                                }
+                            } else if !settings.vhi {
+                                if settings.vocalEffort {
+                                    veSection
+                                }
+                                if settings.botulinumInjection {
+                                    biSection
+                                }
+                                
+                                submitButton
+                            } else {
+                                if page == 1 {
+                                    if settings.vhi {
+                                        vhiSection
+                                    }
+                                    
+                                    HStack {
+                                        
+                                        Spacer()
+                                        Button("Next") {
+                                            self.page += 1
+                                        }.buttonStyle(NextButton())
+                                        
+                                    }
+                                    .padding(.vertical)
+                                } else {
+                                    if settings.vocalEffort {
+                                        veSection
+                                    }
+                                    if settings.botulinumInjection {
+                                        biSection
+                                    }
+                                    
+                                    HStack {
+                                        Button("Back") {
+                                            self.page -= 1
+                                        }.buttonStyle(BackButton())
+                                        Spacer()
+                                    }
+                                    .padding(.vertical)
+                                    
+                                    submitButton
+                                }
+                            }
+                            
+                            
+                            
+                        } else {
+                            HStack {
+                                Text("No survey selection")
+                                    .foregroundColor(.black)
+                                    .font(._title)
+                                    .padding(.top)
+                                Spacer()
+                            }
+                            HStack {
+                                Text("You may edit your voice plan in settings to include an option that asks you to complete surveys.")
+                                    .font(._subTitle)
+                                    .foregroundColor(Color.BODY_COPY)
+                                    .multilineTextAlignment(.leading)
+                                Spacer()
+                            }
                         }
                     }
+                    .frame(width: svm.content_width)
+                    .padding(.trailing)
                 }
-                .frame(width: svm.content_width)
-                .padding(.trailing)
+                .frame(width: svm.content_width * 1.05)
             }
-            .frame(width: svm.content_width * 1.05)
             
             if submitAnimation {
                 ZStack {
@@ -118,13 +177,8 @@ extension SurveyView {
                 Spacer()
             }
             
-            infoSection
-            
             ForEach(Array(svm.questions.enumerated()), id: \.element) { index, element in
                 if index <= 9 {
-                    if index == 6 {
-                        infoSection
-                    }
                     VHIScale(responses: self.$responses, prompt: element, index: index)
                 }
             }

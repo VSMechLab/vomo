@@ -245,7 +245,7 @@ extension PitchGraph {
                 
                 Text("\(bottom, specifier: "%.0f")")
                 
-                Color.clear.frame(width: 1, height: 17)
+                Color.clear.frame(width: 1, height: 25)
             }
             .font(._fieldCopyRegular)
             .frame(width: 25)
@@ -316,9 +316,13 @@ extension PitchGraph {
                 
                 /// bottom of axis & date
                 Color.white.frame(height: 2)
-                Text("\(firstPoint.dataDate.baselineLabel())")
-                    .font(._day)
-                    .frame(width: 75, height: 15)
+                VStack(spacing: 0) {
+                    Text("\(firstPoint.dataDate.baselineLabelTitle())")
+                    Text("\(firstPoint.dataDate.baselineLabelBody())")
+                        .foregroundColor(.YELLOW)
+                }
+                .font(._day)
+                .frame(width: 50, height: 23)
             }
         }
         .frame(width: 75)
@@ -349,7 +353,7 @@ extension PitchGraph {
                 }
             }
             
-            Color.clear.frame(height: 17)
+            Color.clear.frame(height: 25)
         }
     }
     
@@ -413,9 +417,13 @@ extension PitchGraph {
                     
                     /// bottom of axis & date
                     Color.white.frame(height: 2)
-                    Text("\(point.dataDate.nodeLabel())")
-                        .font(._day)
-                        .frame(width: point.hasTreatment ? 100 : 50, height: 15)
+                    VStack(spacing: 0) {
+                        Text("\(point.dataDate.nodeTitle())")
+                        Text("\(point.dataDate.nodeHeader())")
+                            .foregroundColor(.YELLOW)
+                    }
+                    .font(._day)
+                    .frame(width: point.hasTreatment ? 100 : 50, height: 23)
                 }
                 
             }.frame(width: point.hasTreatment ? 100 : 50)
@@ -440,7 +448,7 @@ extension PitchGraph {
                     .frame(height: geo.size.height)
                 }
                 
-                Color.clear.frame(height: 17)
+                Color.clear.frame(height: 25)
             }
             
             VStack(spacing: 0) {
@@ -475,7 +483,7 @@ extension PitchGraph {
                     .frame(height: geo.size.height)
                 }
                 
-                Color.clear.frame(height: 17)
+                Color.clear.frame(height: 25)
             }
             .foregroundColor(Color.white.opacity(0.5))
             

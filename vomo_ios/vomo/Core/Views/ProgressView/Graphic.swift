@@ -8,15 +8,17 @@
 import SwiftUI
 
 /// tabs
-var tabs = ["Summary", "Pitch", "Duration", "Quality", "Survey"]
+//var tabs = ["Summary", "Pitch", "Duration", "Quality", "Survey"]
 
 struct Graphic: View {
+    @EnvironmentObject var settings: Settings
+    
     @Binding var thresholdPopUps: (Bool, Bool, Bool)
     @Binding var tappedRecording: Date
     @Binding var showBaseline: (Bool, Int)
     @Binding var deletionTarget: (Date, String)
     
-    @State var selectedTab = "Summary"
+    @State var selectedTab = ""
     
     @State var edge = UIApplication.shared.connectedScenes
         .filter { $0.activationState == .foregroundActive }
@@ -45,37 +47,48 @@ struct Graphic: View {
                 Color.DARK_BLUE.edgesIgnoringSafeArea(.top)
             }
             
-            // Flip through views
-            // Using swipe gesture
+            
             TabView(selection: $selectedTab) {
-                SummaryTab(showTitle: $showTitle)
-                    .tag("Summary")
-                
-                PitchTab(showTitle: $showTitle, thresholdPopUps: $thresholdPopUps, tappedRecording: $tappedRecording, showBaseline: self.$showBaseline, deletionTarget: $deletionTarget)
-                    .tag("Pitch")
-                
-                DurationTab(showTitle: $showTitle, thresholdPopUps: $thresholdPopUps, tappedRecording: $tappedRecording, showBaseline: self.$showBaseline, deletionTarget: $deletionTarget)
-                    .tag("Duration")
-                
-                QualityTab(showTitle: $showTitle, thresholdPopUps: $thresholdPopUps, tappedRecording: $tappedRecording, showBaseline: $showBaseline, deletionTarget: $deletionTarget)
-                    .tag("Quality")
-                
-                SurveyTab(showTitle: $showTitle, tappedRecording: $tappedRecording, deletionTarget: $deletionTarget)
-                    .tag("Survey")
+                ForEach(settings.summaryOrder, id: \.self) { page in
+                    if page == "Summary" {
+                        SummaryTab(showTitle: $showTitle)
+                            .tag("Summary")
+                    }
+                    if page == "Pitch" {
+                        PitchTab(showTitle: $showTitle, thresholdPopUps: $thresholdPopUps, tappedRecording: $tappedRecording, showBaseline: self.$showBaseline, deletionTarget: $deletionTarget)
+                            .tag("Pitch")
+                    }
+                    if page == "Duration" {
+                        DurationTab(showTitle: $showTitle, thresholdPopUps: $thresholdPopUps, tappedRecording: $tappedRecording, showBaseline: self.$showBaseline, deletionTarget: $deletionTarget)
+                            .tag("Duration")
+                    }
+                    if page == "Quality" {
+                        QualityTab(showTitle: $showTitle, thresholdPopUps: $thresholdPopUps, tappedRecording: $tappedRecording, showBaseline: $showBaseline, deletionTarget: $deletionTarget)
+                            .tag("Quality")
+                    }
+                    if page == "Survey" {
+                        SurveyTab(showTitle: $showTitle, tappedRecording: $tappedRecording, deletionTarget: $deletionTarget)
+                            .tag("Survey")
+                    }
+                }
             }
             .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
             .ignoresSafeArea(.all, edges: .bottom)
             .edgesIgnoringSafeArea(.top)
+            
+            // Flip through views
+            // Using swipe gesture
+            
             
             
             VStack(spacing: 0) {
                 if showTitle {
                     // Flip through bars using a tap
                     HStack(spacing: 0) {
-                        ForEach(tabs, id: \.self) { image in
+                        ForEach(settings.summaryOrder, id: \.self) { image in
                             Spacer()
                             TabButton(image: image, selectedTab: $selectedTab)
-                            if image == tabs.last {
+                            if image == settings.summaryOrder.last {
                                 Spacer()
                             }
                         }
@@ -106,14 +119,21 @@ struct Graphic: View {
                 Spacer()
             }
             
-            HStack {
-                ForEach(0...4, id: \.self) { step in
-                    Circle()
-                        .foregroundColor(tabs[step] == selectedTab ? Color.white : Color.INPUT_FIELDS)
-                        .frame(width: tabs[step] == selectedTab ? 8.5 : 6, height: tabs[step] == selectedTab ? 8.5 : 6, alignment: .center)
+            if settings.summaryOrder.count == 5 {
+                HStack {
+                    ForEach(0...4, id: \.self) { step in
+                        Circle()
+                            .foregroundColor(settings.summaryOrder[step] == selectedTab ? Color.white : Color.INPUT_FIELDS)
+                            .frame(width: settings.summaryOrder[step] == selectedTab ? 8.5 : 6, height: settings.summaryOrder[step] == selectedTab ? 8.5 : 6, alignment: .center)
+                    }
                 }
+                .padding(.bottom, 5.5)
             }
-            .padding(.bottom, 5.5)
+        }
+        .onAppear() {
+            if settings.summaryOrder.count == 5 {
+                selectedTab = settings.summaryOrder[0]
+            }
         }
         .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height * 0.35)
         .onReceive(timer) { _ in

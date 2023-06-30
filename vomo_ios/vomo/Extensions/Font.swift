@@ -21,6 +21,10 @@ extension Font {
     static var _title1: Font {
         Font.custom("Roboto-Bold", size: 24)
     }
+    /// Countdown, Size 75, Bold
+    static var _countdown: Font {
+        Font.custom("Roboto-Bold", size: 75)
+    }
     /// Subtitle, Size 17, Regular
     static var _subTitle: Font {
         Font.custom("Roboto-light", size: 19)
@@ -91,7 +95,7 @@ extension Font {
         Font.custom("Roboto-Regular", size: 16)
     }
     static var _day: Font {
-        Font.custom("Roboto-Light", size: 12)
+        Font.custom("Roboto-Light", size: 14)
     }
     static var _surveyNormalLabel: Font {
         Font.custom("Roboto-Bold", size: 12)

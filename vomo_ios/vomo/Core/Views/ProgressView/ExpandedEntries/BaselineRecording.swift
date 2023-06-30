@@ -156,17 +156,17 @@ extension BaselineRecording {
                         .font(._bodyCopy)
                     Spacer()
                     Text(result.0.pitch_mean == -1 ? "N/A" : "\(result.0.pitch_mean, specifier: "%.0f")")
-                        .font(._bodyCopyBold)
+                        .font(._bodyCopy)
                 }
                 HStack {
                     Text("Mean CPP (dB):")
                         .font(._bodyCopy)
                     Spacer()
                     Text(result.0.pitch_min == -1 ? "N/A" : "\(result.0.cppMean, specifier: "%.1f")")
-                        .font(._bodyCopyBold)
+                        .font(._bodyCopy)
                 }
             }
-            .padding(.leading, 8)
+            .padding(.horizontal, 95)
             
             
             ZStack {
@@ -191,14 +191,14 @@ extension BaselineRecording {
             
             Group {
                 HStack {
-                    Text("Maximum Duration (seconds):")
+                    Text("Time (seconds):")
                         .font(._bodyCopy)
                     Spacer()
                     Text(result.1.duration == -1 ? "N/A" : "\(result.1.duration, specifier: "%.1f")")
-                        .font(._bodyCopyBold)
+                        .font(._bodyCopy)
                 }
             }
-            .padding(.leading, 8)
+            .padding(.horizontal, 95)
             
             
             ZStack {
@@ -219,25 +219,33 @@ extension BaselineRecording {
     
     private var rainbowSection: some View {
         VStack(alignment: .leading, spacing: 1) {
-            Text("Rainbow Baseline **\(result.2.createdAt.weekAndDay())**")
+            Text("Sentences Baseline **\(result.2.createdAt.weekAndDay())**")
             
-            Group {
+            
+            VStack {
+                
                 HStack {
-                    Text("Mean Pitch (Hertz):")
-                        .font(._bodyCopy)
-                    Spacer()
-                    Text(result.2.pitch_mean == -1 ? "N/A" : "\(result.2.pitch_mean, specifier: "%.0f")")
-                        .font(._bodyCopyBold)
-                }
-                HStack {
-                    Text("Mean CPP (dB):")
-                        .font(._bodyCopy)
-                    Spacer()
-                    Text(result.2.cppMean == -1 ? "N/A" : "\(result.2.cppMean, specifier: "%.1f")")
-                        .font(._bodyCopyBold)
+                    VStack(alignment: .leading) {
+                        Text("Mean Pitch (Hertz):")
+                        Text("Mean CPP (dB):")
+                    }
+                    .font(._bodyCopy)
+                    .frame(width: 1.20 * svm.content_width / 3)
+                    
+                    VStack(alignment: .trailing) {
+                        Text(result.2.pitch_mean == -1 ? "N/A" : "\(result.2.pitch_mean, specifier: "%.0f")")
+                        Text(result.2.cppMean == -1 ? "N/A" : "\(result.2.cppMean, specifier: "%.1f")")
+                    }
+                    .font(._bodyCopyBold)
+                    .frame(width: 0.70 * svm.content_width / 3)
+                    
+                    VStack(alignment: .trailing) {
+                        Color.clear
+                    }
+                    .font(._bodyCopyMedium)
+                    .frame(width: 0.70 * svm.content_width / 3)
                 }
             }
-            .padding(.leading, 8)
             
             ZStack {
                 HStack {

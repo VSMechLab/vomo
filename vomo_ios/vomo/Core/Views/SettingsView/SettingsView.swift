@@ -61,12 +61,20 @@ struct SettingsView: View {
                     
                     voiceProblemOnsetSection
                     
-                    trackStatementSection
+                    Text("Drag to edit progress page graph order")
+                        .font(._fieldLabel)
+                        .foregroundColor(Color.black)
+                    SummaryOrderEditor()
+                        .padding(.bottom, -175)
                     
-                    extraButtonSection
-                    
-                    Text("Version 1.19")
-                        .font(._bodyCopyUnBold)
+                    Group {
+                        trackStatementSection
+                        
+                        extraButtonSection
+                        
+                        Text("Version 1.21")
+                            .font(._bodyCopyUnBold)
+                    }
                 }
                 .font(._fieldLabel)
                 .padding(.bottom, 75)
@@ -264,14 +272,9 @@ extension SettingsView {
         }) {
             VStack(spacing: 0) {
                 HStack {
-                    Text("You are on \(svm.vocalIssues[settings.focusSelection]) track ")
-                        .foregroundColor(Color.BODY_COPY)
-                    Spacer()
-                }
-                HStack {
-                    Text("Edit")
-                        .underline()
+                    Text("You are on \(svm.vocalIssues[settings.focusSelection]) track. Edit?")
                         .foregroundColor(Color.DARK_PURPLE)
+                        .multilineTextAlignment(.leading)
                     Spacer()
                 }
             }
@@ -447,5 +450,43 @@ class DocumentPicker: NSObject, UIDocumentPickerDelegate {
     
     func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
         selectedFiles.append(contentsOf: urls)
+    }
+}
+
+struct SummaryOrderEditor: View {
+    @EnvironmentObject var settings: Settings
+    
+    var body: some View {
+        NavigationView {
+            List {
+                ForEach(settings.summaryOrder, id: \.self) { contact in
+                    HStack {
+                        Text(contact)
+                            .font(._fieldCopyRegular)
+                            .foregroundColor(.black)
+                        Spacer()
+                        Image(systemName: "line.3.horizontal")
+                            .font(._fieldCopyRegular)
+                            .foregroundColor(.black)
+                    }
+                }
+                // 2
+                .onMove(perform: move)
+                .shadow(radius: 1)
+            }.listStyle(.plain)
+                
+        }
+        .onAppear {
+            if settings.summaryOrder.isEmpty {
+                settings.summaryOrder = ["Summary",  "Pitch", "Duration", "Quality", "Survey"]
+            }
+        }
+    }
+    
+    // 3
+    func move(from: IndexSet, to: Int) {
+
+        settings.summaryOrder.move(fromOffsets: from, toOffset: to)
+        
     }
 }

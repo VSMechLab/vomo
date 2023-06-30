@@ -347,8 +347,8 @@
 			isa = PBXGroup;
 			children = (
 				AD00C76529F720DE0017385E /* BaselineRecording.swift */,
-				AD00C76729F720DE0017385E /* ExpandedJournal.swift */,
 				AD00C76629F720DE0017385E /* ExpandedRecording.swift */,
+				AD00C76729F720DE0017385E /* ExpandedJournal.swift */,
 				AD00C76429F720DE0017385E /* ExpandedSurvey.swift */,
 			);
 			path = ExpandedEntries;
@@ -639,8 +639,8 @@
 		ADB4A83E293830D0003D8556 /* SurveyView */ = {
 			isa = PBXGroup;
 			children = (
-				AD00C74129F720A10017385E /* CustomSlider.swift */,
 				AD00C74329F720A10017385E /* SurveyView.swift */,
+				AD00C74129F720A10017385E /* CustomSlider.swift */,
 				AD00C74229F720A10017385E /* VEScale.swift */,
 				AD00C74429F720A10017385E /* VHIScale.swift */,
 			);
@@ -650,8 +650,8 @@
 		ADB4A84329386E78003D8556 /* RecordView */ = {
 			isa = PBXGroup;
 			children = (
-				AD00C73D29F720940017385E /* RecordAction.swift */,
 				AD00C73E29F720940017385E /* RecordView.swift */,
+				AD00C73D29F720940017385E /* RecordAction.swift */,
 			);
 			path = RecordView;
 			sourceTree = "<group>";
@@ -1015,7 +1015,7 @@
 				CODE_SIGN_ENTITLEMENTS = VoMo/VoMo.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 33;
+				CURRENT_PROJECT_VERSION = 34;
 				DEVELOPMENT_ASSET_PATHS = "\"VoMo/Preview Content\"";
 				DEVELOPMENT_TEAM = E3GYNLB224;
 				ENABLE_PREVIEWS = YES;
@@ -1037,7 +1037,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.20;
+				MARKETING_VERSION = 1.21;
 				PRODUCT_BUNDLE_IDENTIFIER = edu.uc.vomo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1056,7 +1056,7 @@
 				CODE_SIGN_ENTITLEMENTS = VoMo/VoMo.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 33;
+				CURRENT_PROJECT_VERSION = 34;
 				DEVELOPMENT_ASSET_PATHS = "\"VoMo/Preview Content\"";
 				DEVELOPMENT_TEAM = E3GYNLB224;
 				ENABLE_PREVIEWS = YES;
@@ -1078,7 +1078,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.20;
+				MARKETING_VERSION = 1.21;
 				PRODUCT_BUNDLE_IDENTIFIER = edu.uc.vomo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

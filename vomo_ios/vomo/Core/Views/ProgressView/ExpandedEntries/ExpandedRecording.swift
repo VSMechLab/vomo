@@ -25,6 +25,120 @@ struct ExpandedRecording: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 1) {
+            if recordType == "Vowel" {
+                VStack {
+                    HStack {
+                        VStack(alignment: .leading) {
+                            Text(" ")
+                        }
+                        .font(._bodyCopy)
+                        .frame(width: 1.20 * svm.content_width / 3)
+                        
+                        VStack(alignment: .trailing) {
+                            Text("Current")
+                        }
+                        .font(._bodyCopyBold)
+                        .foregroundColor(.YELLOW)
+                        .frame(width: 0.70 * svm.content_width / 3)
+                        
+                        VStack(alignment: .trailing) {
+                            Text("Baseline")
+                        }
+                        .font(._bodyCopyMedium)
+                        .frame(width: 0.70 * svm.content_width / 3)
+                        
+                    }
+                    
+                    HStack {
+                        VStack(alignment: .leading) {
+                            Text("Mean Pitch (Hertz):")
+                            Text("Mean CPP (dB):")
+                        }
+                        .font(._bodyCopy)
+                        .frame(width: 1.20 * svm.content_width / 3)
+                        
+                        VStack(alignment: .trailing) {
+                            Text(result.pitch_mean == -1 ? "N/A" : "\(result.pitch_mean, specifier: "%.0f")")
+                            Text(result.cppMean == -1 ? "N/A" : "\(result.cppMean, specifier: "%.1f")")
+                        }
+                        .font(._bodyCopyBold)
+                        .foregroundColor(.YELLOW)
+                        .frame(width: 0.70 * svm.content_width / 3)
+                        
+                        VStack(alignment: .trailing) {
+                            Text(result.pitch_mean == -1 ? "N/A" : "\(baseline.pitch_mean, specifier: "%.0f")")
+                            Text(result.cppMean == -1 ? "N/A" : "\(baseline.cppMean, specifier: "%.1f")")
+                        }
+                        .font(._bodyCopyMedium)
+                        .frame(width: 0.70 * svm.content_width / 3)
+                        
+                    }
+                }
+            } else if recordType == "Duration" {
+                Text("duration")
+            } else if recordType == "Rainbow" {
+                VStack {
+                    HStack {
+                        VStack(alignment: .leading) {
+                            Text(" ")
+                        }
+                        .font(._bodyCopy)
+                        .frame(width: 1.20 * svm.content_width / 3)
+                        
+                        VStack(alignment: .trailing) {
+                            Text("Current")
+                        }
+                        .font(._bodyCopyBold)
+                        .foregroundColor(.YELLOW)
+                        .frame(width: 0.70 * svm.content_width / 3)
+                        
+                        VStack(alignment: .trailing) {
+                            Text("Baseline")
+                        }
+                        .font(._bodyCopyMedium)
+                        .frame(width: 0.70 * svm.content_width / 3)
+                        
+                    }
+                    
+                    HStack {
+                        VStack(alignment: .leading) {
+                            Text("Mean Pitch (Hertz):")
+                            Text("Mean CPP (dB):")
+                        }
+                        .font(._bodyCopy)
+                        .frame(width: 1.20 * svm.content_width / 3)
+                        
+                        VStack(alignment: .trailing) {
+                            Text(result.pitch_mean == -1 ? "N/A" : "\(result.pitch_mean, specifier: "%.0f")")
+                            Text(result.cppMean == -1 ? "N/A" : "\(result.cppMean, specifier: "%.1f")")
+                        }
+                        .font(._bodyCopyBold)
+                        .foregroundColor(.YELLOW)
+                        .frame(width: 0.70 * svm.content_width / 3)
+                        
+                        VStack(alignment: .trailing) {
+                            Text(result.pitch_mean == -1 ? "N/A" : "\(baseline.pitch_mean, specifier: "%.0f")")
+                            Text(result.cppMean == -1 ? "N/A" : "\(baseline.cppMean, specifier: "%.1f")")
+                        }
+                        .font(._bodyCopyMedium)
+                        .frame(width: 0.70 * svm.content_width / 3)
+                        
+                    }
+                }
+                
+                
+                
+            }
+                
+                /*
+            HStack {
+                Spacer()
+                Text("Mean Pitch (Hertz):")
+                    .font(._bodyCopy)
+                Text(result.pitch_mean == -1 ? "N/A" : "\(result.pitch_mean, specifier: "%.0f")/\(baseline.pitch_mean, specifier: "%.0f")")
+                    .font(._bodyCopyBold)
+            }
+            
             HStack {
                 Text("Mean Pitch (Hertz):")
                     .font(._bodyCopy)
@@ -45,7 +159,7 @@ struct ExpandedRecording: View {
                 Spacer()
                 Text(result.cppMean == -1 ? "N/A" : "\(result.cppMean, specifier: "%.1f")/\(baseline.cppMean, specifier: "%.1f")")
                     .font(._bodyCopyBold)
-            }
+            }*/
             
             AudioInterface(date: createdAt)
                 .scaleEffect(0.7)
@@ -77,6 +191,7 @@ struct ExpandedRecording: View {
                 baseline = audioRecorder.baselineRainbow()
             }
         }
+        
         /*
         VStack(alignment: .leading) {
             if !audioRecorder.recordings.isEmpty {

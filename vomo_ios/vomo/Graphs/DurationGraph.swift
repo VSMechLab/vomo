@@ -282,7 +282,7 @@ extension DurationGraph {
                 
                 Text("\(bottom, specifier: "%.0f")")
                 
-                Color.clear.frame(width: 1, height: 17)
+                Color.clear.frame(width: 1, height: 25)
             }
             .font(._fieldCopyRegular)
             .frame(width: 25)
@@ -352,9 +352,13 @@ extension DurationGraph {
                 
                 /// bottom of axis & date
                 Color.white.frame(height: 2)
-                Text("\(firstPoint.dataDate.baselineLabel())")
-                    .font(._day)
-                    .frame(width: 75, height: 15)
+                VStack(spacing: 0) {
+                    Text("\(firstPoint.dataDate.baselineLabelTitle())")
+                    Text("\(firstPoint.dataDate.baselineLabelBody())")
+                        .foregroundColor(.YELLOW)
+                }
+                .font(._day)
+                .frame(width: 50, height: 23)
             }
         }
         .frame(width: 75)
@@ -384,7 +388,7 @@ extension DurationGraph {
                 }
             }
             
-            Color.clear.frame(height: 17)
+            Color.clear.frame(height: 25)
         }
     }
     
@@ -447,9 +451,13 @@ extension DurationGraph {
                     
                     /// bottom of axis & date
                     Color.white.frame(height: 2)
-                    Text("\(point.dataDate.nodeLabel())")
-                        .font(._day)
-                        .frame(width: point.hasTreatment ? 100 : 50, height: 15)
+                    VStack(spacing: 0) {
+                        Text("\(point.dataDate.nodeTitle())")
+                        Text("\(point.dataDate.nodeHeader())")
+                            .foregroundColor(.YELLOW)
+                    }
+                    .font(._day)
+                    .frame(width: point.hasTreatment ? 100 : 50, height: 23)
                 }
                 
             }.frame(width: point.hasTreatment ? 100 : 50)
@@ -472,23 +480,41 @@ extension DurationGraph {
                         ZStack {
                             Color.indigo.opacity(0.5)
                                 .frame(height: geo.size.height * nodes(duration: settings.durationRange().0).3 / 0.90)
+                            
                             VStack {
                                 Spacer()
+                                
+                                HStack(spacing: 0) {
+                                    ForEach(1...20, id: \.self) { num in
+                                        if num % 2 == 0 {
+                                            Color.white.frame(height: 2)
+                                        } else {
+                                            Color.clear.frame(height: 2)
+                                        }
+                                    }
+                                }.frame(width: geo.size.width)
+                            }
+                        }
+                        .frame(height: geo.size.height * nodes(duration: settings.durationRange().0).3 / 0.90)
+                        
+                        ZStack {
+                            Color.clear
+                                .frame(height: geo.size.height * nodes(duration: settings.durationRange().0).1 / 0.90)
+                            VStack {
                                 HStack {
                                     Text(" \(settings.durationRange().0, specifier: "%.0f")")
                                         .font(._fieldCopyBold)
                                         .padding(2.5)
+                                        .foregroundColor(Color.white.opacity(0.5))
                                     Spacer()
                                 }
+                                Spacer()
                             }
                         }
-                        .frame(height: geo.size.height * nodes(duration: settings.durationRange().0).3 / 0.90)
-                        Color.clear
-                            .frame(height: geo.size.height * nodes(duration: settings.durationRange().0).1 / 0.90)
                     }
                 }
             }
-            Color.clear.frame(height: 17)
+            Color.clear.frame(height: 25)
         }
     }
     

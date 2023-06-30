@@ -36,8 +36,19 @@ struct EntryRow: View {
                 withAnimation() { expandEntryItem.toggle() }
             }) {
                 HStack {
-                    Text("**\(element.str[index])** | \(element.preciseDate[index].toStringHour())")
-                        .font(._bodyCopyUnBold)
+                    if element.str[index] == "Vowel" {
+                        Text("**Vowel** | \(element.preciseDate[index].toStringHour())")
+                            .font(._bodyCopyUnBold)
+                    } else if element.str[index] == "Duration" {
+                        Text("**Maximum Duration** | \(element.preciseDate[index].toStringHour())")
+                            .font(._bodyCopyUnBold)
+                    } else if element.str[index] == "Rainbow" {
+                        Text("**Sentences** | \(element.preciseDate[index].toStringHour())")
+                            .font(._bodyCopyUnBold)
+                    } else {
+                        Text("**\(element.str[index])** | \(element.preciseDate[index].toStringHour())")
+                            .font(._bodyCopyUnBold)
+                    }
                     Spacer()
                     if !expandEntryItem && !audioRecorder.recordings.isEmpty && (element.str[index] == "Vowel" || element.str[index] == "Duration" || element.str[index] == "Rainbow") {
                         MiniAudioInterface(audioPlayer: $audioPlayer, date: element.preciseDate[index])

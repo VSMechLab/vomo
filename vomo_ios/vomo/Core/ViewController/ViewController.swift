@@ -123,7 +123,7 @@ extension ViewController {
                         .resizable()
                         .frame(width: 20.0, height: 27.5)
                     
-                    Text("RECORDING")
+                    Text("RECORD")
                         .font(Font._tabTitle)
                         .foregroundColor(viewRouter.currentPage == .record ? Color.DARK_PURPLE : Color.gray)
                 }.frame(width: UIScreen.main.bounds.width / 3)
@@ -159,7 +159,7 @@ extension ViewController {
                             .resizable()
                             .frame(width: 20.0, height: 27.5)
                         
-                        Text("RECORDING")
+                        Text("RECORD")
                             .font(Font._tabTitle)
                             .foregroundColor(viewRouter.currentPage == .record ? Color.DARK_PURPLE : Color.gray)
                     }.frame(width: UIScreen.main.bounds.width / 3)

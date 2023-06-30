@@ -51,7 +51,7 @@ struct Filter: View {
                     }
                 }) {
                     HStack {
-                        Text("Duration")
+                        Text("Maximum Duration")
                         Spacer()
                         Text("\(numOfRecords().1) Entries")
                     }
@@ -69,7 +69,7 @@ struct Filter: View {
                     }
                 }) {
                     HStack {
-                        Text("Rainbow")
+                        Text("Sentences")
                         Spacer()
                         Text("\(numOfRecords().2) Entries")
                     }

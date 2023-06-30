@@ -140,6 +140,13 @@ class Settings: ObservableObject {
             UserDefaults.standard.set(qualityThreshold, forKey: "quality_threshold")
         }
     }
+    /// ["Summary",  "Pitch", "Duration", "Quality", "Survey"]
+    @Published var summaryOrder: [String] {
+        didSet {
+            print("\n\nResettings summary order\n\n")
+            UserDefaults.standard.set(summaryOrder, forKey: "summary_order")
+        }
+    }
     
     /// Functions/Variables for Record Page. Need the following
     /// var of type array that stores the name of all the tasks
@@ -345,6 +352,9 @@ class Settings: ObservableObject {
         self.qualityThreshold = defaults.object(forKey: "quality_threshold") as? [Int] ?? []
         
         self.allowIncompleteSurvey = defaults.object(forKey: "allow_incomplete_survey") as? Bool ?? false
+        
+        
+        self.summaryOrder = defaults.object(forKey: "summary_order") as? [String] ?? ["Summary",  "Pitch", "Duration", "Quality", "Survey"]
     }
     
     var availableRecordings: [String] {

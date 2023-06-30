@@ -191,19 +191,34 @@ extension Date {
         return dateFormatter.string(from: self).uppercased()
     }
     
-    /// For baseline
-    /// "EEE M/d/yy"
-    func baselineLabel() -> String {
+    /// For baseline title
+    /// "EEE"
+    func baselineLabelTitle() -> String {
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "EEE M/d/yy"
+        dateFormatter.dateFormat = "EEE"
+        return dateFormatter.string(from: self).uppercased()
+    }
+    /// For baseline body
+    /// "M/d/yy"
+    func baselineLabelBody() -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "M/d/yy"
         return dateFormatter.string(from: self).uppercased()
     }
     
     /// For node
-    /// "EEE M/d"
-    func nodeLabel() -> String {
+    /// "EEE"
+    func nodeTitle() -> String {
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "EEE M/d"
+        dateFormatter.dateFormat = "EEE"
+        return dateFormatter.string(from: self).uppercased()
+    }
+    
+    /// For node
+    /// "M/d"
+    func nodeHeader() -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "M/d"
         return dateFormatter.string(from: self).uppercased()
     }
     
