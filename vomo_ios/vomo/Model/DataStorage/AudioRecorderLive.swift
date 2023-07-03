@@ -134,7 +134,7 @@ extension AudioRecorder: AVCaptureAudioDataOutputSampleBufferDelegate {
         {
 #if targetEnvironment(simulator)
             
-            // microphone =
+            fatalError("Detected simulator, no in built microphone")
 #else
             fatalError("Did not detect simulator or microphone! Error!")
 #endif

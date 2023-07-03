@@ -36,5 +36,53 @@
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "CC316170-CC8F-4BF7-83D3-115D52A16028"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "VoMo/Model/DataStorage/AudioRecorderLive.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "148"
+            endingLineNumber = "148"
+            landmarkName = "configureCaptureSession()"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "CC316170-CC8F-4BF7-83D3-115D52A16028 - 707fa10231f667b0"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "VoMo.AudioRecorder.configureCaptureSession() -&gt; ()"
+                  moduleName = "VoMo"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/sweesemac/Development/Swift/vomo/vomo/vomo_ios/VoMo/Model/DataStorage/AudioRecorderLive.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "149"
+                  endingLineNumber = "149"
+                  offsetFromSymbolStart = "544">
+               </Location>
+               <Location
+                  uuid = "CC316170-CC8F-4BF7-83D3-115D52A16028 - 707fa10231f667b0"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "VoMo.AudioRecorder.configureCaptureSession() -&gt; ()"
+                  moduleName = "VoMo"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/sweesemac/Development/Swift/vomo/vomo/vomo_ios/VoMo/Model/DataStorage/AudioRecorderLive.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "149"
+                  endingLineNumber = "149"
+                  offsetFromSymbolStart = "504">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
    </Breakpoints>
 </Bucket>
