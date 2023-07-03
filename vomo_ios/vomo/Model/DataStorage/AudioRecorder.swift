@@ -38,17 +38,98 @@ class AudioRecorder: NSObject, ObservableObject {
     var processedData: [MetricsModel] = [] {
         didSet { saveProcessedData() }
     }
+
     // Q: What is this used for?
-    var processings = Processings()
+    //var processings = Processings()
     
+    // Live Recording Values
+    // TODOSW seperate out into additional file where applicable
+    
+    @Published var gain: Float = 0.025
+    @Published var zeroReference: Double = 1000
+    @Published var nyqFreq: Float = 0
+
+    // MARK: Properties
+    // TODOSW
+    //let audioEngine = AVAudioEngine()
+    //let inputNode = AVAudioInputNode()
+    /// The number of samples per frame — the height of the spectrogram.
+    var average:Float = 0
+    static let sampleCount = 1024
+    
+    /// The number of displayed buffers — the width of the spectrogram.
+    static let bufferCount = 768
+    
+    /// Determines the overlap between frames.
+    static let hopCount = 512
+
+    let captureSession = AVCaptureSession()
+    let audioOutput = AVCaptureAudioDataOutput()
+    let captureQueue = DispatchQueue(label: "captureQueue",
+                                     qos: .userInitiated,
+                                     attributes: [],
+                                     autoreleaseFrequency: .workItem)
+    let sessionQueue = DispatchQueue(label: "sessionQueue",
+                                     attributes: [],
+                                     autoreleaseFrequency: .workItem)
+    
+    let forwardDCT = vDSP.DCT(count: sampleCount,
+                              transformType: .II)!
+    
+    /// The window sequence for reducing spectral leakage.
+    let hanningWindow = vDSP.window(ofType: Float.self,
+                                    usingSequence: .hanningDenormalized,
+                                    count: sampleCount,
+                                    isHalfWindow: false)
+    
+    let dispatchSemaphore = DispatchSemaphore(value: 1)
+    
+    /// The highest frequency that the app can represent.
+    ///
+    /// The first call of `AudioSpectrogram.captureOutput(_:didOutput:from:)` calculates
+    /// this value.
+    var nyquistFrequency: Float = 0
+    
+    /// A buffer that contains the raw audio data from AVFoundation.
+    var rawAudioData = [Int16]()
+    
+    /// Raw frequency-domain values.
+    var frequencyDomainValues = [Float](repeating: 0,
+                                        count: bufferCount * sampleCount)
+ 
+
+
+    /// A reusable array that contains the current frame of time-domain audio data as single-precision
+    /// values.
+    var timeDomainBuffer = [Float](repeating: 0,
+                                   count: sampleCount)
+    
+    /// A resuable array that contains the frequency-domain representation of the current frame of
+    /// audio data.
+    var frequencyDomainBuffer = [Float](repeating: 0,
+                                        count: sampleCount)
+    
+// MARK: INIT
     override init() {
         super.init()
         fetchRecordings()
         getProcessedData()
+        
+        // Live Recording Setup
+        // see AudioRecorderLive
+        configureCaptureSession()
+        audioOutput.setSampleBufferDelegate(self,
+                                            queue: captureQueue)
+        
+        
+    }
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     func grantedPermission() -> Bool {
         let audioSession = AVAudioSession.sharedInstance()
+        
         switch audioSession.recordPermission {
         case .granted:
             return true// User has granted permission to record audio
@@ -169,12 +250,16 @@ class AudioRecorder: NSObject, ObservableObject {
             AVNumberOfChannelsKey: 1,
             AVEncoderAudioQualityKey: AVAudioQuality.high.rawValue
         ]
-        
         do {
-            audioRecorder = try AVAudioRecorder(url: audioFilename, settings: settings)
-            audioRecorder.record()
-
-            recording = true
+                audioRecorder = try AVAudioRecorder(url: audioFilename, settings: settings)
+                audioRecorder.record()
+                sessionQueue.async {
+                    // CHANGESW
+                    if AVCaptureDevice.authorizationStatus(for: .audio) == .authorized {
+                        self.captureSession.startRunning()
+                    }
+                }
+                recording = true
         } catch {
             Logging.audioRecorderLog.error("Could not start recording: \(error.localizedDescription)")
         }
@@ -532,8 +617,7 @@ func getCreationDate(for file: URL) -> Date {
 }
 
 extension AudioRecorder {
-    
-    
+
     func months() -> [Date] {
         var model: [Date] = []
         
@@ -570,4 +654,79 @@ extension AudioRecorder {
     
     func filterRecordingsDay(focus: Date) -> [Recording] { return [] }
     func filterRecordingsDayExercise(focus: Date, taskNum: Int) -> [Recording] { return [] }
+}
+
+
+//extension AudioRecorder
+/*
+ 
+ // Loop through recordings
+ for record in recordings {
+     /// 0 if no matches, 1 if a match
+     var count = 0
+     
+     for process in processedData {
+         
+         // if there is a match change var to 1
+         if record.createdAt == process.createdAt {
+             
+             count += 1
+             print("match")
+         }
+     }
+     
+     // if there was a match on none of these then reprocess this file and add to proccessedData
+     if count == 0 {
+         print("Performed a reproccessing on this file: \(record.createdAt)")
+         
+         
+         let processings = process(recording: record, gender: gender)
+         saveProcessedData()
+     }
+ }
+} else if processedData.count > recordings.count {
+ print("Difference is: \(processedData.count) - \(recordings.count)")
+ 
+ for index in 0..<recordings.count {
+     if recordings[index].createdAt == processedData[index].createdAt {
+         print("At index: \(index) there is a match")
+     } else {
+         print("At index: \(index) there is a mismatch")
+     }
+ }
+}
+ */
+extension AudioRecorder {
+    func processData(values: [Int16]) {
+        vDSP.convertElements(of: values,
+                             to: &timeDomainBuffer)
+        
+        vDSP.multiply(timeDomainBuffer,
+                      hanningWindow,
+                      result: &timeDomainBuffer)
+        
+        forwardDCT.transform(timeDomainBuffer,
+                             result: &frequencyDomainBuffer)
+        
+        vDSP.absolute(frequencyDomainBuffer,
+                      result: &frequencyDomainBuffer)
+
+        vDSP.convert(amplitude: frequencyDomainBuffer,
+                     toDecibels: &frequencyDomainBuffer,
+                     zeroReference: Float(zeroReference))
+        
+        vDSP.multiply(Float(gain),
+                      frequencyDomainBuffer,
+                      result: &frequencyDomainBuffer)
+        
+        // TODOSW
+        average = 10*(vDSP.maximum(frequencyDomainBuffer)-vDSP.minimum(frequencyDomainBuffer))
+        
+        if frequencyDomainValues.count > AudioRecorder.sampleCount {
+            frequencyDomainValues.removeFirst(AudioRecorder.sampleCount)
+        }
+        
+        frequencyDomainValues.append(contentsOf: frequencyDomainBuffer)
+    }
+    
 }
