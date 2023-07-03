@@ -209,33 +209,28 @@ struct FeedbackSyllables: View {
     @State var index = 0
     
     var body: some View {
-        ScrollViewReader { proxy in
-            ScrollView(.horizontal) {
-                HStack() {
-                    ForEach(sentence, id: \.self) { word in
-                        Text(word)
-                            .font(._title1)
-                            .id(word)
-                    }
-                }
-            }
-            .disabled(true)
+        
+        HStack(spacing: 5) {
+            Spacer()
             
-            Button {
-                withAnimation {
-                    proxy.scrollTo(sentence[index])
-                }
-                
-                if index < sentence.count - 1 {
-                    index += 1
-                }
-                
-            } label: {
-                Image(systemName: "arrow.right.circle.fill")
-                    .font(.largeTitle)
+            ForEach(sentence, id: \.self) { word in
+                Text(word)
+                    .font(.system(size: 25))
+                    .fontWeight((word == sentence[index]) ? .bold : .regular)
             }
-            .tint(.MEDIUM_PURPLE)
+            
+            Spacer()
         }
+        
+        Button {
+            if index < sentence.count - 1 {
+                index += 1
+            }
+        } label: {
+            Image(systemName: "arrow.right.circle.fill")
+                .font(.largeTitle)
+        }
+        .tint(.MEDIUM_PURPLE)
     }
 }
 
@@ -292,12 +287,13 @@ struct FeedbackRecordView: View {
     
     @ViewBuilder
     private func recordingControls() -> some View {
-        HStack {
+        HStack(alignment: .center) {
             
             Button {
-                
+                self.dismiss()
             } label: {
                 Image(systemName: "xmark.circle.fill")
+                    .font(.system(size: 35))
             }
             
             Spacer()
@@ -306,10 +302,12 @@ struct FeedbackRecordView: View {
                 
             } label: {
                 Image(systemName: "play.circle.fill")
+                    .font(.system(size: 50))
             }
             
             Spacer()
         }
+        .foregroundColor(.MEDIUM_PURPLE)
     }
 }
 
