@@ -265,6 +265,8 @@ struct FeedbackRecordView: View {
     
     @Environment(\.dismiss) private var dismiss
     
+    @ObservedObject var audioRecorder = AudioRecorder()
+    
     var body: some View {
         
         VStack {
@@ -278,6 +280,8 @@ struct FeedbackRecordView: View {
 //                FeedbackVolume()
 
             }
+            
+            Text("\(audioRecorder.recording ? "Recording..." + String(audioRecorder.nyqFreq) : "Not recording")")
             
             recordingControls()
                 .padding(.horizontal)
@@ -299,13 +303,14 @@ struct FeedbackRecordView: View {
             Spacer()
             
             Button {
-                
+                audioRecorder.startRecording(taskNum: 3)
             } label: {
                 Image(systemName: "play.circle.fill")
                     .font(.system(size: 50))
             }
             
             Spacer()
+            
         }
         .foregroundColor(.MEDIUM_PURPLE)
     }
