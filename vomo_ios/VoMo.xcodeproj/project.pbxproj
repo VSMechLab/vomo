@@ -25,6 +25,7 @@
 		2239BC002A259386001D154D /* DebugMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2239BBFF2A259386001D154D /* DebugMenuView.swift */; };
 		22CF5B6C2A3CA57F00F06663 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 22CF5B6B2A3CA57F00F06663 /* README.md */; };
 		22CF5B6E2A3CA59400F06663 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 22CF5B6D2A3CA59400F06663 /* .gitignore */; };
+		22D005BA2A4A2FC7001DC57A /* ExerciseSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D005B92A4A2FC7001DC57A /* ExerciseSelectionView.swift */; };
 		AD00C71E29F71F2C0017385E /* SharedViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD00C71D29F71F2C0017385E /* SharedViewModel.swift */; };
 		AD00C72A29F720530017385E /* GoalEntryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD00C72329F720530017385E /* GoalEntryView.swift */; };
 		AD00C72B29F720530017385E /* LandingPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD00C72429F720530017385E /* LandingPageView.swift */; };
@@ -151,8 +152,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		221861762A2503DE00F63D0A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = vomo/AppDelegate.swift; sourceTree = SOURCE_ROOT; };
 		221254282A39568A001035E5 /* FeedbackRecordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FeedbackRecordView.swift; path = vomo/Core/Views/RecordView/FeedbackRecordView.swift; sourceTree = SOURCE_ROOT; };
+		221861762A2503DE00F63D0A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = vomo/AppDelegate.swift; sourceTree = SOURCE_ROOT; };
 		22253A032A1003AC004FD26B /* Logging.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Logging.swift; path = vomo/Model/Service/Logging.swift; sourceTree = SOURCE_ROOT; };
 		22253A132A103393004FD26B /* Roboto-Thin.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Roboto-Thin.ttf"; path = "vomo/Fonts/Roboto-Thin.ttf"; sourceTree = SOURCE_ROOT; };
 		22253A142A103393004FD26B /* Roboto-BlackItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Roboto-BlackItalic.ttf"; path = "vomo/Fonts/Roboto-BlackItalic.ttf"; sourceTree = SOURCE_ROOT; };
@@ -169,6 +170,7 @@
 		2239BBFF2A259386001D154D /* DebugMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DebugMenuView.swift; path = vomo/Core/Views/DebugMenuView.swift; sourceTree = SOURCE_ROOT; };
 		22CF5B6B2A3CA57F00F06663 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		22CF5B6D2A3CA59400F06663 /* .gitignore */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = .gitignore; path = ../.gitignore; sourceTree = "<group>"; };
+		22D005B92A4A2FC7001DC57A /* ExerciseSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ExerciseSelectionView.swift; path = vomo/Core/Views/RecordView/ExerciseSelectionView.swift; sourceTree = SOURCE_ROOT; };
 		AD00C71D29F71F2C0017385E /* SharedViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SharedViewModel.swift; path = VoMo/Model/DataModels/SharedViewModel.swift; sourceTree = SOURCE_ROOT; };
 		AD00C72329F720530017385E /* GoalEntryView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GoalEntryView.swift; path = vomo/Core/Views/OnboardView/GoalEntryView.swift; sourceTree = SOURCE_ROOT; };
 		AD00C72429F720530017385E /* LandingPageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LandingPageView.swift; path = vomo/Core/Views/OnboardView/LandingPageView.swift; sourceTree = SOURCE_ROOT; };
@@ -704,6 +706,7 @@
 				AD00C73D29F720940017385E /* RecordAction.swift */,
 				AD00C73E29F720940017385E /* RecordView.swift */,
 				221254282A39568A001035E5 /* FeedbackRecordView.swift */,
+				22D005B92A4A2FC7001DC57A /* ExerciseSelectionView.swift */,
 			);
 			path = RecordView;
 			sourceTree = "<group>";
@@ -899,6 +902,7 @@
 				AD0FB6D529D21D1700E54749 /* GraphComponents.swift in Sources */,
 				AD00C77E29F721BC0017385E /* Wave.swift in Sources */,
 				ADE8921A295D426900351EA1 /* SurveyGraph.swift in Sources */,
+				22D005BA2A4A2FC7001DC57A /* ExerciseSelectionView.swift in Sources */,
 				ADA0E0E0282561CA00CF05D1 /* LineShape.swift in Sources */,
 				AD7BF16829B7121E00FA0AF8 /* QualityGraph.swift in Sources */,
 				AD00C72D29F720530017385E /* VoiceQuestionView.swift in Sources */,
