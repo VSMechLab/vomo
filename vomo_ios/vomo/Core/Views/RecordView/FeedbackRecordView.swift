@@ -221,6 +221,7 @@ struct FeedbackSyllables: View {
             
             Spacer()
         }
+        .padding(.top)
         
         Button {
             if index < sentence.count - 1 {
@@ -261,6 +262,20 @@ struct FeedbackVolume: View {
     }
 }
 
+struct FeedbackPitchTarget: View {
+    
+    var size: CGSize
+    
+    var body: some View {
+        VStack {
+            Rectangle()
+                .frame(height: 3)
+                .foregroundColor(.green)
+                .position(x: size.width / 2, y: (size.height / 3))
+        }
+    }
+}
+
 struct FeedbackRecordView: View {
     
     @Environment(\.dismiss) private var dismiss
@@ -276,6 +291,8 @@ struct FeedbackRecordView: View {
                 FeedbackWaveform(size: proxy.size)
                 
                 FeedbackSyllables()
+                
+                FeedbackPitchTarget(size: proxy.size)
                             
 //                FeedbackVolume()
 

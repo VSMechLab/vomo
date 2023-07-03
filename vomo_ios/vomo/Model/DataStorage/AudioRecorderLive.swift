@@ -103,7 +103,8 @@ extension AudioRecorder: AVCaptureAudioDataOutputSampleBufferDelegate {
             // Users can add authorization by choosing Settings > Privacy >
             // Microphone on an iOS device, or System Preferences >
             // Security & Privacy > Microphone on a macOS device.
-            fatalError("App requires microphone access.")
+//            fatalError("App requires microphone access.")
+                Logging.audioRecorderLog.error("App requires microphone access")
         }
         
         captureSession.beginConfiguration()
