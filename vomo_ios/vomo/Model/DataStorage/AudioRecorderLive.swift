@@ -131,21 +131,20 @@ extension AudioRecorder: AVCaptureAudioDataOutputSampleBufferDelegate {
         let microphone = AVCaptureDevice.default(.builtInMicrophone,
                                                  for: .audio,
                                                  position: .unspecified)
-        if (microphone == nil)
-        {
-#if targetEnvironment(simulator)
-            
-            // microphone =
-#else
-            fatalError("Did not detect simulator or microphone! Error!")
-#endif
-        }
         
-        let microphoneInput = try? AVCaptureDeviceInput(device: (microphone ?? AVCaptureDevice.default(for: .audio))!)
+        #if targetEnvironment(simulator)
         
-        if captureSession.canAddInput(microphoneInput!) {
-            captureSession.addInput(microphoneInput!)
-        }
+            print("Can't use microphone in simulator")
+        
+        #else
+        
+            let microphoneInput = try? AVCaptureDeviceInput(device: (microphone ?? AVCaptureDevice.default(for: .audio))!)
+
+            if captureSession.canAddInput(microphoneInput!) {
+                captureSession.addInput(microphoneInput!)
+            }
+        
+        #endif
         
         captureSession.commitConfiguration()
     }
