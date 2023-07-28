@@ -44,7 +44,7 @@ class WaveformPointsDummyStream {
 
 fileprivate class DummyStream {
     
-    let amplitude: Float = 0.25  // Amplitude of the sine wave
+    let amplitude: Float = 0.5  // Amplitude of the sine wave
     let frequency: Float = 10.0  // Frequency of the sine wave (in Hz)
     var time: Float = 0.0
     
@@ -102,6 +102,7 @@ class WaveformPointsManager: ObservableObject {
     static let shared = WaveformPointsManager(count: 130)
     
     @Published var points: Points
+    @Published var isStreaming: Bool = false
     
 //    public var consumer: Task<(), Never>?
 //    public var stream: WaveformPointsDummyStream?
@@ -110,14 +111,16 @@ class WaveformPointsManager: ObservableObject {
     public init(count: Int) {
         self.points = Points(count: count)
     }
-    
+        
     public func startStream() {
         self.stream = DummyStream()
+        self.isStreaming = true
     }
     
     public func stopStream() {
         self.stream?.scheduledTimer?.invalidate()
         self.stream = nil
+        self.isStreaming = false
     }
     
     func update(date: Date) {}
@@ -157,7 +160,7 @@ class WaveformPointsManager: ObservableObject {
 
 struct FeedbackWaveform: View {
     
-    @StateObject var waveform: WaveformPointsManager = .shared
+    var waveform: WaveformPointsManager
     
     public let size: CGSize
     
@@ -165,8 +168,24 @@ struct FeedbackWaveform: View {
     private let pointSpacing: CGFloat = 3.0
     private let pointSize: CGSize = .init(width: 4, height: 4)
     
+    @ViewBuilder
+    private func lineLabel(_ label: String) -> some View {
+        HStack {
+            Text("\(label) Hz")
+                .font(.system(size: 14, weight: .semibold))
+                .padding(.leading, 4)
+            Rectangle()
+                .frame(height: 1)
+        }
+        .foregroundColor(Color(uiColor: .systemGray2))
+    }
+    
     var body: some View {
+        
         VStack {
+            
+            lineLabel("3400")
+            
             TimelineView(.animation) { timeline in
                                 
                 Canvas { context, size in
@@ -178,7 +197,6 @@ struct FeedbackWaveform: View {
                         
                         if let point = waveform.points[index] {
                             let x = CGFloat(index) * pointSpacing
-//                            let x = size.width
                             let y = (CGFloat(point) * size.height)
                             let rect = CGRect(origin: CGPoint(x: x, y: y), size: pointSize)
                             let path = Circle().path(in: rect)
@@ -188,15 +206,15 @@ struct FeedbackWaveform: View {
                 }
             }
             
-            .onAppear {
-//                waveform.observeStreams()
-                waveform.startStream()
-            }
+            lineLabel("300")
             
-            .onDisappear {
-//                waveform.cancelStreamObservation()
-                waveform.stopStream()
-            }
+//            .onAppear {
+//                waveform.startStream()
+//            }
+            
+//            .onDisappear {
+//                waveform.stopStream()
+//            }
         }
     }
     
@@ -223,15 +241,15 @@ struct FeedbackSyllables: View {
         }
         .padding(.top)
         
-        Button {
-            if index < sentence.count - 1 {
-                index += 1
-            }
-        } label: {
-            Image(systemName: "arrow.right.circle.fill")
-                .font(.largeTitle)
-        }
-        .tint(.MEDIUM_PURPLE)
+//        Button {
+//            if index < sentence.count - 1 {
+//                index += 1
+//            }
+//        } label: {
+//            Image(systemName: "arrow.right.circle.fill")
+//                .font(.largeTitle)
+//        }
+//        .tint(.MEDIUM_PURPLE)
     }
 }
 
@@ -265,13 +283,14 @@ struct FeedbackVolume: View {
 struct FeedbackPitchTarget: View {
     
     var size: CGSize
+    var targetPitch: CGFloat
     
     var body: some View {
         VStack {
             Rectangle()
-                .frame(height: 3)
+                .frame(height: 1)
                 .foregroundColor(.green)
-                .position(x: size.width / 2, y: (size.height / 3))
+                .position(x: size.width / 2, y: size.height - (size.height * CGFloat(targetPitch / 3400)))
         }
     }
 }
@@ -282,27 +301,43 @@ struct FeedbackRecordView: View {
     
     @ObservedObject var audioRecorder = AudioRecorder()
     
+    @StateObject var waveform: WaveformPointsManager = .shared
+    
+    @State var targetPitch: Int
+    @State var isShowingCloseConfirmationAlert: Bool = false
+    
     var body: some View {
         
         VStack {
             
             GeometryReader { proxy in
-                                
-                FeedbackWaveform(size: proxy.size)
                 
-                FeedbackSyllables()
+                VStack {
+                    
+                    FeedbackSyllables()
+                    
+                    FeedbackWaveform(waveform: waveform, size: proxy.size)
+                                        
+                }
                 
-                FeedbackPitchTarget(size: proxy.size)
+                FeedbackPitchTarget(size: proxy.size, targetPitch: CGFloat(targetPitch))
                             
-//                FeedbackVolume()
-
             }
             
-            Text("\(audioRecorder.recording ? "Recording..." + String(audioRecorder.nyqFreq) : "Not recording")")
+//            Text("\(audioRecorder.recording ? "Recording..." + String(audioRecorder.nyqFreq) : "Not recording")")
             
             recordingControls()
                 .padding(.horizontal)
             
+        }
+        
+        .alert("Are you sure you want to end this exercise?", isPresented: $isShowingCloseConfirmationAlert) {
+            Button(role: .destructive) {
+                self.dismiss()
+            } label: {
+                Text("End")
+            }
+
         }
     }
     
@@ -311,7 +346,7 @@ struct FeedbackRecordView: View {
         HStack(alignment: .center) {
             
             Button {
-                self.dismiss()
+                self.isShowingCloseConfirmationAlert = true
             } label: {
                 Image(systemName: "xmark.circle.fill")
                     .font(.system(size: 35))
@@ -320,13 +355,27 @@ struct FeedbackRecordView: View {
             Spacer()
             
             Button {
-                audioRecorder.startRecording(taskNum: 3)
+//                audioRecorder.startRecording(taskNum: 3)
+                
+                if (waveform.isStreaming) {
+                    waveform.stopStream()
+                } else {
+                    waveform.startStream()
+                }
+                
             } label: {
-                Image(systemName: "play.circle.fill")
-                    .font(.system(size: 50))
+                Image(systemName: (waveform.isStreaming) ? "pause.circle.fill" : "play.circle.fill")
+                    .font(.system(size: 55))
             }
             
             Spacer()
+            
+            Button {
+                
+            } label: {
+                Image(systemName: "ellipsis.circle.fill")
+                    .font(.system(size: 35))
+            }
             
         }
         .foregroundColor(.MEDIUM_PURPLE)
@@ -335,6 +384,6 @@ struct FeedbackRecordView: View {
 
 struct FeedbackRecordView_Preview: PreviewProvider {
     static var previews: some View {
-        FeedbackRecordView()
+        FeedbackRecordView(targetPitch: 400)
     }
 }

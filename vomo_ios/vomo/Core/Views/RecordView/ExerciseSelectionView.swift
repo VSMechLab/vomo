@@ -12,7 +12,7 @@ struct ExerciseSelectionView: View {
     @EnvironmentObject var settings: Settings
     
     @State var isShowingRecordingView = false
-    @State var targetFrequency = 250 // in Hz
+    @State var targetFrequency = 500 // in Hz
     
     @FocusState private var focused: Bool
     
@@ -76,7 +76,7 @@ struct ExerciseSelectionView: View {
         .padding()
         
         .fullScreenCover(isPresented: $isShowingRecordingView, content: {
-            FeedbackRecordView()
+            FeedbackRecordView(targetPitch: targetFrequency)
         })
     }
 }
