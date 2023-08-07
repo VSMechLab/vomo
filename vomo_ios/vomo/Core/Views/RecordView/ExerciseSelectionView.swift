@@ -10,7 +10,6 @@ import SwiftUI
 struct ExerciseSelectionView: View {
     
     @EnvironmentObject var settings: Settings
-    @EnvironmentObject var audioRecorder: AudioRecorder
     
     @State var isShowingRecordingView = false
     @State var targetFrequency = 500 // in Hz
@@ -33,7 +32,7 @@ struct ExerciseSelectionView: View {
             HStack {
                 Text("Target Frequency")
                     .font(._BTNCopy)
-                
+                                
                 Spacer()
                 
                 TextField("", value: $targetFrequency, format: .number)
@@ -77,7 +76,7 @@ struct ExerciseSelectionView: View {
         .padding()
         
         .fullScreenCover(isPresented: $isShowingRecordingView, content: {
-            FeedbackRecordView(targetPitch: targetFrequency)
+            FeedbackRecordView(targetPitch: $targetFrequency)
         })
     }
 }

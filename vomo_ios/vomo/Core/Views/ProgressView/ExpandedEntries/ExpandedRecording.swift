@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ExpandedRecording: View {
-    @EnvironmentObject var audioRecorder: AudioRecorder
+    @ObservedObject var audioRecorder = AudioRecorder.shared
     let svm = SharedViewModel()
     let createdAt: Date
     @Binding var deletionTarget: (Date, String)

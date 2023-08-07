@@ -9,7 +9,7 @@ import SwiftUI
 
 struct BaselineRecording: View {
     @EnvironmentObject var settings: Settings
-    @EnvironmentObject var audioRecorder: AudioRecorder
+    @ObservedObject var audioRecorder = AudioRecorder.shared
     @EnvironmentObject var viewRouter: ViewRouter
     
     @Binding var deletionTarget: (Date, String)

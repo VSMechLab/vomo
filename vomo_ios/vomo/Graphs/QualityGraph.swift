@@ -27,7 +27,7 @@ class QualityNodeModel: Identifiable, Codable {
 
 struct QualityGraph: View {
     @EnvironmentObject var viewRouter: ViewRouter
-    @EnvironmentObject var audioRecorder: AudioRecorder
+    @ObservedObject var audioRecorder = AudioRecorder.shared
     @EnvironmentObject var settings: Settings
     @EnvironmentObject var entries: Entries
     

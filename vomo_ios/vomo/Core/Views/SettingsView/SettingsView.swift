@@ -22,7 +22,7 @@ import UniformTypeIdentifiers
 struct SettingsView: View {
     @EnvironmentObject var viewRouter: ViewRouter
     @EnvironmentObject var settings: Settings
-    @EnvironmentObject var audioRecorder: AudioRecorder
+    @ObservedObject var audioRecorder = AudioRecorder.shared
     @EnvironmentObject var entries: Entries
     
     // Variables for settings

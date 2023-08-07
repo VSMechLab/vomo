@@ -11,7 +11,7 @@ import AVFAudio
 /// Complex view that is able to be initialized with a 'expandedList' variable that is taken in
 /// this inititalizes how the view should appear and if stuff should be expanded at first or not
 struct DayList: View {
-    @EnvironmentObject var audioRecorder: AudioRecorder
+    @ObservedObject var audioRecorder = AudioRecorder.shared
     @State private var showMore = false
     let element: Element
     var expand = false

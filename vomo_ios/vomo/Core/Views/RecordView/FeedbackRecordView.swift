@@ -8,60 +8,6 @@
 import Foundation
 import SwiftUI
 
-//class WaveformPointsDummyStream {
-//        
-//    private var continuation: AsyncStream<Float?>.Continuation?
-//    
-//    public func cancel() {
-//        continuation?.finish()
-////        stream = nil
-//    }
-//    
-//     init() {
-//        
-//        let amplitude: Float = 0.25  // Amplitude of the sine wave
-//        let frequency: Float = 10.0  // Frequency of the sine wave (in Hz)
-//        var time: Float = 0.0
-//
-//        let _ = Timer.scheduledTimer(withTimeInterval: 0.01, repeats: true) { timer in
-//            let value = amplitude * sin(2 * Float.pi * frequency * time) + 0.5
-//            time += 0.001
-//            self.continuation?.yield(value)
-//        }
-//    }
-//    
-//    lazy var stream: AsyncStream<Float?> = {
-//        AsyncStream(Float?.self, bufferingPolicy: .bufferingNewest(1)) { cont in
-//            continuation = cont
-//            
-//            cont.onTermination = { @Sendable status in
-//                print("Task terminated with status: \(status)")
-//            }
-//        }
-//    }()
-//    
-//}
-//
-//fileprivate class DummyStream {
-//    
-//    let amplitude: Float = 0.5  // Amplitude of the sine wave
-//    let frequency: Float = 10.0  // Frequency of the sine wave (in Hz)
-//    var time: Float = 0.0
-//    
-//    var scheduledTimer: Timer?
-//        
-//    init() {
-//        
-//        self.scheduledTimer = Timer.scheduledTimer(withTimeInterval: 0.01, repeats: true) { timer in
-//            Task {
-//                let value = self.amplitude * sin(2 * Float.pi * self.frequency * self.time) + 0.5
-//                self.time += 0.001
-//                await WaveformPointsManager.shared.points.add(value)
-//            }
-//        }
-//    }
-//}
-
 @MainActor
 class WaveformPointsManager: ObservableObject {
                     
@@ -99,74 +45,40 @@ class WaveformPointsManager: ObservableObject {
         
     }
     
-    static let shared = WaveformPointsManager(count: 130)
+    static let shared = WaveformPointsManager(count: 130) // TODO: Replace this magic number. Represents number of points across screen at one time
     
     @Published var points: Points
     @Published var isStreaming: Bool = false
     
-//    public var consumer: Task<(), Never>?
-//    public var stream: WaveformPointsDummyStream?
-//    private var stream: DummyStream?
-    
     public init(count: Int) {
         self.points = Points(count: count)
     }
-        
-//    public func startStream() {
-//        self.stream = DummyStream()
-//        self.isStreaming = true
-//    }
-    
-//    public func stopStream() {
-//        self.stream?.scheduledTimer?.invalidate()
-//        self.stream = nil
-//        self.isStreaming = false
-//    }
     
     func update(date: Date) {}
-    
-//    public func observeStreams() {
-//        
-//        stream = WaveformPointsDummyStream()
-//        
-//        if stream != nil {
-//            consumer = Task {
-//                
-//                do {
-//                    for await point in self.stream!.stream {
-//                        try Task.checkCancellation()
-//                        self.points.add(point)
-//                    }
-//                } catch {
-//                    print("Cancelled")
-//                }
-//                
-//            }
-//        }
-//    }
-    
-//    public func cancelStreamObservation() {
-//        consumer?.cancel()
-//        stream = nil
-//    }
-    
-    // memory-safety
-//    deinit {
-//        points.deallocate()
-//        print("Deallocated WaveformPointsManager buffer")
-//    }
-    
+
 }
 
+@MainActor
 struct FeedbackWaveform: View {
+    
+    @ObservedObject var audioRecorder = AudioRecorder.shared
 
-    var waveform: WaveformPointsManager
+    var waveform: WaveformPointsManager = .shared
     
     public let size: CGSize
     
     // config visual elements here
     private let pointSpacing: CGFloat = 3.0
     private let pointSize: CGSize = .init(width: 4, height: 4)
+    
+    init(size: CGSize) {
+        self.size = size
+        
+        // observe for nyqFreq changes
+        _ = audioRecorder.$nyqFreq.sink { freq in
+            WaveformPointsManager.shared.points.add((freq*50)/3400)
+        }
+    }
     
     @ViewBuilder
     private func lineLabel(_ label: String) -> some View {
@@ -208,13 +120,6 @@ struct FeedbackWaveform: View {
             
             lineLabel("300")
             
-//            .onAppear {
-//                waveform.startStream()
-//            }
-            
-//            .onDisappear {
-//                waveform.stopStream()
-//            }
         }
     }
     
@@ -298,11 +203,10 @@ struct FeedbackPitchTarget: View {
 struct FeedbackRecordView: View {
     
     @Environment(\.dismiss) private var dismiss
-    @EnvironmentObject var audioRecorder: AudioRecorder
     
-    @StateObject var waveform: WaveformPointsManager = .shared
-    
-    @State var targetPitch: Int
+    @ObservedObject var audioRecorder = AudioRecorder.shared
+        
+    @Binding var targetPitch: Int
     @State var isShowingCloseConfirmationAlert: Bool = false
     
     var body: some View {
@@ -312,16 +216,18 @@ struct FeedbackRecordView: View {
             GeometryReader { proxy in
                 
                 VStack {
-                    
+                                        
                     FeedbackSyllables()
                     
-                    FeedbackWaveform(waveform: waveform, size: proxy.size)
+                    FeedbackWaveform(size: proxy.size)
                                         
                 }
                 
                 FeedbackPitchTarget(size: proxy.size, targetPitch: CGFloat(targetPitch))
                             
             }
+            
+            Text("\(audioRecorder.nyqFreq)")
             
             recordingControls()
                 .padding(.horizontal)
@@ -361,15 +267,9 @@ struct FeedbackRecordView: View {
                         audioRecorder.startRecording(taskNum: 1)
                     }
                 }
-//                
-//                if (waveform.isStreaming) {
-//                    waveform.stopStream()
-//                } else {
-//                    waveform.startStream()
-//                }
                 
             } label: {
-                Image(systemName: (waveform.isStreaming) ? "pause.circle.fill" : "play.circle.fill")
+                Image(systemName: (audioRecorder.recording) ? "pause.circle.fill" : "play.circle.fill")
                     .font(.system(size: 55))
             }
             
@@ -389,6 +289,6 @@ struct FeedbackRecordView: View {
 
 struct FeedbackRecordView_Preview: PreviewProvider {
     static var previews: some View {
-        FeedbackRecordView(targetPitch: 400)
+        FeedbackRecordView(targetPitch: .constant(400))
     }
 }

@@ -35,7 +35,7 @@ class PitchNodeModel: Identifiable, Codable {
 
 struct PitchGraph: View {
     @EnvironmentObject var viewRouter: ViewRouter
-    @EnvironmentObject var audioRecorder: AudioRecorder
+    @ObservedObject var audioRecorder = AudioRecorder.shared
     @EnvironmentObject var settings: Settings
     @EnvironmentObject var entries: Entries
     

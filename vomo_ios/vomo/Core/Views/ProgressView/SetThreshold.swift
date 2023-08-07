@@ -153,7 +153,6 @@ struct SetThreshold_Previews: PreviewProvider {
     static var previews: some View {
         SetThreshold(popUp: .constant(true), selection: .constant(0), min: .constant(0), max: .constant(100))
             .environmentObject(Entries())
-            .environmentObject(AudioRecorder())
             .environmentObject(Settings())
     }
 }

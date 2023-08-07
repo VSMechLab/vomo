@@ -70,7 +70,7 @@ struct LaunchScreen: View {
             */
             ViewController()
                 .environmentObject(ViewRouter.shared)
-                .environmentObject(AudioRecorder())
+//                .environmentObject(AudioRecorder())
                 .environmentObject(Entries())
                 .environmentObject(Settings())
                 .environmentObject(Notification.shared)

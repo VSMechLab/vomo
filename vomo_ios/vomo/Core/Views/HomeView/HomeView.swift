@@ -16,8 +16,8 @@ struct HomeView: View {
     @EnvironmentObject var entries: Entries
     @EnvironmentObject var viewRouter: ViewRouter
     @EnvironmentObject var settings: Settings
-    @EnvironmentObject var audioRecorder: AudioRecorder
-    
+    @ObservedObject var audioRecorder = AudioRecorder.shared
+
     @State private var totalProgress = true
     
     let svm = SharedViewModel()
@@ -192,7 +192,7 @@ extension HomeView {
 struct HomeView_Previews: PreviewProvider {
     static var previews: some View {
         HomeView()
-            .environmentObject(AudioRecorder())
+//            .environmentObject(AudioRecorder())
             .environmentObject(Entries())
             .environmentObject(Settings())
     }

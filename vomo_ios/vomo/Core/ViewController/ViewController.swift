@@ -19,7 +19,7 @@ struct ViewController: View {
     
     @Environment(\.scenePhase) var scene
     
-    @EnvironmentObject var audioRecorder: AudioRecorder
+    @ObservedObject var audioRecorder = AudioRecorder.shared
     @EnvironmentObject var viewRouter: ViewRouter
     @EnvironmentObject var notification: Notification
     @EnvironmentObject var settings: Settings

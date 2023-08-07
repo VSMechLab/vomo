@@ -12,8 +12,8 @@ import AVFAudio
 
 struct ShareButtonByDate: View {
     
-    @EnvironmentObject var audioRecorder: AudioRecorder
-    
+    @ObservedObject var audioRecorder = AudioRecorder.shared
+
     @State private var selectedFiles = [URL]()
     
     var date: Date

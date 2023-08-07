@@ -14,7 +14,7 @@ import AVFoundation
 
 /// Stores types of information when you expand upon a day under the progress view
 struct EntryRow: View {
-    @EnvironmentObject var audioRecorder: AudioRecorder
+    @ObservedObject var audioRecorder = AudioRecorder.shared
     @EnvironmentObject var entries: Entries
     var expand: Bool
     let index: Int

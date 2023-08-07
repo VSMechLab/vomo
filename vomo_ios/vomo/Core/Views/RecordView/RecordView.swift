@@ -13,8 +13,8 @@ import AVFoundation
 struct RecordView: View {
     @EnvironmentObject var viewRouter: ViewRouter
     @EnvironmentObject var settings: Settings
-    @EnvironmentObject var audioRecorder: AudioRecorder
-    
+    @ObservedObject var audioRecorder = AudioRecorder.shared
+
     @StateObject private var audioPlayer = AudioPlayer()
     
     @State private var exercise = 0
@@ -310,6 +310,6 @@ struct RecordView_Previews: PreviewProvider {
         RecordView()
             .environmentObject(ViewRouter.shared)
             .environmentObject(Settings())
-            .environmentObject(AudioRecorder())
+//            .environmentObject(AudioRecorder())
     }
 }

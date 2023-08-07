@@ -11,7 +11,7 @@ import simd
 import AVFAudio
 
 struct PlayButtonByDate: View {
-    @EnvironmentObject var audioRecorder: AudioRecorder
+    @ObservedObject var audioRecorder = AudioRecorder.shared
     @ObservedObject var audioPlayer = AudioPlayer()
     
     var date: Date
@@ -38,7 +38,7 @@ struct PlayButtonByDate: View {
 }
 
 struct StarButton: View {
-    @EnvironmentObject var audioRecorder: AudioRecorder
+    @ObservedObject var audioRecorder = AudioRecorder.shared
     @EnvironmentObject var entries: Entries
     
     @State private var star = false

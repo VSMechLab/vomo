@@ -146,7 +146,7 @@ struct Graphic: View {
 struct SummaryTab: View {
     @EnvironmentObject var settings: Settings
     @EnvironmentObject var entries: Entries
-    @EnvironmentObject var audioRecorder: AudioRecorder
+    @ObservedObject var audioRecorder = AudioRecorder.shared
     @Binding var showTitle: Bool
     @State var showInformation = false
     var body: some View {

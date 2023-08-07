@@ -9,7 +9,7 @@ import SwiftUI
 
 struct Filter: View {
     @EnvironmentObject var entries: Entries
-    @EnvironmentObject var audioRecorder: AudioRecorder
+    @ObservedObject var audioRecorder = AudioRecorder.shared
     @Binding var filters: [String]
     @Binding var showFilter: Bool
     let svm = SharedViewModel()

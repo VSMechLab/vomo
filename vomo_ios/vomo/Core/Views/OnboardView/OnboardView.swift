@@ -13,7 +13,7 @@ import UserNotifications
 struct OnboardView: View {
     @EnvironmentObject var viewRouter: ViewRouter
     @EnvironmentObject var settings: Settings
-    @EnvironmentObject var audioRecorder: AudioRecorder
+    @ObservedObject var audioRecorder = AudioRecorder.shared
     
     @State private var svm = SharedViewModel()
     @State private var stepSwitch = 0

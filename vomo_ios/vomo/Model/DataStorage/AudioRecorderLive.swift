@@ -72,6 +72,7 @@ extension AudioRecorder: AVCaptureAudioDataOutputSampleBufferDelegate {
         
         DispatchQueue.main.async { [self] in
             nyqFreq = average
+            objectWillChange.send(.shared)
         }
     }
     

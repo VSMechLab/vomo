@@ -15,8 +15,8 @@ import AVFoundation
 
 struct MiniAudioInterface: View {
     
-    @EnvironmentObject var audioRecorder: AudioRecorder
-    
+    @ObservedObject var audioRecorder = AudioRecorder.shared
+
     @Binding var audioPlayer: AVAudioPlayer!
     
     @State var progress: CGFloat = 0.0
@@ -138,10 +138,8 @@ struct MiniAudioInterface_Previews: PreviewProvider {
         MiniAudioInterface(audioPlayer: .constant(nil), date: .now)
             .previewLayout(PreviewLayout.fixed(width: 400, height: 300))
             .previewDisplayName("Default preview")
-            .environmentObject(AudioRecorder())
         MiniAudioInterface(audioPlayer: .constant(nil), date: .now)
             .previewLayout(PreviewLayout.fixed(width: 400, height: 300))
             .environment(\.sizeCategory, .accessibilityExtraLarge)
-            .environmentObject(AudioRecorder())
     }
 }

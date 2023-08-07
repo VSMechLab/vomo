@@ -25,6 +25,8 @@ struct Processings {
 /// AudioRecorder - stores audio files, saved processings of files and functions for the files
 class AudioRecorder: NSObject, ObservableObject {
     
+    static let shared = AudioRecorder()
+    
     @EnvironmentObject var settings: Settings
     
     // Attributes
@@ -47,11 +49,7 @@ class AudioRecorder: NSObject, ObservableObject {
     
     @Published var gain: Float = 0.025
     @Published var zeroReference: Double = 1000
-    @Published var nyqFreq: Float = 0 {
-        didSet {
-            print("changed nyqFreq to \(nyqFreq)")
-        }
-    }
+    @Published var nyqFreq: Float = 0
 
     // MARK: Properties
     // TODOSW

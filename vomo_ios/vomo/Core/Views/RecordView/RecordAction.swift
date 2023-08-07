@@ -10,7 +10,7 @@ import SwiftUI
 
 struct CompleteMenu: View {
     @EnvironmentObject var entries: Entries
-    @EnvironmentObject var audioRecorder: AudioRecorder
+    @ObservedObject var audioRecorder = AudioRecorder.shared
     @EnvironmentObject var settings: Settings
     @EnvironmentObject var viewRouter: ViewRouter
     
@@ -142,6 +142,6 @@ struct CompleteMenu_Previews: PreviewProvider {
     static var previews: some View {
         CompleteMenu(popUp: .constant(true), exercise: .constant(1))
             .environmentObject(Settings())
-            .environmentObject(AudioRecorder())
+//            .environmentObject(AudioRecorder())
     }
 }
