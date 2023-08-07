@@ -8,59 +8,59 @@
 import Foundation
 import SwiftUI
 
-class WaveformPointsDummyStream {
-        
-    private var continuation: AsyncStream<Float?>.Continuation?
-    
-    public func cancel() {
-        continuation?.finish()
-//        stream = nil
-    }
-    
-     init() {
-        
-        let amplitude: Float = 0.25  // Amplitude of the sine wave
-        let frequency: Float = 10.0  // Frequency of the sine wave (in Hz)
-        var time: Float = 0.0
-
-        let _ = Timer.scheduledTimer(withTimeInterval: 0.01, repeats: true) { timer in
-            let value = amplitude * sin(2 * Float.pi * frequency * time) + 0.5
-            time += 0.001
-            self.continuation?.yield(value)
-        }
-    }
-    
-    lazy var stream: AsyncStream<Float?> = {
-        AsyncStream(Float?.self, bufferingPolicy: .bufferingNewest(1)) { cont in
-            continuation = cont
-            
-            cont.onTermination = { @Sendable status in
-                print("Task terminated with status: \(status)")
-            }
-        }
-    }()
-    
-}
-
-fileprivate class DummyStream {
-    
-    let amplitude: Float = 0.5  // Amplitude of the sine wave
-    let frequency: Float = 10.0  // Frequency of the sine wave (in Hz)
-    var time: Float = 0.0
-    
-    var scheduledTimer: Timer?
-        
-    init() {
-        
-        self.scheduledTimer = Timer.scheduledTimer(withTimeInterval: 0.01, repeats: true) { timer in
-            Task {
-                let value = self.amplitude * sin(2 * Float.pi * self.frequency * self.time) + 0.5
-                self.time += 0.001
-                await WaveformPointsManager.shared.points.add(value)
-            }
-        }
-    }
-}
+//class WaveformPointsDummyStream {
+//        
+//    private var continuation: AsyncStream<Float?>.Continuation?
+//    
+//    public func cancel() {
+//        continuation?.finish()
+////        stream = nil
+//    }
+//    
+//     init() {
+//        
+//        let amplitude: Float = 0.25  // Amplitude of the sine wave
+//        let frequency: Float = 10.0  // Frequency of the sine wave (in Hz)
+//        var time: Float = 0.0
+//
+//        let _ = Timer.scheduledTimer(withTimeInterval: 0.01, repeats: true) { timer in
+//            let value = amplitude * sin(2 * Float.pi * frequency * time) + 0.5
+//            time += 0.001
+//            self.continuation?.yield(value)
+//        }
+//    }
+//    
+//    lazy var stream: AsyncStream<Float?> = {
+//        AsyncStream(Float?.self, bufferingPolicy: .bufferingNewest(1)) { cont in
+//            continuation = cont
+//            
+//            cont.onTermination = { @Sendable status in
+//                print("Task terminated with status: \(status)")
+//            }
+//        }
+//    }()
+//    
+//}
+//
+//fileprivate class DummyStream {
+//    
+//    let amplitude: Float = 0.5  // Amplitude of the sine wave
+//    let frequency: Float = 10.0  // Frequency of the sine wave (in Hz)
+//    var time: Float = 0.0
+//    
+//    var scheduledTimer: Timer?
+//        
+//    init() {
+//        
+//        self.scheduledTimer = Timer.scheduledTimer(withTimeInterval: 0.01, repeats: true) { timer in
+//            Task {
+//                let value = self.amplitude * sin(2 * Float.pi * self.frequency * self.time) + 0.5
+//                self.time += 0.001
+//                await WaveformPointsManager.shared.points.add(value)
+//            }
+//        }
+//    }
+//}
 
 @MainActor
 class WaveformPointsManager: ObservableObject {
@@ -106,22 +106,22 @@ class WaveformPointsManager: ObservableObject {
     
 //    public var consumer: Task<(), Never>?
 //    public var stream: WaveformPointsDummyStream?
-    private var stream: DummyStream?
+//    private var stream: DummyStream?
     
     public init(count: Int) {
         self.points = Points(count: count)
     }
         
-    public func startStream() {
-        self.stream = DummyStream()
-        self.isStreaming = true
-    }
+//    public func startStream() {
+//        self.stream = DummyStream()
+//        self.isStreaming = true
+//    }
     
-    public func stopStream() {
-        self.stream?.scheduledTimer?.invalidate()
-        self.stream = nil
-        self.isStreaming = false
-    }
+//    public func stopStream() {
+//        self.stream?.scheduledTimer?.invalidate()
+//        self.stream = nil
+//        self.isStreaming = false
+//    }
     
     func update(date: Date) {}
     
@@ -159,7 +159,7 @@ class WaveformPointsManager: ObservableObject {
 }
 
 struct FeedbackWaveform: View {
-    
+
     var waveform: WaveformPointsManager
     
     public let size: CGSize
@@ -298,8 +298,7 @@ struct FeedbackPitchTarget: View {
 struct FeedbackRecordView: View {
     
     @Environment(\.dismiss) private var dismiss
-    
-    @ObservedObject var audioRecorder = AudioRecorder()
+    @EnvironmentObject var audioRecorder: AudioRecorder
     
     @StateObject var waveform: WaveformPointsManager = .shared
     
@@ -323,8 +322,6 @@ struct FeedbackRecordView: View {
                 FeedbackPitchTarget(size: proxy.size, targetPitch: CGFloat(targetPitch))
                             
             }
-            
-//            Text("\(audioRecorder.recording ? "Recording..." + String(audioRecorder.nyqFreq) : "Not recording")")
             
             recordingControls()
                 .padding(.horizontal)
@@ -355,13 +352,21 @@ struct FeedbackRecordView: View {
             Spacer()
             
             Button {
-//                audioRecorder.startRecording(taskNum: 3)
                 
-                if (waveform.isStreaming) {
-                    waveform.stopStream()
-                } else {
-                    waveform.startStream()
+                if (audioRecorder.grantedPermission()) {
+                    
+                    if (audioRecorder.recording) {
+                        audioRecorder.stopRecording()
+                    } else {
+                        audioRecorder.startRecording(taskNum: 1)
+                    }
                 }
+//                
+//                if (waveform.isStreaming) {
+//                    waveform.stopStream()
+//                } else {
+//                    waveform.startStream()
+//                }
                 
             } label: {
                 Image(systemName: (waveform.isStreaming) ? "pause.circle.fill" : "play.circle.fill")

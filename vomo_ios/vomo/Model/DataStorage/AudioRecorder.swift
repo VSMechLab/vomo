@@ -47,7 +47,11 @@ class AudioRecorder: NSObject, ObservableObject {
     
     @Published var gain: Float = 0.025
     @Published var zeroReference: Double = 1000
-    @Published var nyqFreq: Float = 0
+    @Published var nyqFreq: Float = 0 {
+        didSet {
+            print("changed nyqFreq to \(nyqFreq)")
+        }
+    }
 
     // MARK: Properties
     // TODOSW

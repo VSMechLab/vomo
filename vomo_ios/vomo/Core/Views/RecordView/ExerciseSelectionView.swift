@@ -10,6 +10,7 @@ import SwiftUI
 struct ExerciseSelectionView: View {
     
     @EnvironmentObject var settings: Settings
+    @EnvironmentObject var audioRecorder: AudioRecorder
     
     @State var isShowingRecordingView = false
     @State var targetFrequency = 500 // in Hz

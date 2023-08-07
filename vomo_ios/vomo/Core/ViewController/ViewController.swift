@@ -63,21 +63,20 @@ struct ViewController: View {
             
             // TODO: Move requesting permissions to a different spot (e.g. in onboarding flow)
             notification.requestPermission()
-//            notification.updateNotifications(triggers: settings.triggers())
             
-            let group = DispatchGroup()
-            let labelGroup = String("test")
-            group.enter()
+//            let group = DispatchGroup()
+//            let labelGroup = String("test")
+//            group.enter()
+//
+//            let dispatchQueue = DispatchQueue(label: labelGroup, qos: .background)
+//            dispatchQueue.async(group: group, execute: {
+//                audioRecorder.syncEntries(gender: settings.gender)
+//            })
             
-            let dispatchQueue = DispatchQueue(label: labelGroup, qos: .background)
-            dispatchQueue.async(group: group, execute: {
-                audioRecorder.syncEntries(gender: settings.gender)
-            })
-            
-            group.leave()
-            group.notify(queue: DispatchQueue.main, execute: {
-                Logging.defaultLog.notice("Synced all recordings!")
-            })
+//            group.leave()
+//            group.notify(queue: DispatchQueue.main, execute: {
+//                Logging.defaultLog.notice("Synced all recordings!")
+//            })
         }
         
         .onChange(of: scene) { newScenePhase in
