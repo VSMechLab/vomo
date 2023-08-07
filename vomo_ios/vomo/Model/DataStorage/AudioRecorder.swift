@@ -269,6 +269,7 @@ class AudioRecorder: NSObject, ObservableObject {
     
     func stopRecording() {
         audioRecorder.stop()
+        captureSession.stopRunning()
         recording = false
         fetchRecordings()
     }

@@ -237,6 +237,7 @@ struct FeedbackRecordView: View {
         .alert("Are you sure you want to end this exercise?", isPresented: $isShowingCloseConfirmationAlert) {
             Button(role: .destructive) {
                 self.dismiss()
+                audioRecorder.stopRecording()
             } label: {
                 Text("End")
             }
