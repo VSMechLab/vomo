@@ -126,19 +126,28 @@ struct FeedbackWaveform: View {
 
 struct FeedbackSyllables: View {
     
-    var sentence: [String] = "Come back right away".split(separator: " ").map({ String($0) })
+    var sentenceArray: [String] = []
+    var syllableCount: Int
         
     @State var index = 0
+    
+    init(syllableCount: Int) {
+        self.syllableCount = syllableCount
+        
+        if let sentence = ExerciseManager.fetch(for: syllableCount) {
+            sentenceArray = sentence.phrase.split(separator: " ").map({ String($0) })
+        } 
+    }
     
     var body: some View {
         
         HStack(spacing: 5) {
             Spacer()
             
-            ForEach(sentence, id: \.self) { word in
+            ForEach(sentenceArray, id: \.self) { word in
                 Text(word)
                     .font(.system(size: 25))
-                    .fontWeight((word == sentence[index]) ? .bold : .regular)
+                    .fontWeight((word == sentenceArray[index]) ? .bold : .regular)
             }
             
             Spacer()
@@ -195,7 +204,9 @@ struct FeedbackRecordView: View {
     
     @ObservedObject var audioRecorder = AudioRecorder.shared
         
-    @Binding var targetPitch: Int
+    var targetPitch: Int
+    var syllableCount: Int
+    
     @State var isShowingCloseConfirmationAlert: Bool = false
     
     var body: some View {
@@ -206,7 +217,7 @@ struct FeedbackRecordView: View {
                 
                 VStack {
                                         
-                    FeedbackSyllables()
+                    FeedbackSyllables(syllableCount: syllableCount)
                     
                     FeedbackWaveform(size: proxy.size)
                                         
@@ -291,6 +302,6 @@ struct FeedbackRecordView: View {
 
 struct FeedbackRecordView_Preview: PreviewProvider {
     static var previews: some View {
-        FeedbackRecordView(targetPitch: .constant(400))
+        FeedbackRecordView(targetPitch: 400, syllableCount: 2)
     }
 }

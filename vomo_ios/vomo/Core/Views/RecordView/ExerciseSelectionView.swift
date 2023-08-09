@@ -13,7 +13,7 @@ struct ExerciseSelectionView: View {
     
     @State var isShowingRecordingView = false
     @State var targetFrequency = 500 // in Hz
-    @State var syllableCount = 3 // move to global definition with exercise manager
+    @State var syllableCount = 2 // move to global definition with exercise manager
     
     @FocusState private var focused: Bool
     
@@ -51,7 +51,7 @@ struct ExerciseSelectionView: View {
         .padding()
         
         .fullScreenCover(isPresented: $isShowingRecordingView, content: {
-            FeedbackRecordView(targetPitch: $targetFrequency)
+            FeedbackRecordView(targetPitch: targetFrequency, syllableCount: syllableCount)
         })
     }
     
@@ -95,8 +95,9 @@ struct ExerciseSelectionView: View {
                 .font(._BTNCopy)
             Spacer()
             Picker("", selection: $syllableCount) {
-                ForEach(1..<6) { num in
-                    Text("^[\(num) Syllable](inflect: true)")
+                ForEach(2..<6) { num in
+                    Text("\(num) Syllables")
+                        .tag(num)
                 }
             }
             .pickerStyle(.menu)
