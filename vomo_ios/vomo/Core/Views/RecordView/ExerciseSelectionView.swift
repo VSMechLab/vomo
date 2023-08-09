@@ -13,6 +13,7 @@ struct ExerciseSelectionView: View {
     
     @State var isShowingRecordingView = false
     @State var targetFrequency = 500 // in Hz
+    @State var syllableCount = 3 // move to global definition with exercise manager
     
     @FocusState private var focused: Bool
     
@@ -28,36 +29,10 @@ struct ExerciseSelectionView: View {
             .padding(.vertical)
             
             Divider()
-                
-            HStack {
-                Text("Target Frequency")
-                    .font(._BTNCopy)
-                                
-                Spacer()
-                
-                TextField("", value: $targetFrequency, format: .number)
-                    .fixedSize()
-                    .padding([.vertical],5)
-                    .padding([.horizontal], 10)
-                
-                    .focused($focused)
-                    .background(Color.INPUT_FIELDS, in: RoundedRectangle(cornerRadius: 5))
-                    
-                    .keyboardType(.numberPad)
-                    .toolbar {
-                        ToolbarItemGroup(placement: .keyboard) {
-                            Spacer()
-                            Button("Done") {
-                                   focused.toggle()
-                            }
-                        }
-                    }
-                
-                    .onChange(of: focused) { focus in
-                        settings.keyboardShown = focus
-                    }
-                Text("Hz")
-            }
+            
+            targetFrequencyPicker()
+            
+            syllableDifficultyPicker()
             
             Spacer()
             
@@ -78,6 +53,56 @@ struct ExerciseSelectionView: View {
         .fullScreenCover(isPresented: $isShowingRecordingView, content: {
             FeedbackRecordView(targetPitch: $targetFrequency)
         })
+    }
+    
+    @ViewBuilder
+    private func targetFrequencyPicker() -> some View {
+        HStack {
+            Text("Target Frequency")
+                .font(._BTNCopy)
+                            
+            Spacer()
+            
+            TextField("", value: $targetFrequency, format: .number)
+                .fixedSize()
+                .padding([.vertical],5)
+                .padding([.horizontal], 10)
+            
+                .focused($focused)
+                .background(Color.INPUT_FIELDS, in: RoundedRectangle(cornerRadius: 8))
+                
+                .keyboardType(.numberPad)
+                .toolbar {
+                    ToolbarItemGroup(placement: .keyboard) {
+                        Spacer()
+                        Button("Done") {
+                               focused.toggle()
+                        }
+                    }
+                }
+            
+                .onChange(of: focused) { focus in
+                    settings.keyboardShown = focus
+                }
+            Text("Hz")
+        }
+    }
+    
+    @ViewBuilder
+    private func syllableDifficultyPicker() -> some View {
+        HStack {
+            Text("Difficulty")
+                .font(._BTNCopy)
+            Spacer()
+            Picker("", selection: $syllableCount) {
+                ForEach(1..<6) { num in
+                    Text("^[\(num) Syllable](inflect: true)")
+                }
+            }
+            .pickerStyle(.menu)
+            .tint(.black)
+            .background(Color.INPUT_FIELDS, in: RoundedRectangle(cornerRadius: 8))
+        }
     }
 }
 
