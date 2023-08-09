@@ -48,7 +48,6 @@ class WaveformPointsManager: ObservableObject {
     static let shared = WaveformPointsManager(count: 130) // TODO: Replace this magic number. Represents number of points across screen at one time
     
     @Published var points: Points
-    @Published var isStreaming: Bool = false
     
     public init(count: Int) {
         self.points = Points(count: count)
@@ -85,7 +84,7 @@ struct FeedbackWaveform: View {
         HStack {
             Text("\(label) Hz")
                 .font(.system(size: 14, weight: .semibold))
-                .padding(.leading, 4)
+                .padding(.leading, 7)
             Rectangle()
                 .frame(height: 1)
         }
@@ -145,16 +144,6 @@ struct FeedbackSyllables: View {
             Spacer()
         }
         .padding(.top)
-        
-//        Button {
-//            if index < sentence.count - 1 {
-//                index += 1
-//            }
-//        } label: {
-//            Image(systemName: "arrow.right.circle.fill")
-//                .font(.largeTitle)
-//        }
-//        .tint(.MEDIUM_PURPLE)
     }
 }
 
@@ -224,15 +213,27 @@ struct FeedbackRecordView: View {
                 }
                 
                 FeedbackPitchTarget(size: proxy.size, targetPitch: CGFloat(targetPitch))
-                            
+                
             }
-            
-            Text("\(audioRecorder.nyqFreq)")
-            
+                        
             recordingControls()
                 .padding(.horizontal)
             
         }
+        
+        #if targetEnvironment(simulator)
+        
+        .overlay {
+            VStack(spacing: 15) {
+                Image(systemName: "exclamationmark.triangle.fill")
+                    .foregroundColor(.red)
+                    .font(.system(size: 50))
+                Text("Microphone not available in simulator")
+                    .font(.headline)
+            }
+        }
+
+        #endif
         
         .alert("Are you sure you want to end this exercise?", isPresented: $isShowingCloseConfirmationAlert) {
             Button(role: .destructive) {
@@ -253,7 +254,7 @@ struct FeedbackRecordView: View {
                 self.isShowingCloseConfirmationAlert = true
             } label: {
                 Image(systemName: "xmark.circle.fill")
-                    .font(.system(size: 35))
+                    .font(.system(size: 40))
             }
             
             Spacer()
@@ -271,7 +272,7 @@ struct FeedbackRecordView: View {
                 
             } label: {
                 Image(systemName: (audioRecorder.recording) ? "pause.circle.fill" : "play.circle.fill")
-                    .font(.system(size: 55))
+                    .font(.system(size: 65))
             }
             
             Spacer()
@@ -280,7 +281,7 @@ struct FeedbackRecordView: View {
                 
             } label: {
                 Image(systemName: "ellipsis.circle.fill")
-                    .font(.system(size: 35))
+                    .font(.system(size: 40))
             }
             
         }

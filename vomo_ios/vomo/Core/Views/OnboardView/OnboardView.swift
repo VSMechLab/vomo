@@ -21,6 +21,18 @@ struct OnboardView: View {
     
     var body: some View {
         VStack {
+            
+            #if DEBUG
+                                
+            Button {
+                viewRouter.currentPage = .home
+                settings.generateRandomOnboardingData()
+            } label: {
+                Label("(Debug) Skip Onboarding", systemImage: "arrow.right.circle.fill")
+            }
+
+            #endif
+            
             switch stepSwitch {
             case 0:
                 LandingPageView()
@@ -61,6 +73,7 @@ struct OnboardView: View {
 extension OnboardView {
     private var navSection: some View {
         VStack {
+            
             Spacer()
             if stepSwitch != 0 {
                 ZStack {

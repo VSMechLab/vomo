@@ -41,7 +41,7 @@ struct SettingsView: View {
     let svm = SharedViewModel()
     
     #if DEBUG
-        @State private var showDebugMenu = false
+    @State private var showDebugMenu = false
     #endif
 	
 	@State private var selectedFiles = [URL]()
