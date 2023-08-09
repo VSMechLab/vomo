@@ -39,7 +39,7 @@ struct ExerciseSelectionView: View {
             Button {
                 isShowingRecordingView = true
             } label: {
-                Label("Start Recording", systemImage: "mic.fill")
+                Label("Start Exercise", systemImage: "mic.fill")
                     .font(.system(size: 20, weight: .medium))
                     .foregroundColor(.white)
                     .padding([.vertical], 10)

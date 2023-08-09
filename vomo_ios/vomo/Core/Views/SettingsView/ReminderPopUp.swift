@@ -10,7 +10,8 @@ import SwiftUI
 struct ReminderPopUp: View {
     @Environment(\.openURL) var openURL
     
-    @EnvironmentObject var notifications: Notification
+    @ObservedObject var notifications: NotificationService = .shared
+    
     @EnvironmentObject var settings: Settings
     @Binding var showNotifications: Bool
     @State private var showTime: Bool = false
@@ -133,12 +134,12 @@ extension ReminderPopUp {
     fileprivate struct NotificationFrequencySelection: View {
         
         @Environment(\.dismiss) var dismiss
-        @EnvironmentObject var notifications: Notification
-        
+        @ObservedObject var notifications: NotificationService = .shared
+
         var body: some View {
             VStack(spacing: 15) {
                 Divider()
-                ForEach(Notification.Frequency.allCases, id: \.self) { frequency in
+                ForEach(NotificationService.Frequency.allCases, id: \.self) { frequency in
                     HStack {
                         Button {
                             notifications.notificationSettings.frequency = frequency
@@ -187,19 +188,15 @@ extension ReminderPopUp {
         }
     }
 }
-
+ 
 struct ReminderPopUp_Previews: PreviewProvider {
-    
-    static let previewNotificationService = Notification.shared
-    
+        
     static var previews: some View {
         ReminderPopUp(showNotifications: .constant(false))
-            .environmentObject(previewNotificationService)
             .previewDisplayName("Pop Up")
         
         NavigationView {
             ReminderPopUp.NotificationFrequencySelection()
-                .environmentObject(previewNotificationService)
         }
         .frame(width: 340, height: 350)
         .background(Color.white)

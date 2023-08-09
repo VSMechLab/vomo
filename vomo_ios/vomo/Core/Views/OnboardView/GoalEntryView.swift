@@ -10,7 +10,8 @@ import SwiftUI
 struct GoalEntryView: View {
     @Environment(\.openURL) var openURL
     
-    @EnvironmentObject var notification: Notification
+    @ObservedObject var notification: NotificationService = .shared
+    
     @EnvironmentObject var settings: Settings
     
     @State private var svm = SharedViewModel()
@@ -284,7 +285,6 @@ extension GoalEntryView {
 struct GoalEntryView_Previews: PreviewProvider {
     static var previews: some View {
         GoalEntryView()
-            .environmentObject(Notification.shared)
             .environmentObject(Settings())
     }
 }

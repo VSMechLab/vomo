@@ -14,7 +14,7 @@ import UserNotifications
 /// For now limit to 63 max (7 entries per week over 9 weeks)
 
 struct NotificationSettings: Codable {
-    var frequency: Notification.Frequency = .daily
+    var frequency: NotificationService.Frequency = .daily
     
 //    var customFrequency: Int = 1
     
@@ -30,11 +30,11 @@ struct NotificationSettings: Codable {
 }
 
 /// Notifications - queues notifications
-class Notification: ObservableObject {
+class NotificationService: ObservableObject {
     
     @EnvironmentObject var settings: Settings
     
-    static let shared = Notification()
+    static let shared = NotificationService()
     
     let defaults = UserDefaults.standard
     
@@ -64,7 +64,7 @@ class Notification: ObservableObject {
 
     @Published var notificationSettings: NotificationSettings {
         didSet {
-            Notification.write(notificationSettings)
+            NotificationService.write(notificationSettings)
             
             // remove scheduled notifications if notifications are turned off
             if (!notificationSettings.notificationsOn) {
@@ -82,7 +82,7 @@ class Notification: ObservableObject {
     
     init() {
         self.autoSchedule = UserDefaults.standard.object(forKey: "auto_schedule") as? Bool ?? true
-        self.notificationSettings = Notification.load(NotificationSettings.self) ?? .init()
+        self.notificationSettings = NotificationService.load(NotificationSettings.self) ?? .init()
     }
     
     // MARK: Move all of this to persistance service eventually
@@ -106,7 +106,7 @@ class Notification: ObservableObject {
     }
 }
 
-extension Notification {
+extension NotificationService {
     
     func scheduleNotifications() {
         

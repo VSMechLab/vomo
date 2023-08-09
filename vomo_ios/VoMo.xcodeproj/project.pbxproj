@@ -94,7 +94,7 @@
 		AD81B71528BEAE84009920FB /* HBarChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD81B71428BEAE84009920FB /* HBarChart.swift */; };
 		AD81B71728BEB011009920FB /* HBarChartCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD81B71628BEB011009920FB /* HBarChartCell.swift */; };
 		AD81B71928BEB0B5009920FB /* HBarChartCellShape.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD81B71828BEB0B5009920FB /* HBarChartCellShape.swift */; };
-		AD81B71E28BFCF83009920FB /* Notification.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD81B71D28BFCF83009920FB /* Notification.swift */; };
+		AD81B71E28BFCF83009920FB /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD81B71D28BFCF83009920FB /* NotificationService.swift */; };
 		AD81B72028BFCFB2009920FB /* AudioRecorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD81B71F28BFCFB2009920FB /* AudioRecorder.swift */; };
 		AD81B72228BFCFCA009920FB /* AudioPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD81B72128BFCFCA009920FB /* AudioPlayer.swift */; };
 		AD81B72828BFD769009920FB /* SurveyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD81B72728BFD769009920FB /* SurveyModel.swift */; };
@@ -243,7 +243,7 @@
 		AD81B71428BEAE84009920FB /* HBarChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = HBarChart.swift; path = vomo/Graphs/HBarChart.swift; sourceTree = SOURCE_ROOT; };
 		AD81B71628BEB011009920FB /* HBarChartCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = HBarChartCell.swift; path = vomo/Graphs/BarChart/HBarChartCell.swift; sourceTree = SOURCE_ROOT; };
 		AD81B71828BEB0B5009920FB /* HBarChartCellShape.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = HBarChartCellShape.swift; path = vomo/Graphs/BarChart/HBarChartCellShape.swift; sourceTree = SOURCE_ROOT; };
-		AD81B71D28BFCF83009920FB /* Notification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Notification.swift; path = VoMo/Model/Service/Notification.swift; sourceTree = SOURCE_ROOT; };
+		AD81B71D28BFCF83009920FB /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = NotificationService.swift; path = VoMo/Model/Service/NotificationService.swift; sourceTree = SOURCE_ROOT; };
 		AD81B71F28BFCFB2009920FB /* AudioRecorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AudioRecorder.swift; path = VoMo/Model/DataStorage/AudioRecorder.swift; sourceTree = SOURCE_ROOT; };
 		AD81B72128BFCFCA009920FB /* AudioPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AudioPlayer.swift; path = VoMo/Model/Service/AudioPlayer.swift; sourceTree = SOURCE_ROOT; };
 		AD81B72728BFD769009920FB /* SurveyModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SurveyModel.swift; path = VoMo/Model/DataModels/SurveyModel.swift; sourceTree = SOURCE_ROOT; };
@@ -380,7 +380,7 @@
 		AD00C71C29F71ECA0017385E /* Service */ = {
 			isa = PBXGroup;
 			children = (
-				AD81B71D28BFCF83009920FB /* Notification.swift */,
+				AD81B71D28BFCF83009920FB /* NotificationService.swift */,
 				AD81B72128BFCFCA009920FB /* AudioPlayer.swift */,
 				AD72972328CFD736001E7211 /* SignalProcess.swift */,
 				22253A032A1003AC004FD26B /* Logging.swift */,
@@ -891,7 +891,7 @@
 				AD26BA202829F4E600AC1A7B /* BarChartRow.swift in Sources */,
 				ADA0E0CA2825601700CF05D1 /* ChartGrid.swift in Sources */,
 				AD00C75F29F720C10017385E /* GraphicTitle.swift in Sources */,
-				AD81B71E28BFCF83009920FB /* Notification.swift in Sources */,
+				AD81B71E28BFCF83009920FB /* NotificationService.swift in Sources */,
 				AD26BA1C2829F4C900AC1A7B /* BarChartCell.swift in Sources */,
 				AD81B71328BDBA5A009920FB /* BarChart.swift in Sources */,
 				ADB4A81B29369516003D8556 /* AnyTransition.swift in Sources */,

@@ -17,7 +17,7 @@ class AppDelegate: NSObject, UIApplicationDelegate, ObservableObject, UNUserNoti
     }
     
     func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse) async {
-        if let notificationType = Notification.NotificationType(rawValue: response.notification.request.content.categoryIdentifier) {
+        if let notificationType = NotificationService.NotificationType(rawValue: response.notification.request.content.categoryIdentifier) {
             switch notificationType {
                 case .recordingReminder:
 //                    Logging.notificationLog.notice("Opened recording reminder!")

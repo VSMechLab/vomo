@@ -19,7 +19,7 @@ struct DebugMenuView: View {
                 Section {
                     
                     Button {
-                        Notification.printScheduledNotifications()
+                        NotificationService.printScheduledNotifications()
                     } label: {
                         Text("Print scheduled notifications")
                     }
