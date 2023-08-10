@@ -44,12 +44,12 @@ struct Graph: View {
     /// only accounts for vhi for now, vocal effort later
     func surveysEntered(start: Date, end: Date) -> Double {
         //var ret = 0.0
-        let fakeData: [SurveyModel] = [
-            SurveyModel(createdAt: .now, responses: [0, 1, 2, 3, 4, 5, 6, 7,  8, 9, 10, 22], favorite: false),
-            SurveyModel(createdAt: .now, responses: [0, 1, 2, 3, 4, 5, 6, 7,  8, 9, 10, 22], favorite: false),
-            SurveyModel(createdAt: .now, responses: [0, 1, 2, 3, 4, 5, 6, 7,  8, 9, 10, 22], favorite: false),
-            SurveyModel(createdAt: .now, responses: [0, 1, 2, 3, 4, 5, 6, 7,  8, 9, 10, 22], favorite: false)
-        ]
+//        let fakeData: [SurveyModel] = [
+//            SurveyModel(createdAt: .now, responses: [0, 1, 2, 3, 4, 5, 6, 7,  8, 9, 10, 22], favorite: false),
+//            SurveyModel(createdAt: .now, responses: [0, 1, 2, 3, 4, 5, 6, 7,  8, 9, 10, 22], favorite: false),
+//            SurveyModel(createdAt: .now, responses: [0, 1, 2, 3, 4, 5, 6, 7,  8, 9, 10, 22], favorite: false),
+//            SurveyModel(createdAt: .now, responses: [0, 1, 2, 3, 4, 5, 6, 7,  8, 9, 10, 22], favorite: false)
+//        ]
         
 //        for _ in fakeData {
 //            print("worth")

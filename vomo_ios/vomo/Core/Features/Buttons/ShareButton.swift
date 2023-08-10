@@ -69,7 +69,9 @@ struct ShareButtonByDate: View {
                         
                     if !filesToShare.isEmpty {
                         let activityVC = UIActivityViewController(activityItems: filesToShare, applicationActivities: nil)
-                        UIApplication.shared.windows.first?.rootViewController?.present(activityVC, animated: true)
+                        let windowScene = UIApplication.shared.connectedScenes.first(where: { $0.activationState == .foregroundActive }) as? UIWindowScene
+                        let window = windowScene?.windows.first(where: { $0.isKeyWindow })
+                        window?.rootViewController?.present(activityVC, animated: true)
                     }
                     
                     
