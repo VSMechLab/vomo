@@ -88,6 +88,9 @@ struct ViewController: View {
                 case .inactive:
                     break
                 case .active:
+                    Task {
+                        await notification.getStatus() // update notification status
+                    }
                     break
                 @unknown default:
                     Logging.defaultLog.warning("Unknown scene phase encountered")

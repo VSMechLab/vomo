@@ -80,9 +80,14 @@ class Notification: ObservableObject {
         }
     }
     
+    @Published var notificationsAllowed: Bool = false
+    
     init() {
         self.autoSchedule = UserDefaults.standard.object(forKey: "auto_schedule") as? Bool ?? true
         self.notificationSettings = Notification.load(NotificationSettings.self) ?? .init()
+        Task {
+            await getStatus()
+        }
     }
     
     // MARK: Move all of this to persistance service eventually
@@ -109,6 +114,10 @@ class Notification: ObservableObject {
 extension Notification {
     
     func scheduleNotifications() {
+        
+        if (!notificationsAllowed) {
+            return // cancel scheduling if not authorized
+        }
         
         // check if start date is in the past
         if (notificationSettings.startDate.startOfDay < Date.now.startOfDay) {
@@ -162,11 +171,10 @@ extension Notification {
     }
     
     /// Gets status to ask you to turn on notifications again
-    func getStatus() -> Bool {
-        guard let settings = UIApplication.shared.currentUserNotificationSettings else {
-            return false
-        }
-        return settings.types.intersection([.alert, .badge, .sound]).isEmpty != true
+    func getStatus() async {
+        let notificationSettings = await UNUserNotificationCenter.current().notificationSettings()
+        
+        notificationsAllowed = notificationSettings.authorizationStatus == .authorized
     }
     
     /// Requests permission

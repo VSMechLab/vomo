@@ -222,12 +222,12 @@ extension GoalEntryView {
                     }
                     .padding(.bottom, 10)
                     
-                    Text(notification.getStatus() ? "You have enabled notifications, you will recieve one per day" : "You have not allowed notifications. You may change this by accessing Settings -> Vomo -> Notifications -> Allow Notifications.")
+                    Text(notification.notificationsAllowed ? "You have enabled notifications, you will recieve one per day" : "You have not allowed notifications. You may change this by accessing Settings -> Vomo -> Notifications -> Allow Notifications.")
                         .font(._bodyCopy)
                         .foregroundColor(Color.BODY_COPY)
                         .padding(.bottom)
                     
-                    if !notification.getStatus() {
+                    if !notification.notificationsAllowed {
                         Button(action: {
                             if #available(iOS 16, *) {
                                 openURL(URL(string: UIApplication.openNotificationSettingsURLString)!)

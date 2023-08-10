@@ -15,6 +15,7 @@ struct ReminderPopUp: View {
     @Binding var showNotifications: Bool
     @State private var showTime: Bool = false
 //    @State private var date: Date = .now
+        
     let svm = SharedViewModel()
     
     var body: some View {
@@ -62,7 +63,7 @@ extension ReminderPopUp {
             }
             .tint(Color.MEDIUM_PURPLE)
             
-            if (!notifications.getStatus()) {
+            if (!notifications.notificationsAllowed) {
                 Button {
                     if #available(iOS 16, *) {
                         openURL(URL(string: UIApplication.openNotificationSettingsURLString)!)
