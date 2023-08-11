@@ -38,9 +38,6 @@ struct SharedViewModel {
     
     let rx_sign = "rx_sign"
     
-    /// For Profile
-    let genders = ["Other", "Genderqueer", "Non-binary", "Female", "Male"]
-    var sexes = ["Male", "Female"]
     /// Focus Selection
     /// 0. Custom
     /// 1. Gender-Affirming Voice Care

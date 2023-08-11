@@ -233,18 +233,15 @@ class Settings: ObservableObject {
             UserDefaults.standard.set(voice_onset, forKey: "voiceOnset")
         }
     }
-    @Published var sexAtBirth: String {
+    @Published var sexAtBirth: SexAtBirth {
         didSet {
-            UserDefaults.standard.set(sexAtBirth, forKey: "sex_at_birth")
+            UserDefaults.standard.set(sexAtBirth.rawValue, forKey: "sex_at_birth")
         }
     }
-    ///Saved as follows
-    ///0 = "Other"
-    ///
-    ///["Other", "Genderqueer", "Non-binary", "Female", "Male"]
-    @Published var gender: String {
+
+    @Published var gender: Gender {
         didSet {
-            UserDefaults.standard.set(gender, forKey: "gender")
+            UserDefaults.standard.set(gender.rawValue, forKey: "gender")
         }
     }
     @Published var dateOnset: Date {
@@ -320,8 +317,10 @@ class Settings: ObservableObject {
         
         /// Settings View Questions
         self.voice_onset = UserDefaults.standard.object(forKey: "voiceOnset") as? Bool ?? false
-        self.sexAtBirth = UserDefaults.standard.object(forKey: "sex_at_birth") as? String ?? ""
-        self.gender = UserDefaults.standard.object(forKey: "gender") as? String ?? ""
+       
+        self.sexAtBirth = SexAtBirth(rawValue: defaults.string(forKey: "sex_at_birth") ?? "") ?? .male
+        self.gender = Gender(rawValue: defaults.string(forKey: "gender") ?? "") ?? .other
+        
         self.dateOnset = UserDefaults.standard.object(forKey: "date_onset") as? Date ?? .now
         
         self.current_smoker = UserDefaults.standard.object(forKey: "currentSmoker") as? Bool ?? false
@@ -473,7 +472,7 @@ extension Settings {
         if diffs.year ?? 0 > 60 {
             return (15.0, 25.0)
         } else {
-            if gender == "Female" {
+            if gender == .female {
                 return (15.0, 25.0)
             } else {
                 return (25.0, 35.0)
@@ -484,21 +483,21 @@ extension Settings {
     /// Range of target for duration
     func pitchRange() -> (CGFloat, CGFloat) {
         if focusSelection == 4 {
-            if gender == "Male" {
+            if gender == .male {
                 return (100, 150)
-            } else if gender == "Female" {
+            } else if gender == .female {
                 return (180, 250)
-            } else if gender == "Non-binary" {
+            } else if gender == .nonbinary {
                 return (150, 180)
             } else {
                 return (150, 180)
             }
         } else {
-            if gender == "Male" {
+            if gender == .male {
                 return (100, 150)
-            } else if gender == "Female" {
+            } else if gender == .female {
                 return (180, 250)
-            } else if gender == "Non-binary" {
+            } else if gender == .nonbinary {
                 return (150, 180)
             } else {
                 return (150, 180)
@@ -509,21 +508,21 @@ extension Settings {
     /// This stores the title for the target pitch label on the graph
     func pitchLabel() -> String {
         if focusSelection == 4 {
-            if gender == "Male" {
+            if gender == .male {
                 return "Target Range"
-            } else if gender == "Female" {
+            } else if gender == .female {
                 return "Target Range"
-            } else if gender == "Non-binary" {
+            } else if gender == .nonbinary {
                 return "Target Range"
             } else {
                 return "Select Gender"
             }
         } else {
-            if gender == "Male" {
+            if gender == .male {
                 return "Normal Range"
-            } else if gender == "Female" {
+            } else if gender == .female {
                 return "Normal Range"
-            } else if gender == "Non-binary" {
+            } else if gender == .nonbinary {
                 return "Normal Range"
             } else {
                 return "Select Gender"

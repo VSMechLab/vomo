@@ -26,8 +26,8 @@ struct SettingsView: View {
     @EnvironmentObject var entries: Entries
     
     // Variables for settings
-    @State private var sex = ""
-    @State private var gender = ""
+    @State private var sex = Settings.shared.sexAtBirth
+    @State private var gender = Settings.shared.gender
     
     // Show or hide calendars
     @State private var showCalendar = false
@@ -92,11 +92,6 @@ struct SettingsView: View {
             
             popUpSection
         }
-        .onAppear() {
-            // Initialize values
-            sex = self.settings.sexAtBirth
-            gender = self.settings.gender
-        }
         
         #if DEBUG
         .sheet(isPresented: $showDebugMenu) {
@@ -156,23 +151,20 @@ extension SettingsView {
             
             Menu {
                 Picker("choose", selection: $sex) {
-                    ForEach(svm.sexes, id: \.self) { sex in
-                        Text("\(sex)")
+                    ForEach(SexAtBirth.allCases, id: \.self) { sex in
+                        Text("\(sex.rawValue)")
                             .font(._fieldCopyRegular)
                     }
                 }
                 .labelsHidden()
                 .pickerStyle(InlinePickerStyle())
-                .onChange(of: self.sex) { newSex in
-                    self.settings.sexAtBirth = sex
-                }
 
             } label: {
                 ZStack {
                     EntryField()
                     
                     HStack {
-                        Text("\(sex == "" ? "Select Sex" : sex)")
+                        Text("\(sex.rawValue)")
                             .font(._fieldCopyRegular)
                         
                         Spacer()
@@ -190,8 +182,8 @@ extension SettingsView {
             
             Menu {
                 Picker("choose", selection: $gender) {
-                    ForEach(svm.genders, id: \.self) { gender in
-                        Text("\(gender)")
+                    ForEach(Gender.allCases, id: \.self) { gender in
+                        Text("\(gender.rawValue)")
                             .font(._fieldCopyRegular)
                     }
                 }
@@ -205,7 +197,7 @@ extension SettingsView {
                     EntryField()
                     
                     HStack {
-                        Text("\(gender == "" ? "Select Gender" : gender)")
+                        Text("\(gender.rawValue)")
                             .font(._fieldCopyRegular)
                         
                         Spacer()

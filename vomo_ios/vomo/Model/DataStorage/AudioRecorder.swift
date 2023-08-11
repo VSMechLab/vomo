@@ -186,7 +186,7 @@ class AudioRecorder: NSObject, ObservableObject {
         fetchRecordings()
     }
     
-    func process(recording rec: Recording, gender: String) {
+    func process(recording rec: Recording, gender: Gender) {
         let group = DispatchGroup()
         let labelGroup = String("test")
         
@@ -423,7 +423,7 @@ class AudioRecorder: NSObject, ObservableObject {
         return returnable
     }
     
-    func syncEntries(gender: String) {
+    func syncEntries(gender: Gender) {
         // Determine if the same amount, if not will further process
         
         if recordings.count != processedData.count {

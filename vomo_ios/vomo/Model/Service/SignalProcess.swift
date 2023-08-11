@@ -17,7 +17,7 @@ import AVFAudio
 extension AudioRecorder {
     // NOTE: command to get into Kermit's vomo project folder
     // cd ~/Library/Mobile\ Documents/com~apple~CloudDocs/Documents/VoMoApp/vomo
-    func signalProcess(fileURL: URL!, gender: String) -> Array<Double> {
+    func signalProcess(fileURL: URL!, gender: Gender) -> Array<Double> {
         // Initialize output vector
         let numMetrics: Int = 6
         var audioMetrics = Array<Double>(repeating: 0.0, count: numMetrics)
@@ -62,10 +62,10 @@ extension AudioRecorder {
                     //["Other", "Genderqueer", "Non-binary", "Female", "Male"]
                     // Define minPitch based on gender
                     var minPitch, maxPitch: Double
-                    if gender == "3" {
+                    if gender == .female {
                         minPitch = 90.0
                         maxPitch = 500.0
-                    } else if gender == "4" {
+                    } else if gender == .male {
                         minPitch = 60.0
                         maxPitch = 300.0
                     } else {

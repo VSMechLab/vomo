@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		221861772A2503DE00F63D0A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 221861762A2503DE00F63D0A /* AppDelegate.swift */; };
+		221A811F2A866D39004D5BB3 /* GenderEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 221A811E2A866D39004D5BB3 /* GenderEnum.swift */; };
+		221A81212A866D4D004D5BB3 /* SexAtBirthEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 221A81202A866D4D004D5BB3 /* SexAtBirthEnum.swift */; };
 		22253A042A1003AC004FD26B /* Logging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22253A032A1003AC004FD26B /* Logging.swift */; };
 		22253A1F2A103394004FD26B /* Roboto-Thin.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 22253A132A103393004FD26B /* Roboto-Thin.ttf */; };
 		22253A202A103394004FD26B /* Roboto-BlackItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 22253A142A103393004FD26B /* Roboto-BlackItalic.ttf */; };
@@ -151,6 +153,8 @@
 
 /* Begin PBXFileReference section */
 		221861762A2503DE00F63D0A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = vomo/AppDelegate.swift; sourceTree = SOURCE_ROOT; };
+		221A811E2A866D39004D5BB3 /* GenderEnum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = GenderEnum.swift; path = vomo/Model/DataModels/Enumerations/GenderEnum.swift; sourceTree = SOURCE_ROOT; };
+		221A81202A866D4D004D5BB3 /* SexAtBirthEnum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SexAtBirthEnum.swift; path = vomo/Model/DataModels/Enumerations/SexAtBirthEnum.swift; sourceTree = SOURCE_ROOT; };
 		22253A032A1003AC004FD26B /* Logging.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Logging.swift; path = vomo/Model/Service/Logging.swift; sourceTree = SOURCE_ROOT; };
 		22253A132A103393004FD26B /* Roboto-Thin.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Roboto-Thin.ttf"; path = "vomo/Fonts/Roboto-Thin.ttf"; sourceTree = SOURCE_ROOT; };
 		22253A142A103393004FD26B /* Roboto-BlackItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Roboto-BlackItalic.ttf"; path = "vomo/Fonts/Roboto-BlackItalic.ttf"; sourceTree = SOURCE_ROOT; };
@@ -305,6 +309,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		221A811D2A866D24004D5BB3 /* Enumerations */ = {
+			isa = PBXGroup;
+			children = (
+				221A811E2A866D39004D5BB3 /* GenderEnum.swift */,
+				221A81202A866D4D004D5BB3 /* SexAtBirthEnum.swift */,
+			);
+			path = Enumerations;
+			sourceTree = "<group>";
+		};
 		22253A052A103159004FD26B /* Sounds */ = {
 			isa = PBXGroup;
 			children = (
@@ -346,6 +359,7 @@
 		AD00C71A29F71CAB0017385E /* DataModels */ = {
 			isa = PBXGroup;
 			children = (
+				221A811D2A866D24004D5BB3 /* Enumerations */,
 				AD81B73728C00070009920FB /* ViewRouter.swift */,
 				AD00C71D29F71F2C0017385E /* SharedViewModel.swift */,
 				AD81B72728BFD769009920FB /* SurveyModel.swift */,
@@ -877,6 +891,7 @@
 				ADA0E0B628255ECD00CF05D1 /* ChartBase.swift in Sources */,
 				AD0FB6D729D21E6300E54749 /* SurveyGraphViews.swift in Sources */,
 				ADBF43A3290AC6B1001CDBF5 /* FilterButton.swift in Sources */,
+				221A81212A866D4D004D5BB3 /* SexAtBirthEnum.swift in Sources */,
 				AD00C73829F720720017385E /* SettingsView.swift in Sources */,
 				AD67CEC428A4965A006AF596 /* SubmissionButton.swift in Sources */,
 				AD00C75B29F720C10017385E /* Graphic.swift in Sources */,
@@ -912,6 +927,7 @@
 				AD72972428CFD736001E7211 /* SignalProcess.swift in Sources */,
 				ADA0E0C828255FD900CF05D1 /* View+Extension.swift in Sources */,
 				AD81B72C28BFD774009920FB /* TreatmentModel.swift in Sources */,
+				221A811F2A866D39004D5BB3 /* GenderEnum.swift in Sources */,
 				AD7BF16629B7121200FA0AF8 /* DurationGraph.swift in Sources */,
 				AD0FB6D329D21C5700E54749 /* SurveyGraphFunctions.swift in Sources */,
 				ADA0E0DE282561C400CF05D1 /* LineChart.swift in Sources */,
@@ -1077,7 +1093,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 33;
 				DEVELOPMENT_ASSET_PATHS = "\"VoMo/Preview Content\"";
-				DEVELOPMENT_TEAM = E3GYNLB224;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = VoMo/Info.plist;
@@ -1118,7 +1134,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 33;
 				DEVELOPMENT_ASSET_PATHS = "\"VoMo/Preview Content\"";
-				DEVELOPMENT_TEAM = E3GYNLB224;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = VoMo/Info.plist;

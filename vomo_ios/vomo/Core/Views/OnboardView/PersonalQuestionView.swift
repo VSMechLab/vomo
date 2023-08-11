@@ -30,8 +30,8 @@ struct PersonalQuestionView: View {
     @State var showDatePicker = false
     @State var textfieldText: String = ""
     
-    @State private var sex = ""
-    @State private var gender = ""
+    @State private var sex = Settings.shared.sexAtBirth
+    @State private var gender = Settings.shared.gender
     
     @State var date: Date = Settings.shared.dob
     
@@ -64,14 +64,6 @@ struct PersonalQuestionView: View {
             Spacer()
         }
         .frame(width: svm.content_width)
-//        .onAppear() {
-//            date = self.settings.dob.toDateFromDOB() ?? .now
-//        }
-        .onAppear() {
-            // Initialize values
-            sex = self.settings.sexAtBirth
-            gender = self.settings.gender
-        }
     }
     
     
@@ -84,25 +76,20 @@ extension PersonalQuestionView {
             
             Menu {
                 Picker("choose", selection: $sex) {
-                    ForEach(svm.sexes, id: \.self) { sex in
-                        Text("\(sex)")
+                    ForEach(SexAtBirth.allCases, id: \.self) { sex in
+                        Text("\(sex.rawValue)")
                             .font(._fieldCopyRegular)
                     }
                 }
                 .labelsHidden()
                 .pickerStyle(InlinePickerStyle())
-                .onChange(of: self.sex) { newSex in
-                    self.settings.sexAtBirth = sex
-                    self.gender = sex
-                    self.settings.gender = sex
-                }
 
             } label: {
                 ZStack {
                     EntryField()
                     
                     HStack {
-                        Text("\(sex == "" ? "Select Sex" : sex)")
+                        Text("\(sex.rawValue)")
                             .font(._fieldCopyRegular)
                         
                         Spacer()
@@ -120,8 +107,8 @@ extension PersonalQuestionView {
             
             Menu {
                 Picker("choose", selection: $gender) {
-                    ForEach(svm.genders, id: \.self) { gender in
-                        Text("\(gender)")
+                    ForEach(Gender.allCases, id: \.self) { gender in
+                        Text("\(gender.rawValue)")
                             .font(._fieldCopyRegular)
                     }
                 }
@@ -135,7 +122,7 @@ extension PersonalQuestionView {
                     EntryField()
                     
                     HStack {
-                        Text("\(gender == "" ? "Select Gender" : gender)")
+                        Text("\(gender.rawValue)")
                             .font(._fieldCopyRegular)
                         
                         Spacer()

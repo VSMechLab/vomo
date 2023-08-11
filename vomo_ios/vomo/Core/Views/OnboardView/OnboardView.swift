@@ -116,7 +116,7 @@ extension OnboardView {
                                 }
                             } else if stepSwitch == 1 {
                                 // Sign up page
-                                if settings.firstName != "" && settings.lastName != "" && settings.sexAtBirth != "" && settings.gender != "" {
+                                if settings.firstName != "" && settings.lastName != "" {
                                     Button("Next") {
                                         stepSwitch += 1
                                     }.buttonStyle(NextButton())
