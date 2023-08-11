@@ -22,7 +22,7 @@ struct ViewController: View {
     @EnvironmentObject var audioRecorder: AudioRecorder
     @EnvironmentObject var viewRouter: ViewRouter
     @EnvironmentObject var notification: Notification
-    @EnvironmentObject var settings: Settings
+    @ObservedObject var settings = Settings.shared
     @State private var variablePadding: CGFloat = 0
     let svm = SharedViewModel()
     
@@ -221,7 +221,6 @@ struct ViewController_Preview: PreviewProvider {
         ViewController()
             .environmentObject(ViewRouter.shared)
             .environmentObject(Notification.shared)
-            .environmentObject(Settings())
             .environmentObject(AudioRecorder())
     }
 }

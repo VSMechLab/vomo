@@ -11,8 +11,8 @@ import SwiftUI
 struct Graph: View {
     
     @EnvironmentObject var entries: Entries
-    @EnvironmentObject var settings: Settings
-    
+    @ObservedObject var settings = Settings.shared
+
     @State private var svm = SharedViewModel()
     
     var chartStyle = ChartStyle(backgroundColor: .clear, foregroundColor: [ColorGradient(.TEAL, .BRIGHT_PURPLE), ColorGradient(.DARK_PURPLE, .DARK_PURPLE)])
@@ -71,7 +71,6 @@ struct Graph: View {
 struct Graph_Previews: PreviewProvider {
     static var previews: some View {
         Graph()
-            .environmentObject(Settings())
             .environmentObject(Entries())
             .frame(width: 325.0, height: 300)
     }

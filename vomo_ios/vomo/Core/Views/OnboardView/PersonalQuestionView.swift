@@ -8,8 +8,8 @@
 import SwiftUI
 
 struct PersonalQuestionView: View {
-    @EnvironmentObject var settings: Settings
-    
+    @ObservedObject var settings = Settings.shared
+
     let logo = "VM_0-Loading-Screen-logo"
     let entry_img = "VM_12-entry-field"
     let nav_img = "VM_Dropdown-Btn"
@@ -33,7 +33,7 @@ struct PersonalQuestionView: View {
     @State private var sex = ""
     @State private var gender = ""
     
-    @State var date: Date = .now
+    @State var date: Date = Settings.shared.dob
     
     var body: some View {
         VStack {
@@ -64,9 +64,9 @@ struct PersonalQuestionView: View {
             Spacer()
         }
         .frame(width: svm.content_width)
-        .onAppear() {
-            date = self.settings.dob.toDateFromDOB() ?? .now
-        }
+//        .onAppear() {
+//            date = self.settings.dob.toDateFromDOB() ?? .now
+//        }
         .onAppear() {
             // Initialize values
             sex = self.settings.sexAtBirth
@@ -216,7 +216,7 @@ extension PersonalQuestionView {
                     withAnimation() {
                         self.showCalendar.toggle()
                     }
-                    self.settings.dob = date.toString(dateFormat: "MM/dd/yyyy")
+//                    self.settings.dob = date.toString(dateFormat: "MM/dd/yyyy")
                 }) {
                     HStack {
                         Text(date.toString(dateFormat: "MM/dd/yyyy"))
@@ -237,6 +237,5 @@ extension PersonalQuestionView {
 struct PersonalQuestionView_Previews: PreviewProvider {
     static var previews: some View {
         PersonalQuestionView()
-            .environmentObject(Settings())
     }
 }

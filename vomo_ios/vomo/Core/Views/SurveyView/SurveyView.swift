@@ -10,7 +10,7 @@ import SwiftUI
 struct SurveyView: View {
     @EnvironmentObject var viewRouter: ViewRouter
     @EnvironmentObject var entries: Entries
-    @EnvironmentObject var settings: Settings
+    @ObservedObject var settings = Settings.shared
     //@State private var vm = RecordingViewModel()
     @State private var svm = SharedViewModel()
     @State private var submitAnimation = false

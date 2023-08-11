@@ -9,7 +9,7 @@ import SwiftUI
 
 struct NameEntryField: View {
     @Binding var topic: String
-    @EnvironmentObject var settings: Settings
+    @ObservedObject var settings = Settings.shared
     @FocusState private var focused: Bool
     let label: String
     let svm = SharedViewModel()

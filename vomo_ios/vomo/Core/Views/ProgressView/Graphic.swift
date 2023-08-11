@@ -144,7 +144,7 @@ struct Graphic: View {
 }
 
 struct SummaryTab: View {
-    @EnvironmentObject var settings: Settings
+    @ObservedObject var settings = Settings.shared
     @EnvironmentObject var entries: Entries
     @EnvironmentObject var audioRecorder: AudioRecorder
     @Binding var showTitle: Bool
@@ -260,8 +260,8 @@ struct SummaryTab: View {
 }
 
 struct PitchTab: View {
-    @EnvironmentObject var settings: Settings
-    
+    @ObservedObject var settings = Settings.shared
+
     @Binding var showTitle: Bool
     
     @Binding var thresholdPopUps: (Bool, Bool, Bool)
@@ -383,8 +383,8 @@ struct PitchTab: View {
 }
 
 struct DurationTab: View {
-    @EnvironmentObject var settings: Settings
-    
+    @ObservedObject var settings = Settings.shared
+
     @Binding var showTitle: Bool
     
     @Binding var thresholdPopUps: (Bool, Bool, Bool)
@@ -480,8 +480,8 @@ struct DurationTab: View {
 }
 
 struct QualityTab: View {
-    @EnvironmentObject var settings: Settings
-    
+    @ObservedObject var settings = Settings.shared
+
     @Binding var showTitle: Bool
     
     @Binding var thresholdPopUps: (Bool, Bool, Bool)

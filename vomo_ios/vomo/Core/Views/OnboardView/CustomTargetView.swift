@@ -9,8 +9,8 @@ import SwiftUI
 
 struct CustomTargetView: View {
     @EnvironmentObject var viewRouter: ViewRouter
-    @EnvironmentObject var settings: Settings
-    
+    @ObservedObject var settings = Settings.shared
+
     let logo = "VM_0-Loading-Screen-logo"
     let large_select_img = "VM_6-Select-Btn-Prpl-Field"
     let large_unselect_img = "VM_6-Unselect-Btn-Wht-Field"

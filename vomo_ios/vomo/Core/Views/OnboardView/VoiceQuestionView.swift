@@ -9,8 +9,8 @@ import SwiftUI
 
 struct VoiceQuestionView: View {
     @EnvironmentObject var viewRouter: ViewRouter
-    @EnvironmentObject var settings: Settings
-    
+    @ObservedObject var settings = Settings.shared
+
     let logo = "VM_0-Loading-Screen-logo"
     let select_img = "VM_4-Select-Btn-Prpl-Field"
     let unselect_img = "VM_4-Unselect-Btn-Wht-Field"

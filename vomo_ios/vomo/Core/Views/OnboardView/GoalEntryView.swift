@@ -11,8 +11,8 @@ struct GoalEntryView: View {
     @Environment(\.openURL) var openURL
     
     @EnvironmentObject var notification: Notification
-    @EnvironmentObject var settings: Settings
-    
+    @ObservedObject var settings = Settings.shared
+
     @State private var svm = SharedViewModel()
     @State private var recordPerWeek = 0
     @State private var questsPerWeek = 0
@@ -285,6 +285,5 @@ struct GoalEntryView_Previews: PreviewProvider {
     static var previews: some View {
         GoalEntryView()
             .environmentObject(Notification.shared)
-            .environmentObject(Settings())
     }
 }

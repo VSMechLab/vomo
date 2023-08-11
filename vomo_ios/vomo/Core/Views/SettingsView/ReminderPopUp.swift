@@ -11,7 +11,7 @@ struct ReminderPopUp: View {
     @Environment(\.openURL) var openURL
     
     @EnvironmentObject var notifications: Notification
-    @EnvironmentObject var settings: Settings
+    @ObservedObject var settings = Settings.shared
     @Binding var showNotifications: Bool
     @State private var showTime: Bool = false
 //    @State private var date: Date = .now

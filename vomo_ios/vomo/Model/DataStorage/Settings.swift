@@ -12,6 +12,9 @@ import UserNotifications
 
 /// Settings - stores the users information like date of birth, sex, gender etc
 class Settings: ObservableObject {
+    
+    static let shared = Settings()
+    
     let defaults = UserDefaults.standard
 
     /// Showing and hiding on the basis of wether the keyboard is shown or not
@@ -72,9 +75,9 @@ class Settings: ObservableObject {
             UserDefaults.standard.set(lastName, forKey: "last_name")
         }
     }
-    @Published var dob: String {
+    @Published var dob: Date {
         didSet {
-            UserDefaults.standard.set(dob, forKey: "dob")
+            UserDefaults.standard.set(dob as NSDate, forKey: "dob")
         }
     }
     
@@ -244,9 +247,9 @@ class Settings: ObservableObject {
             UserDefaults.standard.set(gender, forKey: "gender")
         }
     }
-    @Published var dateOnset: String {
+    @Published var dateOnset: Date {
         didSet {
-            UserDefaults.standard.set(dateOnset, forKey: "date_onset")
+            UserDefaults.standard.set(dateOnset as NSDate, forKey: "date_onset")
         }
     }
     
@@ -280,7 +283,7 @@ class Settings: ObservableObject {
         self.acceptedTerms = UserDefaults.standard.object(forKey: "accepts_terms") as? Bool ?? false
         self.firstName = UserDefaults.standard.object(forKey: "first_name") as? String ?? ""
         self.lastName = UserDefaults.standard.object(forKey: "last_name") as? String ?? ""
-        self.dob = UserDefaults.standard.object(forKey: "dob") as? String ?? ""
+        self.dob = UserDefaults.standard.object(forKey: "dob") as? Date ?? .init()
         
         /// Voice Plan/Edited before
         self.voice_plan = UserDefaults.standard.object(forKey: "voice_plan") as? Int ?? 0
@@ -319,7 +322,7 @@ class Settings: ObservableObject {
         self.voice_onset = UserDefaults.standard.object(forKey: "voiceOnset") as? Bool ?? false
         self.sexAtBirth = UserDefaults.standard.object(forKey: "sex_at_birth") as? String ?? ""
         self.gender = UserDefaults.standard.object(forKey: "gender") as? String ?? ""
-        self.dateOnset = UserDefaults.standard.object(forKey: "date_onset") as? String ?? ""
+        self.dateOnset = UserDefaults.standard.object(forKey: "date_onset") as? Date ?? .now
         
         self.current_smoker = UserDefaults.standard.object(forKey: "currentSmoker") as? Bool ?? false
         self.have_reflux = UserDefaults.standard.object(forKey: "haveReflux") as? Bool ?? false
@@ -464,8 +467,8 @@ extension Settings {
     /// Older adult male (> 60 years)---- 15 seconds / 35
     /// RETURN TWO VALUES
     func durationRange() -> (CGFloat, CGFloat) {
-        let newDate: Date = dob.toDateFromDOB() ?? .now
-        let diffs = Calendar.current.dateComponents([.year], from: newDate, to: .now)
+//        let newDate: Date = dob.toDateFromDOB() ?? .now
+        let diffs = Calendar.current.dateComponents([.year], from: dob, to: .now)
         
         if diffs.year ?? 0 > 60 {
             return (15.0, 25.0)

@@ -9,7 +9,7 @@ import SwiftUI
 
 /// Form that when filled out will persistently save a new intervention/visit
 struct NewTreatmentForm: View {
-    @EnvironmentObject var settings: Settings
+    @ObservedObject var settings = Settings.shared
     @EnvironmentObject var entries: Entries
     @FocusState private var focused: Bool
     
@@ -272,6 +272,5 @@ struct NewTreatmentForm_Previews: PreviewProvider {
     static var previews: some View {
         NewTreatmentForm(submitAnimation: .constant(false), newTreatment: .constant(true))
             .environmentObject(Entries())
-            .environmentObject(Settings())
     }
 }

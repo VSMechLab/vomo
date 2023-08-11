@@ -72,7 +72,6 @@ struct LaunchScreen: View {
                 .environmentObject(ViewRouter.shared)
                 .environmentObject(AudioRecorder())
                 .environmentObject(Entries())
-                .environmentObject(Settings())
                 .environmentObject(Notification.shared)
         }
     }

@@ -12,7 +12,7 @@ import UserNotifications
 
 struct OnboardView: View {
     @EnvironmentObject var viewRouter: ViewRouter
-    @EnvironmentObject var settings: Settings
+    @ObservedObject var settings = Settings.shared
     @EnvironmentObject var audioRecorder: AudioRecorder
     
     @State private var svm = SharedViewModel()
@@ -176,6 +176,5 @@ struct OnboardView_Preview: PreviewProvider {
     static var previews: some View {
         OnboardView()
             .environmentObject(ViewRouter.shared)
-            .environmentObject(Settings())
     }
 }

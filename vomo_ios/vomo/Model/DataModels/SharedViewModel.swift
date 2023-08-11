@@ -84,7 +84,7 @@ struct SharedViewModel {
     let selected_do_not_show_img = "VM_Prpl-Check-Square-Btn"
     let unselected_do_not_show_img = "VM_Prpl-Square-Btn copy"
     let background_img = "VoMo-App-Outline_8_RECORD_POPUP_IMG"
-    @ObservedObject var settings = Settings()
+    @ObservedObject var settings = Settings.shared
     
     let audio: [String] = ["KR_sustained_Ah_1", "KR_sustained_Ah_1", "KR_rainbow_1"]
     

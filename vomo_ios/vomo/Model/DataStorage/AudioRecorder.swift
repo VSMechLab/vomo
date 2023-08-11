@@ -25,8 +25,8 @@ struct Processings {
 /// AudioRecorder - stores audio files, saved processings of files and functions for the files
 class AudioRecorder: NSObject, ObservableObject {
     
-    @EnvironmentObject var settings: Settings
-    
+    @ObservedObject var settings = Settings.shared
+
     // Attributes
     let processedDataKey: String = "saved_data"
     let objectWillChange = PassthroughSubject<AudioRecorder, Never>()

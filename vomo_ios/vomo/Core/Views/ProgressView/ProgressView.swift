@@ -12,8 +12,8 @@ import AVFAudio
 struct ProgressView: View {
     @EnvironmentObject var entries: Entries
     @EnvironmentObject var audioRecorder: AudioRecorder
-    @EnvironmentObject var settings: Settings
-    
+    @ObservedObject var settings = Settings.shared
+
     @State var filters: [String] = []
     @State var filteredList: [Element] = []
     @State var deletionTarget: (Date, String) = (.now, "")
@@ -306,6 +306,5 @@ struct ProgressView_Previews: PreviewProvider {
         ProgressView()
             .environmentObject(AudioRecorder())
             .environmentObject(Entries())
-            .environmentObject(Settings())
     }
 }

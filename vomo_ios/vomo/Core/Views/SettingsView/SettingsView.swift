@@ -21,15 +21,13 @@ import UniformTypeIdentifiers
 
 struct SettingsView: View {
     @EnvironmentObject var viewRouter: ViewRouter
-    @EnvironmentObject var settings: Settings
+    @ObservedObject var settings = Settings.shared
     @EnvironmentObject var audioRecorder: AudioRecorder
     @EnvironmentObject var entries: Entries
     
     // Variables for settings
-    @State var date: Date = .now
     @State private var sex = ""
     @State private var gender = ""
-    @State var dateOnset: Date = .now
     
     // Show or hide calendars
     @State private var showCalendar = false
@@ -139,18 +137,15 @@ extension SettingsView {
             Text("Date of Birth")
             
             DateEntryField(toggle: self.$showCalendar, date: self.$settings.dob)
-            
+       
             ZStack {
                 if showCalendar {
-                    DatePicker("", selection: $date, in: ...Date.now, displayedComponents: .date)
+                    DatePicker("", selection: $settings.dob, in: ...Date.now, displayedComponents: .date)
                         .datePickerStyle(WheelDatePickerStyle())
                         .frame(maxWidth: svm.content_width * 0.9)
                 }
             }
             .transition(.slide)
-            .onChange(of: date) { value in
-                self.settings.dob = self.date.toDOB()
-            }
         }
         .padding(.bottom, 5)
     }
@@ -248,16 +243,12 @@ extension SettingsView {
                     
                     ZStack {
                         if showOnsetCal {
-                            DatePicker("Pick date", selection: $dateOnset, in: ...Date.now, displayedComponents: .date)
+                            DatePicker("Pick date", selection: $settings.dateOnset, in: ...Date.now, displayedComponents: .date)
                                 .datePickerStyle(WheelDatePickerStyle())
                                 .frame(maxWidth: svm.content_width * 0.9, maxHeight: 400)
                         }
                     }
                     .transition(.slide)
-                    .onChange(of: dateOnset) { value in
-                        /// Text(visit.date == .now ? "Enter appointment date" : visit.date.))
-                        self.settings.dateOnset = self.dateOnset.toString(dateFormat: "EEE MM/dd/yyyy")
-                    }
                 }
             }
             .transition(.slide)
@@ -462,7 +453,6 @@ struct SettingsView_Previews: PreviewProvider {
         SettingsView()
             .foregroundColor(Color.black)
             .environmentObject(ViewRouter.shared)
-            .environmentObject(Settings())
     }
 }
 

@@ -32,7 +32,7 @@ struct NotificationSettings: Codable {
 /// Notifications - queues notifications
 class Notification: ObservableObject {
     
-    @EnvironmentObject var settings: Settings
+    @ObservedObject var settings = Settings.shared
     
     static let shared = Notification()
     
