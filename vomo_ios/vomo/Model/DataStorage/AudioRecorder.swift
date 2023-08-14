@@ -706,7 +706,8 @@ extension AudioRecorder {
 }
  */
 extension AudioRecorder {
-    func processData(values: [Int16]) {
+    func processData(values: [Int16], gender: String) {
+        
         vDSP.convertElements(of: values,
                              to: &timeDomainBuffer)
         
@@ -714,23 +715,14 @@ extension AudioRecorder {
                       hanningWindow,
                       result: &timeDomainBuffer)
         
-        forwardDCT.transform(timeDomainBuffer,
-                             result: &frequencyDomainBuffer)
-        
-        vDSP.absolute(frequencyDomainBuffer,
-                      result: &frequencyDomainBuffer)
-
-        vDSP.convert(amplitude: frequencyDomainBuffer,
-                     toDecibels: &frequencyDomainBuffer,
-                     zeroReference: Float(zeroReference))
-        
-        vDSP.multiply(Float(gain),
-                      frequencyDomainBuffer,
-                      result: &frequencyDomainBuffer)
-        
-        // TODOSW
-        average = 10*(vDSP.maximum(frequencyDomainBuffer)-vDSP.minimum(frequencyDomainBuffer))
-        
+        // not let so that I am reminded to fix this and below
+        var returnArr = signalProcessLive(values:values, gender: gender)
+        // TODOSW this is ugly
+        // returnArr[0] is mean db, returnArr[1] is mean pitch
+        average = Float(returnArr[0] - 100) // dogshit bad code written by Sam Weese for the display of db -Sam Weese
+        average = Float(returnArr[1])
+        print(average)
+        // clearing circle buffer
         if frequencyDomainValues.count > AudioRecorder.sampleCount {
             frequencyDomainValues.removeFirst(AudioRecorder.sampleCount)
         }

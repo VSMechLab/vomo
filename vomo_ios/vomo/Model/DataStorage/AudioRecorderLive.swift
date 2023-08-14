@@ -67,7 +67,7 @@ extension AudioRecorder: AVCaptureAudioDataOutputSampleBufferDelegate {
         while self.rawAudioData.count >= AudioRecorder.sampleCount {
             let dataToProcess = Array(self.rawAudioData[0 ..< AudioRecorder.sampleCount])
             self.rawAudioData.removeFirst(AudioRecorder.hopCount)
-            self.processData(values: dataToProcess)
+            self.processData(values: dataToProcess, gender:"3")
         }
         
         DispatchQueue.main.async { [self] in
