@@ -12,7 +12,7 @@ import AVFoundation
 
 struct RecordView: View {
     @EnvironmentObject var viewRouter: ViewRouter
-    @EnvironmentObject var settings: Settings
+    @ObservedObject var settings = Settings.shared
     @EnvironmentObject var audioRecorder: AudioRecorder
     
     @StateObject private var audioPlayer = AudioPlayer()
@@ -193,11 +193,6 @@ extension RecordView {
                 .font(._subTitle)
                 .foregroundColor(Color.BODY_COPY)
             
-            /*Text("")
-                .onAppear() {
-                    print(settings.taskList)
-                    print(exercise)
-                }*/
             if exercise < settings.taskList.count {
                 if !landingPopUp {
                     ScrollView(showsIndicators: true) {
@@ -342,8 +337,7 @@ extension RecordView {
 struct RecordView_Previews: PreviewProvider {
     static var previews: some View {
         RecordView()
-            .environmentObject(ViewRouter())
-            .environmentObject(Settings())
+            .environmentObject(ViewRouter.shared)
             .environmentObject(AudioRecorder())
     }
 }

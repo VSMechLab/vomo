@@ -131,7 +131,6 @@ struct TreatmentRow: View {
         .onAppear() {
             note = ""
             targetTreatment = treatment.date
-            //print(deletionTarget)
         }
     }
     
@@ -149,10 +148,11 @@ struct TreatmentRow: View {
     }
     
     /// Sensitive delete function, once performed cannot be recovered
-    /// Seaches through treatments for the proper one to delete matching by date
+    /// Searches through treatments for the proper one to delete matching by date
     func deleteAtDate(createdAt: Date) {
-        print("delete at \(deletionTarget.0), \(deletionTarget.1)")
         
+        Logging.defaultLog.notice("Deleting treatment at: \(deletionTarget.0), \(deletionTarget.1)")
+                
         var type = ""
         var count = -1
         
@@ -161,7 +161,6 @@ struct TreatmentRow: View {
                 if createdAt == entries.treatments[index].date {
                     type = "Treatment"
                     count = index
-                    print(count)
                 }
             }
         }
@@ -171,10 +170,9 @@ struct TreatmentRow: View {
                 if entries.treatments[count].date == createdAt {
                     entries.treatments.remove(at: count)
                     count = -1
-                    //print("deleting treatment at \(entries.treatments[count].date)")
                 }
             } else {
-                print("There was a mismatch in data. In order to prevent erroneous deletion of data we have disabled the functionality of deleting this specific entry.")
+                Logging.defaultLog.error("There was a mismatch in data. In order to prevent erroneous deletion of data we have disabled the functionality of deleting this specific entry.")
             }
         }
     }

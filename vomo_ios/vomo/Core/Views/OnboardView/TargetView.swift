@@ -9,8 +9,8 @@ import SwiftUI
 
 struct TargetView: View {
     @EnvironmentObject var viewRouter: ViewRouter
-    @EnvironmentObject var settings: Settings
-    
+    @ObservedObject var settings = Settings.shared
+
     @State private var showSubsectionOne = false
     @State private var showSubsectionTwo = false
     
@@ -342,7 +342,6 @@ extension TargetView {
 struct TargetView_Previews: PreviewProvider {
     static var previews: some View {
         TargetView()
-            .environmentObject(ViewRouter())
-            .environmentObject(Settings())
+            .environmentObject(ViewRouter.shared)
     }
 }

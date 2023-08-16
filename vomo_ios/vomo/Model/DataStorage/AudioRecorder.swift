@@ -25,8 +25,8 @@ struct Processings {
 /// AudioRecorder - stores audio files, saved processings of files and functions for the files
 class AudioRecorder: NSObject, ObservableObject {
     
-    @EnvironmentObject var settings: Settings
-    
+    @ObservedObject var settings = Settings.shared
+
     // Attributes
     let processedDataKey: String = "saved_data"
     let objectWillChange = PassthroughSubject<AudioRecorder, Never>()
@@ -157,7 +157,7 @@ class AudioRecorder: NSObject, ObservableObject {
             try recordingSession.setCategory(.playAndRecord, mode: .default)
             try recordingSession.setActive(true)
         } catch {
-            print("Failed to set up recording session")
+            Logging.audioRecorderLog.error("Failed to set up recording session: \(error.localizedDescription)")
         }
         
         let documentPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
@@ -176,7 +176,7 @@ class AudioRecorder: NSObject, ObservableObject {
 
             recording = true
         } catch {
-            print("Could not start recording")
+            Logging.audioRecorderLog.error("Could not start recording: \(error.localizedDescription)")
         }
     }
     
@@ -186,7 +186,7 @@ class AudioRecorder: NSObject, ObservableObject {
         fetchRecordings()
     }
     
-    func process(recording rec: Recording, gender: String) {
+    func process(recording rec: Recording, gender: Gender) {
         let group = DispatchGroup()
         let labelGroup = String("test")
         
@@ -200,7 +200,7 @@ class AudioRecorder: NSObject, ObservableObject {
         
         group.leave()
         group.notify(queue: DispatchQueue.main, execute: {
-            print("Task completed!")
+            Logging.audioRecorderLog.info("Processing completed")
         })
     }
     
@@ -291,22 +291,22 @@ class AudioRecorder: NSObject, ObservableObject {
             do {
                 try FileManager.default.removeItem(at: record.fileURL)
             } catch {
-                print("File could not be deleted!")
+                Logging.audioRecorderLog.error("Recording could not be deleted: \(error.localizedDescription)")
             }
         }
         
         processedData.removeAll()
         fetchRecordings()
         
-        print("Number of files: \(recordings.count)")
+        Logging.audioRecorderLog.info("Number of files: \(self.recordings.count)")
     }
     
     func deleteRecording(urlToDelete: URL) {
-        print("deleted: \(urlToDelete.lastPathComponent)")
+        Logging.audioRecorderLog.info("Deleted: \(urlToDelete.lastPathComponent)")
         do {
            try FileManager.default.removeItem(at: urlToDelete)
         } catch {
-            print("File could not be deleted!")
+            Logging.audioRecorderLog.error("Recording could not be deleted: \(error.localizedDescription)")
         }
         
         fetchRecordings()
@@ -400,7 +400,7 @@ class AudioRecorder: NSObject, ObservableObject {
              try data.write(to: file!, options: .atomic)
              //try contents.write(to: dir!, atomically: true, encoding: .utf8)
          } catch {
-            print(error.localizedDescription)
+             Logging.audioRecorderLog.error("Recording could not be saved: \(error.localizedDescription)")
          }
          var filesToShare = [Any]()
          filesToShare.append(file!)
@@ -423,11 +423,11 @@ class AudioRecorder: NSObject, ObservableObject {
         return returnable
     }
     
-    func syncEntries(gender: String) {
+    func syncEntries(gender: Gender) {
         // Determine if the same amount, if not will further process
         
         if recordings.count != processedData.count {
-            print("Mismatch in data\n\n\n")
+            Logging.audioRecorderLog.info("Mismatch in data")
             
             processedData.removeAll()
             
@@ -451,8 +451,7 @@ class AudioRecorder: NSObject, ObservableObject {
                     
                     group.leave()
                     group.notify(queue: DispatchQueue.main, execute: {
-                        print("Task completed!")
-                        print("appended this: \(self.recordings[index].createdAt.toDebug())")
+                        Logging.audioRecorderLog.notice("Task completed – Appended \(self.recordings[index].createdAt.toDebug())")
                     })
                     
                     //process(recording: recordings[index], gender: gender)
@@ -461,13 +460,13 @@ class AudioRecorder: NSObject, ObservableObject {
         } else {
             DispatchQueue.main.asyncAfter(deadline: .now() + 4) {
                 
-                print("Matched in count... checking each entry\n")
+                Logging.audioRecorderLog.notice("Matched in count... checking each entry\n")
                 
                 var count = -1
                 if self.recordings.isNotEmpty && self.processedData.isNotEmpty {
                     for index in 0..<self.recordings.count {
                         if self.recordings[index].createdAt.toStringDay() != self.processedData[index].createdAt.toStringDay() {
-                            print("Error found, deleting and retrying")
+                            Logging.audioRecorderLog.error("Error found, deleting and retrying")
                             count = 0
                         }
                         
@@ -475,7 +474,7 @@ class AudioRecorder: NSObject, ObservableObject {
                 }
                 
                 if count == 0 {
-                    print("failure")
+                    Logging.audioRecorderLog.error("Failure")
                     
                     // reprocess
                     self.processedData.removeAll()
@@ -485,7 +484,6 @@ class AudioRecorder: NSObject, ObservableObject {
                     }
                     
                     DispatchQueue.main.asyncAfter(deadline: .now() + 4) {
-                        print("delayed then ran")
                         
                         if self.recordings.count == self.processedData.count {
                             for index in 0..<self.recordings.count {
@@ -503,8 +501,7 @@ class AudioRecorder: NSObject, ObservableObject {
                                 
                                 group.leave()
                                 group.notify(queue: DispatchQueue.main, execute: {
-                                    print("Task completed!")
-                                    print("appended this: \(self.recordings[index].createdAt.toDebug())")
+                                    Logging.audioRecorderLog.notice("Task completed – Appended \(self.recordings[index].createdAt.toDebug())")
                                 })
                                 
                                 //process(recording: recordings[index], gender: gender)
@@ -516,7 +513,7 @@ class AudioRecorder: NSObject, ObservableObject {
                     
                 } else {
                     for index in 0..<self.recordings.count {
-                        print("\(self.recordings[index].createdAt.toStringDay()) & \(self.processedData[index].createdAt.toStringDay())\n")
+                        Logging.audioRecorderLog.notice("\(self.recordings[index].createdAt.toStringDay()) & \(self.processedData[index].createdAt.toStringDay())\n")
                     }
                 }
                 
@@ -574,42 +571,3 @@ extension AudioRecorder {
     func filterRecordingsDay(focus: Date) -> [Recording] { return [] }
     func filterRecordingsDayExercise(focus: Date, taskNum: Int) -> [Recording] { return [] }
 }
-
-/*
- 
- // Loop through recordings
- for record in recordings {
-     /// 0 if no matches, 1 if a match
-     var count = 0
-     
-     for process in processedData {
-         
-         // if there is a match change var to 1
-         if record.createdAt == process.createdAt {
-             
-             count += 1
-             print("match")
-         }
-     }
-     
-     // if there was a match on none of these then reprocess this file and add to proccessedData
-     if count == 0 {
-         print("Performed a reproccessing on this file: \(record.createdAt)")
-         
-         
-         let processings = process(recording: record, gender: gender)
-         saveProcessedData()
-     }
- }
-} else if processedData.count > recordings.count {
- print("Difference is: \(processedData.count) - \(recordings.count)")
- 
- for index in 0..<recordings.count {
-     if recordings[index].createdAt == processedData[index].createdAt {
-         print("At index: \(index) there is a match")
-     } else {
-         print("At index: \(index) there is a mismatch")
-     }
- }
-}
- */

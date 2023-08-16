@@ -12,7 +12,7 @@ import UserNotifications
 
 struct OnboardView: View {
     @EnvironmentObject var viewRouter: ViewRouter
-    @EnvironmentObject var settings: Settings
+    @ObservedObject var settings = Settings.shared
     @EnvironmentObject var audioRecorder: AudioRecorder
     
     @State private var svm = SharedViewModel()
@@ -116,7 +116,7 @@ extension OnboardView {
                                 }
                             } else if stepSwitch == 1 {
                                 // Sign up page
-                                if settings.firstName != "" && settings.lastName != "" && settings.sexAtBirth != "" && settings.gender != "" {
+                                if settings.firstName != "" && settings.lastName != "" {
                                     Button("Next") {
                                         stepSwitch += 1
                                     }.buttonStyle(NextButton())
@@ -160,7 +160,8 @@ extension OnboardView {
                 
             } else {
                 Button("GET STARTED") {
-                    print("Recording permission status \(audioRecorder.grantedPermission())")
+                    
+                    Logging.defaultLog.notice("Recording permission status \(audioRecorder.grantedPermission())")
                     
                     stepSwitch += 1
                 }.buttonStyle(SubmitButton())
@@ -174,7 +175,6 @@ extension OnboardView {
 struct OnboardView_Preview: PreviewProvider {
     static var previews: some View {
         OnboardView()
-            .environmentObject(ViewRouter())
-            .environmentObject(Settings())
+            .environmentObject(ViewRouter.shared)
     }
 }

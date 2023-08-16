@@ -11,198 +11,178 @@ struct ReminderPopUp: View {
     @Environment(\.openURL) var openURL
     
     @EnvironmentObject var notifications: Notification
-    @EnvironmentObject var settings: Settings
+    @ObservedObject var settings = Settings.shared
     @Binding var showNotifications: Bool
     @State private var showTime: Bool = false
-    @State private var date: Date = .now
+//    @State private var date: Date = .now
+        
     let svm = SharedViewModel()
+    
     var body: some View {
-        VStack(alignment: .leading) {
-            HStack {
-                Text("Edit your prefered frequency of notifications")
-                    .font(._subHeadline)
-                    .multilineTextAlignment(.leading)
+        
+        NavigationView {
+            VStack(alignment: .leading, spacing: 15) {
+                HStack {
+                    Text("Notification Settings")
+                        .font(._title1)
+                        .multilineTextAlignment(.leading)
+                    Spacer()
+                }
+                
+                notificationsToggle
+                            
+                if notifications.notificationSettings.notificationsOn {
+                    notificationTimeSelection
+                        .transition(.slideUp)
+                }
                 Spacer()
             }
-            
-            onOffButton
-            
-            if notifications.notificationsOn {
-                timeOfDay
-            }
+            .animation(.spring(), value: notifications.notificationSettings.notificationsOn)
+            .padding()
+            .padding(.vertical)
         }
-        .padding(.vertical)
-        .padding()
-        .frame(width: svm.content_width)
+        .frame(width: svm.content_width, height: 350)
         .background(Color.white)
         .cornerRadius(15)
         .shadow(color: Color.gray, radius: 5)
-        .padding(.vertical)
-        .padding(.vertical)
-        .onAppear() {
-            var dateComponents = DateComponents()
-            dateComponents.hour = notifications.preferedHour
-            dateComponents.minute = notifications.preferedMinute
-            
-            self.date = Calendar.current.date(from: dateComponents) ?? .now
-        }
     }
 }
 
 extension ReminderPopUp {
-    private var onOffButton: some View {
-        Group {
-            Text("Would you like to be notified?")
-                .font(._subsubHeadline)
-                .padding(.top)
+    
+    private var notificationsToggle: some View {
+        
+        VStack(alignment: .leading) {
             
-            HStack(spacing: 0) {
-                Button("") {
-                    withAnimation() {
-                        self.notifications.notificationsOn = true
-                    }
-                }.buttonStyle(YesButton(selected: notifications.notificationsOn))
-                Spacer()
-                Button("") {
-                    withAnimation() {
-                        self.notifications.notificationsOn = false
-                    }
-                }.buttonStyle(NoButton(selected: notifications.notificationsOn))
-            }
-            
-            if !self.notifications.getStatus() {
-                Text("You must enable notifications in settings")
-                    .multilineTextAlignment(.leading)
-                    .foregroundColor(.red)
-                    .font(._bodyCopy)
+            Toggle(isOn: $notifications.notificationSettings.notificationsOn) {
                 
-                Button(action: {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("Receive Notifications")
+                        .font(._BTNCopy)
+                }
+            }
+            .tint(Color.MEDIUM_PURPLE)
+            
+            if (!notifications.notificationsAllowed) {
+                Button {
                     if #available(iOS 16, *) {
                         openURL(URL(string: UIApplication.openNotificationSettingsURLString)!)
-                    }
-                    if #available(iOS 15.4, *) {
-                        openURL(URL(string: UIApplicationOpenNotificationSettingsURLString)!)
-                    }
-                    if #available(iOS 8.0, *) {
-                        // just opens settings
+                    } else {
                         openURL(URL(string: UIApplication.openSettingsURLString)!)
                     }
-                }) {
-                    Text("Go to settings")
-                        .font(._bodyCopyBold)
-                        .foregroundColor(Color.DARK_PURPLE)
-                        .padding(.bottom)
+                } label: {
+                    HStack(spacing: 4) {
+                        Text("Please enable in settings")
+                        Image(systemName: "arrow.up.right")
+                            .font(.system(size: 14, weight: .semibold))
+                    }
+                    .font(._buttonFieldCopy)
+                    .foregroundColor(Color.DARK_PURPLE)
                 }
-                .padding(.bottom, 5)
             }
         }
     }
     
-    private var timeOfDay: some View {
-        Group {
+    private var notificationTimeSelection: some View {
+        
+        VStack(alignment: .leading, spacing: 15) {
+            
+            Divider()
+            
             HStack {
-                Text("Remind me at a time of the day")
-                    .font(._subsubHeadline)
-                Spacer()
-            }
-            
-            Button(action: {
-                withAnimation() {
-                    self.showTime.toggle()
-                }
-            }) {
-                HStack {
-                    Image(svm.time_img)
-                        .resizable()
-                        .scaledToFit()
-                        .frame(height: 40 * 0.8)
-                        .padding(.leading)
-                    Text(self.date.toStringHour())
-                        .font(._fieldCopyRegular)
-                    Spacer()
-                }
-                .padding(.vertical).frame(height: 40)
-                .background(Color.INPUT_FIELDS).cornerRadius(10)
-            }
-            
-            ZStack {
-                if showTime {
-                    DatePicker("", selection: $date, displayedComponents: .hourAndMinute)
-                        .datePickerStyle(WheelDatePickerStyle())
-                        .frame(maxWidth: 260, maxHeight: 175)
-                        .clipped()
-                        .onChange(of: date) { _ in
-                            self.notifications.preferedHour = date.splitHour
-                            self.notifications.preferedMinute = date.splitMinute
-                            
-                            print("Set to be notified at: \(notifications.preferedHour):\(notifications.preferedMinute)")
-                        }
-                }
-            }
-            .transition(.slide)
-            
-            Text("Let us automatically select your notification frequency")
-                .font(._subsubHeadline)
-            
-            HStack(spacing: 0) {
-                Button("") {
-                    withAnimation() {
-                        self.notifications.autoSchedule = true
-                    }
-                }.buttonStyle(YesButton(selected: notifications.autoSchedule))
-                Spacer()
-                Button("") {
-                    withAnimation() {
-                        self.notifications.autoSchedule = false
-                    }
-                }.buttonStyle(NoButton(selected: notifications.autoSchedule))
-            }
-            
-            if !notifications.autoSchedule {
-                Text("Select your prefered notification frequency")
-                    .font(._subsubHeadline)
+                Text("Remind Me")
+                    .font(._BTNCopy)
                 
-                listOfFrequencies
+                DatePicker("", selection: $notifications.notificationSettings.time, displayedComponents: .hourAndMinute)
+                    .datePickerStyle(.graphical)
+                    .tint(.MEDIUM_PURPLE)
+                    .offset(x: 10.0, y: 0)
+            }
+            
+            Toggle(isOn: $notifications.autoSchedule) {
+                Text("Auto Schedule")
+                    .font(._BTNCopy)
+            }
+            .tint(Color.MEDIUM_PURPLE)
+            
+            if (!notifications.autoSchedule) {
+                NavigationLink {
+                    NotificationFrequencySelection()
+                } label: {
+                    HStack {
+                        Text("Frequency")
+                            .font(._BTNCopy)
+                        Spacer()
+                        HStack {
+                            Text("\(notifications.notificationSettings.frequency.rawValue)")
+                            Image(systemName: "chevron.right")
+                                .font(.system(size: 14))
+                        }
+                        
+                    }
+                }
+                .transition(.slideUp)
+                .buttonStyle(.borderless)
+                .tint(.black)
+                .padding(.top, 10)
             }
         }
+        .animation(.spring(), value: notifications.autoSchedule)
     }
     
-    private var listOfFrequencies: some View {
-        ScrollView(showsIndicators: false) {
-            ForEach(1...6, id: \.self) { index in
-                Button(action: {
-                    self.notifications.frequency = index
-                    self.notifications.updateNotifications(triggers: settings.editedTrigger(frequency: index))
-                }) {
-                    ZStack(alignment: .leading) {
-                        ZStack {
-                            if notifications.frequency == index {
-                                Color.MEDIUM_PURPLE
-                                    .frame(width: svm.content_width - 2, height: 60)
-                            } else {
-                                Color.white
-                                    .frame(width: svm.content_width - 2, height: 60)
-                            }
-                            
-                            HStack {
-                                Image(notifications.frequency == index ? svm.select : svm.unselect)
-                                    .resizable()
-                                    .frame(width: 27.5, height: 27.5)
-                                    .padding(.leading, 15)
+    // fileprivate struct so that it can be showed in previews
+    fileprivate struct NotificationFrequencySelection: View {
+        
+        @Environment(\.dismiss) var dismiss
+        @EnvironmentObject var notifications: Notification
+        
+        var body: some View {
+            VStack(spacing: 15) {
+                Divider()
+                ForEach(Notification.Frequency.allCases, id: \.self) { frequency in
+                    HStack {
+                        Button {
+                            notifications.notificationSettings.frequency = frequency
+                        } label: {
+                            HStack(spacing: 10) {
+                                
+                                Image(systemName: (frequency == notifications.notificationSettings.frequency) ? "circle.inset.filled" : "circle")
+                                    .font(.system(size: 20))
+                                
+                                Text(frequency.rawValue)
+                                    .font(._BTNCopy)
                                 Spacer()
                             }
+                            .padding(.vertical, 5)
                         }
-                        .cornerRadius(10)
-                        .shadow(color: Color.gray, radius: 1)
-                        .padding(1)
+                        .buttonStyle(.plain)
+                        .tint(.black)
                         
-                        VStack(alignment: .leading) {
-                            Text("Be notified every \(index) days")
-                                .foregroundColor(notifications.frequency == index ? Color.white : Color.gray)
-                                .font(._buttonFieldCopyLarger)
-                                .multilineTextAlignment(.leading)
-                        }.padding(.leading, svm.content_width / 7)
+//                        if (frequency == notifications.notificationSettings.frequency && frequency == .custom) {
+//                            Stepper("^[\(notifications.notificationSettings.customFrequency) day](inflect: true)", value: $notifications.notificationSettings.customFrequency, in: 1...30)
+//                        }
+                        
                     }
+                }
+                
+                Spacer()
+            }
+            .padding(.horizontal, 15)
+            .navigationBarTitleDisplayMode(.inline)
+            .navigationBarBackButtonHidden(true)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button {
+                        dismiss()
+                    } label: {
+                        HStack(spacing: 4) {
+                            Image(systemName: "chevron.left")
+                                .font(.system(size: 12))
+                            Text("Back")
+                                .font(._lastUsed)
+                        }
+                    }
+                    .buttonStyle(.plain)
                 }
             }
         }
@@ -210,23 +190,22 @@ extension ReminderPopUp {
 }
 
 struct ReminderPopUp_Previews: PreviewProvider {
+    
+    static let previewNotificationService = Notification.shared
+    
     static var previews: some View {
         ReminderPopUp(showNotifications: .constant(false))
-            .environmentObject(Notification())
+            .environmentObject(previewNotificationService)
+            .previewDisplayName("Pop Up")
+        
+        NavigationView {
+            ReminderPopUp.NotificationFrequencySelection()
+                .environmentObject(previewNotificationService)
+        }
+        .frame(width: 340, height: 350)
+        .background(Color.white)
+        .cornerRadius(15)
+        .shadow(color: Color.gray, radius: 5)
+        .previewDisplayName("Frequency Selection")
     }
 }
-
-/*
- /// Sent to notification service to schedule notifications calculated in real time based on goal considerations
- func triggers() -> [TriggerModel] {
-     var ret: [TriggerModel] = []
-     
-     let amountDays = recordPerWeek * numWeeks
-     
-     for i in 0..<amountDays {
-         ret.append(TriggerModel(date: Date(timeInterval: Double(i) * 86400, since: startDate.toFullDate() ?? .now), identifier: String(i)))
-     }
-     
-     return ret
- }
- */

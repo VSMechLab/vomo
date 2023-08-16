@@ -15,7 +15,7 @@ import SwiftUI
 struct HomeView: View {
     @EnvironmentObject var entries: Entries
     @EnvironmentObject var viewRouter: ViewRouter
-    @EnvironmentObject var settings: Settings
+    @ObservedObject var settings = Settings.shared
     @EnvironmentObject var audioRecorder: AudioRecorder
     
     @State private var totalProgress = true
@@ -194,6 +194,5 @@ struct HomeView_Previews: PreviewProvider {
         HomeView()
             .environmentObject(AudioRecorder())
             .environmentObject(Entries())
-            .environmentObject(Settings())
     }
 }

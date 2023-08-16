@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct BaselineRecording: View {
-    @EnvironmentObject var settings: Settings
+    @ObservedObject var settings = Settings.shared
     @EnvironmentObject var audioRecorder: AudioRecorder
     @EnvironmentObject var viewRouter: ViewRouter
     

@@ -14,8 +14,8 @@ import SwiftUI
 struct JournalView: View {
     @EnvironmentObject var viewRouter: ViewRouter
     @EnvironmentObject var entries: Entries
-    @EnvironmentObject var settings: Settings
-    
+    @ObservedObject var settings = Settings.shared
+
     @State private var note = ""
     @State private var submitAnimation = false
     
@@ -205,6 +205,5 @@ struct JournalView_Previews: PreviewProvider {
     static var previews: some View {
         JournalView()
             .environmentObject(Entries())
-            .environmentObject(Settings())
     }
 }

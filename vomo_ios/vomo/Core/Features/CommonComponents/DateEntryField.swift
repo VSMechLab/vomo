@@ -9,7 +9,7 @@ import SwiftUI
 
 struct DateEntryField: View {
     @Binding var toggle: Bool
-    @Binding var date: String
+    @Binding var date: Date
     let svm = SharedViewModel()
     var body: some View {
         ZStack {
@@ -20,7 +20,7 @@ struct DateEntryField: View {
                 }
             }) {
                 HStack {
-                    Text("\(self.date)")
+                    Text("\(self.date.formatted(date: .numeric, time: .omitted))")
                         .font(._bodyCopy)
                     Spacer()
                     Arrow()
@@ -29,5 +29,11 @@ struct DateEntryField: View {
                 .padding(.horizontal, svm.fieldPadding)
             }
         }
+    }
+}
+
+struct DateEntryField_Previews: PreviewProvider {
+    static var previews: some View {
+        DateEntryField(toggle: .constant(true), date: .constant(.init()))
     }
 }

@@ -32,6 +32,8 @@ class SurveyModel: Identifiable, Codable {
         
         
         if responses.count == 13 {
+            Logging.defaultLog.info("Returned a score from SurveyModel")
+            
             // Check if 1-11, 1-10, or 11
             var count = 0
             for index in 0...9 {

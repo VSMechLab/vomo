@@ -16,10 +16,13 @@ import UIKit
  */
 
 struct ViewController: View {
+    
+    @Environment(\.scenePhase) var scene
+    
     @EnvironmentObject var audioRecorder: AudioRecorder
     @EnvironmentObject var viewRouter: ViewRouter
     @EnvironmentObject var notification: Notification
-    @EnvironmentObject var settings: Settings
+    @ObservedObject var settings = Settings.shared
     @State private var variablePadding: CGFloat = 0
     let svm = SharedViewModel()
     
@@ -27,19 +30,23 @@ struct ViewController: View {
     
     var body: some View {
         VStack(spacing: 0) {
+            
+            Spacer().frame(height: 1)
+            
             currentPage
             
             Spacer()
             
-            if !settings.keyboardShown && viewRouter.currentPage != .onboard && viewRouter.currentPage != .home && !focused {
+            if !settings.keyboardShown && viewRouter.currentPage != .onboard && !focused {
                 tabBar
-                    .padding(.bottom, self.variablePadding)
+                    .padding(.bottom, variablePadding)
             }
         }
         .foregroundColor(Color.black)
         .background(Color.white)
         .preferredColorScheme(.light)
         .onAppear() {
+            
             var keyWindow: UIWindow? {
                 return UIApplication.shared.connectedScenes
                     .filter { $0.activationState == .foregroundActive }
@@ -47,13 +54,16 @@ struct ViewController: View {
                     .flatMap({ $0 as? UIWindowScene })?.windows
                     .first(where: \.isKeyWindow)
             }
-            if keyWindow!.safeAreaInsets.bottom > 0 {
+
+            if keyWindow?.safeAreaInsets.bottom ?? 0 > 0 {
                 self.variablePadding = 0
             } else {
                 self.variablePadding = 17.5
             }
+            
+            // TODO: Move requesting permissions to a different spot (e.g. in onboarding flow)
             notification.requestPermission()
-            notification.updateNotifications(triggers: settings.triggers())
+//            notification.updateNotifications(triggers: settings.triggers())
             
             let group = DispatchGroup()
             let labelGroup = String("test")
@@ -66,12 +76,29 @@ struct ViewController: View {
             
             group.leave()
             group.notify(queue: DispatchQueue.main, execute: {
-                print("Synced all recordings!")
+                Logging.defaultLog.notice("Synced all recordings!")
             })
         }
         
+        .onChange(of: scene) { newScenePhase in
+            switch newScenePhase {
+                case .background:
+                    notification.scheduleNotifications()
+                    break
+                case .inactive:
+                    break
+                case .active:
+                    Task {
+                        await notification.getStatus() // update notification status
+                    }
+                    break
+                @unknown default:
+                    Logging.defaultLog.warning("Unknown scene phase encountered")
+            }
+        }
+        
         .onChange(of: audioRecorder.recording) { _ in
-            print(audioRecorder.recording)
+            Logging.defaultLog.debug("Recording status: \(audioRecorder.recording)")
         }
     }
 }
@@ -192,8 +219,8 @@ extension ViewController {
 struct ViewController_Preview: PreviewProvider {
     static var previews: some View {
         ViewController()
-            .environmentObject(ViewRouter())
-            .environmentObject(Notification())
-            .environmentObject(Settings())
+            .environmentObject(ViewRouter.shared)
+            .environmentObject(Notification.shared)
+            .environmentObject(AudioRecorder())
     }
 }

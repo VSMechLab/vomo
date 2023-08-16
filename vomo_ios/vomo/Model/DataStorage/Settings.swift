@@ -12,6 +12,9 @@ import UserNotifications
 
 /// Settings - stores the users information like date of birth, sex, gender etc
 class Settings: ObservableObject {
+    
+    static let shared = Settings()
+    
     let defaults = UserDefaults.standard
 
     /// Showing and hiding on the basis of wether the keyboard is shown or not
@@ -72,9 +75,9 @@ class Settings: ObservableObject {
             UserDefaults.standard.set(lastName, forKey: "last_name")
         }
     }
-    @Published var dob: String {
+    @Published var dob: Date {
         didSet {
-            UserDefaults.standard.set(dob, forKey: "dob")
+            UserDefaults.standard.set(dob as NSDate, forKey: "dob")
         }
     }
     
@@ -237,23 +240,20 @@ class Settings: ObservableObject {
             UserDefaults.standard.set(voice_onset, forKey: "voiceOnset")
         }
     }
-    @Published var sexAtBirth: String {
+    @Published var sexAtBirth: SexAtBirth {
         didSet {
-            UserDefaults.standard.set(sexAtBirth, forKey: "sex_at_birth")
+            UserDefaults.standard.set(sexAtBirth.rawValue, forKey: "sex_at_birth")
         }
     }
-    ///Saved as follows
-    ///0 = "Other"
-    ///
-    ///["Other", "Genderqueer", "Non-binary", "Female", "Male"]
-    @Published var gender: String {
+
+    @Published var gender: Gender {
         didSet {
-            UserDefaults.standard.set(gender, forKey: "gender")
+            UserDefaults.standard.set(gender.rawValue, forKey: "gender")
         }
     }
-    @Published var dateOnset: String {
+    @Published var dateOnset: Date {
         didSet {
-            UserDefaults.standard.set(dateOnset, forKey: "date_onset")
+            UserDefaults.standard.set(dateOnset as NSDate, forKey: "date_onset")
         }
     }
     
@@ -287,7 +287,7 @@ class Settings: ObservableObject {
         self.acceptedTerms = UserDefaults.standard.object(forKey: "accepts_terms") as? Bool ?? false
         self.firstName = UserDefaults.standard.object(forKey: "first_name") as? String ?? ""
         self.lastName = UserDefaults.standard.object(forKey: "last_name") as? String ?? ""
-        self.dob = UserDefaults.standard.object(forKey: "dob") as? String ?? ""
+        self.dob = UserDefaults.standard.object(forKey: "dob") as? Date ?? .init()
         
         /// Voice Plan/Edited before
         self.voice_plan = UserDefaults.standard.object(forKey: "voice_plan") as? Int ?? 0
@@ -324,9 +324,11 @@ class Settings: ObservableObject {
         
         /// Settings View Questions
         self.voice_onset = UserDefaults.standard.object(forKey: "voiceOnset") as? Bool ?? false
-        self.sexAtBirth = UserDefaults.standard.object(forKey: "sex_at_birth") as? String ?? ""
-        self.gender = UserDefaults.standard.object(forKey: "gender") as? String ?? ""
-        self.dateOnset = UserDefaults.standard.object(forKey: "date_onset") as? String ?? ""
+       
+        self.sexAtBirth = SexAtBirth(rawValue: defaults.string(forKey: "sex_at_birth") ?? "") ?? .male
+        self.gender = Gender(rawValue: defaults.string(forKey: "gender") ?? "") ?? .other
+        
+        self.dateOnset = UserDefaults.standard.object(forKey: "date_onset") as? Date ?? .now
         
         self.current_smoker = UserDefaults.standard.object(forKey: "currentSmoker") as? Bool ?? false
         self.have_reflux = UserDefaults.standard.object(forKey: "haveReflux") as? Bool ?? false
@@ -437,7 +439,7 @@ class Settings: ObservableObject {
         
         switch focusSelection {
         case 0: // Custom track
-            print("Custom track selected")
+            Logging.defaultLog.debug("Custom track")
         case 1: // Gender-Affirming Voice Care
             self.vhi = false
             self.vocalEffort = true
@@ -474,13 +476,13 @@ extension Settings {
     /// Older adult male (> 60 years)---- 15 seconds / 35
     /// RETURN TWO VALUES
     func durationRange() -> (CGFloat, CGFloat) {
-        let newDate: Date = dob.toDateFromDOB() ?? .now
-        let diffs = Calendar.current.dateComponents([.year], from: newDate, to: .now)
+//        let newDate: Date = dob.toDateFromDOB() ?? .now
+        let diffs = Calendar.current.dateComponents([.year], from: dob, to: .now)
         
         if diffs.year ?? 0 > 60 {
             return (15.0, 25.0)
         } else {
-            if gender == "Female" {
+            if gender == .female {
                 return (15.0, 25.0)
             } else {
                 return (25.0, 35.0)
@@ -491,21 +493,21 @@ extension Settings {
     /// Range of target for duration
     func pitchRange() -> (CGFloat, CGFloat) {
         if focusSelection == 4 {
-            if gender == "Male" {
+            if gender == .male {
                 return (100, 150)
-            } else if gender == "Female" {
+            } else if gender == .female {
                 return (180, 250)
-            } else if gender == "Non-binary" {
+            } else if gender == .nonbinary {
                 return (150, 180)
             } else {
                 return (150, 180)
             }
         } else {
-            if gender == "Male" {
+            if gender == .male {
                 return (100, 150)
-            } else if gender == "Female" {
+            } else if gender == .female {
                 return (180, 250)
-            } else if gender == "Non-binary" {
+            } else if gender == .nonbinary {
                 return (150, 180)
             } else {
                 return (150, 180)
@@ -516,21 +518,21 @@ extension Settings {
     /// This stores the title for the target pitch label on the graph
     func pitchLabel() -> String {
         if focusSelection == 4 {
-            if gender == "Male" {
+            if gender == .male {
                 return "Target Range"
-            } else if gender == "Female" {
+            } else if gender == .female {
                 return "Target Range"
-            } else if gender == "Non-binary" {
+            } else if gender == .nonbinary {
                 return "Target Range"
             } else {
                 return "Select Gender"
             }
         } else {
-            if gender == "Male" {
+            if gender == .male {
                 return "Normal Range"
-            } else if gender == "Female" {
+            } else if gender == .female {
                 return "Normal Range"
-            } else if gender == "Non-binary" {
+            } else if gender == .nonbinary {
                 return "Normal Range"
             } else {
                 return "Select Gender"
@@ -538,33 +540,33 @@ extension Settings {
         }
     }
     
-    /// Sent to notification service to schedule notifications calculated in real time based on goal considerations
-    func triggers() -> [TriggerModel] {
-        var ret: [TriggerModel] = []
-        
-        let amountDays = recordPerWeek * numWeeks
-        
-        for i in 0..<amountDays {
-            ret.append(TriggerModel(date: Date(timeInterval: Double(i) * 86400, since: startDate.toFullDate() ?? .now), identifier: String(i)))
-        }
-        
-        return ret
-    }
-    
-    /// Sent to notification service to schedule notifications calculated in real time based on goal considerations
-    func editedTrigger(frequency: Int) -> [TriggerModel] {
-        var ret: [TriggerModel] = []
-        
-        let amountDays = recordPerWeek * numWeeks
-        
-        for i in 0..<amountDays {
-            print("start date: \(String(describing: startDate.toFullDate()))")
-            ret.append(TriggerModel(date: Date(timeInterval: Double(frequency) * (Double(i) * 86400), since: startDate.toFullDate() ?? .now), identifier: String(i)))
-        }
-        
-        return ret
-    }
-    
+//    /// Sent to notification service to schedule notifications calculated in real time based on goal considerations
+//    func triggers() -> [TriggerModel] {
+//        var ret: [TriggerModel] = []
+//        
+//        let amountDays = recordPerWeek * numWeeks
+//        
+//        for i in 0..<amountDays {
+//            ret.append(TriggerModel(date: Date(timeInterval: Double(i) * 86400, since: startDate.toFullDate() ?? .now), identifier: String(i)))
+//        }
+//        
+//        return ret
+//    }
+//    
+//    /// Sent to notification service to schedule notifications calculated in real time based on goal considerations
+//    func editedTrigger(frequency: Int) -> [TriggerModel] {
+//        var ret: [TriggerModel] = []
+//        
+//        let amountDays = recordPerWeek * numWeeks
+//        
+//        for i in 0..<amountDays {
+//            Logging.defaultLog.info("start date: \(String(describing: self.startDate.toFullDate()))")
+//            ret.append(TriggerModel(date: Date(timeInterval: Double(frequency) * (Double(i) * 86400), since: startDate.toFullDate() ?? .now), identifier: String(i)))
+//        }
+//        
+//        return ret
+//    }
+//    
     /// Checks if goal is active on the basis of the start date + nWeeks > .now
     func isActive() -> Bool {
         let weeksElapsed = (-1 * Double(startDate.toDate()?.timeIntervalSinceNow ?? 0.0) / 604800.0)

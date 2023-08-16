@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct SetThreshold: View {
-    @EnvironmentObject var settings: Settings
+    @ObservedObject var settings = Settings.shared
     @Binding var popUp: Bool
     @Binding var selection: Int
     @Binding var min: Int
@@ -154,6 +154,5 @@ struct SetThreshold_Previews: PreviewProvider {
         SetThreshold(popUp: .constant(true), selection: .constant(0), min: .constant(0), max: .constant(100))
             .environmentObject(Entries())
             .environmentObject(AudioRecorder())
-            .environmentObject(Settings())
     }
 }

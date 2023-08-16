@@ -52,8 +52,7 @@ struct StarButton: View {
         Button(action: {
             if type == "record" {
                 for index in 0..<audioRecorder.processedData.count {
-                    print("got here")
-                    print("Date \(date), \(audioRecorder.processedData[index].createdAt)")
+                    Logging.defaultLog.notice("Date \(date), \(audioRecorder.processedData[index].createdAt)")
                     
                     if audioRecorder.processedData[index].createdAt == date {
                         audioRecorder.processedData[index].favorite.toggle()

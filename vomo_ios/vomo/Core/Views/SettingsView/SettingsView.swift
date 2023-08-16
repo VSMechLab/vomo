@@ -21,15 +21,13 @@ import UniformTypeIdentifiers
 
 struct SettingsView: View {
     @EnvironmentObject var viewRouter: ViewRouter
-    @EnvironmentObject var settings: Settings
+    @ObservedObject var settings = Settings.shared
     @EnvironmentObject var audioRecorder: AudioRecorder
     @EnvironmentObject var entries: Entries
     
     // Variables for settings
-    @State var date: Date = .now
-    @State private var sex = ""
-    @State private var gender = ""
-    @State var dateOnset: Date = .now
+    @State private var sex = Settings.shared.sexAtBirth
+    @State private var gender = Settings.shared.gender
     
     // Show or hide calendars
     @State private var showCalendar = false
@@ -40,8 +38,11 @@ struct SettingsView: View {
     @State private var showDeleteWarning = false
     let svm = SharedViewModel()
     
-    
-    @State private var selectedFiles = [URL]()
+    #if DEBUG
+        @State private var showDebugMenu = false
+    #endif
+	
+	@State private var selectedFiles = [URL]()
     
     var body: some View {
         ZStack {
@@ -72,9 +73,23 @@ struct SettingsView: View {
                         
                         extraButtonSection
                         
-                        Text("Version 1.21")
+                        Text("Version \(Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "")")
                             .font(._bodyCopyUnBold)
                     }
+
+                    // MARK: Debug Menu
+                    #if DEBUG
+                    
+                    Button {
+                        self.showDebugMenu = true
+                    } label: {
+                        Text("Debug Menu")
+                            .font(._bodyCopyLargeMedium)
+                            .underline()
+                            .foregroundColor(Color.DARK_PURPLE)
+                    }
+                    
+                    #endif
                 }
                 .font(._fieldLabel)
                 .padding(.bottom, 75)
@@ -85,11 +100,12 @@ struct SettingsView: View {
             
             popUpSection
         }
-        .onAppear() {
-            // Initialize values
-            sex = self.settings.sexAtBirth
-            gender = self.settings.gender
+        
+        #if DEBUG
+        .sheet(isPresented: $showDebugMenu) {
+            DebugMenuView()
         }
+        #endif
     }
 }
 
@@ -107,7 +123,7 @@ extension SettingsView {
         Group {
             Text("First Name")
             
-            TextEntryField(topic: $settings.firstName, label: "First Name")
+            NameEntryField(topic: $settings.firstName, label: "First Name", type: .givenName)
         }
     }
     
@@ -115,7 +131,7 @@ extension SettingsView {
         Group {
             Text("Last Name")
             
-            TextEntryField(topic: $settings.lastName, label: "Last Name")
+            NameEntryField(topic: $settings.lastName, label: "Last Name", type: .familyName)
         }
     }
     
@@ -124,18 +140,15 @@ extension SettingsView {
             Text("Date of Birth")
             
             DateEntryField(toggle: self.$showCalendar, date: self.$settings.dob)
-            
+       
             ZStack {
                 if showCalendar {
-                    DatePicker("", selection: $date, in: ...Date.now, displayedComponents: .date)
+                    DatePicker("", selection: $settings.dob, in: ...Date.now, displayedComponents: .date)
                         .datePickerStyle(WheelDatePickerStyle())
                         .frame(maxWidth: svm.content_width * 0.9)
                 }
             }
             .transition(.slide)
-            .onChange(of: date) { value in
-                self.settings.dob = self.date.toDOB()
-            }
         }
         .padding(.bottom, 5)
     }
@@ -146,23 +159,20 @@ extension SettingsView {
             
             Menu {
                 Picker("choose", selection: $sex) {
-                    ForEach(svm.sexes, id: \.self) { sex in
-                        Text("\(sex)")
+                    ForEach(SexAtBirth.allCases, id: \.self) { sex in
+                        Text("\(sex.rawValue)")
                             .font(._fieldCopyRegular)
                     }
                 }
                 .labelsHidden()
                 .pickerStyle(InlinePickerStyle())
-                .onChange(of: self.sex) { newSex in
-                    self.settings.sexAtBirth = sex
-                }
 
             } label: {
                 ZStack {
                     EntryField()
                     
                     HStack {
-                        Text("\(sex == "" ? "Select Sex" : sex)")
+                        Text("\(sex.rawValue)")
                             .font(._fieldCopyRegular)
                         
                         Spacer()
@@ -180,8 +190,8 @@ extension SettingsView {
             
             Menu {
                 Picker("choose", selection: $gender) {
-                    ForEach(svm.genders, id: \.self) { gender in
-                        Text("\(gender)")
+                    ForEach(Gender.allCases, id: \.self) { gender in
+                        Text("\(gender.rawValue)")
                             .font(._fieldCopyRegular)
                     }
                 }
@@ -195,7 +205,7 @@ extension SettingsView {
                     EntryField()
                     
                     HStack {
-                        Text("\(gender == "" ? "Select Gender" : gender)")
+                        Text("\(gender.rawValue)")
                             .font(._fieldCopyRegular)
                         
                         Spacer()
@@ -233,16 +243,12 @@ extension SettingsView {
                     
                     ZStack {
                         if showOnsetCal {
-                            DatePicker("Pick date", selection: $dateOnset, in: ...Date.now, displayedComponents: .date)
+                            DatePicker("Pick date", selection: $settings.dateOnset, in: ...Date.now, displayedComponents: .date)
                                 .datePickerStyle(WheelDatePickerStyle())
                                 .frame(maxWidth: svm.content_width * 0.9, maxHeight: 400)
                         }
                     }
                     .transition(.slide)
-                    .onChange(of: dateOnset) { value in
-                        /// Text(visit.date == .now ? "Enter appointment date" : visit.date.))
-                        self.settings.dateOnset = self.dateOnset.toString(dateFormat: "EEE MM/dd/yyyy")
-                    }
                 }
             }
             .transition(.slide)
@@ -322,7 +328,9 @@ extension SettingsView {
                     
                 if !filesToShare.isEmpty {
                     let activityVC = UIActivityViewController(activityItems: filesToShare, applicationActivities: nil)
-                    UIApplication.shared.windows.first?.rootViewController?.present(activityVC, animated: true)
+                    let windowScene = UIApplication.shared.connectedScenes.first(where: { $0.activationState == .foregroundActive }) as? UIWindowScene
+                    let window = windowScene?.windows.first(where: { $0.isKeyWindow })
+                    window?.rootViewController?.present(activityVC, animated: true)
                 }
             }) {
                 HStack {
@@ -439,8 +447,7 @@ struct SettingsView_Previews: PreviewProvider {
     static var previews: some View {
         SettingsView()
             .foregroundColor(Color.black)
-            .environmentObject(ViewRouter())
-            .environmentObject(Settings())
+            .environmentObject(ViewRouter.shared)
     }
 }
 

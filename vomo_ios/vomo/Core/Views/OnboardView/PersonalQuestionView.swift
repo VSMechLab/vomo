@@ -8,8 +8,8 @@
 import SwiftUI
 
 struct PersonalQuestionView: View {
-    @EnvironmentObject var settings: Settings
-    
+    @ObservedObject var settings = Settings.shared
+
     let logo = "VM_0-Loading-Screen-logo"
     let entry_img = "VM_12-entry-field"
     let nav_img = "VM_Dropdown-Btn"
@@ -30,10 +30,10 @@ struct PersonalQuestionView: View {
     @State var showDatePicker = false
     @State var textfieldText: String = ""
     
-    @State private var sex = ""
-    @State private var gender = ""
+    @State private var sex = Settings.shared.sexAtBirth
+    @State private var gender = Settings.shared.gender
     
-    @State var date: Date = .now
+    @State var date: Date = Settings.shared.dob
     
     var body: some View {
         VStack {
@@ -64,14 +64,6 @@ struct PersonalQuestionView: View {
             Spacer()
         }
         .frame(width: svm.content_width)
-        .onAppear() {
-            date = self.settings.dob.toDateFromDOB() ?? .now
-        }
-        .onAppear() {
-            // Initialize values
-            sex = self.settings.sexAtBirth
-            gender = self.settings.gender
-        }
     }
     
     
@@ -84,25 +76,20 @@ extension PersonalQuestionView {
             
             Menu {
                 Picker("choose", selection: $sex) {
-                    ForEach(svm.sexes, id: \.self) { sex in
-                        Text("\(sex)")
+                    ForEach(SexAtBirth.allCases, id: \.self) { sex in
+                        Text("\(sex.rawValue)")
                             .font(._fieldCopyRegular)
                     }
                 }
                 .labelsHidden()
                 .pickerStyle(InlinePickerStyle())
-                .onChange(of: self.sex) { newSex in
-                    self.settings.sexAtBirth = sex
-                    self.gender = sex
-                    self.settings.gender = sex
-                }
 
             } label: {
                 ZStack {
                     EntryField()
                     
                     HStack {
-                        Text("\(sex == "" ? "Select Sex" : sex)")
+                        Text("\(sex.rawValue)")
                             .font(._fieldCopyRegular)
                         
                         Spacer()
@@ -120,8 +107,8 @@ extension PersonalQuestionView {
             
             Menu {
                 Picker("choose", selection: $gender) {
-                    ForEach(svm.genders, id: \.self) { gender in
-                        Text("\(gender)")
+                    ForEach(Gender.allCases, id: \.self) { gender in
+                        Text("\(gender.rawValue)")
                             .font(._fieldCopyRegular)
                     }
                 }
@@ -135,7 +122,7 @@ extension PersonalQuestionView {
                     EntryField()
                     
                     HStack {
-                        Text("\(gender == "" ? "Select Gender" : gender)")
+                        Text("\(gender.rawValue)")
                             .font(._fieldCopyRegular)
                         
                         Spacer()
@@ -175,6 +162,7 @@ extension PersonalQuestionView {
                 HStack {
                     TextField(self.settings.firstName.isEmpty ? "First Name" : self.settings.firstName, text: $settings.firstName)
                         .font(self.settings.firstName.isEmpty ? ._fieldCopyItalic : ._fieldCopyRegular)
+                        .autocorrectionDisabled(true)
                 }.padding(.horizontal, 5)
             }.frame(width: svm.content_width, height: toggleHeight)
         }
@@ -194,6 +182,7 @@ extension PersonalQuestionView {
                 HStack {
                     TextField(self.settings.lastName.isEmpty ? "Last Name" : self.settings.lastName, text: $settings.lastName)
                         .font(self.settings.lastName.isEmpty ? ._fieldCopyItalic : ._fieldCopyRegular)
+                        .autocorrectionDisabled(true)
                 }.padding(.horizontal, 5)
             }.frame(width: svm.content_width, height: toggleHeight)
         }
@@ -214,7 +203,7 @@ extension PersonalQuestionView {
                     withAnimation() {
                         self.showCalendar.toggle()
                     }
-                    self.settings.dob = date.toString(dateFormat: "MM/dd/yyyy")
+//                    self.settings.dob = date.toString(dateFormat: "MM/dd/yyyy")
                 }) {
                     HStack {
                         Text(date.toString(dateFormat: "MM/dd/yyyy"))
@@ -235,6 +224,5 @@ extension PersonalQuestionView {
 struct PersonalQuestionView_Previews: PreviewProvider {
     static var previews: some View {
         PersonalQuestionView()
-            .environmentObject(Settings())
     }
 }

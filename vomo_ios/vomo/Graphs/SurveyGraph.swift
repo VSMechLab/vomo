@@ -29,7 +29,7 @@ class SurveyNodeModel: Identifiable, Codable {
 
 struct SurveyGraph: View {
     @EnvironmentObject var entries: Entries
-    @EnvironmentObject var settings: Settings
+    @ObservedObject var settings = Settings.shared
     @Binding var surveySelection: Int
     @Binding var tappedRecording: Date
     @Binding var deletionTarget: (Date, String)

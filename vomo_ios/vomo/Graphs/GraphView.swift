@@ -9,8 +9,8 @@ import SwiftUI
 
 struct GraphView: View {
     @EnvironmentObject var entries: Entries
-    @EnvironmentObject var settings: Settings
-    
+    @ObservedObject var settings = Settings.shared
+
     @Binding var showVHI: Bool
     @Binding var showVE: Bool
     

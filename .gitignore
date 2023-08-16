@@ -1,7 +1,11 @@
 # General
-.DS_Store
+*.DS_Store
 .AppleDouble
 .LSOverride
+
+# Xcode User config
+*.xcworkspace/xcuserdata
+*xcuserdata
 
 # Icon must end with two \r
 Icon

@@ -164,7 +164,7 @@ struct Graphic: View {
 }
 
 struct SummaryTab: View {
-    @EnvironmentObject var settings: Settings
+    @ObservedObject var settings = Settings.shared
     @EnvironmentObject var entries: Entries
     @EnvironmentObject var audioRecorder: AudioRecorder
     @Binding var showTitle: Bool
@@ -280,8 +280,8 @@ struct SummaryTab: View {
 }
 
 struct PitchTab: View {
-    @EnvironmentObject var settings: Settings
-    
+    @ObservedObject var settings = Settings.shared
+
     @Binding var showTitle: Bool
     
     @Binding var thresholdPopUps: (Bool, Bool, Bool)
@@ -320,17 +320,17 @@ struct PitchTab: View {
                         // Typical male range
                         // target range if trans
                         if settings.focusSelection == 1 {
-                            if settings.gender == "Male" {
+                            if settings.gender == .male {
                                 Text("Target Male Range")
-                            } else if settings.gender == "Female" {
+                            } else if settings.gender == .female {
                                 Text("Target Female Range")
                             } else {
                                 Text("Target Range")
                             }
                         } else {
-                            if settings.gender == "Male" {
+                            if settings.gender == .male {
                                 Text("Typical Male Range")
-                            } else if settings.gender == "Female" {
+                            } else if settings.gender == .female {
                                 Text("Typical Female Range")
                             } else {
                                 Text("Typical Range")
@@ -343,26 +343,27 @@ struct PitchTab: View {
                 }
                 .padding(.top, showTitle ? 15 : -20)
                 
+                // I think the wording here was left slightly confusing. I think each label is supposed to indicate what it's currently set to, instead of what the button will do
                 HStack {
                     if settings.focusSelection == 4 {
                         switch settings.gender {
-                        case "Male":
-                            Button("Set to Male") {
-                                self.settings.gender = "Female"
+                            case .male:
+                                Button("Set to Male") {
+                                    self.settings.gender = .female
+                                }
+                            case .female:
+                                Button("Set to Female") {
+                                    self.settings.gender = .nonbinary
+                                }
+                            case .nonbinary:
+                                Button("Set to Non-Binary") {
+                                    self.settings.gender = .male
+                                }
+                            default:
+                                Button("No threshold set") {
+                                    self.settings.gender = .male
+                                }
                             }
-                        case "Female":
-                            Button("Set to Female") {
-                                self.settings.gender = "Non-binary"
-                            }
-                        case "Non-binary":
-                            Button("Set to Non-Binary") {
-                                self.settings.gender = "Male"
-                            }
-                        default:
-                            Button("No threshold set") {
-                                self.settings.gender = "Male"
-                            }
-                        }
                     }
                 }
                 .foregroundColor(Color.white)
@@ -403,8 +404,8 @@ struct PitchTab: View {
 }
 
 struct DurationTab: View {
-    @EnvironmentObject var settings: Settings
-    
+    @ObservedObject var settings = Settings.shared
+
     @Binding var showTitle: Bool
     
     @Binding var thresholdPopUps: (Bool, Bool, Bool)
@@ -442,17 +443,17 @@ struct DurationTab: View {
                         // Typical male range
                         // target range if trans
                         if settings.focusSelection == 1 {
-                            if settings.gender == "Male" {
+                            if settings.gender == .male {
                                 Text("Target Male Range")
-                            } else if settings.gender == "Female" {
+                            } else if settings.gender == .female {
                                 Text("Target Female Range")
                             } else {
                                 Text("Target Range")
                             }
                         } else {
-                            if settings.gender == "Male" {
+                            if settings.gender == .male {
                                 Text("Typical Male Range")
-                            } else if settings.gender == "Female" {
+                            } else if settings.gender == .female {
                                 Text("Typical Female Range")
                             } else {
                                 Text("Typical Range")
@@ -500,8 +501,8 @@ struct DurationTab: View {
 }
 
 struct QualityTab: View {
-    @EnvironmentObject var settings: Settings
-    
+    @ObservedObject var settings = Settings.shared
+
     @Binding var showTitle: Bool
     
     @Binding var thresholdPopUps: (Bool, Bool, Bool)

@@ -12,8 +12,8 @@ import AVFAudio
 struct ProgressView: View {
     @EnvironmentObject var entries: Entries
     @EnvironmentObject var audioRecorder: AudioRecorder
-    @EnvironmentObject var settings: Settings
-    
+    @ObservedObject var settings = Settings.shared
+
     @State var filters: [String] = []
     @State var filteredList: [Element] = []
     @State var deletionTarget: (Date, String) = (.now, "")
@@ -66,15 +66,9 @@ struct ProgressView: View {
         }
         .onChange(of: tappedRecording) { _ in
             targetItem()
-            /*print("calling here")
-            if !expandAll {
-                self.showRecordDetails = true
-            } else {
-                self.showRecordDetails = false
-            }*/
         }
         .onChange(of: showRecordDetails) { change in
-            print("ShowRecordingDetails? \(change)")
+            Logging.defaultLog.notice("ShowRecordingDetails state: \(change)")
         }
     }
 }
@@ -312,6 +306,5 @@ struct ProgressView_Previews: PreviewProvider {
         ProgressView()
             .environmentObject(AudioRecorder())
             .environmentObject(Entries())
-            .environmentObject(Settings())
     }
 }

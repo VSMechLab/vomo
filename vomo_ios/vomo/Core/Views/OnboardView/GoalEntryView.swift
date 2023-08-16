@@ -11,8 +11,8 @@ struct GoalEntryView: View {
     @Environment(\.openURL) var openURL
     
     @EnvironmentObject var notification: Notification
-    @EnvironmentObject var settings: Settings
-    
+    @ObservedObject var settings = Settings.shared
+
     @State private var svm = SharedViewModel()
     @State private var recordPerWeek = 0
     @State private var questsPerWeek = 0
@@ -222,12 +222,12 @@ extension GoalEntryView {
                     }
                     .padding(.bottom, 10)
                     
-                    Text(notification.getStatus() ? "You have enabled notifications, you will recieve one per day" : "You have not allowed notifications. You may change this by accessing Settings -> Vomo -> Notifications -> Allow Notifications.")
+                    Text(notification.notificationsAllowed ? "You have enabled notifications, you will recieve one per day" : "You have not allowed notifications. You may change this by accessing Settings -> Vomo -> Notifications -> Allow Notifications.")
                         .font(._bodyCopy)
                         .foregroundColor(Color.BODY_COPY)
                         .padding(.bottom)
                     
-                    if !notification.getStatus() {
+                    if !notification.notificationsAllowed {
                         Button(action: {
                             if #available(iOS 16, *) {
                                 openURL(URL(string: UIApplication.openNotificationSettingsURLString)!)
@@ -253,7 +253,7 @@ extension GoalEntryView {
                         if numWeeks != 0 {
                             Button("SET GOAL") {
                                 settings.setGoal(nWeeks: numWeeks, records: recordPerWeek, quests: questsPerWeek, journs: journalsPerWeek)
-                                notification.updateNotifications(triggers: settings.triggers())
+//                                notification.updateNotifications(triggers: settings.triggers())
                             }.buttonStyle(SubmitButton())
                             .padding(.top, 10)
                         } else {
@@ -284,7 +284,6 @@ extension GoalEntryView {
 struct GoalEntryView_Previews: PreviewProvider {
     static var previews: some View {
         GoalEntryView()
-            .environmentObject(Notification())
-            .environmentObject(Settings())
+            .environmentObject(Notification.shared)
     }
 }
