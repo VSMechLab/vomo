@@ -11,8 +11,8 @@ import SwiftUI
 //var tabs = ["Summary", "Pitch", "Duration", "Quality", "Survey"]
 
 struct Graphic: View {
-    @EnvironmentObject var settings: Settings
-    
+    @ObservedObject var settings = Settings.shared
+
     @Binding var thresholdPopUps: (Bool, Bool, Bool)
     @Binding var tappedRecording: Date
     @Binding var showBaseline: (Bool, Int)

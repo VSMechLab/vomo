@@ -153,18 +153,7 @@ extension PersonalQuestionView {
             Text("First Name")
                 .font(._fieldLabel)
             
-            ZStack {
-                Image(entry_img)
-                    .resizable()
-                    .frame(width: svm.content_width, height: toggleHeight)
-                    .cornerRadius(7)
-                
-                HStack {
-                    TextField(self.settings.firstName.isEmpty ? "First Name" : self.settings.firstName, text: $settings.firstName)
-                        .font(self.settings.firstName.isEmpty ? ._fieldCopyItalic : ._fieldCopyRegular)
-                        .autocorrectionDisabled(true)
-                }.padding(.horizontal, 5)
-            }.frame(width: svm.content_width, height: toggleHeight)
+            NameEntryField(topic: $settings.firstName, label: "First Name", type: .givenName)
         }
     }
     
@@ -173,18 +162,7 @@ extension PersonalQuestionView {
             Text("Last Name")
                 .font(._fieldLabel)
             
-            ZStack {
-                Image(entry_img)
-                    .resizable()
-                    .frame(width: svm.content_width, height: toggleHeight)
-                    .cornerRadius(7)
-                
-                HStack {
-                    TextField(self.settings.lastName.isEmpty ? "Last Name" : self.settings.lastName, text: $settings.lastName)
-                        .font(self.settings.lastName.isEmpty ? ._fieldCopyItalic : ._fieldCopyRegular)
-                        .autocorrectionDisabled(true)
-                }.padding(.horizontal, 5)
-            }.frame(width: svm.content_width, height: toggleHeight)
+            NameEntryField(topic: $settings.lastName, label: "Last Name", type: .familyName)
         }
     }
     

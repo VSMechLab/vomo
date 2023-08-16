@@ -461,8 +461,8 @@ class DocumentPicker: NSObject, UIDocumentPickerDelegate {
 }
 
 struct SummaryOrderEditor: View {
-    @EnvironmentObject var settings: Settings
-    
+    @ObservedObject var settings = Settings.shared
+
     var body: some View {
         NavigationView {
             List {
