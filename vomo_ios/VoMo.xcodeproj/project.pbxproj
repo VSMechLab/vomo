@@ -25,6 +25,7 @@
 		22253A292A103394004FD26B /* Roboto-LightItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 22253A1D2A103394004FD26B /* Roboto-LightItalic.ttf */; };
 		22253A2A2A103394004FD26B /* Roboto-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 22253A1E2A103394004FD26B /* Roboto-Medium.ttf */; };
 		2239BC002A259386001D154D /* DebugMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2239BBFF2A259386001D154D /* DebugMenuView.swift */; };
+		2273A0662A8FBDFF00E76699 /* AmbientNoiseCheckView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2273A0652A8FBDFF00E76699 /* AmbientNoiseCheckView.swift */; };
 		22CF5B6C2A3CA57F00F06663 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 22CF5B6B2A3CA57F00F06663 /* README.md */; };
 		22CF5B6E2A3CA59400F06663 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 22CF5B6D2A3CA59400F06663 /* .gitignore */; };
 		22D005BA2A4A2FC7001DC57A /* ExerciseSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D005B92A4A2FC7001DC57A /* ExerciseSelectionView.swift */; };
@@ -724,6 +725,7 @@
 				AD00C73E29F720940017385E /* RecordView.swift */,
 				221254282A39568A001035E5 /* FeedbackRecordView.swift */,
 				22D005B92A4A2FC7001DC57A /* ExerciseSelectionView.swift */,
+				2273A0652A8FBDFF00E76699 /* AmbientNoiseCheckView.swift */,
 			);
 			path = RecordView;
 			sourceTree = "<group>";
@@ -947,6 +949,7 @@
 				AD9EC70528050DBF007F0395 /* PlayButton.swift in Sources */,
 				AD81B71528BEAE84009920FB /* HBarChart.swift in Sources */,
 				AD67CEC828A49673006AF596 /* NoButton.swift in Sources */,
+				2273A0662A8FBDFF00E76699 /* AmbientNoiseCheckView.swift in Sources */,
 				ADBDFF8628C2663000518354 /* ViewController.swift in Sources */,
 				AD00C75029F720B20017385E /* TreatmentRow.swift in Sources */,
 				AD00C77C29F721BC0017385E /* DateEntryField.swift in Sources */,

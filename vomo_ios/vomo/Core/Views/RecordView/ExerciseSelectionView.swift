@@ -12,7 +12,9 @@ struct ExerciseSelectionView: View {
     @EnvironmentObject var settings: Settings
     
     @State var isShowingRecordingView = false
-    @State var targetFrequency = 500 // in Hz
+    @State var isShowingAmbientNoiseCheckView = false
+    
+    @State var targetFrequency = 50 // in Hz
     @State var syllableCount = 2 // move to global definition with exercise manager
     
     @FocusState private var focused: Bool
@@ -37,7 +39,7 @@ struct ExerciseSelectionView: View {
             Spacer()
             
             Button {
-                isShowingRecordingView = true
+                isShowingAmbientNoiseCheckView = true
             } label: {
                 Label("Start Exercise", systemImage: "mic.fill")
                     .font(.system(size: 20, weight: .medium))
@@ -49,6 +51,10 @@ struct ExerciseSelectionView: View {
             
         }
         .padding()
+        
+        .fullScreenCover(isPresented: $isShowingAmbientNoiseCheckView, content: {
+            AmbientNoiseCheckView(isShowingRecordingView: $isShowingRecordingView)
+        })
         
         .fullScreenCover(isPresented: $isShowingRecordingView, content: {
             FeedbackRecordView(targetPitch: targetFrequency, syllableCount: syllableCount)

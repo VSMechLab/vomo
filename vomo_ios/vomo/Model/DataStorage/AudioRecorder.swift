@@ -268,9 +268,14 @@ class AudioRecorder: NSObject, ObservableObject {
     }
     
     func stopRecording() {
-        if (audioRecorder.isRecording) {
-            audioRecorder.stop()
-        }
+
+        #if targetEnvironment(simulator)
+            // nothing is here because calling audioRecording.isRecording crashes the app when run in simulator
+        #else
+            if (audioRecorder.isRecording) {
+                audioRecorder.stop()
+            }
+        #endif
         
         if (captureSession.isRunning) {
             captureSession.stopRunning()
@@ -720,7 +725,7 @@ extension AudioRecorder {
         // TODOSW this is ugly
         // returnArr[0] is mean db, returnArr[1] is mean pitch
         average = Float(returnArr[0] - 100) // dogshit bad code written by Sam Weese for the display of db -Sam Weese
-        average = Float(returnArr[1])
+//        average = Float(returnArr[1])
         print(average)
         // clearing circle buffer
         if frequencyDomainValues.count > AudioRecorder.sampleCount {

@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 
 @MainActor
-class WaveformPointsManager: ObservableObject {
+fileprivate class WaveformPointsManager: ObservableObject {
                     
     struct Points {
         
@@ -62,20 +62,26 @@ struct FeedbackWaveform: View {
     
     @ObservedObject var audioRecorder = AudioRecorder.shared
 
-    var waveform: WaveformPointsManager = .shared
+    fileprivate var waveform: WaveformPointsManager = .shared
     
     public let size: CGSize
+    public let targetPitch: Int // in Hz
     
     // config visual elements here
     private let pointSpacing: CGFloat = 3.0
     private let pointSize: CGSize = .init(width: 4, height: 4)
     
-    init(size: CGSize) {
+    private let tolerance: Float = 0.025
+    
+    init(size: CGSize, targetPitch: Int) {
         self.size = size
+        self.targetPitch = targetPitch
         
         // observe for nyqFreq changes
         _ = audioRecorder.$nyqFreq.sink { freq in
-            WaveformPointsManager.shared.points.add((freq*50)/3400)
+//            WaveformPointsManager.shared.points.add((freq*50)/3400)
+            WaveformPointsManager.shared.points.add((100-freq)/100)
+
         }
     }
     
@@ -111,7 +117,19 @@ struct FeedbackWaveform: View {
                             let y = (CGFloat(point) * size.height)
                             let rect = CGRect(origin: CGPoint(x: x, y: y), size: pointSize)
                             let path = Circle().path(in: rect)
-                            context.fill(path, with: .color(.MEDIUM_PURPLE))
+                            
+                            var color: Color
+                            let percentageTargetPitch = Float(100-targetPitch) / 100
+                            
+                            // check tolerance
+                            if point <= percentageTargetPitch + tolerance && point >= percentageTargetPitch - tolerance {
+                                color = .green
+                            } else {
+                                // red = too low, blue = too high
+                                color = (point < percentageTargetPitch) ? Color.blue : Color.red // MARK: Take out magic numbers. These are for db, not hz
+                            }
+                            
+                            context.fill(path, with: .color(color))
                         }
                     }
                 }
@@ -124,80 +142,6 @@ struct FeedbackWaveform: View {
     
 }
 
-struct FeedbackSyllables: View {
-    
-    var sentenceArray: [String] = []
-    var syllableCount: Int
-        
-    @State var index = 0
-    
-    init(syllableCount: Int) {
-        self.syllableCount = syllableCount
-        
-        if let sentence = ExerciseManager.fetch(for: syllableCount) {
-            sentenceArray = sentence.phrase.split(separator: " ").map({ String($0) })
-        } 
-    }
-    
-    var body: some View {
-        
-        HStack(spacing: 5) {
-            Spacer()
-            
-            ForEach(sentenceArray, id: \.self) { word in
-                Text(word)
-                    .font(.system(size: 25))
-                    .fontWeight((word == sentenceArray[index]) ? .bold : .regular)
-            }
-            
-            Spacer()
-        }
-        .padding(.top)
-    }
-}
-
-struct FeedbackVolume: View {
-    var body: some View {
-        VStack {
-            Spacer()
-            
-            ZStack(alignment: .leading) {
-                
-                RoundedRectangle(cornerRadius: 10)
-                    .stroke(.black, lineWidth: 1)
-                    .foregroundColor(.white)
-                
-                RoundedRectangle(cornerRadius: 10)
-                    .foregroundColor(.MEDIUM_PURPLE)
-                    .frame(width: 100)
-                
-                Rectangle()
-                    .frame(width: 3)
-                    .foregroundColor(.green)
-                    .offset(x: 200, y: 0)
-                
-            }
-            .frame(height: 35)
-            .padding()
-        }
-    }
-}
-
-struct FeedbackPitchTarget: View {
-    
-    var size: CGSize
-    var targetPitch: CGFloat
-    
-    var body: some View {
-        VStack {
-            Rectangle()
-                .frame(height: 1)
-                .foregroundColor(.green)
-                .position(x: size.width / 2, y: size.height - (size.height * CGFloat(targetPitch / 3400)))
-        }
-    }
-}
-
 struct FeedbackRecordView: View {
     
     @Environment(\.dismiss) private var dismiss
@@ -207,44 +151,27 @@ struct FeedbackRecordView: View {
     var targetPitch: Int
     var syllableCount: Int
     
+    @State var currentSyllable: Int = 0
+    
     @State var isShowingCloseConfirmationAlert: Bool = false
     
     var body: some View {
         
         VStack {
             
+            syllables()
+            
             GeometryReader { proxy in
                 
-                VStack {
-                                        
-                    FeedbackSyllables(syllableCount: syllableCount)
-                    
-                    FeedbackWaveform(size: proxy.size)
-                                        
-                }
+                FeedbackWaveform(size: proxy.size, targetPitch: targetPitch)
                 
-                FeedbackPitchTarget(size: proxy.size, targetPitch: CGFloat(targetPitch))
-                
+                targetPitchIndicator(size: proxy.size)
+
             }
-                        
+            
             recordingControls()
-                .padding(.horizontal)
             
         }
-        
-        #if targetEnvironment(simulator)
-        
-        .overlay {
-            VStack(spacing: 15) {
-                Image(systemName: "exclamationmark.triangle.fill")
-                    .foregroundColor(.red)
-                    .font(.system(size: 50))
-                Text("Microphone not available in simulator")
-                    .font(.headline)
-            }
-        }
-
-        #endif
         
         .alert("Are you sure you want to end this exercise?", isPresented: $isShowingCloseConfirmationAlert) {
             Button(role: .destructive) {
@@ -253,12 +180,44 @@ struct FeedbackRecordView: View {
             } label: {
                 Text("End")
             }
-
         }
     }
     
     @ViewBuilder
+    private func targetPitchIndicator(size: CGSize) -> some View {
+        VStack {
+            Rectangle()
+                .frame(width: size.width, height: 2)
+                .foregroundColor(.green)
+                .position(x: size.width / 2, y: size.height * (CGFloat(100-targetPitch) / 100))
+        }
+    }
+    
+    private func syllables() -> some View {
+        
+        var sentenceArray: [String] = []
+            
+        if let sentence = ExerciseManager.fetch(for: syllableCount) {
+            sentenceArray = sentence.phrase.split(separator: " ").map({ String($0) })
+        }
+        
+        return HStack(spacing: 5) {
+            Spacer()
+            
+            ForEach(sentenceArray, id: \.self) { word in
+                Text(word)
+                    .font((word == sentenceArray[currentSyllable]) ? Font.custom("Roboto", size: 35) : Font.custom("Roboto-Medium", size: 35))
+//                    .fontWeight((word == sentenceArray[currentSyllable]) ? .bold : .regular)
+            }
+            
+            Spacer()
+        }
+        .frame(height: 70)
+    }
+    
+    @ViewBuilder
     private func recordingControls() -> some View {
+        
         HStack(alignment: .center) {
             
             Button {
@@ -267,32 +226,18 @@ struct FeedbackRecordView: View {
                 Image(systemName: "xmark.circle.fill")
                     .font(.system(size: 40))
             }
-            
-            Spacer()
-            
+                        
             Button {
-                
-                if (audioRecorder.grantedPermission()) {
-                    
-                    if (audioRecorder.recording) {
-                        audioRecorder.stopRecording()
-                    } else {
-                        audioRecorder.startRecording(taskNum: 1)
-                    }
+                if (audioRecorder.recording) {
+                    audioRecorder.stopRecording()
+                } else {
+                    audioRecorder.startRecording(taskNum: 1)
                 }
-                
             } label: {
-                Image(systemName: (audioRecorder.recording) ? "pause.circle.fill" : "play.circle.fill")
-                    .font(.system(size: 65))
-            }
-            
-            Spacer()
-            
-            Button {
-                
-            } label: {
-                Image(systemName: "ellipsis.circle.fill")
-                    .font(.system(size: 40))
+                Image((audioRecorder.recording) ? "VM_stop-nav-ds-icon" : "VM_record-nav-ds-icon")
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 120)
             }
             
         }
@@ -302,6 +247,6 @@ struct FeedbackRecordView: View {
 
 struct FeedbackRecordView_Preview: PreviewProvider {
     static var previews: some View {
-        FeedbackRecordView(targetPitch: 400, syllableCount: 2)
+        FeedbackRecordView(targetPitch: 50, syllableCount: 2)
     }
 }
