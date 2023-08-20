@@ -25,7 +25,8 @@
 		22253A292A103394004FD26B /* Roboto-LightItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 22253A1D2A103394004FD26B /* Roboto-LightItalic.ttf */; };
 		22253A2A2A103394004FD26B /* Roboto-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 22253A1E2A103394004FD26B /* Roboto-Medium.ttf */; };
 		2239BC002A259386001D154D /* DebugMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2239BBFF2A259386001D154D /* DebugMenuView.swift */; };
-		2273A0662A8FBDFF00E76699 /* AmbientNoiseCheckView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2273A0652A8FBDFF00E76699 /* AmbientNoiseCheckView.swift */; };
+		2270A8E02A92B64700CCDE9F /* AmbientNoiseCheckView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2270A8DF2A92B64700CCDE9F /* AmbientNoiseCheckView.swift */; };
+		2273A0662A8FBDFF00E76699 /* (null) in Sources */ = {isa = PBXBuildFile; };
 		22CF5B6C2A3CA57F00F06663 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 22CF5B6B2A3CA57F00F06663 /* README.md */; };
 		22CF5B6E2A3CA59400F06663 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 22CF5B6D2A3CA59400F06663 /* .gitignore */; };
 		22D005BA2A4A2FC7001DC57A /* ExerciseSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D005B92A4A2FC7001DC57A /* ExerciseSelectionView.swift */; };
@@ -174,6 +175,7 @@
 		22253A1D2A103394004FD26B /* Roboto-LightItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Roboto-LightItalic.ttf"; path = "vomo/Fonts/Roboto-LightItalic.ttf"; sourceTree = SOURCE_ROOT; };
 		22253A1E2A103394004FD26B /* Roboto-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Roboto-Medium.ttf"; path = "vomo/Fonts/Roboto-Medium.ttf"; sourceTree = SOURCE_ROOT; };
 		2239BBFF2A259386001D154D /* DebugMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DebugMenuView.swift; path = vomo/Core/Views/DebugMenuView.swift; sourceTree = SOURCE_ROOT; };
+		2270A8DF2A92B64700CCDE9F /* AmbientNoiseCheckView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AmbientNoiseCheckView.swift; path = vomo/Core/Views/RecordView/AmbientNoiseCheckView.swift; sourceTree = SOURCE_ROOT; };
 		22CF5B6B2A3CA57F00F06663 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		22CF5B6D2A3CA59400F06663 /* .gitignore */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = .gitignore; path = ../.gitignore; sourceTree = "<group>"; };
 		22D005B92A4A2FC7001DC57A /* ExerciseSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ExerciseSelectionView.swift; path = vomo/Core/Views/RecordView/ExerciseSelectionView.swift; sourceTree = SOURCE_ROOT; };
@@ -721,6 +723,7 @@
 		ADB4A84329386E78003D8556 /* RecordView */ = {
 			isa = PBXGroup;
 			children = (
+				2270A8DF2A92B64700CCDE9F /* AmbientNoiseCheckView.swift */,
 				AD00C73D29F720940017385E /* RecordAction.swift */,
 				AD00C73E29F720940017385E /* RecordView.swift */,
 				221254282A39568A001035E5 /* FeedbackRecordView.swift */,
@@ -886,6 +889,7 @@
 				221861772A2503DE00F63D0A /* AppDelegate.swift in Sources */,
 				AD00C75C29F720C10017385E /* SetThreshold.swift in Sources */,
 				AD00C77D29F721BC0017385E /* Arrow.swift in Sources */,
+				2270A8E02A92B64700CCDE9F /* AmbientNoiseCheckView.swift in Sources */,
 				AD67CEC228A49646006AF596 /* TabIcons.swift in Sources */,
 				ADB402042A2FA58A0001001E /* ShareButton.swift in Sources */,
 				AD81B73128BFDBF6009920FB /* Settings.swift in Sources */,
@@ -949,7 +953,7 @@
 				AD9EC70528050DBF007F0395 /* PlayButton.swift in Sources */,
 				AD81B71528BEAE84009920FB /* HBarChart.swift in Sources */,
 				AD67CEC828A49673006AF596 /* NoButton.swift in Sources */,
-				2273A0662A8FBDFF00E76699 /* AmbientNoiseCheckView.swift in Sources */,
+				2273A0662A8FBDFF00E76699 /* (null) in Sources */,
 				ADBDFF8628C2663000518354 /* ViewController.swift in Sources */,
 				AD00C75029F720B20017385E /* TreatmentRow.swift in Sources */,
 				AD00C77C29F721BC0017385E /* DateEntryField.swift in Sources */,
