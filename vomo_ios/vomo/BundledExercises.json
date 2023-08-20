@@ -1,0 +1,167 @@
+
+{
+    "exercises": [
+        
+        {
+            "syllableCount": 2,
+            "length": 2,
+            "name": "Time flies",
+            "words": [
+                {
+                    "word": "Time",
+                    "syllables": [
+                        {
+                            "syllable": "Time",
+                            "targetPitch": 60,
+                            "length": 1
+                        }
+                    ]
+                },
+                {
+                    "word": "flies",
+                    "syllables": [
+                        {
+                            "syllable": "flies",
+                            "targetPitch": 40,
+                            "length": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        
+        {
+            "syllableCount": 3,
+            "length": 3,
+            "name": "Bring it back",
+            "words": [
+                {
+                    "word": "Bring",
+                    "syllables": [
+                        {
+                            "syllable": "Bring",
+                            "targetPitch": 60,
+                            "length": 1
+                        }
+                    ]
+                },
+                {
+                    "word": "it",
+                    "syllables": [
+                        {
+                            "syllable": "it",
+                            "targetPitch": 40,
+                            "length": 1
+                        }
+                    ]
+                },
+                {
+                    "word": "back",
+                    "syllables": [
+                        {
+                            "syllable": "back",
+                            "targetPitch": 40,
+                            "length": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        
+        {
+            "syllableCount": 4,
+            "length": 4,
+            "name": "Cold and snowy",
+            "words": [
+                {
+                    "word": "Cold",
+                    "syllables": [
+                        {
+                            "syllable": "Bring",
+                            "targetPitch": 60,
+                            "length": 1
+                        }
+                    ]
+                },
+                {
+                    "word": "and",
+                    "syllables": [
+                        {
+                            "syllable": "it",
+                            "targetPitch": 40,
+                            "length": 1
+                        }
+                    ]
+                },
+                {
+                    "word": "snowy",
+                    "syllables": [
+                        {
+                            "syllable": "snow",
+                            "targetPitch": 40,
+                            "length": 1
+                        },
+                        {
+                            "syllable": "y",
+                            "targetPitch": 20,
+                            "length": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        
+        {
+            "syllableCount": 5,
+            "length": 5,
+            "name": "Come back right away",
+            "words": [
+                {
+                    "word": "Come",
+                    "syllables": [
+                        {
+                            "syllable": "Come",
+                            "targetPitch": 60,
+                            "length": 1
+                        }
+                    ]
+                },
+                {
+                    "word": "back",
+                    "syllables": [
+                        {
+                            "syllable": "back",
+                            "targetPitch": 40,
+                            "length": 1
+                        }
+                    ]
+                },
+                {
+                    "word": "right",
+                    "syllables": [
+                        {
+                            "syllable": "right",
+                            "targetPitch": 50,
+                            "length": 1
+                        }
+                    ]
+                },
+                {
+                    "word": "away",
+                    "syllables": [
+                        {
+                            "syllable": "a",
+                            "targetPitch": 40,
+                            "length": 1
+                        },
+                        {
+                            "syllable": "way",
+                            "targetPitch": 20,
+                            "length": 1
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

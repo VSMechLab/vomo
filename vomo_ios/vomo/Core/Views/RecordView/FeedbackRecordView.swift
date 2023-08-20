@@ -198,7 +198,7 @@ struct FeedbackRecordView: View {
         var sentenceArray: [String] = []
             
         if let sentence = ExerciseManager.fetch(for: syllableCount) {
-            sentenceArray = sentence.phrase.split(separator: " ").map({ String($0) })
+            sentenceArray = sentence.words.map({ $0.word })
         }
         
         return HStack(spacing: 5) {
@@ -206,8 +206,7 @@ struct FeedbackRecordView: View {
             
             ForEach(sentenceArray, id: \.self) { word in
                 Text(word)
-                    .font((word == sentenceArray[currentSyllable]) ? Font.custom("Roboto", size: 35) : Font.custom("Roboto-Medium", size: 35))
-//                    .fontWeight((word == sentenceArray[currentSyllable]) ? .bold : .regular)
+                    .font(Font.custom("Roboto-Medium", size: 35))
             }
             
             Spacer()

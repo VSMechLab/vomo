@@ -36,6 +36,26 @@ struct ExerciseSelectionView: View {
             
             syllableDifficultyPicker()
             
+            #if DEBUG
+            // MARK: Debug – Loaded Exercises
+            Divider()
+            
+            HStack {
+                Text("Loaded Exercises (Debug)")
+                    .font(._BTNCopy)
+                Spacer()
+            }
+            
+            ForEach(Array(ExerciseManager.library?.exercises ?? []), id: \.name) { exercise in
+                HStack {
+                    Text("\(exercise.name)")
+                    Spacer()
+                    Text("\(exercise.syllableCount) Syllables")
+                        .font(.subheadline)
+                }
+            }
+            #endif
+            
             Spacer()
             
             Button {
