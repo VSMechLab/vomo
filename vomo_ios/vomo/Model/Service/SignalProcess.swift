@@ -62,13 +62,15 @@ extension AudioRecorder {
                     //["Other", "Genderqueer", "Non-binary", "Female", "Male"]
                     // Define minPitch based on gender
                     var minPitch, maxPitch: Double
-                    if gender == "3" {
+                    
+                    switch gender {
+                    case "3":
                         minPitch = 90.0
                         maxPitch = 500.0
-                    } else if gender == "4" {
+                    case "4":
                         minPitch = 60.0
                         maxPitch = 300.0
-                    } else {
+                    default:
                         minPitch = 60.0
                         maxPitch = 500.0
                     }
