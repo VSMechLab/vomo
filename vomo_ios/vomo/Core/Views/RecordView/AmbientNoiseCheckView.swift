@@ -31,7 +31,7 @@ struct AmbientNoiseCheckView: View {
                 Text("\(countdown)")
                     .font(._large_title)
                 
-                Text("\(audioRecorder.nyqFreq): \((audioRecorder.nyqFreq < loudnessThreshold) ? "Ok loudness" : "Too loud")")
+                Text("\(audioRecorder.outAverage): \((audioRecorder.outAverage < loudnessThreshold) ? "Ok loudness" : "Too loud")")
                 
                 Text("Make sure you're in a quiet space")
                     .font(._title)

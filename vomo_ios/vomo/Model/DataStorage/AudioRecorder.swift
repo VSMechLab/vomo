@@ -14,16 +14,11 @@ import Accelerate // CHANGED: imported for vector math
 import AudioKit // CHANGED: also a package dependency
 import AVFAudio
 
-struct Processings {
-    var duration = Float(0) // Seconds
-    var intensity = Float(0) // Decibels
-    var pitch_mean = Float(0) // Hertz
-    var pitch_min = Float(0) // Hertz
-    var pitch_max = Float(0) // Hertz
-}
 
 /// AudioRecorder - stores audio files, saved processings of files and functions for the files
 class AudioRecorder: NSObject, ObservableObject {
+    
+    let outputfilename:URL = URL(fileURLWithPath:"/Users/sweesemac/Documents/output.txt")
     
     static let shared = AudioRecorder()
     
@@ -49,7 +44,7 @@ class AudioRecorder: NSObject, ObservableObject {
     
     @Published var gain: Float = 0.025
     @Published var zeroReference: Double = 1000
-    @Published var nyqFreq: Float = 0
+    @Published var outAverage: Float = 0
 
     // MARK: Properties
     // TODOSW
@@ -57,6 +52,7 @@ class AudioRecorder: NSObject, ObservableObject {
     //let inputNode = AVAudioInputNode()
     /// The number of samples per frame — the height of the spectrogram.
     var average:Float = 0
+    var oldAvg:Float = 0
     static let sampleCount = 1024
     
     /// The number of displayed buffers — the width of the spectrogram.
@@ -711,6 +707,7 @@ extension AudioRecorder {
 }
  */
 extension AudioRecorder {
+
     func processData(values: [Int16], gender: String) {
         
         vDSP.convertElements(of: values,
@@ -725,7 +722,8 @@ extension AudioRecorder {
         // TODOSW this is ugly
         // returnArr[0] is mean db, returnArr[1] is mean pitch
         average = Float(returnArr[0] - 100) // dogshit bad code written by Sam Weese for the display of db -Sam Weese
-//        average = Float(returnArr[1])
+        
+        average = Float(returnArr[1])
         print(average)
         // clearing circle buffer
         if frequencyDomainValues.count > AudioRecorder.sampleCount {

@@ -77,8 +77,8 @@ struct FeedbackWaveform: View {
         self.size = size
         self.targetPitch = targetPitch
         
-        // observe for nyqFreq changes
-        _ = audioRecorder.$nyqFreq.sink { freq in
+        // observe for outAverage changes
+        _ = audioRecorder.$outAverage.sink { freq in
 //            WaveformPointsManager.shared.points.add((freq*50)/3400)
             WaveformPointsManager.shared.points.add((100-freq)/100)
 
