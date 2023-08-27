@@ -37,19 +37,33 @@ struct AmbientNoiseCheckView: View {
                     .font(._title)
                     .multilineTextAlignment(.center)
                 
+                Spacer()
+                
+                #if DEBUG
                 Button {
                     self.dismiss()
                     self.isShowingRecordingView = true
                 } label: {
-                    Text("Continue")
+                    Text("(DEBUG) Continue")
                 }
+                #endif
                 
-                Spacer()
             }
             .foregroundStyle(.white)
             
             // MARK: TEMP
             .onAppear() {
+                
+                _ = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { timer in
+                    if (countdown > 0) {
+                        countdown -= 1
+                    } else {
+                        timer.invalidate()
+                        self.dismiss()
+                        self.isShowingRecordingView = true
+                    }
+                }
+                
                 audioRecorder.startRecording(taskNum: 1)
             }
             

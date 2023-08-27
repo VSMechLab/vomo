@@ -45,7 +45,7 @@ fileprivate class WaveformPointsManager: ObservableObject {
         
     }
     
-    static let shared = WaveformPointsManager(count: 130) // TODO: Replace this magic number. Represents number of points across screen at one time
+    static let shared = WaveformPointsManager(count: 100) // TODO: Replace this magic number. Represents number of points across screen at one time
     
     @Published var points: Points
     
@@ -68,7 +68,6 @@ struct FeedbackWaveform: View {
     public let targetPitch: Int // in Hz
     
     // config visual elements here
-    private let pointSpacing: CGFloat = 3.0
     private let pointSize: CGSize = .init(width: 4, height: 4)
     
     private let tolerance: Float = 0.025
@@ -77,12 +76,30 @@ struct FeedbackWaveform: View {
         self.size = size
         self.targetPitch = targetPitch
         
+        // MARK: Start sin wave in simulator
+        #if targetEnvironment(simulator)
+        
+        let amplitude: Float = 0.25  // Amplitude of the sine wave
+        let frequency: Float = 10.0  // Frequency of the sine wave (in Hz)
+        var time: Float = 0.0
+        
+        _ = Timer.scheduledTimer(withTimeInterval: 0.01, repeats: true, block: { _ in
+            Task {
+                let value = amplitude * sin(2 * Float.pi * frequency * time) + 0.5
+                time += 0.001
+                await WaveformPointsManager.shared.points.add(value)
+            }
+        })
+        
+        #else
+        
         // observe for nyqFreq changes
         _ = audioRecorder.$nyqFreq.sink { freq in
 //            WaveformPointsManager.shared.points.add((freq*50)/3400)
             WaveformPointsManager.shared.points.add((100-freq)/100)
-
         }
+        
+        #endif
     }
     
     @ViewBuilder
@@ -101,7 +118,7 @@ struct FeedbackWaveform: View {
         
         VStack {
             
-            lineLabel("3400")
+            lineLabel("300")
             
             TimelineView(.animation) { timeline in
                                 
@@ -113,7 +130,7 @@ struct FeedbackWaveform: View {
                     for index in stride(from: 0, to: waveform.points.count, by: 1) {
                         
                         if let point = waveform.points[index] {
-                            let x = CGFloat(index) * pointSpacing
+                            let x = (CGFloat(index) * ((size.width / 2) / 100)) // TODO: Replace this magic number somewhere
                             let y = (CGFloat(point) * size.height)
                             let rect = CGRect(origin: CGPoint(x: x, y: y), size: pointSize)
                             let path = Circle().path(in: rect)
@@ -135,8 +152,13 @@ struct FeedbackWaveform: View {
                 }
             }
             
-            lineLabel("300")
+            lineLabel("0")
             
+        }
+        .overlay {
+            Rectangle()
+                .frame(width: 1, height: size.height - 15)
+                .foregroundColor(Color(uiColor: .systemGray2))
         }
     }
     
