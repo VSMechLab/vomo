@@ -30,4 +30,5 @@ Temporary Items
 
 # Xcode User Settings
 */xcuserdata/*
-vomo_ios/VoMo.xcodeproj/xcuserdata/
+*vomo_ios/VoMo.xcodeproj/xcuserdata/*
+*vomo_ios/VoMo.xcodeproj/project.xcworkspace/xcuserdata/*

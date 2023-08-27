@@ -552,7 +552,7 @@ func pitch_PathFinder(pitchFrame frames: [pitchFrame],
                       ceiling maxPitch: Double) -> [Double] {
     
     // Parameters
-    let silenceThreshold: Double = 0.03
+    let silenceThreshold: Double = 0.1
     let voicingThreshold: Double = 0.45
     let octaveCost: Double = 0.01
     let octaveJumpCost: Double = 0.35

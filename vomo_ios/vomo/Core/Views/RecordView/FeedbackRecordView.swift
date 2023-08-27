@@ -75,7 +75,7 @@ struct FeedbackWaveform: View {
     init(size: CGSize, targetPitch: Int) {
         self.size = size
         self.targetPitch = targetPitch
-        
+
         // MARK: Start sin wave in simulator
         #if targetEnvironment(simulator)
         
@@ -93,8 +93,8 @@ struct FeedbackWaveform: View {
         
         #else
         
-        // observe for nyqFreq changes
-        _ = audioRecorder.$nyqFreq.sink { freq in
+        // observe for outAverage changes
+        _ = audioRecorder.$outAverage.sink { freq in
 //            WaveformPointsManager.shared.points.add((freq*50)/3400)
             WaveformPointsManager.shared.points.add((100-freq)/100)
         }
