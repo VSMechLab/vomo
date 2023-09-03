@@ -66,6 +66,7 @@ extension AudioRecorder: AVCaptureAudioDataOutputSampleBufferDelegate {
         /// ensuring no loss of audio data.
         while self.rawAudioData.count >= AudioRecorder.sampleCount {
             let dataToProcess = Array(self.rawAudioData[0 ..< AudioRecorder.sampleCount])
+            
             self.rawAudioData.removeFirst(AudioRecorder.hopCount)
             self.processData(values: dataToProcess, gender:"3")
         }

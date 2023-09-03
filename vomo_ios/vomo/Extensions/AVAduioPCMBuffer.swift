@@ -766,13 +766,17 @@ extension AVAudioPCMBuffer {
                          maximumPitch ceiling: Double) -> [Double] {
         
         // Read data from buffer
-        let floatData = self.floatChannelData!
-
+        let floatData = self.floatChannelData! // is dones
+        print("FloatData:")
+        print(floatData[0])
         // Read format data
-        let channelNumber: Int = 0
+        let channelNumber: Int = 0 // is done
         let samplingRate: Double = Double(self.format.sampleRate)
+        print("samplingRate:")
+        print(samplingRate)
         let numSamples: Int = Int(self.frameLength)
-        
+        print("numSamples:")
+        print(numSamples)
         // Analysis parameters
         let acScalingMin: Double = 0.1
         let segmentSize: Double = 3.0 / pitchFloor
@@ -797,6 +801,9 @@ extension AVAudioPCMBuffer {
         
         // Convert input signal to type Double
         vDSP_vspdp(floatData[channelNumber], 1, &frameValues, 1, vDSP_Length(numSamples))
+        
+        print("frameValues:")
+        print(frameValues)
          
         // Compute mean, and change sign
         vDSP_meanvD(frameValues, 1, &mean, vDSP_Length(numSamples))

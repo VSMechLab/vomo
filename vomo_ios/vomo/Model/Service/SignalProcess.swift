@@ -280,7 +280,7 @@ extension AudioRecorder {
                                         sampleRate:Double(AudioRecorder.sampleCount),
                                         frameLength:AudioRecorder.bufferCount)
             
-            let pitchReturn = getPitch(floatChannelData:[floats],
+            let pitchReturn = getPitch(floatData:floats,
                                        minimumPitch: minPitch,
                                        maximumPitch: maxPitch,
                                        sampleRate: Double(AudioRecorder.sampleCount),
@@ -302,18 +302,11 @@ extension AudioRecorder {
         }
     }
 }
-
-func getPitch(floatChannelData:[[Float]], minimumPitch pitchFloor: Double, maximumPitch ceiling: Double, sampleRate:Double, frameLength:Int) -> [Double] {
+;
+func getPitch(floatData:[Float], minimumPitch pitchFloor: Double, maximumPitch ceiling: Double, sampleRate:Double, frameLength:Int) -> [Double] {
     
-    // Read data from buffer
-    let floatData = floatChannelData
-
-    // Read format data
-    let channelNumber: Int = 0
-    let samplingRate: Double = sampleRate
-    let numSamples: Int = frameLength
-    
-    // Analysis parameters
+    let numSamples = floatData.count
+    let samplingRate: Double = 16000.00
     let acScalingMin: Double = 0.1
     let segmentSize: Double = 3.0 / pitchFloor
     let timeStepSize: Double = 0.75 / pitchFloor
@@ -324,31 +317,12 @@ func getPitch(floatChannelData:[[Float]], minimumPitch pitchFloor: Double, maxim
     if (numSegments * timeStepSamples) < numSamples {
         numSegments += 1
     }
-    
-    // Initialize parameters
-    var globalPeak: Double = 0.0
-    var mean: Double = 0.0
-    var posOffset: Int = 0
-    
-    // Initialize vectors
     var pitchValues = Array<Double>(repeating: -1.0, count: numSegments)
     var pitchFrames = Array<pitchFrame>(repeating: pitchFrame(), count: numSegments)
-    var frameValues = Array<Double>(repeating: 0.0, count: numSamples)
     
-    // Convert input signal to type Double
-    vDSP_vspdp(floatData[channelNumber], 1, &frameValues, 1, vDSP_Length(numSamples))
-     
-    // Compute mean, and change sign
-    vDSP_meanvD(frameValues, 1, &mean, vDSP_Length(numSamples))
-    mean = -mean
-     
-    // Substract mean from input signal and compute absolute value
-    vDSP_vsaddD(frameValues, 1, &mean, &frameValues, 1, vDSP_Length(numSamples))
-    vDSP_vabsD(frameValues, 1, &frameValues, 1, vDSP_Length(numSamples))
-     
-    // Find global peak
-    vDSP_maxvD(frameValues, 1, &globalPeak, vDSP_Length(numSamples))
-     
+    var posOffset: Int = 0
+    var globalPeak: Double = 0.0
+    
     // Analysis per segment
     for segment in 0 ..< numSegments {
         var block = Array<Double>(repeating: 0.0, count: segmentSamples)
@@ -362,7 +336,7 @@ func getPitch(floatChannelData:[[Float]], minimumPitch pitchFloor: Double, maxim
             }
              
             // Read buffer data
-            block[idx] = Double(floatData[channelNumber][posOffset + idx])
+            block[idx] = Double(floatData[posOffset + idx])
         } // End for
         
         // Compute pitch for current segment
@@ -385,7 +359,10 @@ func getPitch(floatChannelData:[[Float]], minimumPitch pitchFloor: Double, maxim
      
     // Returns array of pitch values
     return pitchValues
+
+    
 } // End fxn, getPitch
+  
 
 func getSegmentPitch(from block: [Double],
                              segSize segmentSize: Int,
