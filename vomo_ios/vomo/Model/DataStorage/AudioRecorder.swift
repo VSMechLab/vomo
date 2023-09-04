@@ -712,7 +712,7 @@ extension AudioRecorder {
  */
 extension AudioRecorder {
     func processData(values: [Int16], gender: String) {
-        print(values)
+        //print(values)
         /*vDSP.convertElements(of: values,
                              to: &timeDomainBuffer)
         
@@ -724,9 +724,9 @@ extension AudioRecorder {
         var returnArr = signalProcessLive(values:values, gender: gender)
         // TODOSW this is ugly
         // returnArr[0] is mean db, returnArr[1] is mean pitch
-        average = Float(returnArr[1]) // dogshit bad code written by Sam Weese for the display of db -Sam Weese
+        average = Float(returnArr[0]) // dogshit bad code written by Sam Weese for the display of db -Sam Weese
 //        average = Float(returnArr[1])
-        //print(average)
+        //print("Sam-calculated volume: ",average)
         // clearing circle buffer
         if frequencyDomainValues.count > AudioRecorder.sampleCount {
             frequencyDomainValues.removeFirst(AudioRecorder.sampleCount)

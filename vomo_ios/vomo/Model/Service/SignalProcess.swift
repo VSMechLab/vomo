@@ -103,6 +103,7 @@ extension AudioRecorder {
 
                     // Create arrays with non-zero values only
                     // for both intensity and pitch results
+                    
                     var filteredIntensityValues = [Double]()
                     var filteredPitchValues = [Double]()
 
@@ -298,6 +299,7 @@ extension AudioRecorder {
                                                frameLength: AudioSpectrogram.bufferCount
                                         )
             */
+            print("Sam-calculated pitch: ",vDSP.mean(pitchReturn))
             return [vDSP.mean(dbReturn), vDSP.mean(pitchReturn)]//vDSP.mean(signalCPPValues)]
         }
     }
@@ -356,6 +358,8 @@ func getPitch(floatData:[Float], minimumPitch pitchFloor: Double, maximumPitch c
     pitchValues = pitch_PathFinder(pitchFrame: pitchFrames,
                                    minimumPitch: pitchFloor,
                                    ceiling: ceiling)
+    print("Sam pitches(VALUE): ", pitchFrames)
+
      
     // Returns array of pitch values
     return pitchValues

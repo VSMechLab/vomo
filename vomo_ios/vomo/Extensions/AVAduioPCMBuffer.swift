@@ -758,6 +758,7 @@ extension AVAudioPCMBuffer {
         } // End for
          
         // Return array of intensity values
+        //print("Intensity Llico: ", intensityValues)
         return intensityValues
     } // End fxn, getIntensity
 
@@ -802,8 +803,8 @@ extension AVAudioPCMBuffer {
         // Convert input signal to type Double
         vDSP_vspdp(floatData[channelNumber], 1, &frameValues, 1, vDSP_Length(numSamples))
         
-        print("frameValues:")
-        print(frameValues)
+        //print("frameValues:")
+        //print(frameValues)
          
         // Compute mean, and change sign
         vDSP_meanvD(frameValues, 1, &mean, vDSP_Length(numSamples))
@@ -851,6 +852,7 @@ extension AVAudioPCMBuffer {
                                        ceiling: ceiling)
          
         // Returns array of pitch values
+        print("Llico Pitches: ", pitchValues)
         return pitchValues
     } // End fxn, getPitch
 
