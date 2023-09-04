@@ -286,6 +286,16 @@ extension AudioRecorder {
                                        maximumPitch: maxPitch,
                                        sampleRate: Double(AudioRecorder.sampleCount),
                                        frameLength:AudioRecorder.bufferCount)
+            
+            var filteredIntensityValues = [Double]()
+            var filteredPitchValues = [Double]()
+
+            for idx in 0 ..< pitchReturn.count {
+                if pitchReturn[idx] != 0 {
+                    filteredIntensityValues.append(dbReturn[idx])
+                    filteredPitchValues.append(pitchReturn[idx])
+                }
+            }
             /*
             // Below is massive hit to efficiency
             let (signalCPPValues, _) = getCPPS(floatChannelData: [floats],
@@ -299,7 +309,7 @@ extension AudioRecorder {
                                                frameLength: AudioSpectrogram.bufferCount
                                         )
             */
-            return [vDSP.mean(dbReturn), vDSP.mean(pitchReturn)]//vDSP.mean(signalCPPValues)]
+            return [vDSP.mean(filteredIntensityValues), vDSP.mean(filteredPitchValues)]//vDSP.mean(signalCPPValues)]
         }
     }
 }
