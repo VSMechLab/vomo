@@ -280,7 +280,7 @@ extension DurationGraph {
                 
                 Spacer()
                 
-                Text("\(bottom, specifier: "%.0f")")
+                Text("\(bottom, specifier: "%.0f")").padding(1.0)
                 
                 Color.clear.frame(width: 1, height: 25)
             }
@@ -357,6 +357,7 @@ extension DurationGraph {
                     Text("\(firstPoint.dataDate.baselineLabelBody())")
                         .foregroundColor(.YELLOW)
                 }
+                Spacer(minLength: 1)
                 .font(._day)
                 .frame(width: 50, height: 23)
             }

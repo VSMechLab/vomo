@@ -343,6 +343,7 @@ extension QualityGraph {
                     Text("\(firstPoint.dataDate.baselineLabelBody())")
                         .foregroundColor(.YELLOW)
                 }
+                Spacer(minLength:1)
                 .font(._day)
                 .frame(width: 50, height: 23)
             }

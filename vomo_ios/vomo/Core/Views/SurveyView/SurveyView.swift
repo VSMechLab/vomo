@@ -23,7 +23,7 @@ struct SurveyView: View {
     @State private var showMissing = false
     
     @State private var page = 1
-    
+
     var body: some View {
         ZStack {
             VStack(alignment: .center, spacing: 5) {
@@ -162,6 +162,7 @@ struct SurveyView: View {
 }
 
 extension SurveyView {
+
     private var infoSection: some View {
         Image(svm.start_scale_img)
             .resizable()

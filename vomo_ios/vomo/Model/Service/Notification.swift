@@ -67,9 +67,14 @@ class Notification: ObservableObject {
             Notification.write(notificationSettings)
             
             // remove scheduled notifications if notifications are turned off
-            if (!notificationSettings.notificationsOn) {
+            if (notificationSettings.notificationsOn == false) {
+                
                 UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
+                UNUserNotificationCenter.current().removeAllDeliveredNotifications()
                 Logging.notificationLog.notice("Cleared all pending notifications")
+            }
+            else {
+                scheduleNotifications()
             }
         }
     }

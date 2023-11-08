@@ -83,7 +83,6 @@ struct ViewController: View {
         .onChange(of: scene) { newScenePhase in
             switch newScenePhase {
                 case .background:
-                    notification.scheduleNotifications()
                     break
                 case .inactive:
                     break

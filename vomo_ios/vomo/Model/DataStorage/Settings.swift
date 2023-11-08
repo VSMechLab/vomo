@@ -211,19 +211,19 @@ class Settings: ObservableObject {
     }
     
     /// vhi
-    @Published var vhi: Bool {
+    var vhi: Bool {
         didSet {
             UserDefaults.standard.set(vhi, forKey: "vhi")
         }
     }
     /// vocal effort
-    @Published var vocalEffort: Bool {
+    var vocalEffort: Bool {
         didSet {
             UserDefaults.standard.set(vocalEffort, forKey: "vocal_effort")
         }
     }
     /// Botulinum Injection
-    @Published var botulinumInjection : Bool {
+    var botulinumInjection : Bool {
         didSet {
             UserDefaults.standard.set(botulinumInjection, forKey: "botulinum_injection")
         }
